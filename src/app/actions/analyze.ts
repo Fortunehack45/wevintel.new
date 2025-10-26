@@ -15,6 +15,13 @@ const getOgTags = (html: string): Record<string, string> => {
   return ogTags;
 };
 
+// Helper function to parse meta description from HTML
+const getMetaDescription = (html: string): string | undefined => {
+    const descriptionRegex = /<meta\s+name="description"\s+content="([^"]+)"/i;
+    const match = html.match(descriptionRegex);
+    return match ? match[1] : undefined;
+}
+
 // Helper to extract specific headers
 const getHeaders = (response: Response): { all: Record<string, string>, security: SecurityData['securityHeaders']} => {
     const allHeaders: Record<string, string> = {};
@@ -153,6 +160,7 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
     }
     
     const tempTitle = pageHtml.match(/<title>(.*?)<\/title>/)?.[1] || 'No title found';
+    const tempDescription = getMetaDescription(pageHtml);
 
     const finalResult: Partial<AnalysisResult> = {
       id: crypto.randomUUID(),
@@ -161,7 +169,7 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
         url: url,
         domain: domain,
         title: tempTitle,
-        description: 'Loading...',
+        description: tempDescription,
         favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
       },
       security: {
