@@ -1,5 +1,6 @@
 
 
+
 export type AnalysisResult = {
   id: string;
   overview: WebsiteOverview;
@@ -12,6 +13,7 @@ export type AnalysisResult = {
   hosting: HostingInfo;
   headers: HeaderInfo;
   audits: AuditInfo;
+  aiSummary: AISummary;
   createdAt: string; // ISO 8601 string
   error?: string;
   partial?: boolean;
@@ -76,6 +78,11 @@ export type AuditItem = {
 
 export type AuditInfo = {
     [key: string]: AuditItem;
+}
+
+export type AISummary = {
+  summary: string;
+  recommendations: string[];
 }
 
 export type HistoryItem = Pick<AnalysisResult, 'id' | 'overview' | 'performance' | 'security' | 'createdAt'>;
