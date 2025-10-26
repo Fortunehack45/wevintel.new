@@ -1,4 +1,5 @@
 
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import type { SecurityData, AuditInfo, AuditItem } from '@/lib/types';
 import { ShieldCheck, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
@@ -58,38 +59,10 @@ export function SecurityCard({ data, audits }: { data: SecurityData, audits?: Au
   
   const auditItems = audits ? Object.values(audits) : [];
   
-  const calculateSecurityScore = () => {
-    let totalScore = 0;
-    let itemsScored = 0;
+  const securityScore = data.securityScore;
 
-    // SSL score
-    totalScore += data.isSecure ? 1 : 0;
-    itemsScored++;
-
-    // Security headers score
-    securityHeaders.forEach(header => {
-        if (data.securityHeaders?.[header.key as keyof typeof data.securityHeaders]) {
-            totalScore += 1;
-        }
-        itemsScored++;
-    });
-
-    // Audits score
-    auditItems.forEach(audit => {
-        if (audit.score !== null) {
-            totalScore += audit.score;
-            itemsScored++;
-        }
-    });
-
-    if (itemsScored === 0) return null;
-    return Math.round((totalScore / itemsScored) * 100);
-  }
-
-  const securityScore = calculateSecurityScore();
-
-  const getScoreBadgeVariant = (score: number | null): "destructive" | "secondary" | "default" => {
-    if (score === null) return "secondary";
+  const getScoreBadgeVariant = (score: number | null | undefined): "destructive" | "secondary" | "default" => {
+    if (score === null || score === undefined) return "secondary";
     if (score < 50) return "destructive";
     if (score < 90) return "secondary";
     return "default";
@@ -106,7 +79,7 @@ export function SecurityCard({ data, audits }: { data: SecurityData, audits?: Au
                 </CardTitle>
                 <CardDescription>SSL, headers, and vulnerability checks.</CardDescription>
             </div>
-            {securityScore !== null && (
+            {securityScore !== undefined && (
                 <Badge variant={getScoreBadgeVariant(securityScore)} className={getScoreBadgeVariant(securityScore) === 'default' ? 'bg-green-500/20 text-green-700 border-green-300' : ''}>
                     {securityScore}%
                 </Badge>
