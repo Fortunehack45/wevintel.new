@@ -9,6 +9,7 @@ import type { AnalysisResult, AISummary } from '@/lib/types';
 import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 
 const SummarySkeleton = () => (
@@ -38,6 +39,7 @@ export function SummaryCard({ data }: { data: Partial<AnalysisResult> }) {
     const [summary, setSummary] = useState<AISummary | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
+    const isMobile = useIsMobile();
 
     const generateSummary = async () => {
         if (!data.overview || !data.security || !data.hosting) return;
@@ -83,7 +85,7 @@ export function SummaryCard({ data }: { data: Partial<AnalysisResult> }) {
 
     return (
         <Card className="glass-card h-full">
-             <Accordion type="single" collapsible>
+             <Accordion type="single" collapsible defaultValue={isMobile ? undefined : "item-1"}>
                 <AccordionItem value="item-1" className='border-none'>
                     <AccordionTrigger className='p-6 hover:no-underline'>
                          <div className='flex flex-col space-y-1.5 text-left'>
