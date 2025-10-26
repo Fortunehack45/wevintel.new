@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, History, Bot, Info } from 'lucide-react';
+import { Home, History, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
@@ -10,7 +10,6 @@ import { motion } from 'framer-motion';
 const navLinks = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/history', label: 'History', icon: History },
-  { href: '/smart-tracker', label: 'Smart Tracker', icon: Bot },
   { href: '/about', label: 'About', icon: Info },
 ];
 
