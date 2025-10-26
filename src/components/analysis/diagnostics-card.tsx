@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import type { AuditItem, AuditInfo } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { SlidersHorizontal, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { Wrench, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -62,17 +62,17 @@ const AuditList = ({ audits }: { audits: AuditItem[] }) => {
 };
 
 
-export function AuditsCard({ data }: { data?: AuditInfo }) {
+export function DiagnosticsCard({ data }: { data?: AuditInfo }) {
 
   if (!data) {
     return (
       <Card className="h-full glass-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <SlidersHorizontal className="h-5 w-5 text-primary" />
-            Performance & Optimization
+            <Wrench className="h-5 w-5 text-primary" />
+            Diagnostics & Best Practices
           </CardTitle>
-          <CardDescription>Metrics and opportunities for improvement.</CardDescription>
+          <CardDescription>Technical details and suggestions.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4 py-4">
@@ -85,30 +85,29 @@ export function AuditsCard({ data }: { data?: AuditInfo }) {
   }
 
   const allAudits = Object.values(data);
-  const opportunities = allAudits.filter(audit => audit.score !== null && audit.score < 0.9);
-  const passed = allAudits.filter(audit => audit.score !== null && audit.score >= 0.9);
+  const withIssues = allAudits.filter(audit => audit.score !== null && audit.score < 1);
+  const passed = allAudits.filter(audit => audit.score === 1);
   const informational = allAudits.filter(audit => audit.score === null);
-
 
   return (
     <Card className="h-full glass-card">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <SlidersHorizontal className="h-5 w-5 text-primary" />
-          Performance & Optimization
+          <Wrench className="h-5 w-5 text-primary" />
+          Diagnostics & Best Practices
         </CardTitle>
-        <CardDescription>Opportunities for improvement from Lighthouse.</CardDescription>
+        <CardDescription>Technical checks from Lighthouse.</CardDescription>
       </CardHeader>
       <CardContent>
         {allAudits.length > 0 ? (
-          <Tabs defaultValue="opportunities" className="w-full">
+          <Tabs defaultValue="issues" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="opportunities">Opportunities ({opportunities.length + informational.length})</TabsTrigger>
+              <TabsTrigger value="issues">Issues ({withIssues.length + informational.length})</TabsTrigger>
               <TabsTrigger value="passed">Passed ({passed.length})</TabsTrigger>
             </TabsList>
-            <TabsContent value="opportunities" className="mt-4">
+            <TabsContent value="issues" className="mt-4">
               <ScrollArea className="h-[450px]">
-                <AuditList audits={[...opportunities, ...informational]} />
+                <AuditList audits={[...withIssues, ...informational]} />
               </ScrollArea>
             </TabsContent>
             <TabsContent value="passed" className="mt-4">
@@ -117,7 +116,7 @@ export function AuditsCard({ data }: { data?: AuditInfo }) {
               </ScrollArea>
             </TabsContent>
           </Tabs>
-        ) : <p className="text-muted-foreground text-sm">No detailed audit information was found.</p>}
+        ) : <p className="text-muted-foreground text-sm">No diagnostic information was found.</p>}
       </CardContent>
     </Card>
   );

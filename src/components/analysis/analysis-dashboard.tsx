@@ -8,6 +8,7 @@ import { HostingCard } from './hosting-card';
 import { MetadataCard } from './metadata-card';
 import { HeadersCard } from './headers-card';
 import { AuditsCard } from './audits-card';
+import { DiagnosticsCard } from './diagnostics-card';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -25,7 +26,7 @@ const cardVariants = {
   })
 };
 
-type PerformancePromise = Promise<Pick<AnalysisResult, 'performance' | 'audits' | 'overview' | 'metadata'>>;
+type PerformancePromise = Promise<Pick<AnalysisResult, 'performance' | 'performanceAudits' | 'securityAudits' | 'diagnosticsAudits' | 'overview' | 'metadata'>>;
 
 export function AnalysisDashboard({ initialData, performancePromise, onDataLoaded }: { initialData: Partial<AnalysisResult>, performancePromise: PerformancePromise, onDataLoaded: (data: AnalysisResult) => void }) {
   const [, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
@@ -45,6 +46,9 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
           metadata: {
             ...initialData.metadata,
             hasRobotsTxt: performanceResult.metadata.hasRobotsTxt,
+          },
+          security: {
+            ...initialData.security,
           }
         } as AnalysisResult;
 
@@ -90,7 +94,7 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
       </motion.div>
       {data.security && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-2">
-          <SecurityCard data={data.security} />
+          <SecurityCard data={data.security} audits={data.securityAudits} />
         </motion.div>
       }
       {data.hosting && 
@@ -98,16 +102,19 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
           <HostingCard data={data.hosting} />
         </motion.div>
       }
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="lg:col-span-4">
-        <AuditsCard data={data.audits} />
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="lg:col-span-2">
+        <AuditsCard data={data.performanceAudits} />
+      </motion.div>
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="lg:col-span-2">
+        <DiagnosticsCard data={data.diagnosticsAudits} />
       </motion.div>
       {data.metadata &&
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="lg:col-span-2">
           <MetadataCard data={data.metadata} />
         </motion.div>
       }
       {data.headers && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="lg:col-span-2">
           <HeadersCard data={data.headers} />
         </motion.div>
       }

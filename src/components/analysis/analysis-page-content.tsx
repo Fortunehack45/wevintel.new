@@ -146,12 +146,14 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                  // Draw the arc for the score
                  if (score > 0) {
                     const angle = (score / 100) * 360;
-                    const endAngleRad = (angle - 90) * (Math.PI / 180);
-                    const startAngleRad = -90 * (Math.PI / 180);
-                    const steps = Math.ceil(angle / 5);
+                    const startAngle = -90;
+                    const endAngle = startAngle + angle;
+                    const steps = Math.ceil(Math.abs(angle) / 5);
+                    const dAngle = angle / steps;
+
                     for (let i = 0; i < steps; i++) {
-                        const a1 = startAngleRad + (i / steps) * (endAngleRad - startAngleRad);
-                        const a2 = startAngleRad + ((i + 1) / steps) * (endAngleRad - startAngleRad);
+                        const a1 = (startAngle + i * dAngle) * Math.PI / 180;
+                        const a2 = (startAngle + (i+1) * dAngle) * Math.PI / 180;
                         const x1 = x + radius * Math.cos(a1);
                         const y1 = y + radius * Math.sin(a1);
                         const x2 = x + radius * Math.cos(a2);
@@ -314,6 +316,9 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
                     metadata: {
                       ...data.metadata,
                       hasRobotsTxt: perfData.metadata.hasRobotsTxt,
+                    },
+                    security: {
+                        ...data.security,
                     }
                   } as AnalysisResult;
                   onDataLoaded(fullData);

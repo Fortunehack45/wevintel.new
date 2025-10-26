@@ -53,92 +53,16 @@ const getPerformanceData = (pageSpeedData: any): PerformanceData => {
     }
 }
 
-// Extract a curated list of specific audits from the Lighthouse report.
-const getAuditInfo = (pageSpeedData: any): AuditInfo => {
-    const audits = pageSpeedData?.lighthouseResult?.audits;
-    if (!audits) return {};
-
-    const desiredAudits = [
-        // Performance
-        'server-response-time',
-        'first-contentful-paint',
-        'largest-contentful-paint',
-        'cumulative-layout-shift',
-        'speed-index',
-        'total-blocking-time',
-        'max-potential-fid',
-        'interactive',
-        'inp-breakdown',
-
-        // Optimization & Best Practices
-        'uses-responsive-images',
-        'uses-webp-images',
-        'offscreen-images',
-        'unminified-css',
-        'unminified-javascript',
-        'unused-css-rules',
-        'unused-javascript',
-        'uses-optimized-images',
-        'uses-long-cache-ttl',
-        'total-byte-weight',
-        'dom-size',
-        'render-blocking-resources',
-        'third-party-summary',
-        'mainthread-work-breakdown',
-        'network-requests',
-        'legacy-javascript',
-        'duplicated-javascript',
-        'efficient-animated-content',
-        'font-display',
-        'lcp-lazy-loaded',
-
-        // Accessibility & SEO
-        'viewport',
-        'document-title',
-        'meta-description',
-        'http-status-code',
-        'link-text',
-        'crawlable-anchors',
-        'is-crawlable',
-        'robots-txt',
-        'image-alt',
-        'html-has-lang',
-        'hreflang',
-        'canonical',
-        'font-size',
-        'plugins',
-        'tap-targets',
-        
-        // PWA
-        'installable-manifest',
-        'service-worker',
-        'splash-screen',
-        'themed-omnibox',
-        'content-width',
-
-        // Diagnostics
-        'largest-contentful-paint-element',
-        'layout-shift-elements',
-        'long-tasks',
-        'non-composited-animations',
-        'user-timings',
-        'uses-explicit-width-and-height',
-        
-        // New Security & Diagnostics
-        'cross-origin-opener-policy',
-        'strict-transport-security',
-        'csp-xss',
-        'deprecations',
-        'errors-in-console',
-        'third-party-facades',
-        'no-vulnerable-libraries',
-    ];
-
+// Helper to process a list of audit IDs from a Lighthouse report
+const processAudits = (audits: any, auditIds: string[]): AuditInfo => {
     const auditResults: AuditInfo = {};
-    desiredAudits.forEach(auditId => {
+    if (!audits) return auditResults;
+    
+    auditIds.forEach(auditId => {
         const audit = audits[auditId];
         if (audit) {
             auditResults[auditId] = {
+                id: auditId,
                 title: audit.title,
                 description: audit.description,
                 score: audit.score,
@@ -146,9 +70,47 @@ const getAuditInfo = (pageSpeedData: any): AuditInfo => {
             };
         }
     });
-
     return auditResults;
 }
+
+const getPerformanceAudits = (pageSpeedData: any): AuditInfo => {
+    const audits = pageSpeedData?.lighthouseResult?.audits;
+    const desiredAudits = [
+        'server-response-time', 'network-requests', 'render-blocking-resources',
+        'uses-responsive-images', 'uses-webp-images', 'offscreen-images', 
+        'unminified-css', 'unminified-javascript', 'unused-css-rules', 'unused-javascript', 
+        'uses-optimized-images', 'uses-long-cache-ttl', 'total-byte-weight', 'dom-size',
+        'mainthread-work-breakdown', 'efficient-animated-content', 'lcp-lazy-loaded',
+        'max-potential-fid', 'interactive',
+    ];
+    return processAudits(audits, desiredAudits);
+}
+
+const getSecurityAudits = (pageSpeedData: any): AuditInfo => {
+    const audits = pageSpeedData?.lighthouseResult?.audits;
+    const desiredAudits = [
+        'cross-origin-opener-policy', 'strict-transport-security', 'csp-xss',
+        'no-vulnerable-libraries'
+    ];
+    return processAudits(audits, desiredAudits);
+}
+
+const getDiagnosticsAudits = (pageSpeedData: any): AuditInfo => {
+    const audits = pageSpeedData?.lighthouseResult?.audits;
+    const desiredAudits = [
+        'legacy-javascript', 'duplicated-javascript', 'deprecations', 'errors-in-console',
+        'third-party-summary', 'third-party-facades', 'user-timings',
+        'layout-shift-elements', 'long-tasks', 'non-composited-animations',
+        'font-display', 'font-size', 'tap-targets', 'viewport',
+        'document-title', 'meta-description', 'http-status-code',
+        'link-text', 'crawlable-anchors', 'is-crawlable', 'robots-txt',
+        'image-alt', 'html-has-lang', 'hreflang', 'canonical',
+        'installable-manifest', 'service-worker', 'splash-screen',
+        'themed-omnibox', 'content-width',
+    ];
+    return processAudits(audits, desiredAudits);
+}
+
 
 export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResult> | { error: string }> {
   try {
@@ -217,7 +179,7 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
   }
 }
 
-export async function getPerformanceAnalysis(url: string): Promise<Pick<AnalysisResult, 'performance' | 'audits' | 'overview' | 'metadata'>> {
+export async function getPerformanceAnalysis(url: string): Promise<Pick<AnalysisResult, 'performance' | 'performanceAudits' | 'securityAudits' | 'diagnosticsAudits' | 'overview' | 'metadata'>> {
     const pageSpeedApiKey = process.env.PAGESPEED_API_KEY;
     const pageSpeedBaseUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO${pageSpeedApiKey ? `&key=${pageSpeedApiKey}` : ''}`;
     const pageSpeedMobileUrl = `${pageSpeedBaseUrl}&strategy=mobile`;
@@ -243,7 +205,9 @@ export async function getPerformanceAnalysis(url: string): Promise<Pick<Analysis
             mobile: getPerformanceData(pageSpeedMobileData),
             desktop: getPerformanceData(pageSpeedDesktopData)
         },
-        audits: getAuditInfo(pageSpeedMobileData), // Using mobile data for audits for now
+        performanceAudits: getPerformanceAudits(pageSpeedMobileData),
+        securityAudits: getSecurityAudits(pageSpeedMobileData),
+        diagnosticsAudits: getDiagnosticsAudits(pageSpeedMobileData),
         overview: { // This will update the existing overview data
             url: url,
             domain: new URL(url).hostname,

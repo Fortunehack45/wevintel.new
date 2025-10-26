@@ -1,9 +1,54 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import type { SecurityData } from '@/lib/types';
-import { ShieldCheck, CheckCircle, XCircle } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 
-export function SecurityCard({ data }: { data: SecurityData }) {
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import type { SecurityData, AuditInfo, AuditItem } from '@/lib/types';
+import { ShieldCheck, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '../ui/skeleton';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+
+const getScoreColor = (score: number | null) => {
+    if (score === null) return 'text-muted-foreground';
+    if (score >= 0.9) return 'text-green-500';
+    if (score >= 0.5) return 'text-yellow-500';
+    return 'text-red-500';
+}
+
+const getScoreIcon = (score: number | null) => {
+    if (score === null) return <AlertCircle className="h-4 w-4" />;
+    if (score >= 0.9) return <CheckCircle className="h-4 w-4" />;
+    return <XCircle className="h-4 w-4" />;
+}
+
+const AuditList = ({ audits }: { audits: AuditItem[] }) => {
+    if (audits.length === 0) {
+        return null;
+    }
+
+    return (
+        <div className="rounded-md border mt-4">
+            <Accordion type="single" collapsible className="w-full">
+                {audits.map((audit) => (
+                    <AccordionItem value={audit.id} key={audit.id}>
+                        <AccordionTrigger className="p-3 text-xs font-medium hover:no-underline">
+                            <div className="flex items-center gap-2 text-left flex-1">
+                                <div className={getScoreColor(audit.score)}>
+                                    {getScoreIcon(audit.score)}
+                                </div>
+                                <span className="flex-1">{audit.title}</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-3 pb-3 text-muted-foreground">
+                           {audit.description.replace(/\[(.*?)\]\(.*?\)/g, '$1')}
+                        </AccordionContent>
+                    </AccordionItem>
+                ))}
+            </Accordion>
+        </div>
+    );
+};
+
+
+export function SecurityCard({ data, audits }: { data: SecurityData, audits?: AuditInfo }) {
   const getGradeColor = (grade: string | undefined) => {
     if (!grade) return 'secondary';
     if (grade.startsWith('A')) return 'default';
@@ -17,6 +62,8 @@ export function SecurityCard({ data }: { data: SecurityData }) {
       { key: 'x-frame-options', name: 'X-Frame-Options'},
       { key: 'x-content-type-options', name: 'X-Content-Type'},
   ]
+  
+  const auditItems = audits ? Object.values(audits) : [];
 
   return (
     <Card className="h-full">
@@ -25,7 +72,7 @@ export function SecurityCard({ data }: { data: SecurityData }) {
           <ShieldCheck className="h-5 w-5 text-primary" />
           Security
         </CardTitle>
-        <CardDescription>SSL, headers, and domain status.</CardDescription>
+        <CardDescription>SSL, headers, and vulnerability checks.</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4 text-sm">
         <div className="flex justify-between items-center">
@@ -37,7 +84,7 @@ export function SecurityCard({ data }: { data: SecurityData }) {
           <span className="font-semibold">{data.domainExpiry ? new Date(data.domainExpiry).toLocaleDateString() : 'N/A'}</span>
         </div>
         <div>
-            <p className="font-semibold mb-2">Security Headers</p>
+            <p className="font-semibold mb-2">HTTP Security Headers</p>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
                 {securityHeaders.map(header => (
                     <div key={header.key} className="flex justify-between items-center">
@@ -47,6 +94,16 @@ export function SecurityCard({ data }: { data: SecurityData }) {
                 ))}
             </div>
         </div>
+        
+        {audits === undefined ? (
+            <Skeleton className="h-24 w-full" />
+        ) : auditItems.length > 0 && (
+            <div>
+                <p className="font-semibold mb-2">Additional Security Audits</p>
+                <AuditList audits={auditItems} />
+            </div>
+        )}
+        
       </CardContent>
     </Card>
   );

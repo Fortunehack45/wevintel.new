@@ -3,6 +3,7 @@
 
 
 
+
 export type AnalysisResult = {
   id: string;
   overview: WebsiteOverview;
@@ -14,7 +15,9 @@ export type AnalysisResult = {
   metadata: Metadata;
   hosting: HostingInfo;
   headers: HeaderInfo;
-  audits: AuditInfo;
+  performanceAudits: AuditInfo;
+  securityAudits: AuditInfo;
+  diagnosticsAudits: AuditInfo;
   createdAt: string; // ISO 8601 string
   error?: string;
   partial?: boolean;
@@ -71,6 +74,7 @@ export type HeaderInfo = {
 }
 
 export type AuditItem = {
+    id: string;
     title: string;
     description: string;
     score: number | null;
