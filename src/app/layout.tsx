@@ -6,6 +6,7 @@ import { Footer } from '@/components/footer';
 import { Poppins } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { BottomNav } from '@/components/bottom-nav';
+import { cn } from '@/lib/utils';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -25,7 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} font-body antialiased bg-gray-50 dark:bg-background text-foreground`}>
+      <body className={cn(
+          `${poppins.variable} font-body antialiased bg-gray-50 dark:bg-background text-foreground`,
+          "relative isolate"
+        )}>
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
