@@ -238,8 +238,8 @@ export async function getPerformanceAnalysis(url: string): Promise<Pick<Analysis
         overview: { // This will update the existing overview data
             url: url,
             domain: new URL(url).hostname,
-            title: audits?.['meta-description']?.title || overviewData?.id.split('?')[0] || 'No title found',
-            description: audits?.['meta-description']?.description || 'No description available.',
+            title: lighthouse?.audits?.['document-title']?.details?.items[0]?.title || overviewData?.id.split('?')[0] || 'No title found',
+            description: lighthouse?.audits?.['meta-description']?.details?.items[0]?.description || 'No description available.',
             language: audits?.['html-has-lang']?.details?.items[0]?.lang,
         },
         metadata: { // This will update the existing metadata

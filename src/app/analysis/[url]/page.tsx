@@ -4,6 +4,9 @@ import { AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AnalysisPageContent } from '@/components/analysis/analysis-page-content';
 import { type Metadata } from 'next';
+import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
+import { Skeleton } from '@/components/ui/skeleton';
+
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
     return (

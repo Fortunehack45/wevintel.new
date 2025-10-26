@@ -211,12 +211,13 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
 function DashboardSkeleton() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-      <Skeleton className="h-56 rounded-2xl lg:col-span-4" />
-      <Skeleton className="h-80 rounded-2xl lg:col-span-2" />
-      <Skeleton className="h-80 rounded-2xl lg:col-span-2" />
-      <Skeleton className="h-64 rounded-2xl lg:col-span-4" />
-      <Skeleton className="h-64 rounded-2xl lg:col-span-2" />
-      <Skeleton className="h-64 rounded-2xl lg:col-span-2" />
+      <Skeleton className="h-56 rounded-xl lg:col-span-4" />
+      <Skeleton className="h-80 rounded-xl lg:col-span-4" />
+      <Skeleton className="h-48 rounded-xl lg:col-span-2" />
+      <Skeleton className="h-48 rounded-xl lg:col-span-2" />
+      <Skeleton className="h-96 rounded-xl lg:col-span-4" />
+      <Skeleton className="h-64 rounded-xl lg:col-span-2" />
+      <Skeleton className="h-64 rounded-xl lg:col-span-2" />
     </div>
   );
 }

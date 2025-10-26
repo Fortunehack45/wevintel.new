@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { WebsiteOverview } from '@/lib/types';
 import Image from 'next/image';
@@ -18,7 +19,7 @@ export function OverviewCard({ data }: { data: WebsiteOverview }) {
           />
         )}
         <div className='flex-1'>
-          <CardTitle>{data.title || 'No Title Found'}</CardTitle>
+          <h2 className="text-2xl font-bold tracking-tight">{data.title || 'No Title Found'}</h2>
           <p className="text-muted-foreground">{data.domain}</p>
         </div>
       </CardHeader>
