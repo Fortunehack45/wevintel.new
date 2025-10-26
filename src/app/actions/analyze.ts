@@ -127,8 +127,16 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
     ] = await Promise.allSettled([
       fetch(ipApiUrl),
       fetch(sitemapUrl, { method: 'HEAD' }),
-      fetch(url)
+      fetch(url, { headers: { 'User-Agent': 'WebIntel-Analysis-Bot/1.0' }})
     ]);
+
+    if (pageHtmlRes.status === 'rejected' || (pageHtmlRes.status === 'fulfilled' && !pageHtmlRes.value.ok)) {
+       // This is a strong indicator that the domain might not exist or is unreachable.
+        const ipCheck = ipInfoRes.status === 'fulfilled' && await ipInfoRes.value.json();
+        if (ipCheck?.status === 'fail') {
+             return { error: 'Domain not found. The website is not reachable.' };
+        }
+    }
 
     const ipInfoData = ipInfoRes.status === 'fulfilled' && ipInfoRes.value.ok ? await ipInfoRes.value.json() : null;
     
@@ -137,6 +145,11 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
     if (pageHtmlRes.status === 'fulfilled' && pageHtmlRes.value.ok) {
         pageHtml = await pageHtmlRes.value.text();
         responseHeaders = getHeaders(pageHtmlRes.value);
+    } else {
+        // If the main fetch failed, we can still proceed with a partial analysis
+        // but we should flag it and maybe return a more specific error.
+        // For now, let's return a specific error if we can't get basic info.
+        return { error: 'Could not fetch the main page of the website. It might be down or blocking requests.' };
     }
     
     const tempTitle = pageHtml.match(/<title>(.*?)<\/title>/)?.[1] || 'No title found';
@@ -172,6 +185,9 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
 
   } catch (error: any) {
     console.error('Fast analysis failed:', error);
+    if (error.cause && (error.cause.code === 'ENOTFOUND' || error.cause.code === 'EAI_AGAIN')) {
+         return { error: 'Domain not found. The website is not reachable.' };
+    }
     return { error: error.message || 'An unknown error occurred during initial analysis.' };
   }
 }

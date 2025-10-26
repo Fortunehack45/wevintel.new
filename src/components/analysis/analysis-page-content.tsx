@@ -12,6 +12,7 @@ import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import { useRouter } from 'next/navigation';
+import { NotFoundCard } from './not-found-card';
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
     return (
@@ -179,18 +180,14 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                  if (score > 0) {
                     const angle = (score / 100) * 360;
                     const startAngle = -90;
-                    const endAngle = startAngle + angle;
-                    const steps = Math.ceil(Math.abs(angle) / 5);
+                    
+                    const steps = 36;
                     const dAngle = angle / steps;
 
                     for (let i = 0; i < steps; i++) {
                         const a1 = (startAngle + i * dAngle) * Math.PI / 180;
                         const a2 = (startAngle + (i+1) * dAngle) * Math.PI / 180;
-                        const x1 = x + radius * Math.cos(a1);
-                        const y1 = y + radius * Math.sin(a1);
-                        const x2 = x + radius * Math.cos(a2);
-                        const y2 = y + radius * Math.sin(a2);
-                        pdf.line(x1, y1, x2, y2);
+                        pdf.line(x + radius * Math.cos(a1), y + radius * Math.sin(a1), x + radius * Math.cos(a2), y + radius * Math.sin(a2));
                     }
                  }
                  
@@ -420,6 +417,9 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
   }
 
   if (error) {
+    if (error === 'Domain not found. The website is not reachable.') {
+        return <NotFoundCard url={url} />;
+    }
     return <ErrorAlert title="Analysis Failed" description={error} />;
   }
   
