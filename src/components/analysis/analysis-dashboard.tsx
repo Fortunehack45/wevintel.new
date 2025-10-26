@@ -1,6 +1,6 @@
 
 'use client';
-import type { AnalysisResult } from '@/lib/types';
+import type { AnalysisResult, AuditInfo } from '@/lib/types';
 import { OverviewCard } from './overview-card';
 import { PerformanceCard } from './performance-card';
 import { SecurityCard } from './security-card';
@@ -10,8 +10,9 @@ import { HeadersCard } from './headers-card';
 import { AuditsCard } from './audits-card';
 import { DiagnosticsCard } from './diagnostics-card';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { OverallScoreCard } from './overall-score-card';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -83,6 +84,26 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
     }
   }, [data, setHistory]);
 
+  const totalAuditScore = useMemo(() => {
+    const allAudits: (AuditInfo | undefined)[] = [data.performanceAudits, data.securityAudits, data.diagnosticsAudits];
+    let totalScore = 0;
+    let scoreCount = 0;
+
+    allAudits.forEach(auditInfo => {
+      if (auditInfo) {
+        Object.values(auditInfo).forEach(audit => {
+          if (audit.score !== null) {
+            totalScore += audit.score;
+            scoreCount++;
+          }
+        });
+      }
+    });
+
+    if (scoreCount === 0) return null;
+    return Math.round((totalScore / scoreCount) * 100);
+  }, [data.performanceAudits, data.securityAudits, data.diagnosticsAudits]);
+
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 bg-background p-4 rounded-xl">
@@ -100,10 +121,13 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
         </motion.div>
       }
       {data.hosting && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-1">
           <HostingCard data={data.hosting} />
         </motion.div>
       }
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-1">
+        <OverallScoreCard score={totalAuditScore} />
+      </motion.div>
       <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="lg:col-span-2">
         <AuditsCard data={data.performanceAudits} />
       </motion.div>
@@ -123,5 +147,3 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
     </div>
   );
 }
-
-    

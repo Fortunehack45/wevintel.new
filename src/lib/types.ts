@@ -1,9 +1,4 @@
 
-
-
-
-
-
 export type AnalysisResult = {
   id: string;
   overview: WebsiteOverview;

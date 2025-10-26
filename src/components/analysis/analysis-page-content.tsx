@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { AlertTriangle, RefreshCw, Download, ArrowLeft } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult, type AuditItem } from '@/lib/types';
+import { type AnalysisResult, type AuditItem, AuditInfo } from '@/lib/types';
 import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
@@ -108,12 +108,14 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                 currentY += Math.max(splitKey.length, splitValue.length) * 12 + 6;
             };
             
-            const addAuditList = (title: string, audits: AuditItem[] | undefined) => {
-                if (!audits || audits.length === 0) return;
+            const addAuditList = (title: string, audits: AuditInfo | undefined) => {
+                if (!audits) return;
+                const auditItems = Object.values(audits);
+                if (auditItems.length === 0) return;
                 
                 addSectionTitle(title);
                 
-                audits.forEach(audit => {
+                auditItems.forEach(audit => {
                     const scoreText = audit.score !== null ? ` (Score: ${Math.round(audit.score * 100)})` : ' (Informational)';
                     const statusColor = audit.score === null ? textColor : audit.score >= 0.9 ? '#22c55e' : '#ef4444';
                     
@@ -163,7 +165,6 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
             addKeyValue('Description', data.overview.description);
             addKeyValue('Language', data.overview.language?.toUpperCase());
 
-            // --- Performance Section ---
             const drawScoreCircle = (x: number, y: number, score: number, label: string) => {
                  const radius = 25;
                  pdf.setLineWidth(4);
@@ -177,9 +178,9 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                  
                  if (score > 0) {
                     const angle = (score / 100) * 360;
-                    const startAngle = -90;
+                    const startAngle = -90; // Start from top
                     const endAngle = startAngle + angle;
-                    const steps = Math.ceil(Math.abs(angle) / 5);
+                    const steps = Math.ceil(Math.abs(angle) / 5); // Number of segments to draw for the arc
                     const dAngle = angle / steps;
 
                     for (let i = 0; i < steps; i++) {
@@ -204,6 +205,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                  pdf.text(label, x, y + radius + 15, { align: 'center' });
             };
 
+            // --- Performance Section ---
             if (data.performance) {
                 addSectionTitle('Core Web Vitals & Performance Scores');
                 const scores = [
@@ -228,6 +230,28 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                 addKeyValue('Speed Index', data.performance.mobile.speedIndex);
                 addKeyValue('Total Blocking Time', data.performance.mobile.totalBlockingTime);
             }
+
+            // --- Total Audit Score ---
+            const allAudits: (AuditInfo | undefined)[] = [data.performanceAudits, data.securityAudits, data.diagnosticsAudits];
+            let totalScore = 0;
+            let scoreCount = 0;
+            allAudits.forEach(auditInfo => {
+              if (auditInfo) {
+                Object.values(auditInfo).forEach(audit => {
+                  if (audit.score !== null) {
+                    totalScore += audit.score;
+                    scoreCount++;
+                  }
+                });
+              }
+            });
+            const totalAuditScore = scoreCount > 0 ? Math.round((totalScore / scoreCount) * 100) : null;
+            if (totalAuditScore !== null) {
+                addSectionTitle('Overall Audit Score');
+                drawScoreCircle(pdfWidth / 2, currentY + 40, totalAuditScore, 'Total Audit Score');
+                currentY += 100;
+            }
+
 
             // --- Security Section ---
             if (data.security) {
@@ -265,9 +289,9 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
             }
             
             // --- Audits Sections ---
-            addAuditList('Performance & Optimization Audits', Object.values(data.performanceAudits || {}));
-            addAuditList('Security Audits', Object.values(data.securityAudits || {}));
-            addAuditList('Diagnostics & Best Practices', Object.values(data.diagnosticsAudits || {}));
+            addAuditList('Performance & Optimization Audits', data.performanceAudits);
+            addAuditList('Security Audits', data.securityAudits);
+            addAuditList('Diagnostics & Best Practices', data.diagnosticsAudits);
 
 
             // --- Headers Section ---
@@ -427,7 +451,3 @@ function DashboardSkeleton() {
     </div>
   );
 }
-
-    
-
-    
