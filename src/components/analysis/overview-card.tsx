@@ -2,11 +2,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { WebsiteOverview } from '@/lib/types';
 import Image from 'next/image';
-import { Languages, FileText } from 'lucide-react';
+import { Languages, FileText, Wand2, RefreshCw } from 'lucide-react';
+import { Button } from '../ui/button';
 
-export function OverviewCard({ data }: { data: WebsiteOverview }) {
+interface OverviewCardProps {
+  data: WebsiteOverview;
+  hasPerformanceRun: boolean;
+  isLoading: boolean;
+  onRunPerformance: () => void;
+}
+
+export function OverviewCard({ data, hasPerformanceRun, isLoading, onRunPerformance }: OverviewCardProps) {
   return (
-    <Card>
+    <Card className="glass-card">
       <CardHeader className="flex flex-col md:flex-row items-start md:items-center gap-4 space-y-0">
         {data.favicon && (
           <Image 
@@ -22,6 +30,16 @@ export function OverviewCard({ data }: { data: WebsiteOverview }) {
           <h3 className="text-2xl font-bold tracking-tight">{data.title || data.domain}</h3>
           <p className="text-muted-foreground">{data.domain}</p>
         </div>
+        {!hasPerformanceRun && (
+          <Button onClick={onRunPerformance} disabled={isLoading}>
+            {isLoading ? (
+                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+                <Wand2 className="mr-2 h-4 w-4" />
+            )}
+            {isLoading ? 'Scanning...' : 'Run Full Performance Scan'}
+          </Button>
+        )}
       </CardHeader>
       <CardContent className="grid md:grid-cols-2 gap-6 pt-4">
         <div className="flex items-start gap-4">

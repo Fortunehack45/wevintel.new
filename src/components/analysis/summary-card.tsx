@@ -1,13 +1,13 @@
+
 'use client';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Wand2, RefreshCw, CheckCircle, Lightbulb } from 'lucide-react';
+import { Wand2, CheckCircle, Lightbulb, AlertTriangle } from 'lucide-react';
 import type { AnalysisResult, AISummary } from '@/lib/types';
 import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
-import { AlertTriangle } from 'lucide-react';
 
 
 const SummarySkeleton = () => (
@@ -33,7 +33,7 @@ const ErrorState = ({ onRetry }: { onRetry: () => void }) => (
     </Alert>
 );
 
-export function SummaryCard({ data, onRunPerformance, isLoading: isPerfLoading }: { data: Partial<AnalysisResult>, onRunPerformance: () => void, isLoading: boolean }) {
+export function SummaryCard({ data }: { data: Partial<AnalysisResult> }) {
     const [summary, setSummary] = useState<AISummary | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -76,11 +76,12 @@ export function SummaryCard({ data, onRunPerformance, isLoading: isPerfLoading }
 
     useEffect(() => {
         generateSummary();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data.id]);
 
 
     return (
-        <Card className="glass-card">
+        <Card className="glass-card h-full">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <Wand2 className="h-5 w-5 text-primary" />
@@ -89,41 +90,22 @@ export function SummaryCard({ data, onRunPerformance, isLoading: isPerfLoading }
                 <CardDescription>A quick analysis and recommendations from our AI expert.</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="grid gap-6 md:grid-cols-2">
-                    <div>
-                        {isLoading && <SummarySkeleton />}
-                        {error && <ErrorState onRetry={generateSummary} />}
-                        {summary && (
-                            <div className="space-y-6">
-                                <div>
-                                    <h4 className="font-semibold mb-2 flex items-center gap-2"><Lightbulb className="text-yellow-400"/> Quick Summary</h4>
-                                    <p className="text-sm text-muted-foreground">{summary.summary}</p>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold mb-2 flex items-center gap-2"><CheckCircle className="text-green-500" /> Recommendations</h4>
-                                    <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5">
-                                        {summary.recommendations.map((rec, i) => <li key={i}>{rec}</li>)}
-                                    </ul>
-                                </div>
-                            </div>
-                        )}
+                {isLoading && <SummarySkeleton />}
+                {error && <ErrorState onRetry={generateSummary} />}
+                {summary && (
+                    <div className="space-y-6">
+                        <div>
+                            <h4 className="font-semibold mb-2 flex items-center gap-2"><Lightbulb className="text-yellow-400"/> Quick Summary</h4>
+                            <p className="text-sm text-muted-foreground">{summary.summary}</p>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold mb-2 flex items-center gap-2"><CheckCircle className="text-green-500" /> Recommendations</h4>
+                            <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5">
+                                {summary.recommendations.map((rec, i) => <li key={i}>{rec}</li>)}
+                            </ul>
+                        </div>
                     </div>
-                    <div className="bg-muted/50 p-6 rounded-lg flex flex-col items-center justify-center text-center">
-                        <h4 className="font-semibold mb-2">Ready for a Deep Dive?</h4>
-                        <p className="text-sm text-muted-foreground mb-4">
-                            Run a full performance analysis with Google PageSpeed to get detailed scores and audits.
-                        </p>
-                        <Button onClick={onRunPerformance} disabled={isPerfLoading}>
-                            {isPerfLoading ? (
-                                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                            ) : (
-                                <Wand2 className="mr-2 h-4 w-4" />
-                            )}
-                            {isPerfLoading ? 'Scanning...' : 'Run Full Performance Scan'}
-                        </Button>
-                        <p className="text-xs text-muted-foreground mt-2">(This may take up to 30 seconds)</p>
-                    </div>
-                </div>
+                )}
             </CardContent>
         </Card>
     )

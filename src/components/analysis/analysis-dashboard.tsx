@@ -147,25 +147,28 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {overview && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="lg:col-span-4">
-          <OverviewCard data={overview} />
-        </motion.div>
-      }
-
-      {!performance &&
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-4">
-          <SummaryCard 
-            data={initialData}
-            onRunPerformance={handleRunPerformance}
+          <OverviewCard 
+            data={overview}
+            hasPerformanceRun={!!performance}
             isLoading={isPerfLoading}
+            onRunPerformance={handleRunPerformance}
           />
         </motion.div>
       }
 
-      {performance &&
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-4">
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2">
+        <SummaryCard data={initialData} />
+      </motion.div>
+
+      {performance ? (
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2">
           <PerformanceCard data={performance} />
         </motion.div>
-      }
+      ) : (
+         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2">
+          <DashboardSkeleton.PerformancePlaceholder />
+        </motion.div>
+      )}
 
       {security && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-2">
@@ -178,11 +181,15 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
         </motion.div>
       }
       
-      {performance &&
+      {performance ? (
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-1">
           <OverallScoreCard score={totalAuditScore} />
         </motion.div>
-      }
+      ) : (
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-1">
+           <DashboardSkeleton.ScorePlaceholder />
+        </motion.div>
+      )}
 
       {performanceAudits && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="lg:col-span-2">
