@@ -48,9 +48,86 @@ Here is the tracking script:
     const websiteUrl = "{{{websiteUrl}}}";
     const endpoint = '/api/track'; // Replace with your actual endpoint
 
-    function shouldRecordEvent(ip, country, timestamp, referrer) {
-      // This function uses an LLM to determine if the event is worth recording.
-      // Replace with actual LLM call (e.g., via a serverless function).
-      // For now, it returns a random boolean for demonstration purposes.
-      // In production, this is where you would call the genkit flow.
-      // Example:  const response = await fetch(\"/api/llm-check?ip=\
+    async function getVisitorInfo() {
+        try {
+            const response = await fetch('https://ipapi.co/json/');
+            if (!response.ok) throw new Error('Failed to fetch IP info');
+            const data = await response.json();
+            return {
+                ip: data.ip,
+                country: data.country_name,
+                timestamp: new Date().toISOString(),
+                referrer: document.referrer || 'direct',
+            };
+        } catch (error) {
+            console.error('Error fetching visitor info:', error);
+            return null;
+        }
+    }
+
+    async function shouldRecordEvent(visitorInfo) {
+        // In a real application, you would make a call to your backend,
+        // which then calls the Genkit flow to get a "smart" decision.
+        // For demonstration, we'll use a simple heuristic.
+        
+        // Example: Don't track localhost or private IPs
+        if (visitorInfo.ip.startsWith('192.168.') || visitorInfo.ip.startsWith('10.') || visitorInfo.ip === '127.0.0.1') {
+            return false;
+        }
+
+        // In a real scenario, this would be a fetch to an API route:
+        /*
+        const response = await fetch('/api/should-track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(visitorInfo),
+        });
+        const result = await response.json();
+        return result.shouldRecord;
+        */
+        
+        // For this demo, we will record most events.
+        console.log('AI would decide if this event is worth tracking:', visitorInfo);
+        return true;
+    }
+
+    async function trackEvent() {
+        const visitorInfo = await getVisitorInfo();
+        if (!visitorInfo) return;
+
+        const shouldRecord = await shouldRecordEvent(visitorInfo);
+
+        if (shouldRecord) {
+            try {
+                await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ...visitorInfo, website: websiteUrl }),
+                    keepalive: true, // Ensures request is sent even if page is unloading
+                });
+            } catch (error) {
+                console.error('Tracking API error:', error);
+            }
+        }
+    }
+
+    // Wait for the page to be fully loaded to avoid impacting performance
+    window.addEventListener('load', trackEvent);
+  })();
+</script>
+`,
+});
+
+const generateSmartTrackerScriptFlow = ai.defineFlow(
+  {
+    name: 'generateSmartTrackerScriptFlow',
+    inputSchema: GenerateSmartTrackerScriptInputSchema,
+    outputSchema: GenerateSmartTrackerScriptOutputSchema,
+  },
+  async (input) => {
+    const {output} = await prompt(input);
+    return output!;
+  }
+);

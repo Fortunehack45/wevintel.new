@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Compass, Menu } from 'lucide-react';
+import { Compass, Menu, Bot } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/history', label: 'History' },
+    { href: '/smart-tracker', label: 'Smart Tracker' },
     { href: '/about', label: 'About' },
 ];
 
