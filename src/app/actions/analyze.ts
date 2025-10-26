@@ -1,91 +1,74 @@
 'use server';
 
 import type { AnalysisResult } from '@/lib/types';
-
+import 'dotenv/config';
 
 export async function analyzeUrl(url: string): Promise<AnalysisResult | { error: string }> {
   try {
     const urlObject = new URL(url);
     const domain = urlObject.hostname;
+    
+    // API keys can be stored in .env.local file
     const pageSpeedApiKey = process.env.PAGESPEED_API_KEY;
-    const ipInfoApiKey = process.env.IPINFO_API_TOKEN;
 
-    const useMockData = !pageSpeedApiKey;
+    const pageSpeedUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO${pageSpeedApiKey ? `&key=${pageSpeedApiKey}` : ''}`;
+    const ipApiUrl = `http://ip-api.com/json/${domain}`;
+    
+    const [pageSpeedRes, ipInfoRes] = await Promise.allSettled([
+      fetch(pageSpeedUrl),
+      fetch(ipApiUrl)
+    ]);
 
-    let finalResult: AnalysisResult;
-
-    if (useMockData) {
-      console.warn("API keys missing. Using mock data for analysis.");
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
-      finalResult = {
-        id: crypto.randomUUID(),
-        overview: {
-          url: url,
-          domain: domain,
-          title: 'Mock Website: The Future of the Web',
-          description: 'This is a mock description for the website. In a real analysis, this content would be fetched directly from the site\'s meta tags, providing SEO-relevant information.',
-          language: 'en-US',
-          favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
-        },
-        performance: { performanceScore: 85, accessibilityScore: 92, seoScore: 95, bestPracticesScore: 100 },
-        security: { sslGrade: 'A+', securityHeadersGrade: 'A', domainExpiry: '2025-10-22', isSecure: url.startsWith('https://') },
-        metadata: { openGraphTags: { 'og:title': 'Mock OG Title', 'og:description': 'Mock OG Description', 'og:image': 'https://picsum.photos/seed/1/1200/630' }, hasRobotsTxt: true, hasSitemapXml: false },
-        hosting: { ip: '8.8.8.8', isp: 'Mock ISP, e.g., Google Cloud', country: 'US' },
-        createdAt: new Date().toISOString(),
-      };
-    } else {
-        const [pageSpeedRes, ipInfoRes] = await Promise.all([
-          fetch(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&key=${pageSpeedApiKey}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO`),
-          fetch(`https://ip-api.com/json/${domain}`)
-        ]);
-
-        if (!pageSpeedRes.ok) {
-            const errorData = await pageSpeedRes.json();
-            throw new Error(`PageSpeed API failed: ${errorData.error.message}`);
-        }
-        if (!ipInfoRes.ok) throw new Error(`IPinfo API failed with status: ${ipInfoRes.status}`);
-
-        const pageSpeedData = await pageSpeedRes.json();
-        const ipInfoData = await ipInfoRes.json();
-
-        const lighthouse = pageSpeedData.lighthouseResult;
-        const audits = lighthouse.audits;
-        
-        finalResult = {
-          id: crypto.randomUUID(),
-          overview: {
-            url: url,
-            domain: domain,
-            title: audits['meta-description']?.title,
-            description: audits['meta-description']?.description,
-            language: audits['html-has-lang']?.details?.items[0]?.lang,
-            favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
-          },
-          performance: {
-            performanceScore: Math.round(lighthouse.categories.performance.score * 100),
-            accessibilityScore: Math.round(lighthouse.categories.accessibility.score * 100),
-            seoScore: Math.round(lighthouse.categories.seo.score * 100),
-            bestPracticesScore: Math.round(lighthouse.categories['best-practices'].score * 100),
-          },
-          security: {
-            sslGrade: 'A+', // Mocked - requires dedicated API
-            securityHeadersGrade: 'A', // Mocked - requires dedicated API
-            domainExpiry: '2025-10-22', // Mocked - requires WHOIS API
-            isSecure: url.startsWith('https://'),
-          },
-          metadata: {
-            openGraphTags: {}, // PageSpeed doesn't easily provide all OG tags
-            hasRobotsTxt: audits['robots-txt']?.score === 1,
-            hasSitemapXml: false, // This check is complex; mocking for now
-          },
-          hosting: {
-            ip: ipInfoData.query,
-            isp: ipInfoData.isp,
-            country: ipInfoData.country,
-          },
-          createdAt: new Date().toISOString(),
-        };
+    let partial = false;
+    if (pageSpeedRes.status === 'rejected' || ipInfoRes.status === 'rejected') {
+        partial = true;
     }
+    
+    const pageSpeedData = pageSpeedRes.status === 'fulfilled' && pageSpeedRes.value.ok ? await pageSpeedRes.value.json() : null;
+    const ipInfoData = ipInfoRes.status === 'fulfilled' && ipInfoRes.value.ok ? await ipInfoRes.value.json() : null;
+
+    if (!pageSpeedData && !ipInfoData) {
+        throw new Error('All API requests failed. Unable to analyze the URL.');
+    }
+
+    const lighthouse = pageSpeedData?.lighthouseResult;
+    const audits = lighthouse?.audits;
+
+    const finalResult: AnalysisResult = {
+      id: crypto.randomUUID(),
+      overview: {
+        url: url,
+        domain: domain,
+        title: audits?.['meta-description']?.title || pageSpeedData?.id.split('?')[0] || 'No title found',
+        description: audits?.['meta-description']?.description || 'No description available.',
+        language: audits?.['html-has-lang']?.details?.items[0]?.lang,
+        favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
+      },
+      performance: {
+        performanceScore: lighthouse ? Math.round(lighthouse.categories.performance.score * 100) : undefined,
+        accessibilityScore: lighthouse ? Math.round(lighthouse.categories.accessibility.score * 100) : undefined,
+        seoScore: lighthouse ? Math.round(lighthouse.categories.seo.score * 100) : undefined,
+        bestPracticesScore: lighthouse ? Math.round(lighthouse.categories['best-practices'].score * 100) : undefined,
+      },
+      security: {
+        sslGrade: 'N/A', // Requires dedicated API like SSL Labs, which has usage restrictions
+        securityHeadersGrade: 'N/A', // Requires dedicated API, often with rate limits
+        domainExpiry: 'N/A', // Requires WHOIS lookup, which is complex to do reliably via public API
+        isSecure: url.startsWith('https://'),
+      },
+      metadata: {
+        openGraphTags: {}, // PageSpeed doesn't easily provide all OG tags, would need DOM parsing
+        hasRobotsTxt: audits?.['robots-txt']?.score === 1,
+        hasSitemapXml: false, // This check is complex and often unreliable; mocking for now
+      },
+      hosting: {
+        ip: ipInfoData?.query,
+        isp: ipInfoData?.isp,
+        country: ipInfoData?.countryCode,
+      },
+      createdAt: new Date().toISOString(),
+      partial: partial,
+    };
     
     return finalResult;
 
