@@ -78,35 +78,35 @@ export function AnalysisDashboard({ initialData, performancePromise }: { initial
 
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {data.overview && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="xl:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="lg:col-span-4">
           <OverviewCard data={data.overview} />
         </motion.div>
       }
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2 xl:col-span-3">
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-4">
         <PerformanceCard data={data.performance} />
       </motion.div>
       {data.security && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-1 xl:col-span-1">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-2">
           <SecurityCard data={data.security} />
         </motion.div>
       }
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="xl:col-span-4">
-        <AuditsCard data={data.audits} />
-      </motion.div>
       {data.hosting && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="xl:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-2">
           <HostingCard data={data.hosting} />
         </motion.div>
       }
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="lg:col-span-4">
+        <AuditsCard data={data.audits} />
+      </motion.div>
       {data.metadata &&
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="xl:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="lg:col-span-2">
           <MetadataCard data={data.metadata} />
         </motion.div>
       }
       {data.headers && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="xl:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="lg:col-span-2">
           <HeadersCard data={data.headers} />
         </motion.div>
       }

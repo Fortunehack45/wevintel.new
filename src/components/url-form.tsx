@@ -113,7 +113,7 @@ export function UrlForm() {
         transition={{ duration: 0.5 }}
         className="relative w-full max-w-xl mx-auto"
     >
-        <Card className="p-2 rounded-2xl shadow-lg border">
+        <Card className="p-2 rounded-xl shadow-lg border">
             <form onSubmit={handleSubmit} className="flex w-full items-center space-x-2">
                 <Input
                     type="text"
@@ -127,7 +127,7 @@ export function UrlForm() {
                     disabled={isLoading}
                     autoComplete="off"
                 />
-                <Button type="submit" size="lg" className="h-12" disabled={isLoading || !url}>
+                <Button type="submit" size="lg" className="h-12 rounded-lg" disabled={isLoading || !url}>
                     {isLoading ? (
                         <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
