@@ -5,13 +5,13 @@ export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="text-center">
-        <h1 className="text-5xl font-bold gradient-text">About WebIntel</h1>
+        <h1 className="text-5xl font-bold text-foreground">About WebIntel</h1>
         <p className="mt-4 text-lg text-muted-foreground">
           Your open-source tool for instant website intelligence.
         </p>
       </div>
 
-      <Card className="glass-card">
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Info className="text-primary" />
@@ -28,7 +28,7 @@ export default function AboutPage() {
         </CardContent>
       </Card>
 
-      <Card className="glass-card">
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Lock className="text-primary" />
@@ -47,7 +47,7 @@ export default function AboutPage() {
         </CardContent>
       </Card>
 
-      <Card className="glass-card">
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Database className="text-primary" />

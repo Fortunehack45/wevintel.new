@@ -7,7 +7,7 @@ import { TrendingUp } from 'lucide-react';
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="p-2 text-sm glass-card rounded-md border border-border">
+      <div className="p-2 text-sm bg-white/80 backdrop-blur-sm rounded-md border">
         <p className="label font-bold">{`${label}`}</p>
         <p style={{ color: payload[0].fill }}>{`Score : ${payload[0].value}`}</p>
       </div>
@@ -31,7 +31,7 @@ export function PerformanceCard({ data }: { data: PerformanceData }) {
   ].filter(d => typeof d.score === 'number');
 
   return (
-    <Card className="glass-card h-full">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5 text-primary" />
@@ -45,7 +45,7 @@ export function PerformanceCard({ data }: { data: PerformanceData }) {
             <BarChart data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
               <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} domain={[0, 100]} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--accent) / 0.1)' }}/>
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--accent) / 0.5)' }}/>
               <Bar dataKey="score" radius={[4, 4, 0, 0]}>
                 {chartData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={getScoreColor(entry.score ?? 0)} />

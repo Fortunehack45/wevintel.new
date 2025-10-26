@@ -20,7 +20,7 @@ export function HistoryClient() {
 
   if (history.length === 0) {
     return (
-        <div className="text-center p-8 glass-card rounded-2xl">
+        <div className="text-center p-8 border-2 border-dashed rounded-2xl">
             <h3 className="text-xl font-semibold">No sites analyzed yet.</h3>
             <p className="text-muted-foreground mt-2">Start exploring to see your history here!</p>
         </div>
@@ -44,7 +44,7 @@ export function HistoryClient() {
             transition={{ delay: index * 0.05 }}
           >
             <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`} className="block h-full">
-                <Card className="glass-card h-full hover:border-primary/50 transition-colors group">
+                <Card className="h-full hover:border-primary/50 transition-colors group hover:shadow-xl">
                     <CardHeader>
                         <div className="flex items-center gap-3">
                             <Image src={item.overview.favicon || '/fallback-favicon.svg'} alt="favicon" width={32} height={32} className="rounded-md" unoptimized />

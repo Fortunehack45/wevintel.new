@@ -26,16 +26,16 @@ export function Header() {
   }, []);
 
   if (!mounted) {
-    return <header className="p-4 flex justify-between items-center border-b border-white/10 h-[69px]" />;
+    return <header className="p-4 flex justify-between items-center border-b h-[69px]" />;
   }
 
   const NavContent = () => (
     <nav className={cn("flex items-center gap-2", isMobile && 'flex-col items-start gap-4')}>
         {navLinks.map(link => (
-            <Button 
-                key={link.href} 
-                variant={pathname === link.href ? "secondary" : "ghost"} 
-                asChild 
+            <Button
+                key={link.href}
+                variant={pathname === link.href ? "secondary" : "ghost"}
+                asChild
                 className={cn(isMobile && "justify-start w-full")}
                 onClick={() => setSheetOpen(false)}
             >
@@ -47,10 +47,10 @@ export function Header() {
 
 
   return (
-    <header className="p-4 flex justify-between items-center border-b border-white/10 sticky top-0 bg-background/80 backdrop-blur-lg z-50">
+    <header className="p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-50">
       <Link href="/" className="flex items-center gap-2 font-bold text-lg">
         <Compass className="h-6 w-6 text-primary" />
-        <span className="gradient-text">WebIntel</span>
+        <span className="text-foreground">WebIntel</span>
       </Link>
 
       {isMobile ? (
@@ -60,11 +60,11 @@ export function Header() {
               <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="glass-card w-[250px]">
+          <SheetContent side="right" className="bg-background/90 w-[250px]">
             <div className='p-4'>
               <Link href="/" className="flex items-center gap-2 font-bold text-lg mb-8" onClick={() => setSheetOpen(false)}>
                 <Compass className="h-6 w-6 text-primary" />
-                <span className="gradient-text">WebIntel</span>
+                <span className="text-foreground">WebIntel</span>
               </Link>
               <NavContent />
             </div>

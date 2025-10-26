@@ -15,7 +15,7 @@ export default function Home() {
           transition={{ duration: 0.7, ease: 'easeOut' }}
           className="mb-12"
         >
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight gradient-text">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground">
             WebIntel
           </h1>
           <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -29,7 +29,7 @@ export default function Home() {
       </div>
 
       <div className="w-full max-w-5xl mt-20">
-          <h2 className="text-2xl font-bold mb-4">Recent Analyses</h2>
+          <h2 className="text-2xl font-bold mb-4 text-left">Recent Analyses</h2>
           <HistoryClient />
       </div>
 

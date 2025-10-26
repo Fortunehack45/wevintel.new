@@ -7,7 +7,7 @@ export function HeadersCard({ data }: { data: HeaderInfo }) {
   const headers = Object.entries(data);
 
   return (
-    <Card className="glass-card h-full">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ListTree className="h-5 w-5 text-primary" />
@@ -17,7 +17,7 @@ export function HeadersCard({ data }: { data: HeaderInfo }) {
       </CardHeader>
       <CardContent>
         {headers.length > 0 ? (
-          <ScrollArea className="h-64 rounded-md border border-border p-4">
+          <ScrollArea className="h-64 rounded-md border p-4">
             <div className="space-y-4 text-sm">
                 {headers.map(([key, value]) => (
                     <div key={key} className="grid grid-cols-1 md:grid-cols-4 gap-1">

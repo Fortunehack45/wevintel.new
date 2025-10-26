@@ -6,7 +6,7 @@ export function MetadataCard({ data }: { data: Metadata }) {
   const ogTags = Object.entries(data.openGraphTags);
 
   return (
-    <Card className="glass-card h-full">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Code className="h-5 w-5 text-primary" />
@@ -19,13 +19,13 @@ export function MetadataCard({ data }: { data: Metadata }) {
           <span className="text-muted-foreground flex items-center gap-2">
             robots.txt
           </span>
-          {data.hasRobotsTxt ? <CheckCircle className="h-5 w-5 text-green-400" /> : <XCircle className="h-5 w-5 text-destructive" />}
+          {data.hasRobotsTxt ? <CheckCircle className="h-5 w-5 text-green-500" /> : <XCircle className="h-5 w-5 text-red-500" />}
         </div>
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground flex items-center gap-2">
             sitemap.xml
           </span>
-          {data.hasSitemapXml ? <CheckCircle className="h-5 w-5 text-green-400" /> : <XCircle className="h-5 w-5 text-destructive" />}
+          {data.hasSitemapXml ? <CheckCircle className="h-5 w-5 text-green-500" /> : <XCircle className="h-5 w-5 text-red-500" />}
         </div>
         <div>
             <p className="font-semibold mb-2">Open Graph Tags</p>

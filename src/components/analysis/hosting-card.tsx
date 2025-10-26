@@ -4,7 +4,7 @@ import { Server } from 'lucide-react';
 
 export function HostingCard({ data }: { data: HostingInfo }) {
   return (
-    <Card className="glass-card h-full">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Server className="h-5 w-5 text-primary" />

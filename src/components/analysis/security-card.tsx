@@ -19,7 +19,7 @@ export function SecurityCard({ data }: { data: SecurityData }) {
   ]
 
   return (
-    <Card className="glass-card h-full">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ShieldCheck className="h-5 w-5 text-primary" />
@@ -30,7 +30,7 @@ export function SecurityCard({ data }: { data: SecurityData }) {
       <CardContent className="grid gap-4 text-sm">
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">SSL Connection</span>
-          {data.isSecure ? <Badge className="bg-green-500/20 text-green-300 border-green-500/30 hover:bg-green-500/30">Secure</Badge> : <Badge variant="destructive">Insecure</Badge>}
+          {data.isSecure ? <Badge className="bg-green-100 text-green-800 border-green-200 hover:bg-green-200">Secure</Badge> : <Badge variant="destructive">Insecure</Badge>}
         </div>
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Domain Expiry</span>
@@ -42,7 +42,7 @@ export function SecurityCard({ data }: { data: SecurityData }) {
                 {securityHeaders.map(header => (
                     <div key={header.key} className="flex justify-between items-center">
                         <span className="text-muted-foreground">{header.name}</span>
-                        {data.securityHeaders?.[header.key as keyof typeof data.securityHeaders] ? <CheckCircle className="h-4 w-4 text-green-400" /> : <XCircle className="h-4 w-4 text-destructive" />}
+                        {data.securityHeaders?.[header.key as keyof typeof data.securityHeaders] ? <CheckCircle className="h-4 w-4 text-green-500" /> : <XCircle className="h-4 w-4 text-red-500" />}
                     </div>
                 ))}
             </div>

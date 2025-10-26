@@ -22,9 +22,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${poppins.variable} font-body antialiased bg-background text-foreground`}>
-        <div className="flex flex-col min-h-screen bg-gradient-to-br from-black via-background to-background">
+    <html lang="en">
+      <body className={`${poppins.variable} font-body antialiased bg-gray-50 text-foreground`}>
+        <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-1 container mx-auto px-4 py-8">{children}</main>
           <Footer />
