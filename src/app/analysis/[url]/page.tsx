@@ -74,19 +74,19 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
 function DashboardSkeleton() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <Skeleton className="h-56 rounded-lg lg:col-span-3 glass-card" />
-      <Skeleton className="h-80 rounded-lg lg:col-span-2 glass-card" />
-      <Skeleton className="h-80 rounded-lg glass-card" />
-      <Skeleton className="h-64 rounded-lg glass-card" />
-      <Skeleton className="h-64 rounded-lg glass-card" />
-      <Skeleton className="h-64 rounded-lg lg:col-span-1 glass-card" />
+      <Skeleton className="h-56 rounded-2xl lg:col-span-3 glass-card" />
+      <Skeleton className="h-80 rounded-2xl lg:col-span-2 glass-card" />
+      <Skeleton className="h-80 rounded-2xl glass-card" />
+      <Skeleton className="h-64 rounded-2xl glass-card" />
+      <Skeleton className="h-64 rounded-2xl glass-card" />
+      <Skeleton className="h-64 rounded-2xl lg:col-span-1 glass-card" />
     </div>
   );
 }
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
     return (
-        <Alert variant="destructive">
+        <Alert variant="destructive" className="glass-card">
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>{title}</AlertTitle>
 

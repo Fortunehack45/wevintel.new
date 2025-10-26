@@ -44,7 +44,7 @@ export function UrlForm() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-xl mx-auto p-4 rounded-lg glass-card glow-border"
+        className="w-full max-w-xl mx-auto p-4 rounded-2xl glass-card glow-border"
     >
         <form onSubmit={handleSubmit} className="flex w-full items-center space-x-2">
             <Input
@@ -56,7 +56,7 @@ export function UrlForm() {
                 aria-label="Website URL"
                 disabled={isLoading}
             />
-            <Button type="submit" size="lg" className="h-12" disabled={isLoading || !url}>
+            <Button type="submit" size="lg" className="h-12 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity" disabled={isLoading || !url}>
                 {isLoading ? (
                     <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

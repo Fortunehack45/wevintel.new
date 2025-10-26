@@ -20,7 +20,7 @@ export function HistoryClient() {
 
   if (history.length === 0) {
     return (
-        <div className="text-center p-8 glass-card rounded-lg">
+        <div className="text-center p-8 glass-card rounded-2xl">
             <h3 className="text-xl font-semibold">No sites analyzed yet.</h3>
             <p className="text-muted-foreground mt-2">Start exploring to see your history here!</p>
         </div>

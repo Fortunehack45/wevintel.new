@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${poppins.variable} font-body antialiased bg-background text-foreground`}>
-        <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-black to-background">
+        <div className="flex flex-col min-h-screen bg-gradient-to-br from-black via-background to-background">
           <Header />
           <main className="flex-1 container mx-auto px-4 py-8">{children}</main>
           <Footer />

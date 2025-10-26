@@ -1,18 +1,27 @@
+'use client';
+
 import { UrlForm } from '@/components/url-form';
 import { HistoryClient } from '@/components/history-client';
+import { motion } from 'framer-motion';
+
 
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center text-center min-h-[calc(100vh-200px)] -mt-16">
       <div className="max-w-3xl w-full">
-        <div className="mb-12">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="mb-12"
+        >
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight gradient-text">
             WebIntel
           </h1>
           <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Instantly uncover the secrets of any website. Enter a URL to generate a complete intelligence report.
+            Know everything about any website. Instantly uncover the secrets of any URL.
           </p>
-        </div>
+        </motion.div>
         <UrlForm />
         <p className="mt-4 text-sm text-muted-foreground">
           Get insights on performance, security, SEO, and more.
