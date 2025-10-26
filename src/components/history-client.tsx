@@ -51,7 +51,7 @@ export function HistoryClient() {
         <div className="flex justify-end mb-4">
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm">
+                <Button size="sm">
                   <Trash2 className="mr-2 h-4 w-4" />
                   Clear History
                 </Button>
@@ -66,7 +66,7 @@ export function HistoryClient() {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={clearHistory}>Continue</AlertDialogAction>
+                  <AlertDialogAction onClick={clearHistory} className={buttonVariants({ variant: "destructive" })}>Continue</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
