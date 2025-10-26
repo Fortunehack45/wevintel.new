@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import type { HeaderInfo } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ListHeaders } from 'lucide-react';
+import { ListTree } from 'lucide-react';
 
 export function HeadersCard({ data }: { data: HeaderInfo }) {
   const headers = Object.entries(data);
@@ -10,7 +10,7 @@ export function HeadersCard({ data }: { data: HeaderInfo }) {
     <Card className="glass-card h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ListHeaders className="h-5 w-5 text-primary" />
+          <ListTree className="h-5 w-5 text-primary" />
           HTTP Headers
         </CardTitle>
         <CardDescription>Raw response headers from the server.</CardDescription>
