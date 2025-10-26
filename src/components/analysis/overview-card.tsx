@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { WebsiteOverview } from '@/lib/types';
 import Image from 'next/image';
 import { Languages, FileText } from 'lucide-react';
@@ -18,7 +18,7 @@ export function OverviewCard({ data }: { data: WebsiteOverview }) {
           />
         )}
         <div className='flex-1'>
-          <h2 className="text-2xl font-bold">{data.title || 'No Title Found'}</h2>
+          <CardTitle>{data.title || 'No Title Found'}</CardTitle>
           <p className="text-muted-foreground">{data.domain}</p>
         </div>
       </CardHeader>

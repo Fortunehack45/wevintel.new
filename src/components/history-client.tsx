@@ -48,12 +48,12 @@ export function HistoryClient() {
                 transition={{ delay: index * 0.05 }}
               >
                 <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`} className="block h-full">
-                    <Card className="h-full hover:border-primary/50 transition-colors group glass-card hover:shadow-primary/20 hover:shadow-lg">
+                    <Card className="h-full hover:border-primary/50 transition-all group glass-card hover:shadow-primary/20 hover:shadow-lg hover:scale-105">
                         <CardHeader>
                             <div className="flex items-center gap-3">
                                 <Image src={item.overview.favicon || '/fallback-favicon.svg'} alt="favicon" width={32} height={32} className="rounded-md" unoptimized />
                                 <div className="flex-1 overflow-hidden">
-                                    <CardTitle className="truncate text-lg">{item.overview.domain}</CardTitle>
+                                    <CardTitle className="truncate">{item.overview.domain}</CardTitle>
                                     <p className="text-xs text-muted-foreground">
                                         {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
                                     </p>
@@ -77,7 +77,7 @@ export function HistoryClient() {
                             </div>
                         </CardContent>
                         <CardFooter>
-                           <p className="text-xs text-muted-foreground group-hover:text-primary transition-colors">View full report &rarr;</p>
+                           <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">View full report &rarr;</p>
                         </CardFooter>
                     </Card>
                 </Link>
