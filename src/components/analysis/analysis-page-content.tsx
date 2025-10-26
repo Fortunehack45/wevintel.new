@@ -196,10 +196,12 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
   
   if (analysisResult && performancePromise) {
     return (
-      <AnalysisDashboard 
-        initialData={analysisResult} 
-        performancePromise={performancePromise}
-      />
+      <Suspense fallback={<DashboardSkeleton />}>
+        <AnalysisDashboard 
+          initialData={analysisResult} 
+          performancePromise={performancePromise}
+        />
+      </Suspense>
     );
   }
 
