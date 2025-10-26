@@ -52,8 +52,8 @@ export function HistoryClient() {
         <div className="flex justify-end mb-4">
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button size="sm">
-                  <Trash2 className="mr-2 h-4 w-4" />
+                <Button size="sm" className="group transition-colors duration-200 ease-in-out bg-primary hover:bg-destructive text-primary-foreground">
+                  <Trash2 className="mr-2 h-4 w-4 transition-colors duration-200 ease-in-out" />
                   Clear History
                 </Button>
               </AlertDialogTrigger>
