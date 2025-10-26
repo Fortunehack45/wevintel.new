@@ -15,6 +15,8 @@ import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { OverallScoreCard } from './overall-score-card';
 import { DashboardSkeleton } from './dashboard-skeleton';
+import { getPerformanceAnalysis } from '@/app/actions/analyze';
+import { SummaryCard } from './summary-card';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -29,92 +31,93 @@ const cardVariants = {
   })
 };
 
-type PerformancePromise = Promise<Pick<AnalysisResult, 'performance' | 'performanceAudits' | 'securityAudits' | 'diagnosticsAudits' | 'overview' | 'metadata'>>;
-
-export function AnalysisDashboard({ initialData, performancePromise, onDataLoaded }: { initialData: Partial<AnalysisResult>, performancePromise: PerformancePromise, onDataLoaded: (data: AnalysisResult) => void }) {
+export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: Partial<AnalysisResult>, onDataLoaded: (data: AnalysisResult) => void }) {
   const [, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
-  const [data, setData] = useState<AnalysisResult | null>(null);
+  const [fullData, setFullData] = useState<AnalysisResult | null>(null);
+  const [isPerfLoading, setIsPerfLoading] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
-    performancePromise.then(performanceResult => {
-      if(isMounted) {
-        
-        const securityAudits = performanceResult.securityAudits || {};
-        let securityScoreTotal = 0;
-        let securityItemsScored = 0;
-        
-        if (initialData.security?.isSecure) {
-            securityScoreTotal += 1;
-        }
-        securityItemsScored++;
-
-        Object.values(initialData.security?.securityHeaders || {}).forEach(present => {
-            if (present) securityScoreTotal++;
-            securityItemsScored++;
-        });
-
-        Object.values(securityAudits).forEach(audit => {
-            if (audit.score !== null) {
-                securityScoreTotal += audit.score;
-                securityItemsScored++;
-            }
-        });
-
-        const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
-
-        const fullData = {
-          ...initialData,
-          ...performanceResult,
-          overview: {
-            // Prioritize performance result's overview, but fallback to initialData's
-            ...initialData.overview,
-            ...performanceResult.overview,
-            // Explicitly keep the better title if the perf one is bad
-            title: performanceResult.overview?.title?.startsWith('http') ? initialData.overview?.title : performanceResult.overview?.title || initialData.overview?.title,
-            description: performanceResult.overview?.description || initialData.overview?.description,
-          },
-          metadata: {
-            ...initialData.metadata,
-            hasRobotsTxt: performanceResult.metadata.hasRobotsTxt,
-          },
-          security: {
-            ...initialData.security,
-            securityScore: calculatedSecurityScore,
-          }
-        } as AnalysisResult;
-
-        setData(fullData);
-        onDataLoaded(fullData);
-      }
-    });
-
-    return () => {
-      isMounted = false;
-    }
-
-  }, [performancePromise, initialData, onDataLoaded]);
+    // When initial data is loaded, set it as the full data (but partial)
+    // This allows the UI to render immediately with the fast analysis results.
+    setFullData(initialData as AnalysisResult);
+    onDataLoaded(initialData as AnalysisResult);
+  }, [initialData, onDataLoaded]);
   
   useEffect(() => {
-    if (data && data.performance) {
+    // This effect runs when the full data (including performance) is available.
+    // It updates the history.
+    if (fullData && fullData.performance) {
       setHistory(prevHistory => {
         const newHistory = [...prevHistory];
-        const existingIndex = newHistory.findIndex(item => item.overview.url === data.overview?.url);
+        const existingIndex = newHistory.findIndex(item => item.overview.url === fullData.overview?.url);
         
         if (existingIndex > -1) {
-            newHistory[existingIndex] = data as AnalysisResult;
+            newHistory[existingIndex] = fullData as AnalysisResult;
         } else {
-            newHistory.unshift(data as AnalysisResult);
+            newHistory.unshift(fullData as AnalysisResult);
         }
 
         return newHistory.slice(0, 20);
       });
     }
-  }, [data, setHistory]);
+  }, [fullData, setHistory]);
+
+  const handleRunPerformance = async () => {
+    if (!fullData?.overview.url) return;
+    setIsPerfLoading(true);
+
+    const performanceResult = await getPerformanceAnalysis(fullData.overview.url);
+    
+    const securityAudits = performanceResult.securityAudits || {};
+    let securityScoreTotal = 0;
+    let securityItemsScored = 0;
+    
+    if (initialData.security?.isSecure) {
+        securityScoreTotal += 1;
+    }
+    securityItemsScored++;
+
+    Object.values(initialData.security?.securityHeaders || {}).forEach(present => {
+        if (present) securityScoreTotal++;
+        securityItemsScored++;
+    });
+
+    Object.values(securityAudits).forEach(audit => {
+        if (audit.score !== null) {
+            securityScoreTotal += audit.score;
+            securityItemsScored++;
+        }
+    });
+
+    const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
+
+    const updatedData = {
+      ...initialData,
+      ...performanceResult,
+      overview: {
+        ...initialData.overview,
+        ...performanceResult.overview,
+        title: performanceResult.overview?.title || initialData.overview?.title,
+        description: performanceResult.overview?.description || initialData.overview?.description,
+      },
+      metadata: {
+        ...initialData.metadata,
+        hasRobotsTxt: performanceResult.metadata.hasRobotsTxt,
+      },
+      security: {
+        ...initialData.security,
+        securityScore: calculatedSecurityScore,
+      }
+    } as AnalysisResult;
+
+    setFullData(updatedData);
+    onDataLoaded(updatedData);
+    setIsPerfLoading(false);
+  }
 
   const totalAuditScore = useMemo(() => {
-    if (!data) return null;
-    const allAudits: (AuditInfo | undefined)[] = [data.performanceAudits, data.securityAudits, data.diagnosticsAudits];
+    if (!fullData?.performance) return null; // Only calculate if performance data is available
+    const allAudits: (AuditInfo | undefined)[] = [fullData.performanceAudits, fullData.securityAudits, fullData.diagnosticsAudits];
     let totalScore = 0;
     let scoreCount = 0;
 
@@ -131,50 +134,76 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
 
     if (scoreCount === 0) return null;
     return Math.round((totalScore / scoreCount) * 100);
-  }, [data]);
+  }, [fullData]);
 
 
-  if (!data) {
-    return <DashboardSkeleton initialData={initialData} />;
+  if (!fullData) {
+    return <DashboardSkeleton />;
   }
+
+  const { overview, security, hosting, metadata, headers, performance, performanceAudits, securityAudits, diagnosticsAudits } = fullData;
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-      {data.overview && 
+      {overview && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="lg:col-span-4">
-          <OverviewCard data={data.overview} />
+          <OverviewCard data={overview} />
         </motion.div>
       }
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-4">
-        <PerformanceCard data={data.performance} />
-      </motion.div>
-      {data.security && 
+
+      {!performance &&
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-4">
+          <SummaryCard 
+            data={initialData}
+            onRunPerformance={handleRunPerformance}
+            isLoading={isPerfLoading}
+          />
+        </motion.div>
+      }
+
+      {performance &&
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-4">
+          <PerformanceCard data={performance} />
+        </motion.div>
+      }
+
+      {security && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-2">
-          <SecurityCard data={data.security} audits={data.securityAudits} />
+          <SecurityCard data={security} audits={securityAudits} />
         </motion.div>
       }
-      {data.hosting && 
+      {hosting && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-1">
-          <HostingCard data={data.hosting} />
+          <HostingCard data={hosting} />
         </motion.div>
       }
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-1">
-        <OverallScoreCard score={totalAuditScore} />
-      </motion.div>
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="lg:col-span-2">
-        <AuditsCard data={data.performanceAudits} />
-      </motion.div>
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="lg:col-span-2">
-        <DiagnosticsCard data={data.diagnosticsAudits} />
-      </motion.div>
-      {data.metadata &&
+      
+      {performance &&
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-1">
+          <OverallScoreCard score={totalAuditScore} />
+        </motion.div>
+      }
+
+      {performanceAudits && 
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="lg:col-span-2">
+          <AuditsCard data={performanceAudits} />
+        </motion.div>
+      }
+      
+      {diagnosticsAudits &&
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="lg:col-span-2">
+          <DiagnosticsCard data={diagnosticsAudits} />
+        </motion.div>
+      }
+
+      {metadata &&
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="lg:col-span-2">
-          <MetadataCard data={data.metadata} />
+          <MetadataCard data={metadata} />
         </motion.div>
       }
-      {data.headers && 
+      {headers && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="lg:col-span-2">
-          <HeadersCard data={data.headers} />
+          <HeadersCard data={headers} />
         </motion.div>
       }
     </div>

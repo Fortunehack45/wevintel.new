@@ -159,7 +159,7 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
         return { error: 'Could not fetch the main page of the website. It might be down or blocking requests.' };
     }
     
-    const tempTitle = pageHtml.match(/<title>(.*?)<\/title>/)?.[1] || 'No title found';
+    const tempTitle = pageHtml.match(/<title>(.*?)<\/title>/)?.[1];
     const tempDescription = getMetaDescription(pageHtml);
 
     const finalResult: Partial<AnalysisResult> = {
@@ -221,6 +221,10 @@ export async function getPerformanceAnalysis(url: string): Promise<Pick<Analysis
     const lighthouse = overviewData?.lighthouseResult;
     const audits = lighthouse?.audits;
 
+    const perfTitle = lighthouse?.audits?.['document-title']?.details?.items[0]?.title;
+    const perfDesc = lighthouse?.audits?.['meta-description']?.details?.items[0]?.description;
+
+
     return {
         performance: {
             mobile: getPerformanceData(pageSpeedMobileData),
@@ -232,8 +236,8 @@ export async function getPerformanceAnalysis(url: string): Promise<Pick<Analysis
         overview: { // This will update the existing overview data
             url: url,
             domain: new URL(url).hostname,
-            title: lighthouse?.audits?.['document-title']?.details?.items[0]?.title,
-            description: lighthouse?.audits?.['meta-description']?.details?.items[0]?.description,
+            title: !perfTitle || perfTitle.startsWith('http') ? undefined : perfTitle,
+            description: perfDesc,
             language: audits?.['html-has-lang']?.details?.items[0]?.lang,
         },
         metadata: { // This will update the existing metadata

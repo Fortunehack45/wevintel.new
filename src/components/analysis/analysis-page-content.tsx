@@ -341,7 +341,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                         <RefreshCw className="mr-2 h-4 w-4" />
                         Re-analyze
                     </Button>
-                    <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisDataForPdf}>
+                    <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisDataForPdf || !analysisDataForPdf.performance}>
                          {isDownloading ? (
                             <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                          ) : (
@@ -360,11 +360,9 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     );
 }
 
-type PerformancePromise = ReturnType<typeof getPerformanceAnalysis>;
 
 function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: number, onDataLoaded: (data: AnalysisResult | null) => void; }) {
   const [analysisResult, setAnalysisResult] = useState<Partial<AnalysisResult> | null>(null);
-  const [performancePromise, setPerformancePromise] = useState<PerformancePromise | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -373,7 +371,6 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
         setIsLoading(true);
         setError(null);
         setAnalysisResult(null);
-        setPerformancePromise(null);
         onDataLoaded(null!);
         try {
             const data = await getFastAnalysis(url);
@@ -381,11 +378,8 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
                 setError(data.error);
             } else {
                 setAnalysisResult(data);
-                // Set the performance promise *after* the fast analysis is complete
-                const perfPromise = getPerformanceAnalysis(url);
-                setPerformancePromise(perfPromise);
-
-                // Note: The full data consolidation is now handled inside AnalysisDashboard
+                // The performance analysis is now triggered by the user
+                // inside the AnalysisDashboard component.
             }
         } catch (error: any) {
             setError(error.message);
@@ -407,12 +401,11 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
     return <ErrorAlert title="Analysis Failed" description={error} />;
   }
   
-  if (analysisResult && performancePromise) {
+  if (analysisResult) {
     return (
       <Suspense fallback={<DashboardSkeleton />}>
         <AnalysisDashboard 
           initialData={analysisResult} 
-          performancePromise={performancePromise}
           onDataLoaded={onDataLoaded as (data: AnalysisResult) => void}
         />
       </Suspense>

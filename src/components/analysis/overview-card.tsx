@@ -19,7 +19,7 @@ export function OverviewCard({ data }: { data: WebsiteOverview }) {
           />
         )}
         <div className='flex-1'>
-          <h3 className="text-2xl font-bold tracking-tight">{data.title || 'No Title Found'}</h3>
+          <h3 className="text-2xl font-bold tracking-tight">{data.title || data.domain}</h3>
           <p className="text-muted-foreground">{data.domain}</p>
         </div>
       </CardHeader>
