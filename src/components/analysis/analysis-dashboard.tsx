@@ -53,6 +53,8 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
         } as AnalysisResult;
 
         setData(fullData);
+        // This is the important change. We pass the *full* data object
+        // once the performance analysis is complete.
         onDataLoaded(fullData);
       }
     });
@@ -121,3 +123,5 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
     </div>
   );
 }
+
+    
