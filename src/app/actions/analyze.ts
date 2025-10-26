@@ -123,6 +123,15 @@ const getAuditInfo = (pageSpeedData: any): AuditInfo => {
         'non-composited-animations',
         'user-timings',
         'uses-explicit-width-and-height',
+        
+        // New Security & Diagnostics
+        'cross-origin-opener-policy',
+        'strict-transport-security',
+        'csp-xss',
+        'deprecations',
+        'errors-in-console',
+        'third-party-facades',
+        'no-vulnerable-libraries',
     ];
 
     const auditResults: AuditInfo = {};
