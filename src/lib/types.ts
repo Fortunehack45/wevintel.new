@@ -11,6 +11,7 @@ export type AnalysisResult = {
   metadata: Metadata;
   hosting: HostingInfo;
   headers: HeaderInfo;
+  audits: AuditInfo;
   createdAt: string; // ISO 8601 string
   error?: string;
   partial?: boolean;
@@ -64,6 +65,17 @@ export type HostingInfo = {
 
 export type HeaderInfo = {
     [key: string]: string;
+}
+
+export type AuditItem = {
+    title: string;
+    description: string;
+    score: number | null;
+    displayValue?: string;
+}
+
+export type AuditInfo = {
+    [key: string]: AuditItem;
 }
 
 export type HistoryItem = Pick<AnalysisResult, 'id' | 'overview' | 'performance' | 'security' | 'createdAt'>;

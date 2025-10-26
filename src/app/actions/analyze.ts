@@ -1,7 +1,7 @@
 
 'use server';
 
-import type { AnalysisResult, PerformanceData, SecurityData } from '@/lib/types';
+import type { AnalysisResult, PerformanceData, SecurityData, AuditInfo, AuditItem } from '@/lib/types';
 import 'dotenv/config';
 
 // Helper function to parse Open Graph tags from HTML
@@ -51,6 +51,40 @@ const getPerformanceData = (pageSpeedData: any): PerformanceData => {
         largestContentfulPaint: audits?.['largest-contentful-paint']?.displayValue,
         cumulativeLayoutShift: audits?.['cumulative-layout-shift']?.displayValue,
     }
+}
+
+// Extract a curated list of specific audits from the Lighthouse report.
+const getAuditInfo = (pageSpeedData: any): AuditInfo => {
+    const audits = pageSpeedData?.lighthouseResult?.audits;
+    if (!audits) return {};
+
+    const desiredAudits = [
+        'third-party-summary',
+        'largest-contentful-paint-element',
+        'layout-shift-elements',
+        'legacy-javascript',
+        'uses-long-cache-ttl',
+        'user-timings',
+        'long-tasks',
+        'total-byte-weight',
+        'unused-css-rules',
+        'mainthread-work-breakdown',
+    ];
+
+    const auditResults: AuditInfo = {};
+    desiredAudits.forEach(auditId => {
+        const audit = audits[auditId];
+        if (audit) {
+            auditResults[auditId] = {
+                title: audit.title,
+                description: audit.description,
+                score: audit.score,
+                displayValue: audit.displayValue,
+            };
+        }
+    });
+
+    return auditResults;
 }
 
 
@@ -142,6 +176,7 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
         country: ipInfoData?.countryCode,
       },
       headers: responseHeaders.all,
+      audits: getAuditInfo(pageSpeedMobileData), // Using mobile data for audits for now
       createdAt: new Date().toISOString(),
       partial: partial,
     };
