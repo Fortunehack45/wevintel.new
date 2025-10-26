@@ -8,6 +8,7 @@ import { Wand2, CheckCircle, Lightbulb, AlertTriangle } from 'lucide-react';
 import type { AnalysisResult, AISummary } from '@/lib/types';
 import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 
 
 const SummarySkeleton = () => (
@@ -82,31 +83,39 @@ export function SummaryCard({ data }: { data: Partial<AnalysisResult> }) {
 
     return (
         <Card className="glass-card h-full">
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <Wand2 className="h-5 w-5 text-primary" />
-                    AI-Powered Summary
-                </CardTitle>
-                <CardDescription>A quick analysis and recommendations from our AI expert.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                {isLoading && <SummarySkeleton />}
-                {error && <ErrorState onRetry={generateSummary} />}
-                {summary && (
-                    <div className="space-y-6">
-                        <div>
-                            <h4 className="font-semibold mb-2 flex items-center gap-2"><Lightbulb className="text-yellow-400"/> Quick Summary</h4>
-                            <p className="text-sm text-muted-foreground">{summary.summary}</p>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold mb-2 flex items-center gap-2"><CheckCircle className="text-green-500" /> Recommendations</h4>
-                            <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5">
-                                {summary.recommendations.map((rec, i) => <li key={i}>{rec}</li>)}
-                            </ul>
-                        </div>
-                    </div>
-                )}
-            </CardContent>
+             <Accordion type="single" collapsible defaultValue='item-1'>
+                <AccordionItem value="item-1" className='border-none'>
+                    <AccordionTrigger className='p-6 hover:no-underline'>
+                         <div className='flex flex-col space-y-1.5 text-left'>
+                            <CardTitle className="flex items-center gap-2">
+                                <Wand2 className="h-5 w-5 text-primary" />
+                                AI-Powered Summary
+                            </CardTitle>
+                            <CardDescription>A quick analysis and recommendations from our AI expert.</CardDescription>
+                         </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                        <CardContent>
+                            {isLoading && <SummarySkeleton />}
+                            {error && <ErrorState onRetry={generateSummary} />}
+                            {summary && (
+                                <div className="space-y-6">
+                                    <div>
+                                        <h4 className="font-semibold mb-2 flex items-center gap-2"><Lightbulb className="text-yellow-400"/> Quick Summary</h4>
+                                        <p className="text-sm text-muted-foreground">{summary.summary}</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-semibold mb-2 flex items-center gap-2"><CheckCircle className="text-green-500" /> Recommendations</h4>
+                                        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5">
+                                            {summary.recommendations.map((rec, i) => <li key={i}>{rec}</li>)}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
+                        </CardContent>
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>
         </Card>
     )
 }
