@@ -97,8 +97,8 @@ export function PerformanceCard({ data }: { data: { mobile: PerformanceData, des
       <CardContent>
           <Tabs defaultValue="mobile" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="mobile"><Smartphone className="mr-2"/>Mobile</TabsTrigger>
-              <TabsTrigger value="desktop"><Monitor className="mr-2"/>Desktop</TabsTrigger>
+              <TabsTrigger value="mobile"><Smartphone className="mr-2 h-4 w-4"/>Mobile</TabsTrigger>
+              <TabsTrigger value="desktop"><Monitor className="mr-2 h-4 w-4"/>Desktop</TabsTrigger>
             </TabsList>
             <TabsContent value="mobile">
               <PerformanceReport data={data.mobile} />
