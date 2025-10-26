@@ -1,9 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Info, Database, Shield, Lock } from "lucide-react";
+import { Info, Database, Shield, Lock, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
+      <div className="mb-8">
+        <Button asChild variant="outline">
+          <Link href="/">
+            <Home className="mr-2 h-4 w-4" />
+            Back to Dashboard
+          </Link>
+        </Button>
+      </div>
       <div className="text-center">
         <h1 className="text-5xl font-bold text-foreground">About WebIntel</h1>
         <p className="mt-4 text-lg text-muted-foreground">
