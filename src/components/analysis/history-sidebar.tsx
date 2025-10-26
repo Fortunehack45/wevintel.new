@@ -1,9 +1,5 @@
 'use client';
 
-import { useCollection } from 'react-firebase-hooks/firestore';
-import { useUser } from '@/firebase/auth/use-user';
-import { collection, query, where, orderBy, getFirestore } from 'firebase/firestore';
-import { app } from '@/firebase/config';
 import {
   Sidebar,
   SidebarContent,
@@ -15,21 +11,23 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import Link from 'next/link';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import type { AnalysisResult } from '@/lib/types';
 import { formatDistanceToNow } from 'date-fns';
-import { Globe, History, PanelLeft } from 'lucide-react';
+import { Globe, History } from 'lucide-react';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
-const db = getFirestore(app);
-
 export function HistorySidebar() {
-  const { user } = useUser();
   const params = useParams();
   const currentUrl = params.url ? decodeURIComponent(params.url as string) : null;
+  const [history, setHistory] = useLocalStorage<AnalysisResult[]>('analysis-history', []);
 
-  const [value, loading, error] = useCollection(
-    user ? query(collection(db, 'analyses'), where('userId', '==', user.uid), orderBy('createdAt', 'desc')) : null
-  );
+  const sortedHistory = history.sort((a, b) => {
+    if (!a.createdAt || !b.createdAt) return 0;
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
 
   return (
     <SidebarProvider>
@@ -42,19 +40,19 @@ export function HistorySidebar() {
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
-            {loading && (
+            {!history && (
               <>
                 <SidebarMenuSkeleton showIcon />
                 <SidebarMenuSkeleton showIcon />
                 <SidebarMenuSkeleton showIcon />
               </>
             )}
-            {error && <p className="p-2 text-sm text-destructive">Error loading history.</p>}
-            {value && value.docs.map((doc) => {
-              const analysis = doc.data();
+            
+            {sortedHistory && sortedHistory.map((analysis) => {
+              if (!analysis?.overview?.url) return null;
               const isActive = analysis.overview.url === currentUrl;
               return (
-                <SidebarMenuItem key={doc.id}>
+                <SidebarMenuItem key={analysis.id}>
                   <SidebarMenuButton
                     asChild
                     isActive={isActive}
@@ -63,7 +61,7 @@ export function HistorySidebar() {
                         <>
                           <p>{analysis.overview.domain}</p>
                           <p className="text-xs text-muted-foreground">
-                            {analysis.createdAt ? formatDistanceToNow(analysis.createdAt.toDate(), { addSuffix: true }) : ''}
+                            {analysis.createdAt ? formatDistanceToNow(new Date(analysis.createdAt), { addSuffix: true }) : ''}
                           </p>
                         </>
                       ),
@@ -75,7 +73,7 @@ export function HistorySidebar() {
                         <span className="truncate w-full">{analysis.overview.domain}</span>
                         {analysis.createdAt && (
                           <span className="text-xs text-muted-foreground">
-                            {formatDistanceToNow(analysis.createdAt.toDate(), { addSuffix: true })}
+                            {formatDistanceToNow(new Date(analysis.createdAt), { addSuffix: true })}
                           </span>
                         )}
                       </div>
@@ -84,7 +82,7 @@ export function HistorySidebar() {
                 </SidebarMenuItem>
               );
             })}
-             {value && value.empty && (
+             {history && history.length === 0 && (
                 <div className='p-4 text-center text-sm text-muted-foreground group-data-[collapsible=icon]:hidden'>
                     Your analysis history will appear here.
                 </div>

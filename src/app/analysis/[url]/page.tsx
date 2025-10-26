@@ -4,17 +4,7 @@ import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { cookies } from 'next/headers';
 import { HistorySidebar, HistorySidebarTrigger } from '@/components/analysis/history-sidebar';
-
-async function getUserId() {
-    // This is a placeholder. In a real app with server-side auth, you'd get this differently.
-    // For now, let's assume we can get it from a cookie or header if needed.
-    // However, for anonymous auth, the client will handle the user state.
-    // We will get the uid from the client and pass it to server action.
-    return null; 
-}
-
 
 export default function AnalysisPage({ params }: { params: { url: string } }) {
   let decodedUrl = '';
@@ -53,10 +43,7 @@ export default function AnalysisPage({ params }: { params: { url: string } }) {
 }
 
 async function AnalysisData({ url }: { url: string }) {
-  // Since we're using anonymous auth on the client, we can't easily get the UID here on the server
-  // during the initial render. The client will pass it with the form submission.
-  // For loading history, the client-side `useCollection` hook will handle fetching data for the current user.
-  const analysisResult = await analyzeUrl(url); // Don't pass userId on initial load
+  const analysisResult = await analyzeUrl(url);
 
   if (analysisResult.error) {
     return <ErrorAlert title="Analysis Failed" description={analysisResult.error} />;

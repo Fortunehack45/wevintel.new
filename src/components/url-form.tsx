@@ -6,15 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
-import { useUser } from '@/firebase/auth/use-user';
-import { analyzeUrl } from '@/app/actions/analyze';
 
 export function UrlForm() {
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
-  const { user } = useUser();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,9 +27,8 @@ export function UrlForm() {
       const urlObject = new URL(cleanUrl);
       const encodedUrl = encodeURIComponent(urlObject.href);
       
-      // Perform analysis and save to history
-      await analyzeUrl(urlObject.href, user?.uid);
-
+      // We no longer call analyzeUrl here. We navigate directly.
+      // The analysis and saving will happen on the analysis page.
       router.push(`/analysis/${encodedUrl}`);
 
     } catch (error) {

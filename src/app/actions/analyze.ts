@@ -1,43 +1,9 @@
 'use server';
 
 import type { AnalysisResult } from '@/lib/types';
-import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { initializeApp, getApps, cert } from 'firebase-admin/app';
-import { getFirestore as getAdminFirestore } from 'firebase-admin/firestore';
 
 
-// This is a temporary solution to get the user ID on the server.
-// In a real app, you'd get this from a proper authentication context.
-async function getUserId() {
-    try {
-        const { getAuth } = await import('firebase/auth');
-        const { app } = await import('@/firebase/config');
-        const auth = getAuth(app);
-        if (auth.currentUser) {
-            return auth.currentUser.uid;
-        }
-
-        const { signInAnonymously } = await import('firebase/auth');
-        const userCredential = await signInAnonymously(auth);
-        return userCredential.user.uid;
-    } catch(e) {
-        // This will happen on the server, so we'll fall back to a server-side auth method.
-        return null;
-    }
-}
-
-
-const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT) : null;
-
-if (serviceAccount && getApps().length === 0) {
-  initializeApp({
-    credential: cert(serviceAccount)
-  });
-}
-
-const adminDb = serviceAccount ? getAdminFirestore() : null;
-
-export async function analyzeUrl(url: string, userId?: string | null): Promise<AnalysisResult | { error: string }> {
+export async function analyzeUrl(url: string): Promise<AnalysisResult | { error: string }> {
   try {
     const urlObject = new URL(url);
     const domain = urlObject.hostname;
@@ -52,6 +18,7 @@ export async function analyzeUrl(url: string, userId?: string | null): Promise<A
       console.warn("API keys missing. Using mock data for analysis.");
       await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
       finalResult = {
+        id: crypto.randomUUID(),
         overview: {
           url: url,
           domain: domain,
@@ -64,6 +31,7 @@ export async function analyzeUrl(url: string, userId?: string | null): Promise<A
         security: { sslGrade: 'A+', securityHeadersGrade: 'A', domainExpiry: '2025-10-22', isSecure: url.startsWith('https://') },
         metadata: { openGraphTags: { 'og:title': 'Mock OG Title', 'og:description': 'Mock OG Description', 'og:image': 'https://picsum.photos/seed/1/1200/630' }, hasRobotsTxt: true, hasSitemapXml: false },
         hosting: { ip: '8.8.8.8', isp: 'Mock ISP, e.g., Google Cloud', country: 'US' },
+        createdAt: new Date().toISOString(),
       };
     } else {
         const [pageSpeedRes, ipInfoRes] = await Promise.all([
@@ -84,6 +52,7 @@ export async function analyzeUrl(url: string, userId?: string | null): Promise<A
         const audits = lighthouse.audits;
         
         finalResult = {
+          id: crypto.randomUUID(),
           overview: {
             url: url,
             domain: domain,
@@ -114,23 +83,10 @@ export async function analyzeUrl(url: string, userId?: string | null): Promise<A
             isp: ipInfoData.org,
             country: ipInfoData.country,
           },
+          createdAt: new Date().toISOString(),
         };
     }
-
-    if (userId && adminDb) {
-        try {
-            await adminDb.collection('analyses').add({
-                ...finalResult,
-                userId: userId,
-                createdAt: serverTimestamp(),
-            });
-        } catch (e: any) {
-            console.error("Failed to save analysis to Firestore:", e);
-            // Don't block the user from seeing the result if Firestore fails
-        }
-    }
-
-
+    
     return finalResult;
 
   } catch (error: any) {
