@@ -15,14 +15,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const getScoreColor = (score: number | null) => {
     if (score === null) return 'text-muted-foreground';
-    if (score >= 0.9) return 'text-green-500';
-    if (score >= 0.5) return 'text-yellow-500';
+    if (score >= 90) return 'text-green-500';
+    if (score >= 50) return 'text-yellow-500';
     return 'text-red-500';
 }
 
 const getScoreIcon = (score: number | null) => {
     if (score === null) return <AlertCircle className="h-4 w-4" />;
-    if (score >= 0.9) return <CheckCircle className="h-4 w-4" />;
+    if (score >= 90) return <CheckCircle className="h-4 w-4" />;
     return <XCircle className="h-4 w-4" />;
 }
 
@@ -34,22 +34,30 @@ const AuditList = ({ audits }: { audits: AuditItem[] }) => {
     return (
         <ScrollArea className="h-72 rounded-md border">
             <Accordion type="single" collapsible className="w-full">
-                {audits.map((audit) => (
-                    <AccordionItem value={audit.title} key={audit.title}>
-                        <AccordionTrigger className="p-4 text-sm font-medium hover:no-underline">
-                            <div className="flex items-center gap-3 text-left">
-                                <div className={getScoreColor(audit.score)}>
-                                    {getScoreIcon(audit.score)}
+                {audits.map((audit) => {
+                    const score100 = audit.score !== null ? Math.round(audit.score * 100) : null;
+                    return (
+                        <AccordionItem value={audit.title} key={audit.title}>
+                            <AccordionTrigger className="p-4 text-sm font-medium hover:no-underline">
+                                <div className="flex items-center gap-3 text-left flex-1">
+                                    <div className={getScoreColor(score100)}>
+                                        {getScoreIcon(score100)}
+                                    </div>
+                                    <span className="flex-1">{audit.title}</span>
+                                    {audit.displayValue && <Badge variant="outline">{audit.displayValue}</Badge>}
                                 </div>
-                                <span className="flex-1">{audit.title}</span>
-                                {audit.displayValue && <Badge variant="outline">{audit.displayValue}</Badge>}
-                            </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-4 pb-4 text-muted-foreground">
-                           {audit.description.replace(/\[(.*?)\]\(.*?\)/g, '$1')}
-                        </AccordionContent>
-                    </AccordionItem>
-                ))}
+                                {score100 !== null && (
+                                    <div className={`text-sm font-bold ml-4 ${getScoreColor(score100)}`}>
+                                        {score100}%
+                                    </div>
+                                )}
+                            </AccordionTrigger>
+                            <AccordionContent className="px-4 pb-4 text-muted-foreground">
+                               {audit.description.replace(/\[(.*?)\]\(.*?\)/g, '$1')}
+                            </AccordionContent>
+                        </AccordionItem>
+                    )
+                })}
             </Accordion>
         </ScrollArea>
     );
@@ -64,7 +72,7 @@ export function AuditsCard({ data }: { data: AuditInfo }) {
 
 
   return (
-    <Card className="h-full">
+    <Card className="h-full glass-card">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <SlidersHorizontal className="h-5 w-5 text-primary" />
