@@ -1,16 +1,16 @@
-// This is a Client Component that receives a simple string prop.
-// All state, effects, and user interactions happen here.
-'use client';
 
-import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult } from '@/lib/types';
 import { analyzeUrl } from '@/app/actions/analyze';
+import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
+import { useEffect, useState } from 'react';
 
+// This is the Client Component that handles state and user interactions.
+// All state, effects, and user interactions happen here.
 function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
     
@@ -37,6 +37,7 @@ function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
 
 
 function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
+  'use client';
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | { error: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
