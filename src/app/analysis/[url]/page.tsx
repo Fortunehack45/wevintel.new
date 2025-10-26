@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 
 // This is the Client Component that handles state and user interactions.
 // All state, effects, and user interactions happen here.
+// By adding 'use client' here, we isolate the client-side logic.
+'use client';
 function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
     
@@ -37,7 +39,6 @@ function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
 
 
 function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
-  'use client';
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | { error: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -75,22 +76,21 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
 function DashboardSkeleton() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <Skeleton className="h-56 rounded-2xl lg:col-span-3 bg-gray-200" />
-      <Skeleton className="h-80 rounded-2xl lg:col-span-2 bg-gray-200" />
-      <Skeleton className="h-80 rounded-2xl bg-gray-200" />
-      <Skeleton className="h-64 rounded-2xl bg-gray-200" />
-      <Skeleton className="h-64 rounded-2xl bg-gray-200" />
-      <Skeleton className="h-64 rounded-2xl lg:col-span-1 bg-gray-200" />
+      <Skeleton className="h-56 rounded-2xl lg:col-span-3" />
+      <Skeleton className="h-80 rounded-2xl lg:col-span-2" />
+      <Skeleton className="h-80 rounded-2xl" />
+      <Skeleton className="h-64 rounded-2xl" />
+      <Skeleton className="h-64 rounded-2xl" />
+      <Skeleton className="h-64 rounded-2xl lg:col-span-1" />
     </div>
   );
 }
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
     return (
-        <Alert variant="destructive" className="bg-red-50 border-red-200">
+        <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>{title}</AlertTitle>
-
             <AlertDescription>{description}</AlertDescription>
         </Alert>
     );
