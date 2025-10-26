@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Compass, Menu, Bot, Moon, Sun } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
@@ -36,7 +35,6 @@ export function Header() {
   const isMobile = useIsMobile();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const [isSheetOpen, setSheetOpen] = useState(false);
 
 
   useEffect(() => {
@@ -48,14 +46,13 @@ export function Header() {
   }
 
   const NavContent = () => (
-    <nav className={cn("flex items-center gap-2", isMobile && 'flex-col items-start gap-4')}>
+    <nav className="hidden md:flex items-center gap-2">
         {navLinks.map(link => (
             <Button
                 key={link.href}
                 variant={pathname === link.href ? "secondary" : "ghost"}
                 asChild
-                className={cn(isMobile && "justify-start w-full")}
-                onClick={() => setSheetOpen(false)}
+                onClick={() => {}}
             >
                 <Link href={link.href}>{link.label}</Link>
             </Button>
@@ -72,26 +69,7 @@ export function Header() {
       </Link>
 
       <div className="flex items-center gap-2">
-        {isMobile ? (
-          <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="bg-background/90 w-[250px]">
-              <div className='p-4'>
-                <Link href="/" className="flex items-center gap-2 font-bold text-lg mb-8" onClick={() => setSheetOpen(false)}>
-                  <Compass className="h-6 w-6 text-primary" />
-                  <span className="text-foreground">WebIntel</span>
-                </Link>
-                <NavContent />
-              </div>
-            </SheetContent>
-          </Sheet>
-        ) : (
-          <NavContent />
-        )}
+        <NavContent />
         <ThemeToggle />
       </div>
     </header>

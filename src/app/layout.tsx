@@ -5,6 +5,7 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Poppins } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
+import { BottomNav } from '@/components/bottom-nav';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -33,9 +34,10 @@ export default function RootLayout({
         >
           <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-1 container mx-auto px-4 py-8">{children}</main>
+            <main className="flex-1 container mx-auto px-4 py-8 pb-24 md:pb-8">{children}</main>
             <Footer />
           </div>
+          <BottomNav />
           <Toaster />
         </ThemeProvider>
       </body>
