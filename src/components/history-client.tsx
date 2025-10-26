@@ -21,6 +21,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
+  buttonVariants
 } from "@/components/ui/alert-dialog"
 
 export function HistoryClient() {
@@ -85,7 +86,7 @@ export function HistoryClient() {
                 transition={{ delay: index * 0.05 }}
               >
                 <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`} className="block h-full">
-                    <Card className="h-full hover:border-primary/50 transition-all group glass-card hover:shadow-primary/20 hover:shadow-lg hover:scale-105">
+                    <Card className="h-full hover:border-primary/50 transition-all group glass-card glow-border">
                         <CardHeader>
                             <div className="flex items-center gap-3">
                                 <Image src={item.overview.favicon || '/fallback-favicon.svg'} alt="favicon" width={32} height={32} className="rounded-md" crossOrigin="anonymous" />
