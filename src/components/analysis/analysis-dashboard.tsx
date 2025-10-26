@@ -27,8 +27,8 @@ const cardVariants = {
 
 type PerformancePromise = Promise<Pick<AnalysisResult, 'performance' | 'audits' | 'overview' | 'metadata'>>;
 
-export function AnalysisDashboard({ initialData, performancePromise }: { initialData: Partial<AnalysisResult>, performancePromise: PerformancePromise }) {
-  const [history, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
+export function AnalysisDashboard({ initialData, performancePromise, onDataLoaded }: { initialData: Partial<AnalysisResult>, performancePromise: PerformancePromise, onDataLoaded: (data: AnalysisResult) => void }) {
+  const [, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
   const [data, setData] = useState(initialData);
 
   useEffect(() => {
@@ -49,6 +49,7 @@ export function AnalysisDashboard({ initialData, performancePromise }: { initial
         } as AnalysisResult;
 
         setData(fullData);
+        onDataLoaded(fullData);
       }
     });
 
@@ -56,7 +57,7 @@ export function AnalysisDashboard({ initialData, performancePromise }: { initial
       isMounted = false;
     }
 
-  }, [performancePromise, initialData]);
+  }, [performancePromise, initialData, onDataLoaded]);
   
   useEffect(() => {
     // Save to history only when we have the full data
@@ -78,7 +79,7 @@ export function AnalysisDashboard({ initialData, performancePromise }: { initial
 
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 bg-background p-4 rounded-xl">
       {data.overview && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="lg:col-span-4">
           <OverviewCard data={data.overview} />

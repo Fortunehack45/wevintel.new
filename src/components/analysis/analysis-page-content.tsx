@@ -10,7 +10,6 @@ import { type AnalysisResult } from '@/lib/types';
 import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { Compass } from 'lucide-react';
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
@@ -25,88 +24,200 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
 
 export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
-    const reportRef = useRef<HTMLDivElement>(null);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [analysisDataForPdf, setAnalysisDataForPdf] = useState<AnalysisResult | null>(null);
 
     const handleDownloadPdf = async () => {
-        const element = reportRef.current;
-        if (!element) return;
+        if (!analysisDataForPdf) return;
         
         setIsDownloading(true);
 
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'pt',
-            format: 'a4'
-        });
+        const generatePdfFromData = (data: AnalysisResult) => {
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'pt',
+                format: 'a4'
+            });
 
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const margin = 40;
-        const contentWidth = pdfWidth - margin * 2;
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const margin = 40;
+            const contentWidth = pdfWidth - margin * 2;
+            let currentY = 0;
+            const primaryColor = '#3b82f6';
+            const textColor = '#374151';
+            const mutedColor = '#6b7280';
+            const whiteColor = '#ffffff';
+            const lightGrayColor = '#f3f4f6';
+            
+            // Helper functions
+            const addPageHeader = (title: string) => {
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(10);
+                pdf.setTextColor(mutedColor);
+                pdf.text(title, margin, 30);
+                pdf.setDrawColor(lightGrayColor);
+                pdf.line(margin, 35, pdfWidth - margin, 35);
+                currentY = 60;
+            };
 
-        const addHeader = (pageNumber: number) => {
-            pdf.saveGraphicsState();
+            const addPageFooter = (pageNumber: number) => {
+                const generationTime = new Date().toLocaleString();
+                pdf.setFontSize(8);
+                pdf.setTextColor(mutedColor);
+                pdf.text(`Page ${pageNumber}`, pdfWidth / 2, pdfHeight - 20, { align: 'center' });
+                pdf.text(`Report generated on ${generationTime}`, margin, pdfHeight - 20);
+            };
+
+            const checkAndAddPage = () => {
+                if (currentY > pdfHeight - 60) {
+                    addPageFooter(pdf.internal.pages.length);
+                    pdf.addPage();
+                    addPageHeader(data.overview.domain);
+                }
+            };
+            
+            const addSectionTitle = (title: string) => {
+                checkAndAddPage();
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(14);
+                pdf.setTextColor(textColor);
+                pdf.text(title, margin, currentY);
+                currentY += 20;
+            };
+
+            const addKeyValue = (key: string, value: string | undefined | null) => {
+                if (!value) return;
+                checkAnd.addPage();
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(10);
+                pdf.setTextColor(textColor);
+                pdf.text(key, margin + 10, currentY, { maxWidth: contentWidth * 0.4 });
+                
+                pdf.setFont('helvetica', 'normal');
+                pdf.text(String(value), margin + 150, currentY, { maxWidth: contentWidth * 0.6 });
+                currentY += 18;
+            };
+
+            // --- Cover Page ---
+            pdf.setFillColor(primaryColor);
+            pdf.rect(0, 0, pdfWidth, pdfHeight, 'F');
+            
             pdf.setFont('helvetica', 'bold');
-            pdf.setFontSize(20);
-            pdf.setTextColor(34, 139, 230); // Primary color
-            pdf.text('WebIntel Analysis Report', margin, 40);
+            pdf.setFontSize(28);
+            pdf.setTextColor(whiteColor);
+            pdf.text('WebIntel Analysis Report', pdfWidth / 2, pdfHeight / 2 - 40, { align: 'center' });
+
+            pdf.setFontSize(16);
+            pdf.text(data.overview.domain, pdfWidth / 2, pdfHeight / 2, { align: 'center' });
 
             pdf.setFont('helvetica', 'normal');
             pdf.setFontSize(10);
-            pdf.setTextColor(100, 116, 139); // Muted foreground
-            pdf.text(new URL(decodedUrl).hostname, margin, 55);
-            pdf.restoreGraphicsState();
-        };
-        
-        const addFooter = (pageNumber: number, totalPages: number) => {
-             const generationTime = new Date().toLocaleString();
-             pdf.saveGraphicsState();
-             pdf.setFontSize(8);
-             pdf.setTextColor(156, 163, 175); // Muted foreground
-             pdf.text(`Page ${pageNumber} of ${totalPages}`, pdfWidth / 2, pdfHeight - margin / 2, { align: 'center' });
-             pdf.text(`Report generated on ${generationTime}`, margin, pdfHeight - margin / 2);
-             pdf.restoreGraphicsState();
-        };
+            pdf.text(`Generated on: ${new Date().toUTCString()}`, pdfWidth / 2, pdfHeight / 2 + 20, { align: 'center'});
 
+            // --- Start Content Pages ---
+            pdf.addPage();
+            addPageHeader(data.overview.domain);
 
-        try {
-            const canvas = await html2canvas(element, {
-                scale: 2, 
-                useCORS: true,
-                backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue('--background').trim() === '222.2 84% 4.9%' ? '#0c101b' : '#ffffff',
-            });
+            // --- Overview Section ---
+            addSectionTitle('Website Overview');
+            addKeyValue('URL', data.overview.url);
+            addKeyValue('Title', data.overview.title);
+            addKeyValue('Description', data.overview.description);
+            addKeyValue('Language', data.overview.language?.toUpperCase());
+            currentY += 20;
 
-            const imgData = canvas.toDataURL('image/png');
-            const imgHeight = (canvas.height * contentWidth) / canvas.width;
-            let heightLeft = imgHeight;
-            let position = margin + 20;
-            let page = 1;
+            // --- Performance Section ---
+            const drawScoreCircle = (x: number, y: number, score: number, label: string) => {
+                 const radius = 25;
+                 pdf.setLineWidth(4);
+                 pdf.setDrawColor(lightGrayColor);
+                 pdf.circle(x, y, radius);
+                 pdf.stroke();
 
-            addHeader(1);
-            pdf.addImage(imgData, 'PNG', margin, position, contentWidth, imgHeight);
-            heightLeft -= (pdfHeight - position - margin);
+                 const getScoreColor = (s: number) => s >= 90 ? '#22c55e' : s >= 50 ? '#f59e0b' : '#ef4444';
+                 const scoreColor = getScoreColor(score);
+                 pdf.setDrawColor(scoreColor);
+                 const angle = (score / 100) * 360;
+                 pdf.path([
+                    { op: 'b', c: [x + radius, y, x + radius, y, x + radius, y] }
+                 ]).arc(x, y, radius, 0, angle, false).stroke();
 
-            while (heightLeft > 0) {
-                addFooter(page, 0); // Placeholder for total pages
-                page++;
-                position = -imgHeight + heightLeft;
-                pdf.addPage();
-                addHeader(page);
-                pdf.addImage(imgData, 'PNG', margin, position, contentWidth, imgHeight);
-                heightLeft -= (pdfHeight - margin);
+                 pdf.setFont('helvetica', 'bold');
+                 pdf.setFontSize(14);
+                 pdf.setTextColor(scoreColor);
+                 pdf.text(String(score), x, y + 5, { align: 'center' });
+
+                 pdf.setFont('helvetica', 'normal');
+                 pdf.setFontSize(8);
+                 pdf.setTextColor(mutedColor);
+                 pdf.text(label, x, y + radius + 15, { align: 'center' });
+            };
+
+            if (data.performance) {
+                addSectionTitle('Core Web Vitals & Performance Scores');
+                const scores = [
+                    { score: data.performance.mobile.performanceScore, label: 'Performance (Mobile)' },
+                    { score: data.performance.mobile.accessibilityScore, label: 'Accessibility (Mobile)' },
+                    { score: data.performance.mobile.seoScore, label: 'SEO (Mobile)' },
+                    { score: data.performance.desktop.performanceScore, label: 'Performance (Desktop)' }
+                ].filter(s => typeof s.score === 'number');
+
+                const circleXStart = margin + 30;
+                const circleY = currentY + 40;
+                const spacing = (contentWidth - 60) / (scores.length > 1 ? scores.length - 1 : 1);
+
+                scores.forEach((s, i) => {
+                    drawScoreCircle(circleXStart + (i * spacing), circleY, s.score!, s.label);
+                });
+                currentY += 120;
+
+                checkAndAddPage();
+                addKeyValue('Largest Contentful Paint', data.performance.mobile.largestContentfulPaint);
+                addKeyValue('Cumulative Layout Shift', data.performance.mobile.cumulativeLayoutShift);
+                addKeyValue('Speed Index', data.performance.mobile.speedIndex);
+                addKeyValue('Total Blocking Time', data.performance.mobile.totalBlockingTime);
+                currentY += 20;
+            }
+
+            // --- Security Section ---
+            if (data.security) {
+                checkAndAddPage();
+                addSectionTitle('Security');
+                addKeyValue('SSL Enabled', data.security.isSecure ? 'Yes' : 'No');
+                Object.entries(data.security.securityHeaders).forEach(([key, value]) => {
+                    addKeyValue(key, value ? 'Present' : 'Missing');
+                });
+                currentY += 20;
             }
             
-            // Go back and set the total pages in the footer
-            for(let i = 1; i <= page; i++) {
-                pdf.setPage(i);
-                addFooter(i, page);
+            // --- Hosting Section ---
+            if (data.hosting) {
+                checkAndAddPage();
+                addSectionTitle('Hosting');
+                addKeyValue('IP Address', data.hosting.ip);
+                addKeyValue('ISP', data.hosting.isp);
+                addKeyValue('Country', data.hosting.country);
+                currentY += 20;
             }
 
-            pdf.save(`webintel-report-${new URL(decodedUrl).hostname}.pdf`);
+            // --- Finalize Pages ---
+            for (let i = 1; i <= pdf.internal.pages.length; i++) {
+                pdf.setPage(i);
+                addPageFooter(i);
+            }
 
+            try {
+                pdf.save(`webintel-report-${new URL(decodedUrl).hostname}.pdf`);
+            } catch (error) {
+                 console.error("Failed to generate PDF", error);
+            }
+        }
+
+        try {
+            generatePdfFromData(analysisDataForPdf);
         } catch (error) {
-            console.error("Failed to generate PDF", error);
+            console.error("PDF generation failed:", error);
         } finally {
             setIsDownloading(false);
         }
@@ -126,7 +237,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                         <RefreshCw className="mr-2 h-4 w-4" />
                         Re-analyze
                     </Button>
-                    <Button onClick={handleDownloadPdf} disabled={isDownloading}>
+                    <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisDataForPdf}>
                          {isDownloading ? (
                             <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                          ) : (
@@ -136,16 +247,18 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                     </Button>
                 </div>
             </div>
-            <div ref={reportRef} className="bg-background p-4 rounded-xl">
-                <AnalysisData url={decodedUrl} cacheKey={key} />
-            </div>
+            <AnalysisData 
+              url={decodedUrl} 
+              cacheKey={key} 
+              onDataLoaded={setAnalysisDataForPdf} 
+            />
         </div>
     );
 }
 
 type PerformancePromise = ReturnType<typeof getPerformanceAnalysis>;
 
-function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
+function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: number, onDataLoaded: (data: AnalysisResult) => void; }) {
   const [analysisResult, setAnalysisResult] = useState<Partial<AnalysisResult> | null>(null);
   const [performancePromise, setPerformancePromise] = useState<PerformancePromise | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -157,6 +270,7 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
         setError(null);
         setAnalysisResult(null);
         setPerformancePromise(null);
+        onDataLoaded(null!);
         try {
             const data = await getFastAnalysis(url);
             if ('error' in data) {
@@ -164,7 +278,24 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
             } else {
                 setAnalysisResult(data);
                 // Set the performance promise *after* the fast analysis is complete
-                setPerformancePromise(getPerformanceAnalysis(url));
+                const perfPromise = getPerformanceAnalysis(url);
+                setPerformancePromise(perfPromise);
+
+                perfPromise.then(perfData => {
+                  const fullData = {
+                    ...data,
+                    ...perfData,
+                    overview: {
+                      ...data.overview,
+                      ...perfData.overview,
+                    },
+                    metadata: {
+                      ...data.metadata,
+                      hasRobotsTxt: perfData.metadata.hasRobotsTxt,
+                    }
+                  } as AnalysisResult;
+                  onDataLoaded(fullData);
+                });
             }
         } catch (error: any) {
             setError(error.message);
@@ -173,7 +304,7 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
         }
     }
     fetchData();
-  }, [url, cacheKey]);
+  }, [url, cacheKey, onDataLoaded]);
 
   if (isLoading) {
     return <DashboardSkeleton />;
@@ -189,6 +320,7 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
         <AnalysisDashboard 
           initialData={analysisResult} 
           performancePromise={performancePromise}
+          onDataLoaded={onDataLoaded}
         />
       </Suspense>
     );
