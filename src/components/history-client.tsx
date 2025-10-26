@@ -11,6 +11,17 @@ import Image from 'next/image';
 import { Globe, BarChart, ShieldCheck, Trash2, Smartphone } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 export function HistoryClient() {
   const [history, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
@@ -31,10 +42,27 @@ export function HistoryClient() {
   return (
     <div>
         <div className="flex justify-end mb-4">
-            <Button variant="destructive" size="sm" onClick={clearHistory}>
-                <Trash2 className="mr-2 h-4 w-4" />
-                Clear History
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm">
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Clear History
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete your
+                    analysis history from this device.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={clearHistory}>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {history.map((item, index) => {
@@ -89,3 +117,5 @@ export function HistoryClient() {
     </div>
   );
 }
+
+    

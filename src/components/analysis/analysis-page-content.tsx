@@ -4,7 +4,7 @@
 
 import { Suspense, useEffect, useState, useMemo, useRef } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AlertTriangle, RefreshCw, Download, ArrowLeft } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Download, Home } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult, type AuditItem, AuditInfo } from '@/lib/types';
@@ -178,9 +178,9 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                  
                  if (score > 0) {
                     const angle = (score / 100) * 360;
-                    const startAngle = -90; // Start from top
+                    const startAngle = -90;
                     const endAngle = startAngle + angle;
-                    const steps = Math.ceil(Math.abs(angle) / 5); // Number of segments to draw for the arc
+                    const steps = Math.ceil(Math.abs(angle) / 5);
                     const dAngle = angle / steps;
 
                     for (let i = 0; i < steps; i++) {
@@ -335,9 +335,9 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                     </p>
                 </div>
                 <div className='flex items-center gap-2'>
-                    <Button variant="outline" onClick={() => router.back()} disabled={isDownloading}>
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Go Back
+                    <Button variant="outline" onClick={() => router.push('/')} disabled={isDownloading}>
+                        <Home className="mr-2 h-4 w-4" />
+                        Back to Home
                     </Button>
                     <Button variant="outline" onClick={() => setKey(Date.now())} disabled={isDownloading}>
                         <RefreshCw className="mr-2 h-4 w-4" />
@@ -451,3 +451,5 @@ function DashboardSkeleton() {
     </div>
   );
 }
+
+    
