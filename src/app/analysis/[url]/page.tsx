@@ -1,3 +1,5 @@
+// This is a Client Component that receives a simple string prop.
+// All state, effects, and user interactions happen here.
 'use client';
 
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
@@ -9,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { type AnalysisResult } from '@/lib/types';
 import { analyzeUrl } from '@/app/actions/analyze';
 
-// This is a Client Component that receives a simple string prop.
 function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
     
@@ -32,27 +33,6 @@ function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
             </Suspense>
         </div>
     );
-}
-
-// This is the main page component, now a SERVER component.
-// It is async and handles the params object.
-export default function AnalysisPage({ params }: { params: { url: string } }) {
-  let decodedUrl = '';
-  try {
-    // The params object is handled here, in a Server Component.
-    decodedUrl = decodeURIComponent(params.url);
-    const urlObject = new URL(decodedUrl);
-    if (urlObject.protocol !== 'http:' && urlObject.protocol !== 'https:') {
-        throw new Error('Invalid protocol');
-    }
-  } catch (e) {
-    return (
-        <ErrorAlert title="Invalid URL" description="The provided URL is not valid. Please go back and try again with a valid URL (e.g., https://example.com)." />
-    )
-  }
-
-  // We pass the clean, validated string to the client component.
-  return <AnalysisPageContent decodedUrl={decodedUrl} />;
 }
 
 
@@ -113,4 +93,25 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
             <AlertDescription>{description}</AlertDescription>
         </Alert>
     );
+}
+
+// This is the main page component, now a SERVER component.
+// It is async and handles the params object from the URL.
+export default function AnalysisPage({ params }: { params: { url: string } }) {
+  let decodedUrl = '';
+  try {
+    // The params object is handled here, in a Server Component.
+    decodedUrl = decodeURIComponent(params.url);
+    const urlObject = new URL(decodedUrl);
+    if (urlObject.protocol !== 'http:' && urlObject.protocol !== 'https:') {
+        throw new Error('Invalid protocol');
+    }
+  } catch (e) {
+    return (
+        <ErrorAlert title="Invalid URL" description="The provided URL is not valid. Please go back and try again with a valid URL (e.g., https://example.com)." />
+    )
+  }
+
+  // We pass the clean, validated string as a prop to the client component.
+  return <AnalysisPageContent decodedUrl={decodedUrl} />;
 }
