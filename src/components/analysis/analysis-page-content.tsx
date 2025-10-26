@@ -11,6 +11,7 @@ import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { Compass } from 'lucide-react';
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
     return (
@@ -33,22 +34,88 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
         
         setIsDownloading(true);
 
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'pt',
+            format: 'a4'
+        });
+
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const margin = 40;
+
         try {
             const canvas = await html2canvas(element, {
-                scale: 2, // Higher scale for better quality
+                scale: 2, 
                 useCORS: true,
-                backgroundColor: null, // Use element's background
+                backgroundColor: window.getComputedStyle(document.body).backgroundColor,
             });
 
             const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'px',
-                format: [canvas.width, canvas.height]
-            });
+            const imgWidth = pdfWidth - margin * 2;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            let heightLeft = imgHeight;
+            let position = 80; // Start below header
+
+            // --- PDF Header ---
+            pdf.saveGraphicsState();
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(20);
+            pdf.setTextColor('#29ABE2'); // Primary color
+            pdf.text('WebIntel Analysis Report', margin, 40);
+
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(10);
+            pdf.setTextColor('#1A2A3A'); // Muted foreground
+            pdf.text(new URL(decodedUrl).hostname, margin, 55);
+            pdf.restoreGraphicsState();
+            // --- End Header ---
+
+            pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+            heightLeft -= (pdfHeight - position - margin);
+
+            let page = 1;
+
+            while (heightLeft >= 0) {
+                // --- PDF Footer for each page ---
+                pdf.setFontSize(8);
+                pdf.setTextColor('#888888');
+                pdf.text(`Page ${page}`, pdfWidth / 2, pdfHeight - margin / 2, { align: 'center' });
+                pdf.text(`Report generated on ${new Date().toLocaleDateString()}`, margin, pdfHeight - margin / 2);
+                // --- End Footer ---
+                
+                position = -imgHeight + heightLeft;
+                pdf.addPage();
+                page++;
+                
+                // Re-add header on new pages
+                pdf.saveGraphicsState();
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(20);
+                pdf.setTextColor('#29ABE2');
+                pdf.text('WebIntel Analysis Report', margin, 40);
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(10);
+                pdf.setTextColor('#1A2A3A');
+                pdf.text(new URL(decodedUrl).hostname, margin, 55);
+                pdf.restoreGraphicsState();
+                // --- End Header ---
+
+                pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+                heightLeft -= pdfHeight;
+            }
             
-            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+            // --- Footer on the last page ---
+            pdf.setFontSize(8);
+            pdf.setTextColor('#888888');
+            pdf.text(`Page ${page}`, pdfWidth / 2, pdfHeight - margin / 2, { align: 'center' });
+            pdf.text(`Report generated on ${new Date().toLocaleDateString()}`, margin, pdfHeight - margin / 2);
+            // --- End Footer ---
+
+
             pdf.save(`webintel-report-${new URL(decodedUrl).hostname}.pdf`);
+
         } catch (error) {
             console.error("Failed to generate PDF", error);
         } finally {
@@ -80,7 +147,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                     </Button>
                 </div>
             </div>
-            <div ref={reportRef}>
+            <div ref={reportRef} className="bg-background p-4 rounded-xl">
                 <AnalysisData url={decodedUrl} cacheKey={key} />
             </div>
         </div>
@@ -151,5 +218,3 @@ function DashboardSkeleton() {
     </div>
   );
 }
-
-

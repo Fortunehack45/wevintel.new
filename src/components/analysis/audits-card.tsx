@@ -33,7 +33,7 @@ const AuditList = ({ audits }: { audits: AuditItem[] }) => {
     }
 
     return (
-        <ScrollArea className="h-72 rounded-md border">
+        <div className="rounded-md border">
             <Accordion type="single" collapsible className="w-full">
                 {audits.map((audit) => {
                     const score100 = audit.score !== null ? Math.round(audit.score * 100) : null;
@@ -60,7 +60,7 @@ const AuditList = ({ audits }: { audits: AuditItem[] }) => {
                     )
                 })}
             </Accordion>
-        </ScrollArea>
+        </div>
     );
 };
 
@@ -113,10 +113,14 @@ export function AuditsCard({ data }: { data?: AuditInfo }) {
               <TabsTrigger value="passed">Passed Audits ({passed.length})</TabsTrigger>
             </TabsList>
             <TabsContent value="opportunities" className="mt-4">
-              <AuditList audits={[...opportunities, ...informational]} />
+              <ScrollArea className="h-[450px]">
+                <AuditList audits={[...opportunities, ...informational]} />
+              </ScrollArea>
             </TabsContent>
             <TabsContent value="passed" className="mt-4">
-              <AuditList audits={passed} />
+              <ScrollArea className="h-[450px]">
+                <AuditList audits={passed} />
+              </ScrollArea>
             </TabsContent>
           </Tabs>
         ) : <p className="text-muted-foreground text-sm">No detailed audit information was found.</p>}
