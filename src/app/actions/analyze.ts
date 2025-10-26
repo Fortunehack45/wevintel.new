@@ -92,6 +92,11 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
         accessibilityScore: lighthouse ? Math.round(lighthouse.categories.accessibility.score * 100) : undefined,
         seoScore: lighthouse ? Math.round(lighthouse.categories.seo.score * 100) : undefined,
         bestPracticesScore: lighthouse ? Math.round(lighthouse.categories['best-practices'].score * 100) : undefined,
+        speedIndex: audits?.['speed-index']?.displayValue,
+        totalBlockingTime: audits?.['total-blocking-time']?.displayValue,
+        firstContentfulPaint: audits?.['first-contentful-paint']?.displayValue,
+        largestContentfulPaint: audits?.['largest-contentful-paint']?.displayValue,
+        cumulativeLayoutShift: audits?.['cumulative-layout-shift']?.displayValue,
       },
       security: {
         sslGrade: 'N/A', // Requires dedicated API like SSL Labs, which has usage restrictions

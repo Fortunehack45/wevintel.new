@@ -26,6 +26,11 @@ export type PerformanceData = {
   accessibilityScore?: number;
   seoScore?: number;
   bestPracticesScore?: number;
+  speedIndex?: string;
+  largestContentfulPaint?: string;
+  totalBlockingTime?: string;
+  firstContentfulPaint?: string;
+  cumulativeLayoutShift?: string;
 };
 
 export type SecurityData = {
