@@ -11,6 +11,13 @@ import { analyzeUrl } from '@/app/actions/analyze';
 
 function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
+    
+    if (!decodedUrl) {
+      return (
+          <ErrorAlert title="Invalid URL" description="The provided URL is not valid. Please go back and try again with a valid URL (e.g., https://example.com)." />
+      );
+    }
+
     return (
         <div className="flex-1">
             <div className="mb-6 flex items-center justify-between gap-4">
@@ -32,6 +39,7 @@ function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     );
 }
 
+
 export default function AnalysisPage({ params }: { params: { url: string } }) {
   let decodedUrl = '';
   try {
@@ -48,6 +56,7 @@ export default function AnalysisPage({ params }: { params: { url: string } }) {
 
   return <AnalysisPageContent decodedUrl={decodedUrl} />;
 }
+
 
 function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | { error: string } | null>(null);
