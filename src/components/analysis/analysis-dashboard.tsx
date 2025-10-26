@@ -32,7 +32,7 @@ type PerformancePromise = Promise<Pick<AnalysisResult, 'performance' | 'performa
 
 export function AnalysisDashboard({ initialData, performancePromise, onDataLoaded }: { initialData: Partial<AnalysisResult>, performancePromise: PerformancePromise, onDataLoaded: (data: AnalysisResult) => void }) {
   const [, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState<AnalysisResult | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -108,6 +108,7 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
   }, [data, setHistory]);
 
   const totalAuditScore = useMemo(() => {
+    if (!data) return null;
     const allAudits: (AuditInfo | undefined)[] = [data.performanceAudits, data.securityAudits, data.diagnosticsAudits];
     let totalScore = 0;
     let scoreCount = 0;
@@ -125,8 +126,14 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
 
     if (scoreCount === 0) return null;
     return Math.round((totalScore / scoreCount) * 100);
-  }, [data.performanceAudits, data.securityAudits, data.diagnosticsAudits]);
+  }, [data]);
 
+
+  if (!data) {
+    // Show a skeleton or loading state while waiting for the full data
+    // This prevents rendering with partial/incomplete data
+    return null; // Or a skeleton component if you prefer
+  }
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
