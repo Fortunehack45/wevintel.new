@@ -43,9 +43,11 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     );
 }
 
+type PerformancePromise = ReturnType<typeof getPerformanceAnalysis>;
 
 function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
   const [analysisResult, setAnalysisResult] = useState<Partial<AnalysisResult> | null>(null);
+  const [performancePromise, setPerformancePromise] = useState<PerformancePromise | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -54,12 +56,15 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
         setIsLoading(true);
         setError(null);
         setAnalysisResult(null);
+        setPerformancePromise(null);
         try {
             const data = await getFastAnalysis(url);
             if ('error' in data) {
                 setError(data.error);
             } else {
                 setAnalysisResult(data);
+                // Set the performance promise *after* the fast analysis is complete
+                setPerformancePromise(getPerformanceAnalysis(url));
             }
         } catch (error: any) {
             setError(error.message);
@@ -70,8 +75,6 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
     fetchData();
   }, [url, cacheKey]);
 
-  const performancePromise = useMemo(() => getPerformanceAnalysis(url), [url, cacheKey]);
-
   if (isLoading) {
     return <DashboardSkeleton />;
   }
@@ -80,7 +83,7 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
     return <ErrorAlert title="Analysis Failed" description={error} />;
   }
   
-  if (analysisResult) {
+  if (analysisResult && performancePromise) {
     return (
       <AnalysisDashboard 
         initialData={analysisResult} 
@@ -104,3 +107,4 @@ function DashboardSkeleton() {
     </div>
   );
 }
+
