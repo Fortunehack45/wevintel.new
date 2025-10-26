@@ -3,14 +3,14 @@
 
 import { Suspense, useEffect, useState, useMemo, useRef } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AlertTriangle, RefreshCw, Download } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Download, ArrowLeft } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult } from '@/lib/types';
 import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
-import { Compass } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
     return (
@@ -26,6 +26,8 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
     const [isDownloading, setIsDownloading] = useState(false);
     const [analysisDataForPdf, setAnalysisDataForPdf] = useState<AnalysisResult | null>(null);
+    const router = useRouter();
+
 
     const handleDownloadPdf = async () => {
         if (!analysisDataForPdf) return;
@@ -88,7 +90,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
 
             const addKeyValue = (key: string, value: string | undefined | null) => {
                 if (!value) return;
-                checkAnd.addPage();
+                checkAndAddPage();
                 pdf.setFont('helvetica', 'bold');
                 pdf.setFontSize(10);
                 pdf.setTextColor(textColor);
@@ -233,6 +235,10 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                     </p>
                 </div>
                 <div className='flex items-center gap-2'>
+                    <Button variant="outline" onClick={() => router.back()} disabled={isDownloading}>
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Go Back
+                    </Button>
                     <Button variant="outline" onClick={() => setKey(Date.now())} disabled={isDownloading}>
                         <RefreshCw className="mr-2 h-4 w-4" />
                         Re-analyze
