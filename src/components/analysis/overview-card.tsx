@@ -14,7 +14,7 @@ export function OverviewCard({ data }: { data: WebsiteOverview }) {
             alt={`${data.domain} favicon`} 
             width={64} 
             height={64} 
-            className="rounded-lg border-2"
+            className="rounded-lg border-2 no-pdf"
             crossOrigin="anonymous"
           />
         )}

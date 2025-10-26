@@ -73,4 +73,7 @@
   .gradient-text {
     @apply text-foreground;
   }
+  .pdf-generating .no-pdf {
+    display: none;
+  }
 }

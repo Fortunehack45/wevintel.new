@@ -33,6 +33,8 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
         if (!element) return;
         
         setIsDownloading(true);
+        element.classList.add('pdf-generating');
+
 
         const pdf = new jsPDF({
             orientation: 'portrait',
@@ -51,6 +53,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                 backgroundColor: window.getComputedStyle(document.body).backgroundColor,
             });
 
+            element.classList.remove('pdf-generating');
             const imgData = canvas.toDataURL('image/png');
             const imgWidth = pdfWidth - margin * 2;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -118,8 +121,12 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
 
         } catch (error) {
             console.error("Failed to generate PDF", error);
+            element.classList.remove('pdf-generating');
         } finally {
             setIsDownloading(false);
+            if (element.classList.contains('pdf-generating')) {
+              element.classList.remove('pdf-generating');
+            }
         }
     };
     
