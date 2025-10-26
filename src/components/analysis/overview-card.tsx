@@ -5,7 +5,7 @@ import { Languages, FileText } from 'lucide-react';
 
 export function OverviewCard({ data }: { data: WebsiteOverview }) {
   return (
-    <Card className="bg-card/50 backdrop-blur-sm">
+    <Card className="glass-card">
       <CardHeader className="flex flex-col md:flex-row items-start md:items-center gap-4 space-y-0">
         {data.favicon && (
           <Image 
@@ -13,7 +13,7 @@ export function OverviewCard({ data }: { data: WebsiteOverview }) {
             alt={`${data.domain} favicon`} 
             width={64} 
             height={64} 
-            className="rounded-lg border-2 border-border"
+            className="rounded-lg border-2 border-white/10"
             unoptimized
           />
         )}

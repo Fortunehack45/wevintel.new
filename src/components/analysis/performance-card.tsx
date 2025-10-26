@@ -7,7 +7,7 @@ import { TrendingUp } from 'lucide-react';
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="p-2 text-sm bg-background/80 backdrop-blur-sm rounded-md border border-border">
+      <div className="p-2 text-sm glass-card rounded-md border border-border">
         <p className="label font-bold">{`${label}`}</p>
         <p style={{ color: payload[0].fill }}>{`Score : ${payload[0].value}`}</p>
       </div>
@@ -31,7 +31,7 @@ export function PerformanceCard({ data }: { data: PerformanceData }) {
   ].filter(d => typeof d.score === 'number');
 
   return (
-    <Card className="bg-card/50 backdrop-blur-sm h-full">
+    <Card className="glass-card h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5 text-primary" />

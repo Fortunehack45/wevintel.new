@@ -1,58 +1,77 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
-import { Mountain, Menu } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Compass, Menu } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
+
+const navLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/history', label: 'History' },
+    { href: '/about', label: 'About' },
+];
 
 export function Header() {
   const isMobile = useIsMobile();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [isSheetOpen, setSheetOpen] = useState(false);
+
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) {
-    return <header className="p-4 flex justify-between items-center border-b border-border/40 h-[69px]" />;
+    return <header className="p-4 flex justify-between items-center border-b border-white/10 h-[69px]" />;
   }
 
+  const NavContent = () => (
+    <nav className={cn("flex items-center gap-2", isMobile && 'flex-col items-start gap-4')}>
+        {navLinks.map(link => (
+            <Button 
+                key={link.href} 
+                variant={pathname === link.href ? "secondary" : "ghost"} 
+                asChild 
+                className={cn(isMobile && "justify-start w-full")}
+                onClick={() => setSheetOpen(false)}
+            >
+                <Link href={link.href}>{link.label}</Link>
+            </Button>
+        ))}
+    </nav>
+  );
+
+
   return (
-    <header className="p-4 flex justify-between items-center border-b border-border/40">
+    <header className="p-4 flex justify-between items-center border-b border-white/10 sticky top-0 bg-background/80 backdrop-blur-lg z-50">
       <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-        <Mountain className="h-6 w-6 text-primary" />
-        <span>Web Insights</span>
+        <Compass className="h-6 w-6 text-primary" />
+        <span className="gradient-text">WebIntel</span>
       </Link>
 
       {isMobile ? (
-        <Sheet>
+        <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon">
               <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right">
-            <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
+          <SheetContent side="right" className="glass-card w-[250px]">
             <div className='p-4'>
-              <Link href="/" className="flex items-center gap-2 font-bold text-lg mb-8">
-                <Mountain className="h-6 w-6 text-primary" />
-                <span>Web Insights</span>
+              <Link href="/" className="flex items-center gap-2 font-bold text-lg mb-8" onClick={() => setSheetOpen(false)}>
+                <Compass className="h-6 w-6 text-primary" />
+                <span className="gradient-text">WebIntel</span>
               </Link>
-              <nav className="flex flex-col gap-4">
-                <Button variant="ghost" asChild className="justify-start">
-                  <Link href="/tracker">Tracker Generator</Link>
-                </Button>
-              </nav>
+              <NavContent />
             </div>
           </SheetContent>
         </Sheet>
       ) : (
-        <nav className="flex items-center gap-4">
-          <Button variant="ghost" asChild>
-            <Link href="/tracker">Tracker Generator</Link>
-          </Button>
-        </nav>
+        <NavContent />
       )}
     </header>
   );

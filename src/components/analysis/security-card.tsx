@@ -12,7 +12,7 @@ export function SecurityCard({ data }: { data: SecurityData }) {
   }
 
   return (
-    <Card className="bg-card/50 backdrop-blur-sm h-full">
+    <Card className="glass-card h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ShieldCheck className="h-5 w-5 text-primary" />
@@ -35,7 +35,7 @@ export function SecurityCard({ data }: { data: SecurityData }) {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">Domain Expiry</span>
-          <span className="font-semibold">{data.domainExpiry || 'N/A'}</span>
+          <span className="font-semibold">{data.domainExpiry ? new Date(data.domainExpiry).toLocaleDateString() : 'N/A'}</span>
         </div>
       </CardContent>
     </Card>

@@ -1,43 +1,41 @@
-import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
-import { analyzeUrl } from '@/app/actions/analyze';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AlertTriangle } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { HistorySidebar, HistorySidebarTrigger } from '@/components/analysis/history-sidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
+'use client';
 
+import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
+import { Suspense, useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { type AnalysisResult } from '@/lib/types';
+import { useSearchParams } from 'next/navigation';
 
 function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
+    const [key, setKey] = useState(Date.now());
     return (
-        <SidebarProvider>
-            <div className='flex gap-4'>
-                <HistorySidebar />
-                <div className="flex-1">
-                    <div className="mb-6 flex items-center gap-4">
-                        <HistorySidebarTrigger />
-                        <div>
-                            <h1 className="text-3xl font-bold">Analysis Report</h1>
-                            <p className="text-muted-foreground">
-                                Results for: <a href={decodedUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{decodedUrl}</a>
-                            </p>
-                        </div>
-                    </div>
-                    <Suspense fallback={<DashboardSkeleton />}>
-                        <AnalysisData url={decodedUrl} />
-                    </Suspense>
+        <div className="flex-1">
+            <div className="mb-6 flex items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold">Analysis Report</h1>
+                    <p className="text-muted-foreground">
+                        Results for: <a href={decodedUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{decodedUrl}</a>
+                    </p>
                 </div>
+                <Button variant="outline" onClick={() => setKey(Date.now())}>
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                    Re-analyze
+                </Button>
             </div>
-        </SidebarProvider>
+            <Suspense fallback={<DashboardSkeleton />}>
+                <AnalysisData url={decodedUrl} cacheKey={key} />
+            </Suspense>
+        </div>
     );
 }
-
 
 export default function AnalysisPage({ params }: { params: { url: string } }) {
   let decodedUrl = '';
   try {
     decodedUrl = decodeURIComponent(params.url);
-    // Further validation to ensure it's a http/https URL
     const urlObject = new URL(decodedUrl);
     if (urlObject.protocol !== 'http:' && urlObject.protocol !== 'https:') {
         throw new Error('Invalid protocol');
@@ -51,24 +49,54 @@ export default function AnalysisPage({ params }: { params: { url: string } }) {
   return <AnalysisPageContent decodedUrl={decodedUrl} />;
 }
 
-async function AnalysisData({ url }: { url: string }) {
-  const analysisResult = await analyzeUrl(url);
+async function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | { error: string } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (analysisResult.error) {
+  useEffect(() => {
+    async function fetchData() {
+        setIsLoading(true);
+        try {
+            const res = await fetch(`/api/analyze?url=${encodeURIComponent(url)}&t=${cacheKey}`);
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || 'Analysis failed');
+            }
+            setAnalysisResult(data);
+        } catch (error: any) {
+            setAnalysisResult({ error: error.message });
+        } finally {
+            setIsLoading(false);
+        }
+    }
+    fetchData();
+  }, [url, cacheKey]);
+
+
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
+  if (analysisResult && 'error' in analysisResult) {
     return <ErrorAlert title="Analysis Failed" description={analysisResult.error} />;
   }
-  return <AnalysisDashboard data={analysisResult} />;
+  
+  if (analysisResult) {
+    return <AnalysisDashboard data={analysisResult} />;
+  }
+
+  return null;
 }
 
 function DashboardSkeleton() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <Skeleton className="h-56 rounded-lg lg:col-span-3" />
-      <Skeleton className="h-80 rounded-lg lg:col-span-2" />
-      <Skeleton className="h-80 rounded-lg" />
-      <Skeleton className="h-64 rounded-lg" />
-      <Skeleton className="h-64 rounded-lg" />
-      <Skeleton className="h-64 rounded-lg lg:col-span-1" />
+      <Skeleton className="h-56 rounded-lg lg:col-span-3 glass-card" />
+      <Skeleton className="h-80 rounded-lg lg:col-span-2 glass-card" />
+      <Skeleton className="h-80 rounded-lg glass-card" />
+      <Skeleton className="h-64 rounded-lg glass-card" />
+      <Skeleton className="h-64 rounded-lg glass-card" />
+      <Skeleton className="h-64 rounded-lg lg:col-span-1 glass-card" />
     </div>
   );
 }
@@ -78,6 +106,7 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
         <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>{title}</AlertTitle>
+
             <AlertDescription>{description}</AlertDescription>
         </Alert>
     );

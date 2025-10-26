@@ -8,6 +8,7 @@ export type AnalysisResult = {
   hosting: HostingInfo;
   createdAt: string; // ISO 8601 string
   error?: string;
+  partial?: boolean;
 };
 
 export type WebsiteOverview = {
@@ -44,3 +45,5 @@ export type HostingInfo = {
   isp?: string;
   country?: string;
 };
+
+export type HistoryItem = Pick<AnalysisResult, 'id' | 'overview' | 'performance' | 'security' | 'createdAt'>;

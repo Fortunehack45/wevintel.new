@@ -6,7 +6,7 @@ export function MetadataCard({ data }: { data: Metadata }) {
   const ogTags = Object.entries(data.openGraphTags);
 
   return (
-    <Card className="bg-card/50 backdrop-blur-sm h-full">
+    <Card className="glass-card h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Code className="h-5 w-5 text-primary" />
@@ -34,7 +34,7 @@ export function MetadataCard({ data }: { data: Metadata }) {
                     {ogTags.map(([key, value]) => (
                         <div key={key} className="flex justify-between items-start gap-2">
                             <span className="text-muted-foreground break-words">{key}</span>
-                            <span className="font-mono text-right break-all">{value}</span>
+                            <span className="font-mono text-right break-all">{String(value)}</span>
                         </div>
                     ))}
                 </div>
