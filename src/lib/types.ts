@@ -1,8 +1,12 @@
 
+
 export type AnalysisResult = {
   id: string;
   overview: WebsiteOverview;
-  performance: PerformanceData;
+  performance: {
+    mobile: PerformanceData;
+    desktop: PerformanceData;
+  };
   security: SecurityData;
   metadata: Metadata;
   hosting: HostingInfo;

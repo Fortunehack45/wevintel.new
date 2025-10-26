@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useLocalStorage } from '@/hooks/use-local-storage';
@@ -7,7 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card'
 import { Badge } from './ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import Image from 'next/image';
-import { Globe, BarChart, ShieldCheck, Trash2 } from 'lucide-react';
+import { Globe, BarChart, ShieldCheck, Trash2, Smartphone } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
@@ -20,7 +21,7 @@ export function HistoryClient() {
 
   if (history.length === 0) {
     return (
-        <div className="text-center p-8 border-2 border-dashed rounded-2xl">
+        <div className="text-center p-8 border-2 border-dashed rounded-2xl glass-card">
             <h3 className="text-xl font-semibold">No sites analyzed yet.</h3>
             <p className="text-muted-foreground mt-2">Start exploring to see your history here!</p>
         </div>
@@ -44,7 +45,7 @@ export function HistoryClient() {
             transition={{ delay: index * 0.05 }}
           >
             <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`} className="block h-full">
-                <Card className="h-full hover:border-primary/50 transition-colors group hover:shadow-xl">
+                <Card className="h-full hover:border-primary/50 transition-colors group glass-card hover:shadow-primary/20 hover:shadow-lg">
                     <CardHeader>
                         <div className="flex items-center gap-3">
                             <Image src={item.overview.favicon || '/fallback-favicon.svg'} alt="favicon" width={32} height={32} className="rounded-md" unoptimized />
@@ -58,8 +59,8 @@ export function HistoryClient() {
                     </CardHeader>
                     <CardContent className="grid grid-cols-2 gap-4 text-sm">
                         <div className="flex items-center gap-2">
-                            <BarChart className="h-4 w-4 text-muted-foreground"/>
-                            <span className="font-semibold">{item.performance.performanceScore || 'N/A'}%</span>
+                            <Smartphone className="h-4 w-4 text-muted-foreground"/>
+                            <span className="font-semibold">{item.performance.mobile.performanceScore || 'N/A'}%</span>
                         </div>
                         <div className="flex items-center gap-2">
                              <ShieldCheck className="h-4 w-4 text-muted-foreground"/>
