@@ -134,17 +134,31 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
             const drawScoreCircle = (x: number, y: number, score: number, label: string) => {
                  const radius = 25;
                  pdf.setLineWidth(4);
+                 
+                 // Background circle
                  pdf.setDrawColor(lightGrayColor);
-                 pdf.circle(x, y, radius);
-                 pdf.stroke();
+                 pdf.circle(x, y, radius, 'S');
 
                  const getScoreColor = (s: number) => s >= 90 ? '#22c55e' : s >= 50 ? '#f59e0b' : '#ef4444';
                  const scoreColor = getScoreColor(score);
                  pdf.setDrawColor(scoreColor);
-                 const angle = (score / 100) * 360;
                  
                  // Draw the arc for the score
-                 pdf.arc(x, y, radius, 0, angle, 'S'); // 'S' for stroke
+                 if (score > 0) {
+                    const angle = (score / 100) * 360;
+                    const endAngleRad = (angle - 90) * (Math.PI / 180);
+                    const startAngleRad = -90 * (Math.PI / 180);
+                    const steps = Math.ceil(angle / 5);
+                    for (let i = 0; i < steps; i++) {
+                        const a1 = startAngleRad + (i / steps) * (endAngleRad - startAngleRad);
+                        const a2 = startAngleRad + ((i + 1) / steps) * (endAngleRad - startAngleRad);
+                        const x1 = x + radius * Math.cos(a1);
+                        const y1 = y + radius * Math.sin(a1);
+                        const x2 = x + radius * Math.cos(a2);
+                        const y2 = y + radius * Math.sin(a2);
+                        pdf.line(x1, y1, x2, y2);
+                    }
+                 }
                  
 
                  pdf.setFont('helvetica', 'bold');
@@ -350,3 +364,5 @@ function DashboardSkeleton() {
     </div>
   );
 }
+
+    
