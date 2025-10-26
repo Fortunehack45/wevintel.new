@@ -106,7 +106,7 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
 
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 bg-background p-4 rounded-xl">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {data.overview && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="lg:col-span-4">
           <OverviewCard data={data.overview} />
