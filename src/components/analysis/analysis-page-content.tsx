@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Suspense, useEffect, useState, useMemo, useRef } from 'react';
@@ -141,9 +142,10 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                  const scoreColor = getScoreColor(score);
                  pdf.setDrawColor(scoreColor);
                  const angle = (score / 100) * 360;
-                 pdf.path([
-                    { op: 'b', c: [x + radius, y, x + radius, y, x + radius, y] }
-                 ]).arc(x, y, radius, 0, angle, false).stroke();
+                 
+                 // Draw the arc for the score
+                 pdf.arc(x, y, radius, 0, angle, 'S'); // 'S' for stroke
+                 
 
                  pdf.setFont('helvetica', 'bold');
                  pdf.setFontSize(14);
