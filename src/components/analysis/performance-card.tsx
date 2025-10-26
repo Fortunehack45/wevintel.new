@@ -2,29 +2,67 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import type { PerformanceData } from '@/lib/types';
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 import { TrendingUp, Gauge, Timer, Milestone, PencilRuler, Smartphone, Monitor } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '../ui/skeleton';
+import { motion } from 'framer-motion';
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="p-2 text-sm bg-background/80 backdrop-blur-sm rounded-md border">
-        <p className="label font-bold">{`${label}`}</p>
-        <p style={{ color: payload[0].fill }}>{`Score : ${payload[0].value}`}</p>
-      </div>
-    );
-  }
-  return null;
-};
 
 const getScoreColor = (score: number) => {
-    if (score >= 90) return 'hsl(var(--chart-1))';
-    if (score >= 50) return 'hsl(var(--chart-4))';
-    return 'hsl(var(--destructive))';
-}
+    if (score >= 90) return 'hsl(var(--chart-1))'; // Green
+    if (score >= 50) return 'hsl(var(--chart-4))'; // Yellow
+    return 'hsl(var(--destructive))'; // Red
+};
+
+const getScoreTextColor = (score: number) => {
+    if (score >= 90) return 'text-green-500';
+    if (score >= 50) return 'text-yellow-500';
+    return 'text-red-500';
+};
+
+const ScoreCircle = ({ label, score }: { label: string, score: number }) => {
+    const radius = 30;
+    const circumference = 2 * Math.PI * radius;
+    const offset = score ? circumference - (score / 100) * circumference : circumference;
+  
+    return (
+      <div className="flex flex-col items-center gap-2">
+        <div className="relative h-20 w-20">
+          <svg className="h-full w-full" viewBox="0 0 80 80">
+            <circle
+              className="stroke-current text-muted/50"
+              cx="40"
+              cy="40"
+              r={radius}
+              fill="transparent"
+              strokeWidth="8"
+            />
+            <motion.circle
+              cx="40"
+              cy="40"
+              r={radius}
+              fill="transparent"
+              strokeWidth="8"
+              stroke={getScoreColor(score)}
+              strokeLinecap="round"
+              strokeDasharray={circumference}
+              strokeDashoffset={offset}
+              transform="rotate(-90 40 40)"
+              initial={{ strokeDashoffset: circumference }}
+              animate={{ strokeDashoffset: offset }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            />
+          </svg>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className={`text-xl font-bold ${getScoreTextColor(score)}`}>{score}</span>
+          </div>
+        </div>
+        <p className="text-xs font-medium text-muted-foreground">{label}</p>
+      </div>
+    );
+};
+
 
 const MetricItem = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value?: string }) => (
     <div className="flex items-center justify-between text-sm">
@@ -52,11 +90,11 @@ const PerformanceReport = ({ data }: { data?: PerformanceData }) => {
   }
     
   const chartData = [
-    { name: 'Perf.', score: data.performanceScore },
-    { name: 'Access.', score: data.accessibilityScore },
-    { name: 'SEO', score: data.seoScore },
-    { name: 'Best Prac.', score: data.bestPracticesScore },
-  ].filter(d => typeof d.score === 'number');
+    { label: 'Performance', score: data.performanceScore },
+    { label: 'Accessibility', score: data.accessibilityScore },
+    { label: 'Best Practices', score: data.bestPracticesScore },
+    { label: 'SEO', score: data.seoScore },
+  ].filter(d => typeof d.score === 'number') as { label: string, score: number }[];
 
   const detailedMetrics = [
       { icon: Gauge, label: 'Speed Index', value: data.speedIndex },
@@ -70,18 +108,9 @@ const PerformanceReport = ({ data }: { data?: PerformanceData }) => {
       <>
         {chartData.length > 0 ? (
           <>
-            <ResponsiveContainer width="100%" height={180}>
-              <BarChart data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} domain={[0, 100]} />
-                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--accent) / 0.5)' }}/>
-                <Bar dataKey="score" radius={[4, 4, 0, 0]}>
-                  {chartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={getScoreColor(entry.score ?? 0)} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 place-items-center">
+                {chartData.map((item) => <ScoreCircle key={item.label} {...item} />)}
+            </div>
             <Separator className="my-4" />
             <div className="grid gap-3">
                 {detailedMetrics.map(metric => (
