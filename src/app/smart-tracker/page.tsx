@@ -16,8 +16,8 @@ export default function SmartTrackerPage() {
 <script>
   (function() {
     // This is where your app is hosted.
-    // If you are running locally, it's likely http://localhost:9002
-    const trackingHost = "https://${process.env.NEXT_PUBLIC_APP_URL}"; 
+    // Replace "YOUR_APP_URL_HERE" with your actual app's domain.
+    const trackingHost = "https://YOUR_APP_URL_HERE"; 
     const endpoint = trackingHost + '/api/track'; 
 
     async function getVisitorInfo() {
