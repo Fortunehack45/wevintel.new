@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useLocalStorage } from '@/hooks/use-local-storage';
@@ -51,7 +52,7 @@ export function HistoryClient() {
                     <Card className="h-full hover:border-primary/50 transition-all group glass-card hover:shadow-primary/20 hover:shadow-lg hover:scale-105">
                         <CardHeader>
                             <div className="flex items-center gap-3">
-                                <Image src={item.overview.favicon || '/fallback-favicon.svg'} alt="favicon" width={32} height={32} className="rounded-md" unoptimized />
+                                <Image src={item.overview.favicon || '/fallback-favicon.svg'} alt="favicon" width={32} height={32} className="rounded-md" unoptimized crossOrigin="anonymous" />
                                 <div className="flex-1 overflow-hidden">
                                     <CardTitle className="truncate">{item.overview.domain}</CardTitle>
                                     <p className="text-xs text-muted-foreground">

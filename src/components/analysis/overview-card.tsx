@@ -16,10 +16,11 @@ export function OverviewCard({ data }: { data: WebsiteOverview }) {
             height={64} 
             className="rounded-lg border-2"
             unoptimized
+            crossOrigin="anonymous"
           />
         )}
         <div className='flex-1'>
-          <h2 className="text-2xl font-bold tracking-tight">{data.title || 'No Title Found'}</h2>
+          <h3 className="text-2xl font-bold tracking-tight">{data.title || 'No Title Found'}</h3>
           <p className="text-muted-foreground">{data.domain}</p>
         </div>
       </CardHeader>
