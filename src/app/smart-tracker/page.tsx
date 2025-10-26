@@ -43,7 +43,7 @@ export default function SmartTrackerPage() {
       setIsLoading(false);
     }
   };
-  
+
   const handleCopy = () => {
     navigator.clipboard.writeText(trackingScript);
     setHasCopied(true);
@@ -52,7 +52,7 @@ export default function SmartTrackerPage() {
         description: 'The script has been copied successfully.',
     });
     setTimeout(() => setHasCopied(false), 2000);
-  }
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
