@@ -1,29 +1,33 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
-export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
+export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val: T) => T)) => void] {
+  // useMemo to prevent initialValue from being recreated on every render
+  const memoizedInitialValue = useMemo(() => initialValue, []);
+
   const readValue = useCallback((): T => {
     if (typeof window === 'undefined') {
-      return initialValue;
+      return memoizedInitialValue;
     }
 
     try {
       const item = window.localStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : initialValue;
+      return item ? (JSON.parse(item) as T) : memoizedInitialValue;
     } catch (error) {
       console.warn(`Error reading localStorage key “${key}”:`, error);
-      return initialValue;
+      return memoizedInitialValue;
     }
-  }, [initialValue, key]);
+  }, [memoizedInitialValue, key]);
 
   const [storedValue, setStoredValue] = useState<T>(readValue);
 
-  const setValue = (value: T) => {
+  const setValue = useCallback((value: T | ((val: T) => T)) => {
     if (typeof window == 'undefined') {
       console.warn(
         `Tried setting localStorage key “${key}” even though environment is not a client`
       );
+      return;
     }
 
     try {
@@ -34,7 +38,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T)
     } catch (error) {
       console.warn(`Error setting localStorage key “${key}”:`, error);
     }
-  };
+  }, [key, storedValue]);
   
   useEffect(() => {
     setStoredValue(readValue());
