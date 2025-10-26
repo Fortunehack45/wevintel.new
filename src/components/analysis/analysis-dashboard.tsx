@@ -1,3 +1,4 @@
+
 'use client';
 import type { AnalysisResult } from '@/lib/types';
 import { OverviewCard } from './overview-card';
@@ -8,7 +9,7 @@ import { MetadataCard } from './metadata-card';
 import { HeadersCard } from './headers-card';
 import { AuditsCard } from './audits-card';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const cardVariants = {
@@ -24,53 +25,91 @@ const cardVariants = {
   })
 };
 
-export function AnalysisDashboard({ data }: { data: AnalysisResult }) {
+type PerformancePromise = Promise<Pick<AnalysisResult, 'performance' | 'audits' | 'overview' | 'metadata'>>;
+
+export function AnalysisDashboard({ initialData, performancePromise }: { initialData: Partial<AnalysisResult>, performancePromise: PerformancePromise }) {
   const [history, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
+  const [data, setData] = useState(initialData);
 
   useEffect(() => {
-    if (data && data.id) {
+    let isMounted = true;
+    performancePromise.then(performanceResult => {
+      if(isMounted) {
+        const fullData = {
+          ...initialData,
+          ...performanceResult,
+          overview: {
+            ...initialData.overview,
+            ...performanceResult.overview,
+          },
+          metadata: {
+            ...initialData.metadata,
+            hasRobotsTxt: performanceResult.metadata.hasRobotsTxt,
+          }
+        } as AnalysisResult;
+
+        setData(fullData);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    }
+
+  }, [performancePromise, initialData]);
+  
+  useEffect(() => {
+    // Save to history only when we have the full data
+    if (data && data.performance) {
       setHistory(prevHistory => {
-        // Avoid adding duplicates based on URL and recent timestamp
-        const existingIndex = prevHistory.findIndex(item => item.overview.url === data.overview.url);
         const newHistory = [...prevHistory];
+        const existingIndex = newHistory.findIndex(item => item.overview.url === data.overview.url);
         
         if (existingIndex > -1) {
-            // If it exists, replace it to update data
-            newHistory[existingIndex] = data;
+            newHistory[existingIndex] = data as AnalysisResult;
         } else {
-            // If not, add it
-            newHistory.unshift(data);
+            newHistory.unshift(data as AnalysisResult);
         }
 
-        // Keep only the last 20 entries
         return newHistory.slice(0, 20);
       });
     }
   }, [data, setHistory]);
 
+
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="xl:col-span-4">
-        <OverviewCard data={data.overview} />
-      </motion.div>
+      {data.overview && 
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="xl:col-span-4">
+          <OverviewCard data={data.overview} />
+        </motion.div>
+      }
       <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2 xl:col-span-3">
         <PerformanceCard data={data.performance} />
       </motion.div>
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-1 xl:col-span-1">
-        <SecurityCard data={data.security} />
-      </motion.div>
+      {data.security && 
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-1 xl:col-span-1">
+          <SecurityCard data={data.security} />
+        </motion.div>
+      }
       <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="xl:col-span-4">
         <AuditsCard data={data.audits} />
       </motion.div>
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="xl:col-span-2">
-        <HostingCard data={data.hosting} />
-      </motion.div>
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="xl:col-span-2">
-        <MetadataCard data={data.metadata} />
-      </motion.div>
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="xl:col-span-4">
-        <HeadersCard data={data.headers} />
-      </motion.div>
+      {data.hosting && 
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="xl:col-span-2">
+          <HostingCard data={data.hosting} />
+        </motion.div>
+      }
+      {data.metadata &&
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="xl:col-span-2">
+          <MetadataCard data={data.metadata} />
+        </motion.div>
+      }
+      {data.headers && 
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="xl:col-span-4">
+          <HeadersCard data={data.headers} />
+        </motion.div>
+      }
     </div>
   );
 }

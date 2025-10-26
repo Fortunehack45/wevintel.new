@@ -6,6 +6,7 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from 
 import { TrendingUp, Gauge, Timer, Milestone, PencilRuler, Smartphone, Monitor } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '../ui/skeleton';
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -35,7 +36,21 @@ const MetricItem = ({ icon: Icon, label, value }: { icon: React.ElementType, lab
     </div>
 );
 
-const PerformanceReport = ({ data }: { data: PerformanceData }) => {
+const PerformanceReport = ({ data }: { data?: PerformanceData }) => {
+  if (!data) {
+      return (
+          <div className="space-y-4 py-4">
+              <Skeleton className="h-[180px] w-full" />
+              <Separator />
+              <div className="space-y-3">
+                  <Skeleton className="h-5 w-full" />
+                  <Skeleton className="h-5 w-full" />
+                  <Skeleton className="h-5 w-full" />
+              </div>
+          </div>
+      )
+  }
+    
   const chartData = [
     { name: 'Perf.', score: data.performanceScore },
     { name: 'Access.', score: data.accessibilityScore },
@@ -84,7 +99,7 @@ const PerformanceReport = ({ data }: { data: PerformanceData }) => {
 }
 
 
-export function PerformanceCard({ data }: { data: { mobile: PerformanceData, desktop: PerformanceData }}) {
+export function PerformanceCard({ data }: { data?: { mobile: PerformanceData, desktop: PerformanceData }}) {
   return (
     <Card className="h-full glass-card">
       <CardHeader>
@@ -101,10 +116,10 @@ export function PerformanceCard({ data }: { data: { mobile: PerformanceData, des
               <TabsTrigger value="desktop"><Monitor className="mr-2 h-4 w-4"/>Desktop</TabsTrigger>
             </TabsList>
             <TabsContent value="mobile">
-              <PerformanceReport data={data.mobile} />
+              <PerformanceReport data={data?.mobile} />
             </TabsContent>
             <TabsContent value="desktop">
-              <PerformanceReport data={data.desktop} />
+              <PerformanceReport data={data?.desktop} />
             </TabsContent>
           </Tabs>
       </CardContent>

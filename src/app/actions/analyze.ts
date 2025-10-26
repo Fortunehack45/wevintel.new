@@ -100,44 +100,23 @@ const getAuditInfo = (pageSpeedData: any): AuditInfo => {
     return auditResults;
 }
 
-
-export async function analyzeUrl(url: string): Promise<AnalysisResult | { error: string }> {
+export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResult> | { error: string }> {
   try {
     const urlObject = new URL(url);
     const domain = urlObject.hostname;
-    
-    // API keys can be stored in .env.local file
-    const pageSpeedApiKey = process.env.PAGESPEED_API_KEY;
-
-    const pageSpeedBaseUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO${pageSpeedApiKey ? `&key=${pageSpeedApiKey}` : ''}`;
-    
-    const pageSpeedMobileUrl = `${pageSpeedBaseUrl}&strategy=mobile`;
-    const pageSpeedDesktopUrl = `${pageSpeedBaseUrl}&strategy=desktop`;
     
     const ipApiUrl = `http://ip-api.com/json/${domain}`;
     const sitemapUrl = `${urlObject.origin}/sitemap.xml`;
     
     const [
-        pageSpeedMobileRes, 
-        pageSpeedDesktopRes, 
         ipInfoRes, 
         sitemapRes, 
         pageHtmlRes
     ] = await Promise.allSettled([
-      fetch(pageSpeedMobileUrl),
-      fetch(pageSpeedDesktopUrl),
       fetch(ipApiUrl),
       fetch(sitemapUrl, { method: 'HEAD' }),
       fetch(url)
     ]);
-
-    let partial = false;
-    if (pageSpeedMobileRes.status === 'rejected' || pageSpeedDesktopRes.status === 'rejected' || ipInfoRes.status === 'rejected' || pageHtmlRes.status === 'rejected') {
-        partial = true;
-    }
-    
-    const pageSpeedMobileData = pageSpeedMobileRes.status === 'fulfilled' && pageSpeedMobileRes.value.ok ? await pageSpeedMobileRes.value.json() : null;
-    const pageSpeedDesktopData = pageSpeedDesktopRes.status === 'fulfilled' && pageSpeedDesktopRes.value.ok ? await pageSpeedDesktopRes.value.json() : null;
 
     const ipInfoData = ipInfoRes.status === 'fulfilled' && ipInfoRes.value.ok ? await ipInfoRes.value.json() : null;
     
@@ -147,41 +126,29 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
         pageHtml = await pageHtmlRes.value.text();
         responseHeaders = getHeaders(pageHtmlRes.value);
     }
+    
+    const tempTitle = pageHtml.match(/<title>(.*?)<\/title>/)?.[1] || 'No title found';
 
-
-    if (!pageSpeedMobileData && !pageSpeedDesktopData && !ipInfoData) {
-        throw new Error('All API requests failed. Unable to analyze the URL.');
-    }
-
-    const overviewData = pageSpeedMobileData || pageSpeedDesktopData;
-    const lighthouse = overviewData?.lighthouseResult;
-    const audits = lighthouse?.audits;
-
-    const finalResult: AnalysisResult = {
+    const finalResult: Partial<AnalysisResult> = {
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
       overview: {
         url: url,
         domain: domain,
-        title: audits?.['meta-description']?.title || overviewData?.id.split('?')[0] || 'No title found',
-        description: audits?.['meta-description']?.description || 'No description available.',
-        language: audits?.['html-has-lang']?.details?.items[0]?.lang,
+        title: tempTitle,
+        description: 'Loading...',
         favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
       },
-      performance: {
-        mobile: getPerformanceData(pageSpeedMobileData),
-        desktop: getPerformanceData(pageSpeedDesktopData)
-      },
       security: {
-        sslGrade: 'N/A', // Requires dedicated API like SSL Labs, which has usage restrictions
-        securityHeadersGrade: 'N/A', // Requires dedicated API, often with rate limits
-        domainExpiry: 'N/A', // Requires WHOIS lookup, which is complex to do reliably via public API
+        sslGrade: 'N/A',
+        securityHeadersGrade: 'N/A',
+        domainExpiry: 'N/A',
         isSecure: url.startsWith('https://'),
         securityHeaders: responseHeaders.security
       },
       metadata: {
         openGraphTags: getOgTags(pageHtml),
-        hasRobotsTxt: audits?.['robots-txt']?.score === 1,
+        hasRobotsTxt: false, // will be updated by pagespeed
         hasSitemapXml: sitemapRes.status === 'fulfilled' && sitemapRes.value.ok,
       },
       hosting: {
@@ -190,14 +157,54 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
         country: ipInfoData?.countryCode,
       },
       headers: responseHeaders.all,
-      audits: getAuditInfo(pageSpeedMobileData), // Using mobile data for audits for now
-      partial: partial,
     };
     
     return finalResult;
 
   } catch (error: any) {
-    console.error('Analysis failed:', error);
-    return { error: error.message || 'An unknown error occurred during analysis.' };
+    console.error('Fast analysis failed:', error);
+    return { error: error.message || 'An unknown error occurred during initial analysis.' };
   }
+}
+
+export async function getPerformanceAnalysis(url: string): Promise<Pick<AnalysisResult, 'performance' | 'audits' | 'overview' | 'metadata'>> {
+    const pageSpeedApiKey = process.env.PAGESPEED_API_KEY;
+    const pageSpeedBaseUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO${pageSpeedApiKey ? `&key=${pageSpeedApiKey}` : ''}`;
+    const pageSpeedMobileUrl = `${pageSpeedBaseUrl}&strategy=mobile`;
+    const pageSpeedDesktopUrl = `${pageSpeedBaseUrl}&strategy=desktop`;
+
+    const [
+        pageSpeedMobileRes, 
+        pageSpeedDesktopRes, 
+    ] = await Promise.allSettled([
+      fetch(pageSpeedMobileUrl),
+      fetch(pageSpeedDesktopUrl),
+    ]);
+
+    const pageSpeedMobileData = pageSpeedMobileRes.status === 'fulfilled' && pageSpeedMobileRes.value.ok ? await pageSpeedMobileRes.value.json() : null;
+    const pageSpeedDesktopData = pageSpeedDesktopRes.status === 'fulfilled' && pageSpeedDesktopRes.value.ok ? await pageSpeedDesktopRes.value.json() : null;
+
+    const overviewData = pageSpeedMobileData || pageSpeedDesktopData;
+    const lighthouse = overviewData?.lighthouseResult;
+    const audits = lighthouse?.audits;
+
+    return {
+        performance: {
+            mobile: getPerformanceData(pageSpeedMobileData),
+            desktop: getPerformanceData(pageSpeedDesktopData)
+        },
+        audits: getAuditInfo(pageSpeedMobileData), // Using mobile data for audits for now
+        overview: { // This will update the existing overview data
+            url: url,
+            domain: new URL(url).hostname,
+            title: audits?.['meta-description']?.title || overviewData?.id.split('?')[0] || 'No title found',
+            description: audits?.['meta-description']?.description || 'No description available.',
+            language: audits?.['html-has-lang']?.details?.items[0]?.lang,
+        },
+        metadata: { // This will update the existing metadata
+            openGraphTags: {}, // Already fetched in fast analysis
+            hasRobotsTxt: audits?.['robots-txt']?.score === 1,
+            hasSitemapXml: false, // Already fetched
+        }
+    };
 }

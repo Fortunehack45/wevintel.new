@@ -7,7 +7,7 @@ import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult } from '@/lib/types';
-import { analyzeUrl } from '@/app/actions/analyze';
+import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 
 
@@ -21,7 +21,6 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
     );
 }
 
-// This is the Client Component that handles state and user interactions.
 export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
     
@@ -39,26 +38,31 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                     Re-analyze
                 </Button>
             </div>
-            <Suspense fallback={<DashboardSkeleton />}>
-                <AnalysisData url={decodedUrl} cacheKey={key} />
-            </Suspense>
+            <AnalysisData url={decodedUrl} cacheKey={key} />
         </div>
     );
 }
 
 
 function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | { error: string } | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<Partial<AnalysisResult> | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
         setIsLoading(true);
+        setError(null);
+        setAnalysisResult(null);
         try {
-            const data = await analyzeUrl(url);
-            setAnalysisResult(data);
+            const data = await getFastAnalysis(url);
+            if ('error' in data) {
+                setError(data.error);
+            } else {
+                setAnalysisResult(data);
+            }
         } catch (error: any) {
-            setAnalysisResult({ error: error.message });
+            setError(error.message);
         } finally {
             setIsLoading(false);
         }
@@ -66,17 +70,21 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
     fetchData();
   }, [url, cacheKey]);
 
-
   if (isLoading) {
     return <DashboardSkeleton />;
   }
 
-  if (analysisResult && 'error' in analysisResult) {
-    return <ErrorAlert title="Analysis Failed" description={analysisResult.error} />;
+  if (error) {
+    return <ErrorAlert title="Analysis Failed" description={error} />;
   }
   
   if (analysisResult) {
-    return <AnalysisDashboard data={analysisResult} />;
+    return (
+      <AnalysisDashboard 
+        initialData={analysisResult} 
+        performancePromise={getPerformanceAnalysis(url)} 
+      />
+    );
   }
 
   return null;
@@ -94,3 +102,4 @@ function DashboardSkeleton() {
     </div>
   );
 }
+

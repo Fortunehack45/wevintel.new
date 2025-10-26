@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/accordion"
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '../ui/skeleton';
 
 const getScoreColor = (score: number | null) => {
     if (score === null) return 'text-muted-foreground';
@@ -64,7 +65,31 @@ const AuditList = ({ audits }: { audits: AuditItem[] }) => {
 };
 
 
-export function AuditsCard({ data }: { data: AuditInfo }) {
+export function AuditsCard({ data }: { data?: AuditInfo }) {
+
+  if (!data) {
+    return (
+      <Card className="h-full glass-card">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <SlidersHorizontal className="h-5 w-5 text-primary" />
+            Performance Audits
+          </CardTitle>
+          <CardDescription>Detailed metrics and opportunities from Lighthouse.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4 py-4">
+              <div className="flex space-x-1">
+                  <Skeleton className="h-8 w-1/2" />
+                  <Skeleton className="h-8 w-1/2" />
+              </div>
+              <Skeleton className="h-72 w-full" />
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
   const allAudits = Object.values(data);
   const opportunities = allAudits.filter(audit => audit.score !== null && audit.score < 0.9);
   const passed = allAudits.filter(audit => audit.score !== null && audit.score >= 0.9);
