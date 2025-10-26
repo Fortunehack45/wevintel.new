@@ -79,10 +79,12 @@ export function SecurityCard({ data, audits }: { data: SecurityData, audits?: Au
                 </CardTitle>
                 <CardDescription>SSL, headers, and vulnerability checks.</CardDescription>
             </div>
-            {securityScore !== undefined && (
+            {securityScore !== undefined ? (
                 <Badge variant={getScoreBadgeVariant(securityScore)} className={getScoreBadgeVariant(securityScore) === 'default' ? 'bg-green-500/20 text-green-700 border-green-300' : ''}>
                     {securityScore}%
                 </Badge>
+            ) : (
+                <Badge variant="secondary">N/A</Badge>
             )}
         </div>
       </CardHeader>
