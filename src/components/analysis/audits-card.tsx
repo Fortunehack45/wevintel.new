@@ -1,7 +1,7 @@
 
 'use client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import type { AuditInfo } from '@/lib/types';
+import type { AuditItem, AuditInfo } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SlidersHorizontal, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import {
@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Badge } from '../ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const getScoreColor = (score: number | null) => {
     if (score === null) return 'text-muted-foreground';
@@ -25,21 +26,13 @@ const getScoreIcon = (score: number | null) => {
     return <XCircle className="h-4 w-4" />;
 }
 
-export function AuditsCard({ data }: { data: AuditInfo }) {
-  const audits = Object.values(data);
+const AuditList = ({ audits }: { audits: AuditItem[] }) => {
+    if (audits.length === 0) {
+        return <p className="text-muted-foreground text-sm p-4 text-center">No audits in this category.</p>;
+    }
 
-  return (
-    <Card className="h-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <SlidersHorizontal className="h-5 w-5 text-primary" />
-          Performance Audits
-        </CardTitle>
-        <CardDescription>Detailed metrics and opportunities from Lighthouse.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {audits.length > 0 ? (
-          <ScrollArea className="h-72 rounded-md border">
+    return (
+        <ScrollArea className="h-72 rounded-md border">
             <Accordion type="single" collapsible className="w-full">
                 {audits.map((audit) => (
                     <AccordionItem value={audit.title} key={audit.title}>
@@ -58,7 +51,41 @@ export function AuditsCard({ data }: { data: AuditInfo }) {
                     </AccordionItem>
                 ))}
             </Accordion>
-          </ScrollArea>
+        </ScrollArea>
+    );
+};
+
+
+export function AuditsCard({ data }: { data: AuditInfo }) {
+  const allAudits = Object.values(data);
+  const opportunities = allAudits.filter(audit => audit.score !== null && audit.score < 0.9);
+  const passed = allAudits.filter(audit => audit.score !== null && audit.score >= 0.9);
+  const informational = allAudits.filter(audit => audit.score === null);
+
+
+  return (
+    <Card className="h-full">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <SlidersHorizontal className="h-5 w-5 text-primary" />
+          Performance Audits
+        </CardTitle>
+        <CardDescription>Detailed metrics and opportunities from Lighthouse.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {allAudits.length > 0 ? (
+          <Tabs defaultValue="opportunities" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="opportunities">Opportunities ({opportunities.length})</TabsTrigger>
+              <TabsTrigger value="passed">Passed Audits ({passed.length})</TabsTrigger>
+            </TabsList>
+            <TabsContent value="opportunities" className="mt-4">
+              <AuditList audits={[...opportunities, ...informational]} />
+            </TabsContent>
+            <TabsContent value="passed" className="mt-4">
+              <AuditList audits={passed} />
+            </TabsContent>
+          </Tabs>
         ) : <p className="text-muted-foreground text-sm">No detailed audit information was found.</p>}
       </CardContent>
     </Card>
