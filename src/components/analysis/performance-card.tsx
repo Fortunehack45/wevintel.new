@@ -17,9 +17,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const getScoreColor = (score: number) => {
-    if (score >= 90) return 'hsl(var(--chart-1))'; // Greenish/Blue
-    if (score >= 50) return 'hsl(var(--chart-4))'; // Orange
-    return 'hsl(var(--destructive))'; // Red
+    if (score >= 90) return 'hsl(var(--chart-1))';
+    if (score >= 50) return 'hsl(var(--chart-4))';
+    return 'hsl(var(--destructive))';
 }
 
 export function PerformanceCard({ data }: { data: PerformanceData }) {

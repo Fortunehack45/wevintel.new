@@ -2,7 +2,7 @@ import { UrlForm } from '@/components/url-form';
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center text-center h-full">
+    <div className="flex flex-col items-center justify-center text-center h-full -mt-16">
       <div className="max-w-3xl w-full">
         <div className="mb-8">
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent/80">
