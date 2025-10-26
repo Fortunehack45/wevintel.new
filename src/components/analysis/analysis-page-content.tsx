@@ -13,6 +13,7 @@ import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import { useRouter } from 'next/navigation';
 import { NotFoundCard } from './not-found-card';
+import { DashboardSkeleton } from './dashboard-skeleton';
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
     return (
@@ -384,24 +385,7 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
                 const perfPromise = getPerformanceAnalysis(url);
                 setPerformancePromise(perfPromise);
 
-                perfPromise.then(perfData => {
-                  const fullData = {
-                    ...data,
-                    ...perfData,
-                    overview: {
-                      ...data.overview,
-                      ...perfData.overview,
-                    },
-                    metadata: {
-                      ...data.metadata,
-                      hasRobotsTxt: perfData.metadata.hasRobotsTxt,
-                    },
-                    security: {
-                        ...data.security,
-                    }
-                  } as AnalysisResult;
-                  onDataLoaded(fullData);
-                });
+                // Note: The full data consolidation is now handled inside AnalysisDashboard
             }
         } catch (error: any) {
             setError(error.message);
@@ -436,20 +420,6 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
   }
 
   return null;
-}
-
-function DashboardSkeleton() {
-  return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-      <Skeleton className="h-56 rounded-xl lg:col-span-4" />
-      <Skeleton className="h-80 rounded-xl lg:col-span-4" />
-      <Skeleton className="h-48 rounded-xl lg:col-span-2" />
-      <Skeleton className="h-48 rounded-xl lg:col-span-2" />
-      <Skeleton className="h-96 rounded-xl lg:col-span-4" />
-      <Skeleton className="h-64 rounded-xl lg:col-span-2" />
-      <Skeleton className="h-64 rounded-xl lg:col-span-2" />
-    </div>
-  );
 }
 
     

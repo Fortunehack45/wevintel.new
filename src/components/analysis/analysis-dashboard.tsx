@@ -14,6 +14,7 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { OverallScoreCard } from './overall-score-card';
+import { DashboardSkeleton } from './dashboard-skeleton';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -66,8 +67,11 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
           ...initialData,
           ...performanceResult,
           overview: {
+            // Prioritize performance result's overview, but fallback to initialData's
             ...initialData.overview,
             ...performanceResult.overview,
+            // Explicitly keep the better title if the perf one is bad
+            title: performanceResult.overview?.title?.startsWith('http') ? initialData.overview?.title : performanceResult.overview?.title,
           },
           metadata: {
             ...initialData.metadata,
@@ -130,9 +134,7 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
 
 
   if (!data) {
-    // Show a skeleton or loading state while waiting for the full data
-    // This prevents rendering with partial/incomplete data
-    return null; // Or a skeleton component if you prefer
+    return <DashboardSkeleton initialData={initialData} />;
   }
 
   return (
