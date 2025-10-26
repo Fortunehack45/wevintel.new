@@ -27,7 +27,8 @@ export function UrlForm() {
   useEffect(() => {
     if (url) {
       const filtered = history.filter(item => 
-        item.overview.url.toLowerCase().includes(url.toLowerCase())
+        item.overview.url.toLowerCase().includes(url.toLowerCase()) ||
+        item.overview.domain.toLowerCase().includes(url.toLowerCase())
       ).slice(0, 5); // Limit to 5 suggestions
       setSuggestions(filtered);
       setShowSuggestions(filtered.length > 0);
@@ -47,15 +48,7 @@ export function UrlForm() {
   }, []);
 
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!url) return;
-    
-    let targetUrl = url;
-    if (activeIndex > -1 && suggestions[activeIndex]) {
-        targetUrl = suggestions[activeIndex].overview.url;
-    }
-    
+  const analyzeUrl = (targetUrl: string) => {
     setIsLoading(true);
 
     let cleanUrl = targetUrl.trim();
@@ -79,6 +72,18 @@ export function UrlForm() {
       setIsLoading(false);
     }
   };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!url) return;
+    
+    let targetUrl = url;
+    if (activeIndex > -1 && suggestions[activeIndex]) {
+        targetUrl = suggestions[activeIndex].overview.url;
+    }
+    
+    analyzeUrl(targetUrl);
+  };
   
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (showSuggestions) {
@@ -95,14 +100,7 @@ export function UrlForm() {
   }
   
   const handleSuggestionClick = (suggestionUrl: string) => {
-      setUrl(suggestionUrl);
-      setShowSuggestions(false);
-      // Manually trigger form submission
-      const form = formRef.current?.querySelector('form');
-      if (form) {
-          const fakeEvent = { preventDefault: () => {} } as React.FormEvent<HTMLFormElement>;
-          handleSubmit(fakeEvent);
-      }
+      analyzeUrl(suggestionUrl);
   }
 
   return (
