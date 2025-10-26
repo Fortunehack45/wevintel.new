@@ -10,7 +10,7 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
     const pageSpeedApiKey = process.env.PAGESPEED_API_KEY;
     const ipInfoApiKey = process.env.IPINFO_API_TOKEN;
 
-    const useMockData = !pageSpeedApiKey || !ipInfoApiKey;
+    const useMockData = !pageSpeedApiKey;
 
     let finalResult: AnalysisResult;
 
@@ -36,7 +36,7 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
     } else {
         const [pageSpeedRes, ipInfoRes] = await Promise.all([
           fetch(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&key=${pageSpeedApiKey}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO`),
-          fetch(`https://ipinfo.io/${domain}?token=${ipInfoApiKey}`)
+          fetch(`https://ip-api.com/json/${domain}`)
         ]);
 
         if (!pageSpeedRes.ok) {
@@ -79,8 +79,8 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
             hasSitemapXml: false, // This check is complex; mocking for now
           },
           hosting: {
-            ip: ipInfoData.ip,
-            isp: ipInfoData.org,
+            ip: ipInfoData.query,
+            isp: ipInfoData.isp,
             country: ipInfoData.country,
           },
           createdAt: new Date().toISOString(),

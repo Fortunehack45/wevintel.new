@@ -7,7 +7,7 @@ import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult } from '@/lib/types';
-import { useSearchParams } from 'next/navigation';
+import { analyzeUrl } from '@/app/actions/analyze';
 
 function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
@@ -49,7 +49,7 @@ export default function AnalysisPage({ params }: { params: { url: string } }) {
   return <AnalysisPageContent decodedUrl={decodedUrl} />;
 }
 
-async function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
+function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | { error: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -57,11 +57,7 @@ async function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }
     async function fetchData() {
         setIsLoading(true);
         try {
-            const res = await fetch(`/api/analyze?url=${encodeURIComponent(url)}&t=${cacheKey}`);
-            const data = await res.json();
-            if (!res.ok) {
-                throw new Error(data.error || 'Analysis failed');
-            }
+            const data = await analyzeUrl(url);
             setAnalysisResult(data);
         } catch (error: any) {
             setAnalysisResult({ error: error.message });
