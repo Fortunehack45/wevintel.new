@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -70,6 +70,8 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
     fetchData();
   }, [url, cacheKey]);
 
+  const performancePromise = useMemo(() => getPerformanceAnalysis(url), [url, cacheKey]);
+
   if (isLoading) {
     return <DashboardSkeleton />;
   }
@@ -82,7 +84,7 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
     return (
       <AnalysisDashboard 
         initialData={analysisResult} 
-        performancePromise={getPerformanceAnalysis(url)} 
+        performancePromise={performancePromise}
       />
     );
   }
@@ -102,4 +104,3 @@ function DashboardSkeleton() {
     </div>
   );
 }
-
