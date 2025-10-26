@@ -5,6 +5,7 @@ import { PerformanceCard } from './performance-card';
 import { SecurityCard } from './security-card';
 import { HostingCard } from './hosting-card';
 import { MetadataCard } from './metadata-card';
+import { HeadersCard } from './headers-card';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -62,6 +63,9 @@ export function AnalysisDashboard({ data }: { data: AnalysisResult }) {
       </motion.div>
       <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="xl:col-span-2">
         <MetadataCard data={data.metadata} />
+      </motion.div>
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="xl:col-span-4">
+        <HeadersCard data={data.headers} />
       </motion.div>
     </div>
   );

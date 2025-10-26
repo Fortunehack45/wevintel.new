@@ -6,6 +6,7 @@ export type AnalysisResult = {
   security: SecurityData;
   metadata: Metadata;
   hosting: HostingInfo;
+  headers: HeaderInfo;
   createdAt: string; // ISO 8601 string
   error?: string;
   partial?: boolean;
@@ -32,6 +33,12 @@ export type SecurityData = {
   securityHeadersGrade?: string;
   domainExpiry?: string;
   isSecure: boolean;
+  securityHeaders: {
+    'content-security-policy'?: boolean;
+    'strict-transport-security'?: boolean;
+    'x-frame-options'?: boolean;
+    'x-content-type-options'?: boolean;
+  }
 };
 
 export type Metadata = {
@@ -45,5 +52,9 @@ export type HostingInfo = {
   isp?: string;
   country?: string;
 };
+
+export type HeaderInfo = {
+    [key: string]: string;
+}
 
 export type HistoryItem = Pick<AnalysisResult, 'id' | 'overview' | 'performance' | 'security' | 'createdAt'>;
