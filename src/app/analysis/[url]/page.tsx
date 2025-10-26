@@ -9,15 +9,10 @@ import { Button } from '@/components/ui/button';
 import { type AnalysisResult } from '@/lib/types';
 import { analyzeUrl } from '@/app/actions/analyze';
 
+// This is now a Client Component that receives a simple string prop.
 function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
     
-    if (!decodedUrl) {
-      return (
-          <ErrorAlert title="Invalid URL" description="The provided URL is not valid. Please go back and try again with a valid URL (e.g., https://example.com)." />
-      );
-    }
-
     return (
         <div className="flex-1">
             <div className="mb-6 flex items-center justify-between gap-4">
@@ -39,7 +34,7 @@ function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     );
 }
 
-
+// This is the main page component, now a SERVER component.
 export default function AnalysisPage({ params }: { params: { url: string } }) {
   let decodedUrl = '';
   try {
@@ -54,6 +49,7 @@ export default function AnalysisPage({ params }: { params: { url: string } }) {
     )
   }
 
+  // We pass the clean, validated string to the client component.
   return <AnalysisPageContent decodedUrl={decodedUrl} />;
 }
 
