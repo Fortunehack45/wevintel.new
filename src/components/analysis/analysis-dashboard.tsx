@@ -71,7 +71,8 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
             ...initialData.overview,
             ...performanceResult.overview,
             // Explicitly keep the better title if the perf one is bad
-            title: performanceResult.overview?.title?.startsWith('http') ? initialData.overview?.title : performanceResult.overview?.title,
+            title: performanceResult.overview?.title?.startsWith('http') ? initialData.overview?.title : performanceResult.overview?.title || initialData.overview?.title,
+            description: performanceResult.overview?.description || initialData.overview?.description,
           },
           metadata: {
             ...initialData.metadata,
