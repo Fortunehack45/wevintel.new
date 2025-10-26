@@ -8,7 +8,6 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarMenuSkeleton,
-  SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { useLocalStorage } from '@/hooks/use-local-storage';
@@ -30,7 +29,6 @@ export function HistorySidebar() {
 
 
   return (
-    <SidebarProvider>
       <Sidebar side="left" variant="sidebar" collapsible="icon">
         <SidebarHeader className='p-4'>
             <div className='flex items-center gap-2'>
@@ -90,7 +88,6 @@ export function HistorySidebar() {
           </SidebarMenu>
         </SidebarContent>
       </Sidebar>
-    </SidebarProvider>
   );
 }
 

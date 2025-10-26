@@ -5,6 +5,33 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { HistorySidebar, HistorySidebarTrigger } from '@/components/analysis/history-sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
+
+
+function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
+    return (
+        <SidebarProvider>
+            <div className='flex gap-4'>
+                <HistorySidebar />
+                <div className="flex-1">
+                    <div className="mb-6 flex items-center gap-4">
+                        <HistorySidebarTrigger />
+                        <div>
+                            <h1 className="text-3xl font-bold">Analysis Report</h1>
+                            <p className="text-muted-foreground">
+                                Results for: <a href={decodedUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{decodedUrl}</a>
+                            </p>
+                        </div>
+                    </div>
+                    <Suspense fallback={<DashboardSkeleton />}>
+                        <AnalysisData url={decodedUrl} />
+                    </Suspense>
+                </div>
+            </div>
+        </SidebarProvider>
+    );
+}
+
 
 export default function AnalysisPage({ params }: { params: { url: string } }) {
   let decodedUrl = '';
@@ -21,25 +48,7 @@ export default function AnalysisPage({ params }: { params: { url: string } }) {
     )
   }
 
-  return (
-    <div className='flex gap-4'>
-        <HistorySidebar />
-        <div className="flex-1">
-            <div className="mb-6 flex items-center gap-4">
-              <HistorySidebarTrigger />
-              <div>
-                <h1 className="text-3xl font-bold">Analysis Report</h1>
-                <p className="text-muted-foreground">
-                    Results for: <a href={decodedUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{decodedUrl}</a>
-                </p>
-              </div>
-            </div>
-            <Suspense fallback={<DashboardSkeleton />}>
-            <AnalysisData url={decodedUrl} />
-            </Suspense>
-        </div>
-    </div>
-  );
+  return <AnalysisPageContent decodedUrl={decodedUrl} />;
 }
 
 async function AnalysisData({ url }: { url: string }) {
