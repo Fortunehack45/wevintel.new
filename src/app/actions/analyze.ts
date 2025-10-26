@@ -3,7 +3,6 @@
 
 import type { AnalysisResult, PerformanceData, SecurityData, AuditInfo, AuditItem } from '@/lib/types';
 import 'dotenv/config';
-import { summarizeAnalysis } from '@/ai/flows/summarize-analysis-flow';
 
 // Helper function to parse Open Graph tags from HTML
 const getOgTags = (html: string): Record<string, string> => {
@@ -158,7 +157,9 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
     const lighthouse = overviewData?.lighthouseResult;
     const audits = lighthouse?.audits;
 
-    const partialAnalysis: Omit<AnalysisResult, 'id' | 'createdAt' | 'aiSummary'> = {
+    const finalResult: AnalysisResult = {
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
       overview: {
         url: url,
         domain: domain,
@@ -191,16 +192,6 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
       headers: responseHeaders.all,
       audits: getAuditInfo(pageSpeedMobileData), // Using mobile data for audits for now
       partial: partial,
-    };
-    
-    // Generate AI summary
-    const aiSummary = await summarizeAnalysis(partialAnalysis);
-
-    const finalResult: AnalysisResult = {
-        ...partialAnalysis,
-        id: crypto.randomUUID(),
-        aiSummary: aiSummary,
-        createdAt: new Date().toISOString(),
     };
     
     return finalResult;

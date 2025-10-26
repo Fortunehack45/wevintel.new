@@ -1,6 +1,7 @@
 
 
 
+
 export type AnalysisResult = {
   id: string;
   overview: WebsiteOverview;
@@ -13,7 +14,6 @@ export type AnalysisResult = {
   hosting: HostingInfo;
   headers: HeaderInfo;
   audits: AuditInfo;
-  aiSummary: AISummary;
   createdAt: string; // ISO 8601 string
   error?: string;
   partial?: boolean;

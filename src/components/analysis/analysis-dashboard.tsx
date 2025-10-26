@@ -7,7 +7,6 @@ import { HostingCard } from './hosting-card';
 import { MetadataCard } from './metadata-card';
 import { HeadersCard } from './headers-card';
 import { AuditsCard } from './audits-card';
-import { AICard } from './ai-card';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -59,9 +58,6 @@ export function AnalysisDashboard({ data }: { data: AnalysisResult }) {
       </motion.div>
       <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-1 xl:col-span-1">
         <SecurityCard data={data.security} />
-      </motion.div>
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="xl:col-span-4">
-        <AICard data={data.aiSummary} />
       </motion.div>
       <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="xl:col-span-4">
         <AuditsCard data={data.audits} />
