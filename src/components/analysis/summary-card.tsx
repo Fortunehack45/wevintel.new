@@ -83,7 +83,7 @@ export function SummaryCard({ data }: { data: Partial<AnalysisResult> }) {
 
     return (
         <Card className="glass-card h-full">
-             <Accordion type="single" collapsible defaultValue='item-1'>
+             <Accordion type="single" collapsible>
                 <AccordionItem value="item-1" className='border-none'>
                     <AccordionTrigger className='p-6 hover:no-underline'>
                          <div className='flex flex-col space-y-1.5 text-left'>
