@@ -362,7 +362,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
 
 
 function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: number, onDataLoaded: (data: AnalysisResult | null) => void; }) {
-  const [analysisResult, setAnalysisResult] = useState<Partial<AnalysisResult> | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -372,15 +372,65 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
         setError(null);
         setAnalysisResult(null);
         onDataLoaded(null!);
+
         try {
-            const data = await getFastAnalysis(url);
-            if ('error' in data) {
-                setError(data.error);
-            } else {
-                setAnalysisResult(data);
-                // The performance analysis is now triggered by the user
-                // inside the AnalysisDashboard component.
+            const [fastResult, perfResult] = await Promise.all([
+                getFastAnalysis(url),
+                getPerformanceAnalysis(url)
+            ]);
+
+            if ('error' in fastResult) {
+                setError(fastResult.error);
+                setIsLoading(false);
+                return;
             }
+            
+            // Combine results
+            const securityAudits = perfResult.securityAudits || {};
+            let securityScoreTotal = 0;
+            let securityItemsScored = 0;
+            
+            if (fastResult.security?.isSecure) {
+                securityScoreTotal += 1;
+            }
+            securityItemsScored++;
+
+            Object.values(fastResult.security?.securityHeaders || {}).forEach(present => {
+                if (present) securityScoreTotal++;
+                securityItemsScored++;
+            });
+
+            Object.values(securityAudits).forEach(audit => {
+                if (audit.score !== null) {
+                    securityScoreTotal += audit.score;
+                    securityItemsScored++;
+                }
+            });
+
+            const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
+
+
+            const combinedData = {
+              ...fastResult,
+              ...perfResult,
+              overview: {
+                ...fastResult.overview,
+                ...perfResult.overview,
+                title: perfResult.overview?.title || fastResult.overview?.title,
+                description: perfResult.overview?.description || fastResult.overview?.description,
+              },
+              metadata: {
+                ...fastResult.metadata,
+                hasRobotsTxt: perfResult.metadata.hasRobotsTxt,
+              },
+              security: {
+                ...fastResult.security,
+                securityScore: calculatedSecurityScore,
+              },
+            } as AnalysisResult;
+            
+            setAnalysisResult(combinedData);
+
         } catch (error: any) {
             setError(error.message);
         } finally {

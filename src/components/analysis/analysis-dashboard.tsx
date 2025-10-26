@@ -31,93 +31,29 @@ const cardVariants = {
   })
 };
 
-export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: Partial<AnalysisResult>, onDataLoaded: (data: AnalysisResult) => void }) {
+export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: AnalysisResult, onDataLoaded: (data: AnalysisResult) => void }) {
   const [, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
-  const [fullData, setFullData] = useState<AnalysisResult | null>(null);
-  const [isPerfLoading, setIsPerfLoading] = useState(false);
-
-  useEffect(() => {
-    // When initial data is loaded, set it as the full data (but partial)
-    // This allows the UI to render immediately with the fast analysis results.
-    setFullData(initialData as AnalysisResult);
-    onDataLoaded(initialData as AnalysisResult);
-  }, [initialData, onDataLoaded]);
   
   useEffect(() => {
-    // This effect runs when the full data (including performance) is available.
-    // It updates the history.
-    if (fullData && fullData.performance) {
-      setHistory(prevHistory => {
-        const newHistory = [...prevHistory];
-        const existingIndex = newHistory.findIndex(item => item.overview.url === fullData.overview?.url);
-        
-        if (existingIndex > -1) {
-            newHistory[existingIndex] = fullData as AnalysisResult;
-        } else {
-            newHistory.unshift(fullData as AnalysisResult);
-        }
+    onDataLoaded(initialData);
 
-        return newHistory.slice(0, 20);
-      });
-    }
-  }, [fullData, setHistory]);
-
-  const handleRunPerformance = async () => {
-    if (!fullData?.overview.url) return;
-    setIsPerfLoading(true);
-
-    const performanceResult = await getPerformanceAnalysis(fullData.overview.url);
-    
-    const securityAudits = performanceResult.securityAudits || {};
-    let securityScoreTotal = 0;
-    let securityItemsScored = 0;
-    
-    if (initialData.security?.isSecure) {
-        securityScoreTotal += 1;
-    }
-    securityItemsScored++;
-
-    Object.values(initialData.security?.securityHeaders || {}).forEach(present => {
-        if (present) securityScoreTotal++;
-        securityItemsScored++;
-    });
-
-    Object.values(securityAudits).forEach(audit => {
-        if (audit.score !== null) {
-            securityScoreTotal += audit.score;
-            securityItemsScored++;
-        }
-    });
-
-    const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
-
-    const updatedData = {
-      ...initialData,
-      ...performanceResult,
-      overview: {
-        ...initialData.overview,
-        ...performanceResult.overview,
-        title: performanceResult.overview?.title || initialData.overview?.title,
-        description: performanceResult.overview?.description || initialData.overview?.description,
-      },
-      metadata: {
-        ...initialData.metadata,
-        hasRobotsTxt: performanceResult.metadata.hasRobotsTxt,
-      },
-      security: {
-        ...initialData.security,
-        securityScore: calculatedSecurityScore,
+    setHistory(prevHistory => {
+      const newHistory = [...prevHistory];
+      const existingIndex = newHistory.findIndex(item => item.overview.url === initialData.overview?.url);
+      
+      if (existingIndex > -1) {
+          newHistory[existingIndex] = initialData;
+      } else {
+          newHistory.unshift(initialData);
       }
-    } as AnalysisResult;
 
-    setFullData(updatedData);
-    onDataLoaded(updatedData);
-    setIsPerfLoading(false);
-  }
+      return newHistory.slice(0, 20);
+    });
+  }, [initialData, onDataLoaded, setHistory]);
+
 
   const totalAuditScore = useMemo(() => {
-    if (!fullData?.performance) return null; // Only calculate if performance data is available
-    const allAudits: (AuditInfo | undefined)[] = [fullData.performanceAudits, fullData.securityAudits, fullData.diagnosticsAudits];
+    const allAudits: (AuditInfo | undefined)[] = [initialData.performanceAudits, initialData.securityAudits, initialData.diagnosticsAudits];
     let totalScore = 0;
     let scoreCount = 0;
 
@@ -134,14 +70,9 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
 
     if (scoreCount === 0) return null;
     return Math.round((totalScore / scoreCount) * 100);
-  }, [fullData]);
+  }, [initialData]);
 
-
-  if (!fullData) {
-    return <DashboardSkeleton />;
-  }
-
-  const { overview, security, hosting, metadata, headers, performance, performanceAudits, securityAudits, diagnosticsAudits } = fullData;
+  const { overview, security, hosting, metadata, headers, performance, performanceAudits, securityAudits, diagnosticsAudits } = initialData;
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -150,8 +81,8 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
           <OverviewCard 
             data={overview}
             hasPerformanceRun={!!performance}
-            isLoading={isPerfLoading}
-            onRunPerformance={handleRunPerformance}
+            isLoading={false}
+            onRunPerformance={() => {}}
           />
         </motion.div>
       }

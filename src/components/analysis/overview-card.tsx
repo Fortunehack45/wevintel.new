@@ -30,16 +30,6 @@ export function OverviewCard({ data, hasPerformanceRun, isLoading, onRunPerforma
           <h3 className="text-2xl font-bold tracking-tight">{data.title || data.domain}</h3>
           <p className="text-muted-foreground">{data.domain}</p>
         </div>
-        {!hasPerformanceRun && (
-          <Button onClick={onRunPerformance} disabled={isLoading}>
-            {isLoading ? (
-                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-                <Wand2 className="mr-2 h-4 w-4" />
-            )}
-            {isLoading ? 'Scanning...' : 'Run Full Performance Scan'}
-          </Button>
-        )}
       </CardHeader>
       <CardContent className="grid md:grid-cols-2 gap-6 pt-4">
         <div className="flex items-start gap-4">
