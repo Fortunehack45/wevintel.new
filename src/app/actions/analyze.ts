@@ -3,6 +3,17 @@
 import type { AnalysisResult } from '@/lib/types';
 import 'dotenv/config';
 
+// Helper function to parse Open Graph tags from HTML
+const getOgTags = (html: string): Record<string, string> => {
+  const ogTags: Record<string, string> = {};
+  const ogTagRegex = /<meta\s+(?:property|name)="og:([^"]+)"\s+content="([^"]+)"/g;
+  let match;
+  while ((match = ogTagRegex.exec(html)) !== null) {
+    ogTags[match[1]] = match[2];
+  }
+  return ogTags;
+};
+
 export async function analyzeUrl(url: string): Promise<AnalysisResult | { error: string }> {
   try {
     const urlObject = new URL(url);
@@ -13,10 +24,13 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
 
     const pageSpeedUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO${pageSpeedApiKey ? `&key=${pageSpeedApiKey}` : ''}`;
     const ipApiUrl = `http://ip-api.com/json/${domain}`;
+    const sitemapUrl = `${urlObject.origin}/sitemap.xml`;
     
-    const [pageSpeedRes, ipInfoRes] = await Promise.allSettled([
+    const [pageSpeedRes, ipInfoRes, sitemapRes, pageHtmlRes] = await Promise.allSettled([
       fetch(pageSpeedUrl),
-      fetch(ipApiUrl)
+      fetch(ipApiUrl),
+      fetch(sitemapUrl, { method: 'HEAD' }),
+      fetch(url)
     ]);
 
     let partial = false;
@@ -26,6 +40,7 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
     
     const pageSpeedData = pageSpeedRes.status === 'fulfilled' && pageSpeedRes.value.ok ? await pageSpeedRes.value.json() : null;
     const ipInfoData = ipInfoRes.status === 'fulfilled' && ipInfoRes.value.ok ? await ipInfoRes.value.json() : null;
+    const pageHtml = pageHtmlRes.status === 'fulfilled' && pageHtmlRes.value.ok ? await pageHtmlRes.value.text() : '';
 
     if (!pageSpeedData && !ipInfoData) {
         throw new Error('All API requests failed. Unable to analyze the URL.');
@@ -57,9 +72,9 @@ export async function analyzeUrl(url: string): Promise<AnalysisResult | { error:
         isSecure: url.startsWith('https://'),
       },
       metadata: {
-        openGraphTags: {}, // PageSpeed doesn't easily provide all OG tags, would need DOM parsing
+        openGraphTags: getOgTags(pageHtml),
         hasRobotsTxt: audits?.['robots-txt']?.score === 1,
-        hasSitemapXml: false, // This check is complex and often unreliable; mocking for now
+        hasSitemapXml: sitemapRes.status === 'fulfilled' && sitemapRes.value.ok,
       },
       hosting: {
         ip: ipInfoData?.query,
