@@ -1,9 +1,13 @@
+import { Timestamp } from 'firebase/firestore';
+
 export type AnalysisResult = {
+  id?: string;
   overview: WebsiteOverview;
   performance: PerformanceData;
   security: SecurityData;
   metadata: Metadata;
   hosting: HostingInfo;
+  createdAt?: Timestamp;
   error?: string;
 };
 

@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
+import { FirebaseProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
   title: 'Web Insights',
@@ -25,12 +26,14 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-background text-foreground">
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-1 container mx-auto px-4 py-8">{children}</main>
-          <Footer />
-        </div>
-        <Toaster />
+        <FirebaseProvider>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-1 container mx-auto px-4 py-8">{children}</main>
+            <Footer />
+          </div>
+          <Toaster />
+        </FirebaseProvider>
       </body>
     </html>
   );

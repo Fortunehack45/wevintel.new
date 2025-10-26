@@ -6,14 +6,17 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import { useUser } from '@/firebase/auth/use-user';
+import { analyzeUrl } from '@/app/actions/analyze';
 
 export function UrlForm() {
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const { user } = useUser();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!url) return;
     setIsLoading(true);
@@ -26,7 +29,12 @@ export function UrlForm() {
     try {
       const urlObject = new URL(cleanUrl);
       const encodedUrl = encodeURIComponent(urlObject.href);
+      
+      // Perform analysis and save to history
+      await analyzeUrl(urlObject.href, user?.uid);
+
       router.push(`/analysis/${encodedUrl}`);
+
     } catch (error) {
       toast({
         title: "Invalid URL",
@@ -48,7 +56,7 @@ export function UrlForm() {
         aria-label="Website URL"
         disabled={isLoading}
       />
-      <Button type="submit" size="lg" className="h-12" disabled={isLoading}>
+      <Button type="submit" size="lg" className="h-12" disabled={isLoading || !url}>
         {isLoading ? (
             <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

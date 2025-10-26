@@ -4,6 +4,17 @@ import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertTriangle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { cookies } from 'next/headers';
+import { HistorySidebar, HistorySidebarTrigger } from '@/components/analysis/history-sidebar';
+
+async function getUserId() {
+    // This is a placeholder. In a real app with server-side auth, you'd get this differently.
+    // For now, let's assume we can get it from a cookie or header if needed.
+    // However, for anonymous auth, the client will handle the user state.
+    // We will get the uid from the client and pass it to server action.
+    return null; 
+}
+
 
 export default function AnalysisPage({ params }: { params: { url: string } }) {
   let decodedUrl = '';
@@ -21,22 +32,32 @@ export default function AnalysisPage({ params }: { params: { url: string } }) {
   }
 
   return (
-    <div>
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold">Analysis Report</h1>
-          <p className="text-muted-foreground">
-            Results for: <a href={decodedUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{decodedUrl}</a>
-          </p>
+    <div className='flex gap-4'>
+        <HistorySidebar />
+        <div className="flex-1">
+            <div className="mb-6 flex items-center gap-4">
+              <HistorySidebarTrigger />
+              <div>
+                <h1 className="text-3xl font-bold">Analysis Report</h1>
+                <p className="text-muted-foreground">
+                    Results for: <a href={decodedUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{decodedUrl}</a>
+                </p>
+              </div>
+            </div>
+            <Suspense fallback={<DashboardSkeleton />}>
+            <AnalysisData url={decodedUrl} />
+            </Suspense>
         </div>
-        <Suspense fallback={<DashboardSkeleton />}>
-          <AnalysisData url={decodedUrl} />
-        </Suspense>
     </div>
   );
 }
 
 async function AnalysisData({ url }: { url: string }) {
-  const analysisResult = await analyzeUrl(url);
+  // Since we're using anonymous auth on the client, we can't easily get the UID here on the server
+  // during the initial render. The client will pass it with the form submission.
+  // For loading history, the client-side `useCollection` hook will handle fetching data for the current user.
+  const analysisResult = await analyzeUrl(url); // Don't pass userId on initial load
+
   if (analysisResult.error) {
     return <ErrorAlert title="Analysis Failed" description={analysisResult.error} />;
   }
