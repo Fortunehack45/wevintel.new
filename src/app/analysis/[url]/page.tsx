@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { type AnalysisResult } from '@/lib/types';
 import { analyzeUrl } from '@/app/actions/analyze';
 
-// This is now a Client Component that receives a simple string prop.
+// This is a Client Component that receives a simple string prop.
 function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
     
@@ -35,9 +35,11 @@ function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
 }
 
 // This is the main page component, now a SERVER component.
+// It is async and handles the params object.
 export default function AnalysisPage({ params }: { params: { url: string } }) {
   let decodedUrl = '';
   try {
+    // The params object is handled here, in a Server Component.
     decodedUrl = decodeURIComponent(params.url);
     const urlObject = new URL(decodedUrl);
     if (urlObject.protocol !== 'http:' && urlObject.protocol !== 'https:') {
