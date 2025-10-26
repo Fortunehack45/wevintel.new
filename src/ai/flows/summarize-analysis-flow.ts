@@ -64,12 +64,7 @@ Focus on the most important metrics. Be insightful but brief.
 - Desktop Performance Score: {{{performance.desktop.performanceScore}}}
 - Mobile SEO Score: {{{performance.mobile.seoScore}}}
 - Security: {{{security.isSecure}}}
-- Key Audit Opportunities:
-{{#each audits}}
-  {{#if (lt score 0.9)}}
-- {{title}}: {{displayValue}}
-  {{/if}}
-{{/each}}
+- Key Audit Opportunities: {{jsonStringify audits}}
 
 Based on this data, provide:
 1.  A short, insightful summary of the site's overall condition.
