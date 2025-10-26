@@ -15,7 +15,6 @@ export function OverviewCard({ data }: { data: WebsiteOverview }) {
             width={64} 
             height={64} 
             className="rounded-lg border-2"
-            unoptimized
             crossOrigin="anonymous"
           />
         )}
