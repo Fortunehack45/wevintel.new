@@ -152,9 +152,6 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
         favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
       },
       security: {
-        sslGrade: 'N/A',
-        securityHeadersGrade: 'N/A',
-        domainExpiry: 'N/A',
         isSecure: url.startsWith('https://'),
         securityHeaders: responseHeaders.security
       },

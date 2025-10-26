@@ -30,6 +30,13 @@ export function HistoryClient() {
     setHistory([]);
   };
 
+  const getScoreBadgeVariant = (score: number | null | undefined): "destructive" | "secondary" | "default" => {
+    if (score === null || score === undefined) return "secondary";
+    if (score < 50) return "destructive";
+    if (score < 90) return "secondary";
+    return "default";
+  }
+
   if (history.length === 0) {
     return (
         <div className="text-center p-8 border-2 border-dashed rounded-2xl glass-card">
@@ -67,7 +74,8 @@ export function HistoryClient() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {history.map((item, index) => {
             const mobilePerformance = item.performance?.mobile?.performanceScore;
-            const isSecure = item.security?.isSecure;
+            
+            const securityScore = item.security?.securityScore;
 
             return (
               <motion.div
@@ -96,8 +104,8 @@ export function HistoryClient() {
                             </div>
                             <div className="flex items-center gap-2">
                                  <ShieldCheck className="h-4 w-4 text-muted-foreground"/>
-                                <Badge variant={isSecure ? "secondary" : "destructive"}>
-                                    {item.security?.sslGrade || (isSecure ? 'Secure' : 'Insecure')}
+                                 <Badge variant={getScoreBadgeVariant(securityScore)} className={getScoreBadgeVariant(securityScore) === 'default' ? 'bg-green-500/20 text-green-700 border-green-300' : ''}>
+                                    {securityScore !== undefined ? `${securityScore}%` : 'N/A'}
                                 </Badge>
                             </div>
                             <div className="flex items-center gap-2 col-span-2">
@@ -117,5 +125,3 @@ export function HistoryClient() {
     </div>
   );
 }
-
-    

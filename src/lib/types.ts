@@ -40,10 +40,8 @@ export type PerformanceData = {
 };
 
 export type SecurityData = {
-  sslGrade?: string;
-  securityHeadersGrade?: string;
-  domainExpiry?: string;
   isSecure: boolean;
+  securityScore?: number;
   securityHeaders: {
     'content-security-policy'?: boolean;
     'strict-transport-security'?: boolean;

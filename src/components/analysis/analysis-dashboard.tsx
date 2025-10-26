@@ -37,6 +37,30 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
     let isMounted = true;
     performancePromise.then(performanceResult => {
       if(isMounted) {
+        
+        const securityAudits = performanceResult.securityAudits || {};
+        let securityScoreTotal = 0;
+        let securityItemsScored = 0;
+        
+        if (initialData.security?.isSecure) {
+            securityScoreTotal += 1;
+        }
+        securityItemsScored++;
+
+        Object.values(initialData.security?.securityHeaders || {}).forEach(present => {
+            if (present) securityScoreTotal++;
+            securityItemsScored++;
+        });
+
+        Object.values(securityAudits).forEach(audit => {
+            if (audit.score !== null) {
+                securityScoreTotal += audit.score;
+                securityItemsScored++;
+            }
+        });
+
+        const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
+
         const fullData = {
           ...initialData,
           ...performanceResult,
@@ -50,12 +74,11 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
           },
           security: {
             ...initialData.security,
+            securityScore: calculatedSecurityScore,
           }
         } as AnalysisResult;
 
         setData(fullData);
-        // This is the important change. We pass the *full* data object
-        // once the performance analysis is complete.
         onDataLoaded(fullData);
       }
     });
@@ -67,11 +90,10 @@ export function AnalysisDashboard({ initialData, performancePromise, onDataLoade
   }, [performancePromise, initialData, onDataLoaded]);
   
   useEffect(() => {
-    // Save to history only when we have the full data
     if (data && data.performance) {
       setHistory(prevHistory => {
         const newHistory = [...prevHistory];
-        const existingIndex = newHistory.findIndex(item => item.overview.url === data.overview.url);
+        const existingIndex = newHistory.findIndex(item => item.overview.url === data.overview?.url);
         
         if (existingIndex > -1) {
             newHistory[existingIndex] = data as AnalysisResult;

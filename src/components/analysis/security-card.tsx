@@ -49,40 +49,76 @@ const AuditList = ({ audits }: { audits: AuditItem[] }) => {
 
 
 export function SecurityCard({ data, audits }: { data: SecurityData, audits?: AuditInfo }) {
-  const getGradeColor = (grade: string | undefined) => {
-    if (!grade) return 'secondary';
-    if (grade.startsWith('A')) return 'default';
-    if (grade.startsWith('B') || grade.startsWith('C')) return 'secondary';
-    return 'destructive';
-  }
-
   const securityHeaders = [
       { key: 'content-security-policy', name: 'CSP'},
       { key: 'strict-transport-security', name: 'HSTS'},
       { key: 'x-frame-options', name: 'X-Frame-Options'},
       { key: 'x-content-type-options', name: 'X-Content-Type'},
-  ]
+  ];
   
   const auditItems = audits ? Object.values(audits) : [];
+  
+  const calculateSecurityScore = () => {
+    let totalScore = 0;
+    let itemsScored = 0;
+
+    // SSL score
+    totalScore += data.isSecure ? 1 : 0;
+    itemsScored++;
+
+    // Security headers score
+    securityHeaders.forEach(header => {
+        if (data.securityHeaders?.[header.key as keyof typeof data.securityHeaders]) {
+            totalScore += 1;
+        }
+        itemsScored++;
+    });
+
+    // Audits score
+    auditItems.forEach(audit => {
+        if (audit.score !== null) {
+            totalScore += audit.score;
+            itemsScored++;
+        }
+    });
+
+    if (itemsScored === 0) return null;
+    return Math.round((totalScore / itemsScored) * 100);
+  }
+
+  const securityScore = calculateSecurityScore();
+
+  const getScoreBadgeVariant = (score: number | null): "destructive" | "secondary" | "default" => {
+    if (score === null) return "secondary";
+    if (score < 50) return "destructive";
+    if (score < 90) return "secondary";
+    return "default";
+  }
 
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <ShieldCheck className="h-5 w-5 text-primary" />
-          Security
-        </CardTitle>
-        <CardDescription>SSL, headers, and vulnerability checks.</CardDescription>
+        <div className="flex justify-between items-start">
+            <div>
+                <CardTitle className="flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-primary" />
+                Security
+                </CardTitle>
+                <CardDescription>SSL, headers, and vulnerability checks.</CardDescription>
+            </div>
+            {securityScore !== null && (
+                <Badge variant={getScoreBadgeVariant(securityScore)} className={getScoreBadgeVariant(securityScore) === 'default' ? 'bg-green-500/20 text-green-700 border-green-300' : ''}>
+                    {securityScore}%
+                </Badge>
+            )}
+        </div>
       </CardHeader>
       <CardContent className="grid gap-4 text-sm">
         <div className="flex justify-between items-center">
           <span className="text-muted-foreground">SSL Connection</span>
           {data.isSecure ? <Badge className="bg-green-100 text-green-800 border-green-200 hover:bg-green-200">Secure</Badge> : <Badge variant="destructive">Insecure</Badge>}
         </div>
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground">Domain Expiry</span>
-          <span className="font-semibold">{data.domainExpiry ? new Date(data.domainExpiry).toLocaleDateString() : 'N/A'}</span>
-        </div>
+        
         <div>
             <p className="font-semibold mb-2">HTTP Security Headers</p>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
