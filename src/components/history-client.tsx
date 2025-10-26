@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useLocalStorage } from '@/hooks/use-local-storage';
@@ -37,49 +36,54 @@ export function HistoryClient() {
             </Button>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {history.map((item, index) => (
-            <motion.div
-            key={item.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-          >
-            <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`} className="block h-full">
-                <Card className="h-full hover:border-primary/50 transition-colors group glass-card hover:shadow-primary/20 hover:shadow-lg">
-                    <CardHeader>
-                        <div className="flex items-center gap-3">
-                            <Image src={item.overview.favicon || '/fallback-favicon.svg'} alt="favicon" width={32} height={32} className="rounded-md" unoptimized />
-                            <div className="flex-1 overflow-hidden">
-                                <CardTitle className="truncate text-lg">{item.overview.domain}</CardTitle>
-                                <p className="text-xs text-muted-foreground">
-                                    {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
-                                </p>
+        {history.map((item, index) => {
+            const mobilePerformance = item.performance?.mobile?.performanceScore;
+            const isSecure = item.security?.isSecure;
+
+            return (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`} className="block h-full">
+                    <Card className="h-full hover:border-primary/50 transition-colors group glass-card hover:shadow-primary/20 hover:shadow-lg">
+                        <CardHeader>
+                            <div className="flex items-center gap-3">
+                                <Image src={item.overview.favicon || '/fallback-favicon.svg'} alt="favicon" width={32} height={32} className="rounded-md" unoptimized />
+                                <div className="flex-1 overflow-hidden">
+                                    <CardTitle className="truncate text-lg">{item.overview.domain}</CardTitle>
+                                    <p className="text-xs text-muted-foreground">
+                                        {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="grid grid-cols-2 gap-4 text-sm">
-                        <div className="flex items-center gap-2">
-                            <Smartphone className="h-4 w-4 text-muted-foreground"/>
-                            <span className="font-semibold">{item.performance.mobile.performanceScore || 'N/A'}%</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                             <ShieldCheck className="h-4 w-4 text-muted-foreground"/>
-                            <Badge variant={item.security.isSecure ? "secondary" : "destructive"}>
-                                {item.security.sslGrade || (item.security.isSecure ? 'Secure' : 'Insecure')}
-                            </Badge>
-                        </div>
-                        <div className="flex items-center gap-2 col-span-2">
-                             <Globe className="h-4 w-4 text-muted-foreground"/>
-                            <span className="font-semibold">{item.hosting.country || 'N/A'}</span>
-                        </div>
-                    </CardContent>
-                    <CardFooter>
-                       <p className="text-xs text-muted-foreground group-hover:text-primary transition-colors">View full report &rarr;</p>
-                    </CardFooter>
-                </Card>
-            </Link>
-            </motion.div>
-        ))}
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-2 gap-4 text-sm">
+                            <div className="flex items-center gap-2">
+                                <Smartphone className="h-4 w-4 text-muted-foreground"/>
+                                <span className="font-semibold">{mobilePerformance || 'N/A'}%</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                 <ShieldCheck className="h-4 w-4 text-muted-foreground"/>
+                                <Badge variant={isSecure ? "secondary" : "destructive"}>
+                                    {item.security?.sslGrade || (isSecure ? 'Secure' : 'Insecure')}
+                                </Badge>
+                            </div>
+                            <div className="flex items-center gap-2 col-span-2">
+                                 <Globe className="h-4 w-4 text-muted-foreground"/>
+                                <span className="font-semibold">{item.hosting?.country || 'N/A'}</span>
+                            </div>
+                        </CardContent>
+                        <CardFooter>
+                           <p className="text-xs text-muted-foreground group-hover:text-primary transition-colors">View full report &rarr;</p>
+                        </CardFooter>
+                    </Card>
+                </Link>
+                </motion.div>
+            )
+        })}
         </div>
     </div>
   );
