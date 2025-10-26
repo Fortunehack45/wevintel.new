@@ -33,8 +33,6 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
         if (!element) return;
         
         setIsDownloading(true);
-        element.classList.add('pdf-generating');
-
 
         const pdf = new jsPDF({
             orientation: 'portrait',
@@ -45,88 +43,72 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
         const margin = 40;
+        const contentWidth = pdfWidth - margin * 2;
+
+        const addHeader = (pageNumber: number) => {
+            pdf.saveGraphicsState();
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(20);
+            pdf.setTextColor(34, 139, 230); // Primary color
+            pdf.text('WebIntel Analysis Report', margin, 40);
+
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(10);
+            pdf.setTextColor(100, 116, 139); // Muted foreground
+            pdf.text(new URL(decodedUrl).hostname, margin, 55);
+            pdf.restoreGraphicsState();
+        };
+        
+        const addFooter = (pageNumber: number, totalPages: number) => {
+             const generationTime = new Date().toLocaleString();
+             pdf.saveGraphicsState();
+             pdf.setFontSize(8);
+             pdf.setTextColor(156, 163, 175); // Muted foreground
+             pdf.text(`Page ${pageNumber} of ${totalPages}`, pdfWidth / 2, pdfHeight - margin / 2, { align: 'center' });
+             pdf.text(`Report generated on ${generationTime}`, margin, pdfHeight - margin / 2);
+             pdf.restoreGraphicsState();
+        };
+
 
         try {
             const canvas = await html2canvas(element, {
                 scale: 2, 
                 useCORS: true,
-                backgroundColor: window.getComputedStyle(document.body).backgroundColor,
+                backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue('--background').trim() === '222.2 84% 4.9%' ? '#0c101b' : '#ffffff',
             });
 
-            element.classList.remove('pdf-generating');
             const imgData = canvas.toDataURL('image/png');
-            const imgWidth = pdfWidth - margin * 2;
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            const imgHeight = (canvas.height * contentWidth) / canvas.width;
             let heightLeft = imgHeight;
-            let position = 80; // Start below header
-
-            // --- PDF Header ---
-            pdf.saveGraphicsState();
-            pdf.setFont('helvetica', 'bold');
-            pdf.setFontSize(20);
-            pdf.setTextColor('#29ABE2'); // Primary color
-            pdf.text('WebIntel Analysis Report', margin, 40);
-
-            pdf.setFont('helvetica', 'normal');
-            pdf.setFontSize(10);
-            pdf.setTextColor('#1A2A3A'); // Muted foreground
-            pdf.text(new URL(decodedUrl).hostname, margin, 55);
-            pdf.restoreGraphicsState();
-            // --- End Header ---
-
-            pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-            heightLeft -= (pdfHeight - position - margin);
-
+            let position = margin + 20;
             let page = 1;
 
-            while (heightLeft >= 0) {
-                // --- PDF Footer for each page ---
-                pdf.setFontSize(8);
-                pdf.setTextColor('#888888');
-                pdf.text(`Page ${page}`, pdfWidth / 2, pdfHeight - margin / 2, { align: 'center' });
-                pdf.text(`Report generated on ${new Date().toLocaleDateString()}`, margin, pdfHeight - margin / 2);
-                // --- End Footer ---
-                
+            addHeader(1);
+            pdf.addImage(imgData, 'PNG', margin, position, contentWidth, imgHeight);
+            heightLeft -= (pdfHeight - position - margin);
+
+            while (heightLeft > 0) {
+                addFooter(page, 0); // Placeholder for total pages
+                page++;
                 position = -imgHeight + heightLeft;
                 pdf.addPage();
-                page++;
-                
-                // Re-add header on new pages
-                pdf.saveGraphicsState();
-                pdf.setFont('helvetica', 'bold');
-                pdf.setFontSize(20);
-                pdf.setTextColor('#29ABE2');
-                pdf.text('WebIntel Analysis Report', margin, 40);
-
-                pdf.setFont('helvetica', 'normal');
-                pdf.setFontSize(10);
-                pdf.setTextColor('#1A2A3A');
-                pdf.text(new URL(decodedUrl).hostname, margin, 55);
-                pdf.restoreGraphicsState();
-                // --- End Header ---
-
-                pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-                heightLeft -= pdfHeight;
+                addHeader(page);
+                pdf.addImage(imgData, 'PNG', margin, position, contentWidth, imgHeight);
+                heightLeft -= (pdfHeight - margin);
             }
             
-            // --- Footer on the last page ---
-            pdf.setFontSize(8);
-            pdf.setTextColor('#888888');
-            pdf.text(`Page ${page}`, pdfWidth / 2, pdfHeight - margin / 2, { align: 'center' });
-            pdf.text(`Report generated on ${new Date().toLocaleDateString()}`, margin, pdfHeight - margin / 2);
-            // --- End Footer ---
-
+            // Go back and set the total pages in the footer
+            for(let i = 1; i <= page; i++) {
+                pdf.setPage(i);
+                addFooter(i, page);
+            }
 
             pdf.save(`webintel-report-${new URL(decodedUrl).hostname}.pdf`);
 
         } catch (error) {
             console.error("Failed to generate PDF", error);
-            element.classList.remove('pdf-generating');
         } finally {
             setIsDownloading(false);
-            if (element.classList.contains('pdf-generating')) {
-              element.classList.remove('pdf-generating');
-            }
         }
     };
     
