@@ -69,6 +69,19 @@ const getAuditInfo = (pageSpeedData: any): AuditInfo => {
         'total-byte-weight',
         'unused-css-rules',
         'mainthread-work-breakdown',
+        'network-requests', // Document request latency
+        'dom-size', // Optimize DOM size
+        'duplicated-javascript', // Duplicated JavaScript
+        'font-display', // Font display
+        'unminified-css', // Minify CSS, also related to forced reflow
+        'unminified-javascript', // Minify JavaScript, also related to forced reflow
+        'non-composited-animations', // Avoid non-composited animations
+        'uses-responsive-images', // Improve image delivery
+        'offscreen-images', // Defer offscreen images
+        'inp-breakdown', // INP breakdown
+        'lcp-lazy-loaded', // LCP request discovery
+        'viewport', // Optimize viewport for mobile
+        'uses-explicit-width-and-height', // Image elements have explicit width and height
     ];
 
     const auditResults: AuditInfo = {};
