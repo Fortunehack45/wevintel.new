@@ -1,15 +1,16 @@
 
 'use client';
 
-import { Suspense, useEffect, useState, useMemo } from 'react';
+import { Suspense, useEffect, useState, useMemo, useRef } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Download } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult } from '@/lib/types';
 import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
-
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
     return (
@@ -23,22 +24,65 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
 
 export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
+    const reportRef = useRef<HTMLDivElement>(null);
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const handleDownloadPdf = async () => {
+        const element = reportRef.current;
+        if (!element) return;
+        
+        setIsDownloading(true);
+
+        try {
+            const canvas = await html2canvas(element, {
+                scale: 2, // Higher scale for better quality
+                useCORS: true,
+                backgroundColor: null, // Use element's background
+            });
+
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                format: [canvas.width, canvas.height]
+            });
+            
+            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+            pdf.save(`webintel-report-${new URL(decodedUrl).hostname}.pdf`);
+        } catch (error) {
+            console.error("Failed to generate PDF", error);
+        } finally {
+            setIsDownloading(false);
+        }
+    };
     
     return (
         <div className="flex-1">
-            <div className="mb-6 flex items-center justify-between gap-4">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold">Analysis Report</h1>
                     <p className="text-muted-foreground">
                         Results for: <a href={decodedUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{decodedUrl}</a>
                     </p>
                 </div>
-                <Button variant="outline" onClick={() => setKey(Date.now())}>
-                    <RefreshCw className="mr-2 h-4 w-4" />
-                    Re-analyze
-                </Button>
+                <div className='flex items-center gap-2'>
+                    <Button variant="outline" onClick={() => setKey(Date.now())} disabled={isDownloading}>
+                        <RefreshCw className="mr-2 h-4 w-4" />
+                        Re-analyze
+                    </Button>
+                    <Button onClick={handleDownloadPdf} disabled={isDownloading}>
+                         {isDownloading ? (
+                            <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                         ) : (
+                            <Download className="mr-2 h-4 w-4" />
+                         )}
+                        Download PDF
+                    </Button>
+                </div>
             </div>
-            <AnalysisData url={decodedUrl} cacheKey={key} />
+            <div ref={reportRef}>
+                <AnalysisData url={decodedUrl} cacheKey={key} />
+            </div>
         </div>
     );
 }
@@ -97,14 +141,15 @@ function AnalysisData({ url, cacheKey }: { url: string; cacheKey: number }) {
 
 function DashboardSkeleton() {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <Skeleton className="h-56 rounded-2xl lg:col-span-3" />
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <Skeleton className="h-56 rounded-2xl lg:col-span-4" />
       <Skeleton className="h-80 rounded-2xl lg:col-span-2" />
-      <Skeleton className="h-80 rounded-2xl" />
-      <Skeleton className="h-64 rounded-2xl" />
-      <Skeleton className="h-64 rounded-2xl" />
-      <Skeleton className="h-64 rounded-2xl lg:col-span-1" />
+      <Skeleton className="h-80 rounded-2xl lg:col-span-2" />
+      <Skeleton className="h-64 rounded-2xl lg:col-span-4" />
+      <Skeleton className="h-64 rounded-2xl lg:col-span-2" />
+      <Skeleton className="h-64 rounded-2xl lg:col-span-2" />
     </div>
   );
 }
+
 
