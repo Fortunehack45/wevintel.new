@@ -148,9 +148,9 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
     if (pageHtmlRes.status === 'fulfilled' && pageHtmlRes.value.ok) {
         // This is tricky because a body can only be read once.
         // We clone the response to be able to read it twice (once for headers, once for text)
-        const responseForHeaders = pageHtmlRes.value.clone();
-        pageHtml = await pageHtmlRes.value.text();
+        const responseForHeaders = pageHtmlRes.value;
         responseHeaders = getHeaders(responseForHeaders);
+        pageHtml = await pageHtmlRes.value.text();
     } else {
         return { error: 'Could not fetch the main page of the website. It might be down or blocking requests.' };
     }
