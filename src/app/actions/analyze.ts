@@ -134,19 +134,17 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
       fetch(url, { headers: { 'User-Agent': 'WebIntel-Analysis-Bot/1.0' }})
     ]);
 
+    const ipInfoData = ipInfoRes.status === 'fulfilled' && ipInfoRes.value.ok ? await ipInfoRes.value.json() : null;
+
     if (pageHtmlRes.status === 'rejected' || (pageHtmlRes.status === 'fulfilled' && !pageHtmlRes.value.ok)) {
        // This is a strong indicator that the domain might not exist or is unreachable.
-        const ipCheck = ipInfoRes.status === 'fulfilled' && await ipInfoRes.value.json();
-        if (ipCheck?.status === 'fail') {
+        if (ipInfoData?.status === 'fail') {
              return { error: 'Domain not found. The website is not reachable.' };
         }
     }
-
-    const ipInfoData = ipInfoRes.status === 'fulfilled' && ipInfoRes.value.ok ? await ipInfoRes.value.json() : null;
     
     let pageHtml = '';
     let responseHeaders = { all: {}, security: {} };
-    let sitemapExists = false;
 
     if (pageHtmlRes.status === 'fulfilled' && pageHtmlRes.value.ok) {
         pageHtml = await pageHtmlRes.value.text();
