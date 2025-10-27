@@ -33,7 +33,7 @@ const categoryIcons: { [key: string]: React.ElementType } = {
   'Productivity': Bot,
   'Q&A': MessageCircle,
   'Blogging': Brush,
-s  'Travel': Plane,
+  'Travel': Plane,
   'Transportation': Car,
   'Food Delivery': Utensils,
   'CMS': Code,
