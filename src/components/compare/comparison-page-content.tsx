@@ -19,9 +19,12 @@ type InitialData = { data1: Partial<AnalysisResult>; data2: Partial<AnalysisResu
 
 export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initialData: InitialData }) {
     const router = useRouter();
+    
+    const memoizedInitialData1 = useMemo(() => initialData.data1, [initialData.data1]);
+    const memoizedInitialData2 = useMemo(() => initialData.data2, [initialData.data2]);
 
-    const { result: data1, loading: loading1, error: error1 } = useAnalysisData(urls.url1, initialData.data1);
-    const { result: data2, loading: loading2, error: error2 } = useAnalysisData(urls.url2, initialData.data2);
+    const { result: data1, loading: loading1, error: error1 } = useAnalysisData(urls.url1, memoizedInitialData1);
+    const { result: data2, loading: loading2, error: error2 } = useAnalysisData(urls.url2, memoizedInitialData2);
     
     const [isDownloading, setIsDownloading] = useState(false);
     const [comparisonSummary, setComparisonSummary] = useState<ComparisonOutput | { error: string } | null>(null);
@@ -255,7 +258,7 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
         };
 
         try {
-            generatePdfFromData(data1, data2, comparisonSummary as ComparisonOutput);
+            generatePdfFromData(data1 as AnalysisResult, data2 as AnalysisResult, comparisonSummary as ComparisonOutput);
         } catch (error) {
             console.error("PDF generation failed:", error);
         } finally {
