@@ -11,6 +11,7 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 import { type DomainHistoryItem, type DomainData } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import React from 'react';
+import { useParams } from 'next/navigation';
 
 function DomainResultSkeleton() {
     return (
@@ -34,7 +35,8 @@ function DomainResultSkeleton() {
 }
 
 
-export default function DomainResultPage({ params }: { params: { domain: string } }) {
+export default function DomainResultPage() {
+  const params = useParams<{ domain: string }>();
   const decodedDomain = decodeURIComponent(params.domain);
   const [domainInfo, setDomainInfo] = React.useState<DomainData | null | undefined>(undefined);
   const [, setHistory] = useLocalStorage<DomainHistoryItem[]>('webintel_domain_history', []);
