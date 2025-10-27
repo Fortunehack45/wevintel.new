@@ -84,7 +84,7 @@ function WebsiteHistoryList({ limit }: { limit?: number }) {
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
-                <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`} className="block h-full">
+                <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`} className="block h-full flex flex-col">
                     <CardHeader>
                         <div className="flex items-center gap-3">
                             <Image src={`https://www.google.com/s2/favicons?domain=${item.overview.domain}&sz=32`} alt="favicon" width={32} height={32} className="rounded-md bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous" />
@@ -96,7 +96,7 @@ function WebsiteHistoryList({ limit }: { limit?: number }) {
                             </div>
                         </div>
                     </CardHeader>
-                    <CardContent className="grid grid-cols-2 gap-4 text-sm">
+                    <CardContent className="grid grid-cols-2 gap-4 text-sm flex-1">
                         <div className="flex items-center gap-2">
                             <Smartphone className="h-4 w-4 text-muted-foreground"/>
                             <span className="font-semibold">{mobilePerformance || 'N/A'}%</span>
@@ -113,7 +113,7 @@ function WebsiteHistoryList({ limit }: { limit?: number }) {
                         </div>
                     </CardContent>
                     <CardFooter>
-                    <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">View full report &rarr;</p>
+                       <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">View full report &rarr;</p>
                     </CardFooter>
                 </Link>
             </Card>
@@ -135,6 +135,7 @@ function DomainHistoryList({ limit }: { limit?: number }) {
   if (itemsToDisplay.length === 0) {
     return (
       <div className="text-center p-8 border-2 border-dashed rounded-2xl glass-card">
+          <FileSearch className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-xl font-semibold">No domains looked up yet.</h3>
           <p className="text-muted-foreground mt-2">Use the Domain Checker to see your history here!</p>
       </div>
@@ -172,7 +173,7 @@ function DomainHistoryList({ limit }: { limit?: number }) {
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
-                <Link href={`/domain-checker/${encodeURIComponent(item.domain)}`} className="block h-full">
+                <Link href={`/domain-checker/${encodeURIComponent(item.domain)}`} className="block h-full flex flex-col">
                     <CardHeader>
                         <div className="flex items-center gap-3">
                             <FileSearch className="h-8 w-8 text-primary" />
@@ -184,6 +185,7 @@ function DomainHistoryList({ limit }: { limit?: number }) {
                             </div>
                         </div>
                     </CardHeader>
+                    <CardContent className="flex-1" />
                     <CardFooter>
                        <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">View domain details &rarr;</p>
                     </CardFooter>
