@@ -45,7 +45,12 @@ const AISummarySchema = z.object({
 });
 export type AISummary = z.infer<typeof AISummarySchema>;
 
-export async function summarizeWebsite(input: WebsiteAnalysisInput): Promise<AISummary | null> {
+const FlowOutputSchema = z.union([
+    z.object({ summary: AISummarySchema, error: z.undefined() }),
+    z.object({ summary: z.undefined(), error: z.string() })
+]);
+
+export async function summarizeWebsite(input: WebsiteAnalysisInput): Promise<z.infer<typeof FlowOutputSchema>> {
   return summarizeWebsiteFlow(input);
 }
 
@@ -79,15 +84,18 @@ const summarizeWebsiteFlow = ai.defineFlow(
   {
     name: 'summarizeWebsiteFlow',
     inputSchema: WebsiteAnalysisInputSchema,
-    outputSchema: z.nullable(AISummarySchema),
+    outputSchema: FlowOutputSchema,
   },
   async (input) => {
     try {
       const { output } = await prompt(input);
-      return output;
-    } catch (e) {
+      if (!output) {
+        return { error: 'The AI model did not return a summary. Please try again.' };
+      }
+      return { summary: output };
+    } catch (e: any) {
       console.error("AI summary flow failed:", e);
-      return null;
+      return { error: e.message || 'An unexpected error occurred while generating the summary.' };
     }
   }
 );

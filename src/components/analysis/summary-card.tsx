@@ -24,12 +24,12 @@ const SummarySkeleton = () => (
     </div>
 );
 
-const ErrorState = ({ onRetry }: { onRetry: () => void }) => (
+const ErrorState = ({ onRetry, error }: { onRetry: () => void, error?: string }) => (
     <Alert variant="destructive">
         <AlertTriangle className="h-4 w-4" />
         <AlertTitle>AI Summary Failed</AlertTitle>
         <AlertDescription>
-            There was an issue generating the AI summary. 
+            {error || 'There was an issue generating the AI summary.'} 
             <Button variant="link" onClick={onRetry} className="p-0 h-auto ml-1 text-destructive-foreground">Click here to try again.</Button>
         </AlertDescription>
     </Alert>
@@ -37,22 +37,20 @@ const ErrorState = ({ onRetry }: { onRetry: () => void }) => (
 
 interface SummaryCardProps {
     data: Partial<AnalysisResult>;
-    summary?: AISummary | null;
+    summary?: { summary: AISummary; error?: never } | { summary?: never; error: string } | null;
     isLoading?: boolean;
 }
 
 export function SummaryCard({ data, summary: initialSummary, isLoading: initialIsLoading }: SummaryCardProps) {
-    const [summary, setSummary] = useState<AISummary | null | undefined>(initialSummary);
+    const [summaryResult, setSummaryResult] = useState(initialSummary);
     const [isLoading, setIsLoading] = useState(initialIsLoading);
-    const [error, setError] = useState(false);
     const isMobile = useIsMobile();
 
     const generateSummary = useCallback(async () => {
         if (!data.overview || !data.security || !data.hosting) return;
 
         setIsLoading(true);
-        setError(false);
-        setSummary(undefined);
+        setSummaryResult(undefined);
 
         try {
             const input: WebsiteAnalysisInput = {
@@ -74,27 +72,17 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
                 headers: data.headers,
             }
             const result = await summarizeWebsite(input);
-            if (result) {
-                setSummary(result);
-            } else {
-                setError(true);
-            }
-        } catch (e) {
+            setSummaryResult(result);
+        } catch (e: any) {
             console.error("AI summary failed:", e);
-            setError(true);
+            setSummaryResult({ error: e.message || "An unexpected client-side error occurred." });
         } finally {
             setIsLoading(false);
         }
     }, [data]);
 
     useEffect(() => {
-        setSummary(initialSummary);
-        if (initialSummary === null) {
-            setError(true);
-            setIsLoading(false);
-        } else if (initialSummary !== undefined) {
-            setError(false);
-        }
+        setSummaryResult(initialSummary);
     }, [initialSummary]);
 
     useEffect(() => {
@@ -118,17 +106,17 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
                     <AccordionContent>
                         <CardContent>
                             {isLoading && <SummarySkeleton />}
-                            {error && <ErrorState onRetry={generateSummary} />}
-                            {summary && !error && (
+                            {summaryResult?.error && <ErrorState onRetry={generateSummary} error={summaryResult.error} />}
+                            {summaryResult?.summary && (
                                 <div className="space-y-6">
                                     <div>
                                         <h4 className="font-semibold mb-2 flex items-center gap-2"><Lightbulb className="text-yellow-400"/> Quick Summary</h4>
-                                        <p className="text-sm text-muted-foreground">{summary.summary}</p>
+                                        <p className="text-sm text-muted-foreground">{summaryResult.summary.summary}</p>
                                     </div>
                                     <div>
                                         <h4 className="font-semibold mb-2 flex items-center gap-2"><CheckCircle className="text-green-500" /> Recommendations</h4>
                                         <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5">
-                                            {summary.recommendations.map((rec, i) => <li key={i}>{rec}</li>)}
+                                            {summaryResult.summary.recommendations.map((rec, i) => <li key={i}>{rec}</li>)}
                                         </ul>
                                     </div>
                                 </div>

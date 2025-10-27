@@ -21,7 +21,7 @@ export type AnalysisResult = {
   createdAt: string; // ISO 8601 string
   error?: string;
   partial?: boolean;
-  aiSummary?: AISummary | null;
+  aiSummary?: { summary: AISummary; error?: never } | { summary?: never; error: string } | null;
 };
 
 export type WebsiteOverview = {
