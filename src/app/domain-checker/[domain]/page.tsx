@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { type DomainHistoryItem, type DomainData } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import React from 'react';
 
 function DomainResultSkeleton() {
     return (
@@ -43,6 +44,7 @@ export default function DomainResultPage({ params }: { params: { domain: string 
       const info = await getDomainInfo(decodedDomain);
       setDomainInfo(info);
 
+      // Only add to history if the lookup was successful (info is not null/undefined)
       if (info) {
         setHistory(prevHistory => {
           const newHistory = prevHistory.filter(item => item.domain !== decodedDomain);
@@ -93,7 +95,7 @@ export default function DomainResultPage({ params }: { params: { domain: string 
             </CardHeader>
             <CardContent>
                 <p className="text-sm text-muted-foreground">
-                    This could be because the domain is not registered, the registrar has privacy protection enabled, or there was a temporary issue with the lookup service.
+                    This could be because the domain is not registered, has privacy protection enabled, or there was a temporary issue with the lookup service. Please check your API key if the issue persists.
                 </p>
             </CardContent>
         </Card>

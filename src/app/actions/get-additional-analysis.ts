@@ -16,6 +16,9 @@ interface WhoisResponse {
         registrant?: any;
         administrativeContact?: any;
         technicalContact?: any;
+    },
+    ErrorMessage?: {
+        msg: string;
     }
 }
 
@@ -46,30 +49,38 @@ export async function getAdditionalAnalysis(url: string): Promise<{ status: Stat
 }
 
 
-export async function getDomainInfo(domainName: string): Promise<DomainData | undefined> {
+export async function getDomainInfo(domainName: string): Promise<DomainData | null | undefined> {
     const apiKey = process.env.WHOIS_API_KEY;
     if (!apiKey) {
         console.error("WHOIS_API_KEY is not set in environment variables.");
-        return undefined;
+        return null;
     }
 
     const whoisApiUrl = `https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=${apiKey}&domainName=${domainName}&outputFormat=JSON`;
 
-    const whoisPromise = fetch(whoisApiUrl)
-    .then(res => res.json())
-    .then((data: WhoisResponse) => {
+    try {
+        const res = await fetch(whoisApiUrl);
+        if (!res.ok) {
+            console.error("Whois API request failed with status:", res.status);
+            return null;
+        }
+
+        const data: WhoisResponse = await res.json();
+
+        if (data.ErrorMessage) {
+            console.error("Whois API Error:", data.ErrorMessage.msg);
+            return null;
+        }
+        
         if (data && data.WhoisRecord) {
             const record = data.WhoisRecord;
             
-            // The status can be a single string or an array of strings.
             let statusArray: string[] = [];
             if(record.status) {
                 const statusString = Array.isArray(record.status) ? record.status.join(' ') : record.status;
-                // The status often comes as a single space-separated string.
                 statusArray = statusString.split(' ').map(s => s.trim()).filter(Boolean);
             }
             
-            // Nameservers can also come in different formats
             let nameservers: string[] = [];
             if(record.nameServers?.rawText) {
                 nameservers = record.nameServers.rawText.split('\n').map(ns => ns.trim()).filter(Boolean);
@@ -102,12 +113,9 @@ export async function getDomainInfo(domainName: string): Promise<DomainData | un
                 tech: parseContact(record.technicalContact),
             };
         }
-        return undefined;
-    })
-    .catch(e => {
+        return undefined; // No record found, but not an error
+    } catch (e) {
         console.error("Whois fetch failed:", e);
-        return undefined;
-    });
-
-    return whoisPromise;
+        return null; // Represents an error state
+    }
 }
