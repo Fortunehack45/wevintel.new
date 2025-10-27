@@ -1,5 +1,6 @@
 
 
+
 'use client';
 
 import { Suspense, useEffect, useState, useMemo, useRef } from 'react';
@@ -7,13 +8,15 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { AlertTriangle, RefreshCw, Download, Home } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult, type AuditItem, AuditInfo } from '@/lib/types';
+import { type AnalysisResult, type AuditItem, AuditInfo, TrafficData } from '@/lib/types';
 import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import { useRouter } from 'next/navigation';
 import { NotFoundCard } from './not-found-card';
 import { DashboardSkeleton } from './dashboard-skeleton';
+import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
+
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
     return (
@@ -374,9 +377,10 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
         onDataLoaded(null!);
 
         try {
-            const [fastResult, perfResult] = await Promise.all([
+            const [fastResult, perfResult, trafficResult] = await Promise.all([
                 getFastAnalysis(url),
-                getPerformanceAnalysis(url)
+                getPerformanceAnalysis(url),
+                estimateTraffic({ url, description: '' }) // Description can be added later
             ]);
 
             if ('error' in fastResult) {
@@ -427,6 +431,7 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
                 ...fastResult.security,
                 securityScore: calculatedSecurityScore,
               },
+               traffic: trafficResult,
             } as AnalysisResult;
             
             setAnalysisResult(combinedData);

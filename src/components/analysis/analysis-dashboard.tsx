@@ -1,5 +1,6 @@
 
 
+
 'use client';
 import type { AnalysisResult, AuditInfo } from '@/lib/types';
 import { OverviewCard } from './overview-card';
@@ -17,6 +18,8 @@ import { OverallScoreCard } from './overall-score-card';
 import { DashboardSkeleton } from './dashboard-skeleton';
 import { getPerformanceAnalysis } from '@/app/actions/analyze';
 import { SummaryCard } from './summary-card';
+import { TrafficCard } from './traffic-card';
+
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -72,7 +75,7 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
     return Math.round((totalScore / scoreCount) * 100);
   }, [initialData]);
 
-  const { overview, security, hosting, metadata, headers, performance, performanceAudits, securityAudits, diagnosticsAudits } = initialData;
+  const { overview, security, hosting, metadata, headers, performance, performanceAudits, securityAudits, diagnosticsAudits, traffic } = initialData;
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -82,7 +85,6 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
             data={overview}
             hasPerformanceRun={!!performance}
             isLoading={false}
-            onRunPerformance={() => {}}
           />
         </motion.div>
       }
@@ -102,10 +104,17 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
       )}
 
       {security && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-1">
           <SecurityCard data={security} audits={securityAudits} />
         </motion.div>
       }
+      
+       {traffic && 
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-1">
+          <TrafficCard data={traffic} />
+        </motion.div>
+      }
+
       {hosting && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-1">
           <HostingCard data={hosting} />

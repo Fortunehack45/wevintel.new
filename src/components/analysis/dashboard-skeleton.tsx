@@ -1,5 +1,6 @@
 
 
+
 'use client';
 import { Skeleton } from "@/components/ui/skeleton";
 import type { AnalysisResult } from "@/lib/types";
@@ -50,7 +51,6 @@ function DashboardSkeleton({ initialData }: { initialData?: Partial<AnalysisResu
                 data={initialData.overview} 
                 hasPerformanceRun={false} 
                 isLoading={true} 
-                onRunPerformance={()=>{}} 
             />
         </div>
       ) : (
@@ -58,7 +58,8 @@ function DashboardSkeleton({ initialData }: { initialData?: Partial<AnalysisResu
       )}
       <Skeleton className="h-80 rounded-xl lg:col-span-2" />
       <PerformancePlaceholder />
-      <Skeleton className="h-48 rounded-xl lg:col-span-2" />
+      <Skeleton className="h-48 rounded-xl lg:col-span-1" />
+      <Skeleton className="h-48 rounded-xl lg:col-span-1" />
       <Skeleton className="h-48 rounded-xl lg:col-span-1" />
       <ScorePlaceholder />
       <Skeleton className="h-96 rounded-xl lg:col-span-2" />

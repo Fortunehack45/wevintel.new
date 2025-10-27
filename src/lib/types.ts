@@ -1,4 +1,5 @@
 
+
 export type AnalysisResult = {
   id: string;
   overview: WebsiteOverview;
@@ -7,6 +8,7 @@ export type AnalysisResult = {
     desktop: PerformanceData;
   };
   security: SecurityData;
+  traffic: TrafficData;
   metadata: Metadata;
   hosting: HostingInfo;
   headers: HeaderInfo;
@@ -49,6 +51,11 @@ export type SecurityData = {
     'x-content-type-options'?: boolean;
   }
 };
+
+export type TrafficData = {
+    estimatedMonthlyVisits?: number;
+    estimationConfidence?: 'low' | 'medium' | 'high';
+}
 
 export type Metadata = {
   openGraphTags: Record<string, string>;

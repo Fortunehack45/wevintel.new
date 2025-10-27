@@ -1,18 +1,18 @@
 
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { WebsiteOverview } from '@/lib/types';
 import Image from 'next/image';
-import { Languages, FileText, Wand2, RefreshCw } from 'lucide-react';
+import { Languages, FileText } from 'lucide-react';
 import { Button } from '../ui/button';
 
 interface OverviewCardProps {
   data: WebsiteOverview;
   hasPerformanceRun: boolean;
   isLoading: boolean;
-  onRunPerformance: () => void;
 }
 
-export function OverviewCard({ data, hasPerformanceRun, isLoading, onRunPerformance }: OverviewCardProps) {
+export function OverviewCard({ data, hasPerformanceRun, isLoading }: OverviewCardProps) {
   return (
     <Card className="glass-card">
       <CardHeader className="flex flex-col md:flex-row items-start md:items-center gap-4 space-y-0">
