@@ -40,18 +40,18 @@ export async function getAdditionalAnalysis(url: string): Promise<{ status: Stat
 
 
 export async function getDomainInfo(domainName: string): Promise<DomainData | undefined> {
-    const whoisPromise = fetch(`https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=${process.env.WHOIS_API_KEY}&domainName=${domainName}&outputFormat=JSON`)
+    // Using a free, public Whois API that doesn't require a key.
+    const whoisPromise = fetch(`https://whois.freeaiapi.xyz/?name=${domainName}`)
     .then(res => res.json())
     .then(data => {
-        if (data.WhoisRecord) {
-            const record = data.WhoisRecord;
+        if (data && data.registrar) {
             return {
-                registrar: record.registrarName,
-                creationDate: record.createdDate,
-                expirationDate: record.expiresDate,
-                updatedDate: record.updatedDate,
-                status: record.status ? (Array.isArray(record.status) ? record.status : [record.status]) : [],
-                nameservers: record.nameServers?.hostNames,
+                registrar: data.registrar,
+                creationDate: data.creation_date,
+                expirationDate: data.expiration_date,
+                updatedDate: data.updated_date,
+                status: data.status ? (Array.isArray(data.status) ? data.status : [data.status]) : [],
+                nameservers: data.name_servers,
             };
         }
         return undefined;
@@ -63,3 +63,4 @@ export async function getDomainInfo(domainName: string): Promise<DomainData | un
 
     return whoisPromise;
 }
+
