@@ -27,7 +27,7 @@ const AuditList = ({ audits }: { audits: AuditItem[] }) => {
     }
 
     return (
-        <ScrollArea className="h-[450px] rounded-md border">
+        <ScrollArea className="h-[300px] rounded-md border">
              <div className="p-4 text-sm">
                 {audits.map((audit) => (
                    <div key={audit.id} className="[&_p]:text-xs [&:not(:last-child)]:border-b [&:not(:last-child)]:pb-3 mb-3">
@@ -69,7 +69,7 @@ export function DiagnosticsCard({ data }: { data?: AuditInfo }) {
         <CardContent>
           <div className="space-y-4 py-4">
               <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-72 w-full mt-4" />
+              <Skeleton className="h-[300px] w-full mt-4" />
           </div>
         </CardContent>
       </Card>

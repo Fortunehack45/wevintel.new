@@ -63,7 +63,7 @@ function TrafficPlaceholder() {
 
 function AuditPlaceholder() {
     return (
-      <Card className="h-full glass-card min-h-[580px]">
+      <Card className="h-full glass-card min-h-[420px]">
         <CardHeader>
           <Skeleton className="h-6 w-48 mb-2" />
           <Skeleton className="h-4 w-64" />
@@ -71,7 +71,7 @@ function AuditPlaceholder() {
         <CardContent>
           <div className="space-y-4 py-4">
               <Skeleton className="h-10 w-full" />
-              <Skeleton className="h-[450px] w-full mt-4" />
+              <Skeleton className="h-[300px] w-full mt-4" />
           </div>
         </CardContent>
       </Card>
@@ -124,32 +124,30 @@ function TechStackPlaceholder() {
 
 function DashboardSkeleton({ initialData }: { initialData?: Partial<AnalysisResult> }) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
       {initialData?.overview ? (
-        <div className="lg:col-span-4">
+        <div className="col-span-2 lg:col-span-4">
             <OverviewCard 
                 data={initialData.overview} 
                 isLoading={true} 
             />
         </div>
       ) : (
-        <Skeleton className="h-40 rounded-xl lg:col-span-4" />
+        <Skeleton className="h-40 rounded-xl col-span-2 lg:col-span-4" />
       )}
-      <div className="lg:col-span-2">
-          { initialData?.aiSummary ? <SummaryCard data={initialData} summary={initialData.aiSummary} /> : <SummaryPlaceholder /> }
-      </div>
-      <div className="lg:col-span-2"><TrafficPlaceholder/></div>
-      <div className="lg:col-span-4"><PerformancePlaceholder /></div>
-      <div className="lg:col-span-4"><TechStackPlaceholder /></div>
-      <Skeleton className="h-48 rounded-xl lg:col-span-1" />
-      <Skeleton className="h-48 rounded-xl lg:col-span-1" />
-      <Skeleton className="h-48 rounded-xl lg:col-span-1" />
-      <Skeleton className="h-48 rounded-xl lg:col-span-1" />
-      <div className="lg:col-span-2"><ScorePlaceholder /></div>
-      <div className="lg:col-span-2"><Skeleton className="h-48 rounded-xl" /></div>
-      <div className="lg:col-span-2"><AuditPlaceholder /></div>
-      <div className="lg:col-span-2"><AuditPlaceholder /></div>
-      <Skeleton className="h-64 rounded-xl lg:col-span-4" />
+      <div className="col-span-2"><SummaryPlaceholder /></div>
+      <div className="col-span-2"><TrafficPlaceholder/></div>
+      <div className="col-span-2 lg:col-span-4"><PerformancePlaceholder /></div>
+      <div className="col-span-2 lg:col-span-4"><TechStackPlaceholder /></div>
+      <Skeleton className="h-48 rounded-xl col-span-1" />
+      <Skeleton className="h-48 rounded-xl col-span-1" />
+      <Skeleton className="h-48 rounded-xl col-span-1" />
+      <Skeleton className="h-48 rounded-xl col-span-1" />
+      <div className="col-span-2"><ScorePlaceholder /></div>
+      <div className="col-span-2"><Skeleton className="h-48 rounded-xl" /></div>
+      <div className="col-span-2"><AuditPlaceholder /></div>
+      <div className="col-span-2"><AuditPlaceholder /></div>
+      <Skeleton className="h-64 rounded-xl col-span-2 lg:col-span-4" />
     </div>
   );
 }

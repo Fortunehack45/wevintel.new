@@ -4,12 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { AuditItem, AuditInfo } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SlidersHorizontal, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '../ui/skeleton';
@@ -33,7 +27,7 @@ const AuditList = ({ audits }: { audits: AuditItem[] }) => {
     }
 
     return (
-        <ScrollArea className="h-[450px] rounded-md border">
+        <ScrollArea className="h-[300px] rounded-md border">
              <div className="p-4 text-sm">
                 {audits.map((audit) => (
                    <div key={audit.id} className="[&_p]:text-xs [&:not(:last-child)]:border-b [&:not(:last-child)]:pb-3 mb-3">
@@ -75,7 +69,7 @@ export function AuditsCard({ data }: { data?: AuditInfo }) {
         <CardContent>
           <div className="space-y-4 py-4">
               <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-72 w-full mt-4" />
+              <Skeleton className="h-[300px] w-full mt-4" />
           </div>
         </CardContent>
       </Card>
