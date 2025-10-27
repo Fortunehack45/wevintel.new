@@ -5,7 +5,7 @@ import { getDomainInfo } from '@/app/actions/get-additional-analysis';
 import { DomainCard } from '@/components/analysis/domain-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Globe, Home, Search, Download, RefreshCw } from 'lucide-react';
+import { Globe, Home, Search, Download, RefreshCw, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { type DomainHistoryItem, type DomainData } from '@/lib/types';
@@ -14,6 +14,7 @@ import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
 import { format, parseISO } from 'date-fns';
+import { Alert, AlertTitle } from '@/components/ui/alert';
 
 function DomainResultSkeleton() {
     return (
@@ -44,33 +45,41 @@ export default function DomainResultPage() {
   const [domainInfo, setDomainInfo] = React.useState<DomainData | null | undefined>(undefined);
   const [isDownloading, setIsDownloading] = useState(false);
   const [history, setHistory] = useLocalStorage<DomainHistoryItem[]>('webintel_domain_history', []);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchAndSaveHistory = useCallback(async () => {
     if (!decodedDomain) return;
 
     setDomainInfo(undefined); // Set to loading state
-    const info = await getDomainInfo(decodedDomain);
-    setDomainInfo(info);
+    setError(null);
+    try {
+        const info = await getDomainInfo(decodedDomain);
+        setDomainInfo(info);
 
-    if (info) {
-      setHistory(prevHistory => {
-        // Remove existing entry for the same domain to avoid duplicates
-        const newHistory = prevHistory.filter(item => item.domain !== decodedDomain);
-        // Add the new lookup to the top of the history
-        newHistory.unshift({
-          id: crypto.randomUUID(),
-          domain: decodedDomain,
-          createdAt: new Date().toISOString(),
-        });
-        // Limit history to 50 items
-        return newHistory.slice(0, 50);
-      });
+        if (info) {
+          setHistory(prevHistory => {
+            // Remove existing entry for the same domain to avoid duplicates
+            const newHistory = prevHistory.filter(item => item.domain !== decodedDomain);
+            // Add the new lookup to the top of the history
+            newHistory.unshift({
+              id: crypto.randomUUID(),
+              domain: decodedDomain,
+              createdAt: new Date().toISOString(),
+            });
+            // Limit history to 50 items
+            return newHistory.slice(0, 50);
+          });
+        } else if (info === null) {
+            setError("Could not retrieve WHOIS information. This might be due to an invalid API key, insufficient credits, or the domain being protected. Please check your .env file for a valid WHOIS_API_KEY.");
+        }
+    } catch (e: any) {
+        setError(e.message || "An unexpected error occurred during the domain lookup.");
     }
   }, [decodedDomain, setHistory]);
 
   useEffect(() => {
     fetchAndSaveHistory();
-  }, [decodedDomain, fetchAndSaveHistory]);
+  }, [fetchAndSaveHistory]);
 
 
   const handleDownloadPdf = async () => {
@@ -269,9 +278,17 @@ export default function DomainResultPage() {
             </div>
         </div>
 
-      {domainInfo === undefined && <DomainResultSkeleton />}
+      {domainInfo === undefined && !error && <DomainResultSkeleton />}
 
-      {domainInfo === null && (
+      {error && (
+        <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Domain Lookup Failed</AlertTitle>
+            <CardDescription>{error}</CardDescription>
+        </Alert>
+      )}
+
+      {domainInfo === null && !error && (
         <Card className="w-full text-center glass-card">
             <CardHeader>
                 <CardTitle>No Information Found</CardTitle>
@@ -279,7 +296,7 @@ export default function DomainResultPage() {
             </CardHeader>
             <CardContent>
                 <p className="text-sm text-muted-foreground">
-                    This could be because the domain is not registered, has privacy protection enabled, or there was a temporary issue with the lookup service. Please check that you have set a valid WHOIS_API_KEY if the issue persists.
+                    This could be because the domain is not registered or has privacy protection enabled.
                 </p>
                  <Button onClick={() => router.push('/domain-checker')} className="mt-4">
                     <Search className="mr-2 h-4 w-4" />

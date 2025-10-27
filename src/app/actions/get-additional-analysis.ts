@@ -69,8 +69,8 @@ export async function getDomainInfo(domainName: string): Promise<DomainData | nu
 
         if (data.ErrorMessage) {
             // Specifically check for API key related errors
-            if (data.ErrorMessage.msg.includes('API key')) {
-                console.error("Whois API Error: Invalid or missing API key.");
+            if (data.ErrorMessage.msg.includes('API key') || data.ErrorMessage.msg.includes('credits')) {
+                console.error(`Whois API Error: ${data.ErrorMessage.msg}. Please check your WHOIS_API_KEY.`);
             } else {
                 console.error("Whois API Error:", data.ErrorMessage.msg);
             }
