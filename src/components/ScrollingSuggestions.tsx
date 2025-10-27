@@ -1,47 +1,42 @@
 
 'use client';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { topSites } from '@/lib/top-sites';
 import { cn } from '@/lib/utils';
 
 const suggestions = topSites.map(site => site.name).slice(0, 15);
 
 export function ScrollingSuggestions({ isVisible }: { isVisible: boolean }) {
-  const marqueeVariants = {
-    animate: {
-      x: [0, -1035],
-      transition: {
-        x: {
-          repeat: Infinity,
-          repeatType: 'loop',
-          duration: 30,
-          ease: 'linear',
-        },
-      },
-    },
-  };
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % suggestions.length);
+    }, 3000); // Wait for 3 seconds before showing the next suggestion
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div
       className={cn(
-        'absolute inset-0 flex items-center z-0 pointer-events-none transition-opacity duration-300',
+        'absolute inset-0 flex items-center z-0 pointer-events-none transition-opacity duration-300 overflow-hidden',
         isVisible ? 'opacity-100' : 'opacity-0'
       )}
     >
-      <motion.div
-        className="flex"
-        variants={marqueeVariants}
-        animate="animate"
-      >
-        {[...suggestions, ...suggestions].map((name, index) => (
-          <span
-            key={index}
-            className="text-muted-foreground/50 text-base font-medium whitespace-nowrap px-4"
-          >
-            {name}
-          </span>
-        ))}
-      </motion.div>
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={index}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
+          className="absolute left-4 text-muted-foreground/50 text-base font-medium whitespace-nowrap"
+        >
+          {suggestions[index]}
+        </motion.span>
+      </AnimatePresence>
     </div>
   );
 }
