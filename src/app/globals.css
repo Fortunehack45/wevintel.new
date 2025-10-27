@@ -75,9 +75,39 @@
   .gradient-text {
     @apply text-foreground;
   }
+
+  /* Tech Stack Carousel */
+  .tech-stack-scroller {
+      @apply w-full overflow-hidden;
+      mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
+  }
+
+  .tech-stack-scroller-inner {
+      @apply flex gap-4 w-max;
+      animation: scroll 40s linear infinite;
+  }
+  
+  .tech-stack-scroller[data-animated="true"] .tech-stack-scroller-inner {
+     animation: scroll 40s linear infinite;
+  }
+  
+  .tech-stack-scroller[data-animated="true"]:hover .tech-stack-scroller-inner {
+      animation-play-state: paused;
+  }
+  
+  .tech-stack-scroller[data-dragging="true"] .tech-stack-scroller-inner {
+      animation-play-state: paused;
+  }
 }
 
 @layer utilities {
+  @keyframes scroll {
+    to {
+      transform: translate(calc(-50% - 0.5rem));
+    }
+  }
+
   @keyframes wave {
     0% { transform: translateX(-50%) translateY(-25%) rotate(0deg); }
     50% { transform: translateX(-50%) translateY(-25%) rotate(180deg); }

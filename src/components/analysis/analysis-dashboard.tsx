@@ -1,4 +1,3 @@
-
 'use client';
 import type { AnalysisResult, AuditInfo } from '@/lib/types';
 import { OverviewCard } from './overview-card';
@@ -17,7 +16,7 @@ import { DashboardSkeleton } from './dashboard-skeleton';
 import { getPerformanceAnalysis } from '@/app/actions/analyze';
 import { SummaryCard } from './summary-card';
 import { TrafficCard } from './traffic-card';
-import { TechStackCard } from './tech-stack-card';
+import { TechStackCarousel } from './tech-stack-carousel';
 import { StatusCard } from './status-card';
 
 
@@ -140,7 +139,7 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
         </motion.div>
       ) : (
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="lg:col-span-4">
-          <TechStackCard data={techStack} />
+          <TechStackCarousel data={techStack} />
         </motion.div>
       )}
       
