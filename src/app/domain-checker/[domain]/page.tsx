@@ -1,14 +1,64 @@
 
+'use client';
+import { useEffect } from 'react';
 import { getDomainInfo } from '@/app/actions/get-additional-analysis';
 import { DomainCard } from '@/components/analysis/domain-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Globe, Home, Search } from 'lucide-react';
 import Link from 'next/link';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { type DomainHistoryItem, type DomainData } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default async function DomainResultPage({ params }: { params: { domain: string } }) {
+function DomainResultSkeleton() {
+    return (
+        <div className="space-y-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-3 grid md:grid-cols-3 gap-6">
+                    <div className="md:col-span-2">
+                        <Skeleton className="h-64 w-full" />
+                    </div>
+                    <div className="space-y-6">
+                        <Skeleton className="h-32 w-full" />
+                        <Skeleton className="h-40 w-full" />
+                    </div>
+                </div>
+                <Skeleton className="h-64 w-full" />
+                <Skeleton className="h-64 w-full" />
+                <Skeleton className="h-64 w-full" />
+            </div>
+        </div>
+    )
+}
+
+
+export default function DomainResultPage({ params }: { params: { domain: string } }) {
   const decodedDomain = decodeURIComponent(params.domain);
-  const domainInfo = await getDomainInfo(decodedDomain);
+  const [domainInfo, setDomainInfo] = React.useState<DomainData | null | undefined>(undefined);
+  const [, setHistory] = useLocalStorage<DomainHistoryItem[]>('webintel_domain_history', []);
+
+  useEffect(() => {
+    async function fetchDomainInfo() {
+      const info = await getDomainInfo(decodedDomain);
+      setDomainInfo(info);
+
+      if (info) {
+        setHistory(prevHistory => {
+          const newHistory = prevHistory.filter(item => item.domain !== decodedDomain);
+          newHistory.unshift({
+            id: crypto.randomUUID(),
+            domain: decodedDomain,
+            createdAt: new Date().toISOString(),
+          });
+          return newHistory.slice(0, 50);
+        });
+      }
+    }
+    fetchDomainInfo();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [decodedDomain]);
+
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -33,11 +83,9 @@ export default async function DomainResultPage({ params }: { params: { domain: s
             </div>
         </div>
 
-      {domainInfo ? (
-        <div className="grid gap-6">
-            <DomainCard data={domainInfo} />
-        </div>
-      ) : (
+      {domainInfo === undefined && <DomainResultSkeleton />}
+
+      {domainInfo === null && (
         <Card className="w-full text-center glass-card">
             <CardHeader>
                 <CardTitle>No Information Found</CardTitle>
@@ -49,6 +97,12 @@ export default async function DomainResultPage({ params }: { params: { domain: s
                 </p>
             </CardContent>
         </Card>
+      )}
+
+      {domainInfo && (
+        <div className="grid gap-6">
+            <DomainCard data={domainInfo} />
+        </div>
       )}
     </div>
   );

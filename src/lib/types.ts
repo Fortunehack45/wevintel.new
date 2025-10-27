@@ -151,3 +151,9 @@ export type StatusData = {
   responseTime?: number; // in ms
   finalUrl?: string; // To check for redirects
 };
+
+export type DomainHistoryItem = {
+  id: string;
+  domain: string;
+  createdAt: string; // ISO 8601 string
+};
