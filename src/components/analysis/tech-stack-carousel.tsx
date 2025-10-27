@@ -177,7 +177,7 @@ export function TechStackCarousel({ data }: { data?: TechStackData }) {
                     </CardTitle>
                     <CardDescription>AI-detected frameworks, libraries, and services.</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="min-h-[140px] flex items-center justify-center">
                     <p className="text-muted-foreground text-sm text-center py-4">Could not detect technology stack.</p>
                 </CardContent>
             </Card>

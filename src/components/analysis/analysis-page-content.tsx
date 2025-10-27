@@ -33,13 +33,13 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
     const [key, setKey] = useState(Date.now());
     const [isDownloading, setIsDownloading] = useState(false);
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(initialData as AnalysisResult);
-    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [trafficCache, setTrafficCache] = useLocalStorage<Record<string, {data: TrafficData, timestamp: string}>>('webintel_traffic_cache', {});
 
     const router = useRouter();
+    const isFetching = useRef(false);
 
-    const getTrafficData = useCallback(async (url: string, description: string): Promise<TrafficData> => {
+    const getTrafficData = useCallback(async (url: string, description?: string): Promise<TrafficData> => {
         const cached = trafficCache[url];
         const now = new Date();
         
@@ -51,7 +51,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             }
         }
         
-        const freshData = await estimateTraffic({ url, description });
+        const freshData = await estimateTraffic({ url, description: description || '' });
         setTrafficCache(prev => ({
             ...prev,
             [url]: {
@@ -62,52 +62,33 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         return freshData;
     }, [setTrafficCache, trafficCache]);
 
+    const getSummaryData = useCallback(async (input: WebsiteAnalysisInput) => {
+        return summarizeWebsite(input);
+    }, []);
+
+    const getTechStackData = useCallback(async (url: string, htmlContent: string, headers: HeaderInfo) => {
+         return detectTechStack({ url, htmlContent, headers });
+    }, []);
+
+
     useEffect(() => {
         const fetchRemainingAnalysis = async () => {
-             if (!initialData) return;
+             if (!initialData || isFetching.current) return;
             
-             setIsLoading(true);
-
-            // 1. AI Summary (in parallel with fast analysis result processing)
+             isFetching.current = true;
+            
             const aiSummaryInput: WebsiteAnalysisInput = {
-                overview: {
-                    url: initialData.overview!.url,
-                    domain: initialData.overview!.domain,
-                    title: initialData.overview!.title,
-                    description: initialData.overview!.description,
-                },
-                security: {
-                    isSecure: initialData.security!.isSecure,
-                    securityHeaders: initialData.security!.securityHeaders,
-                },
-                hosting: {
-                    ip: initialData.hosting!.ip,
-                    isp: initialData.hosting!.isp,
-                    country: initialData.hosting!.country,
-                },
+                overview: initialData.overview!,
+                security: initialData.security!,
+                hosting: initialData.hosting!,
                 headers: initialData.headers,
             };
             
-            const summaryPromise = summarizeWebsite(aiSummaryInput);
-            
-            const resolvedSummary = await summaryPromise;
-
-            setAnalysisResult(current => ({
-              ...(current as AnalysisResult),
-              aiSummary: resolvedSummary,
-            }));
-
-            setIsLoading(false);
-            
-            // 2. Full Performance and Additional Analysis (after fast analysis is displayed)
-            const [perfResult, trafficResult, techStackResult, additionalResult] = await Promise.allSettled([
+            const [perfResult, summaryResult, trafficResult, techStackResult, additionalResult] = await Promise.allSettled([
                 getPerformanceAnalysis(decodedUrl),
-                getTrafficData(decodedUrl, initialData.overview?.description || ''),
-                detectTechStack({
-                    url: decodedUrl,
-                    htmlContent: initialData.overview?.htmlContent || '',
-                    headers: initialData.headers || {}
-                }),
+                getSummaryData(aiSummaryInput),
+                getTrafficData(decodedUrl, initialData.overview?.description),
+                getTechStackData(decodedUrl, initialData.overview?.htmlContent || '', initialData.headers || {}),
                 getAdditionalAnalysis(decodedUrl),
             ]);
 
@@ -135,7 +116,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             }
             const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
 
-            // Combine all results and update state
+            // Combine all results and update state at once
             setAnalysisResult(currentData => ({
                 ...(currentData as AnalysisResult),
                 ...fullPerfData,
@@ -154,19 +135,21 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                     ...currentData!.security,
                     securityScore: calculatedSecurityScore,
                 } as SecurityData,
+                aiSummary: summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.'},
                 traffic: trafficResult.status === 'fulfilled' ? trafficResult.value : undefined,
                 techStack: techStackResult.status === 'fulfilled' ? techStackResult.value : undefined,
                 status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
             }));
+            isFetching.current = false;
         };
 
         fetchRemainingAnalysis().catch(e => {
             console.error("An error occurred during analysis:", e);
             setError(e.message || "An unexpected error occurred.");
-            setIsLoading(false);
+            isFetching.current = false;
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [decodedUrl, key, getTrafficData]);
+    }, [decodedUrl, key]);
 
 
     const handleDownloadPdf = async () => {
