@@ -131,15 +131,14 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
         pageHtmlRes
     ] = await Promise.allSettled([
       fetch(ipApiUrl),
-      fetch(url, { headers: { 'User-Agent': 'WebIntel-Analysis-Bot/1.0' }})
+      fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' }})
     ]);
 
     const ipInfoData = ipInfoRes.status === 'fulfilled' && ipInfoRes.value.ok ? await ipInfoRes.value.json() : null;
 
     if (pageHtmlRes.status === 'rejected' || (pageHtmlRes.status === 'fulfilled' && !pageHtmlRes.value.ok)) {
-       // This is a strong indicator that the domain might not exist or is unreachable.
-        if (ipInfoData?.status === 'fail') {
-             return { error: 'Domain not found. The website is not reachable.' };
+        if (ipInfoData && ipInfoData.status === 'fail') {
+            return { error: 'Domain not found. The website is not reachable.' };
         }
     }
     
@@ -147,8 +146,11 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
     let responseHeaders = { all: {}, security: {} };
 
     if (pageHtmlRes.status === 'fulfilled' && pageHtmlRes.value.ok) {
+        // This is tricky because a body can only be read once.
+        // We clone the response to be able to read it twice (once for headers, once for text)
+        const responseForHeaders = pageHtmlRes.value.clone();
         pageHtml = await pageHtmlRes.value.text();
-        responseHeaders = getHeaders(pageHtmlRes.value);
+        responseHeaders = getHeaders(responseForHeaders);
     } else {
         return { error: 'Could not fetch the main page of the website. It might be down or blocking requests.' };
     }
