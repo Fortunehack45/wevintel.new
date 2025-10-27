@@ -12,7 +12,6 @@ import { useTheme } from 'next-themes';
 const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/leaderboard', label: 'Leaderboard' },
-    { href: '/domain-checker', label: 'Domain Checker' },
     { href: '/history', label: 'History' },
     { href: '/about', label: 'About' },
 ];

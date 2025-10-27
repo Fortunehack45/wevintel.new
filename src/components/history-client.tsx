@@ -142,9 +142,6 @@ export function HistoryClient({ limit, type = 'website' }: { limit?: number, typ
     if (type === 'website') {
       return <WebsiteHistoryList limit={limit} />;
     }
-    if (type === 'domain') {
-      return <DomainHistoryList limit={limit} />;
-    }
   }
 
   return (
@@ -166,7 +163,7 @@ export function HistoryClient({ limit, type = 'website' }: { limit?: number, typ
                       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                       <AlertDialogDescription>
                         This action cannot be undone. This will permanently delete your
-                        entire analysis and domain lookup history from this device.
+                        entire analysis history from this device.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -178,18 +175,7 @@ export function HistoryClient({ limit, type = 'website' }: { limit?: number, typ
             </div>
         )}
         
-        <Tabs defaultValue="websites" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="websites">Website Analyses ({analysisHistory.length})</TabsTrigger>
-            <TabsTrigger value="domains">Domain Lookups ({domainHistory.length})</TabsTrigger>
-          </TabsList>
-          <TabsContent value="websites">
-            <WebsiteHistoryList />
-          </TabsContent>
-          <TabsContent value="domains">
-            <DomainHistoryList />
-          </TabsContent>
-        </Tabs>
+        <WebsiteHistoryList />
     </div>
   );
 }
