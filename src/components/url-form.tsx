@@ -11,6 +11,7 @@ import { motion } from 'framer-motion';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { type AnalysisResult } from '@/lib/types';
 import { Card } from './ui/card';
+import { ScrollingSuggestions } from './ScrollingSuggestions';
 
 export function UrlForm() {
   const [url, setUrl] = useState('');
@@ -112,11 +113,11 @@ export function UrlForm() {
         transition={{ duration: 0.5 }}
         className="relative w-full max-w-xl mx-auto"
     >
-        <Card className="p-2 rounded-xl shadow-lg border">
-            <form onSubmit={handleSubmit} className="flex w-full items-center space-x-2">
+        <Card className="p-2 rounded-xl shadow-lg border relative overflow-hidden">
+            <form onSubmit={handleSubmit} className="flex w-full items-center space-x-2 relative z-10">
                 <Input
                     type="text"
-                    placeholder="https://example.com"
+                    placeholder=""
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
                     onFocus={() => url && suggestions.length > 0 && setShowSuggestions(true)}
@@ -136,9 +137,10 @@ export function UrlForm() {
                     <span className="hidden md:inline ml-2">Analyse</span>
                 </Button>
             </form>
+            <ScrollingSuggestions isVisible={!url && !isLoading} />
         </Card>
         {showSuggestions && suggestions.length > 0 && (
-          <Card className="absolute top-full w-full mt-2 p-2 shadow-xl border z-10">
+          <Card className="absolute top-full w-full mt-2 p-2 shadow-xl border z-20">
             <ul>
               {suggestions.map((item, index) => (
                 <li
