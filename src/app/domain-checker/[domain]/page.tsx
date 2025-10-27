@@ -38,12 +38,13 @@ function DomainResultSkeleton() {
 
 export default function DomainResultPage() {
   const params = useParams<{ domain: string }>();
-  const decodedDomain = decodeURIComponent(params.domain);
+  const decodedDomain = params ? decodeURIComponent(params.domain) : '';
   const [domainInfo, setDomainInfo] = React.useState<DomainData | null | undefined>(undefined);
   const [isDownloading, setIsDownloading] = useState(false);
   const [, setHistory] = useLocalStorage<DomainHistoryItem[]>('webintel_domain_history', []);
 
   useEffect(() => {
+    if (!decodedDomain) return;
     async function fetchDomainInfo() {
       const info = await getDomainInfo(decodedDomain);
       setDomainInfo(info);
