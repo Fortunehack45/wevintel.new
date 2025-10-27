@@ -2,7 +2,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import type { ComparisonOutput } from '@/ai/flows/compare-websites-flow';
+import type { ComparisonOutput } from '@/lib/types';
 import type { AnalysisResult } from '@/lib/types';
 import { Trophy, Scale, Wand2, AlertTriangle, ShieldCheck, TrendingUp } from 'lucide-react';
 import { Skeleton } from '../ui/skeleton';

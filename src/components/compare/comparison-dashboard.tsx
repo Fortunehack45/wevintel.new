@@ -6,7 +6,7 @@ import { PerformanceCard } from '../analysis/performance-card';
 import { SecurityCard } from '../analysis/security-card';
 import { TechStackCarousel } from '../analysis/tech-stack-carousel';
 import { ComparisonSummaryCard } from './comparison-summary-card';
-import type { ComparisonOutput } from '@/ai/flows/compare-websites-flow';
+import type { ComparisonOutput } from '@/lib/types';
 import { motion } from 'framer-motion';
 
 const cardVariants = {

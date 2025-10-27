@@ -4,33 +4,11 @@
  * @fileOverview A flow to compare two websites based on their analysis data.
  *
  * - compareWebsites - A function that takes two sets of website analysis data and returns a comparative summary.
- * - ComparisonInputSchema - The input type for the compareWebsites function.
- * - ComparisonOutputSchema - The return type for the compareWebsites function.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { ComparisonInput, ComparisonInputSchema, ComparisonOutput, ComparisonOutputSchema } from '@/lib/types';
 
-const WebsiteDataSchema = z.object({
-  url: z.string(),
-  performanceScore: z.number().optional(),
-  securityScore: z.number().optional(),
-  techStack: z.array(z.string()).optional(),
-  hostingCountry: z.string().optional(),
-});
-
-export const ComparisonInputSchema = z.object({
-  site1: WebsiteDataSchema,
-  site2: WebsiteDataSchema,
-});
-export type ComparisonInput = z.infer<typeof ComparisonInputSchema>;
-
-export const ComparisonOutputSchema = z.object({
-  title: z.string().describe("A compelling, short title for the comparison, like 'Performance Showdown: Site A vs. Site B'."),
-  summary: z.string().describe("A two-paragraph comparative summary. The first paragraph compares the key metrics (performance, security). The second paragraph discusses the technology stack differences and hosting location implications. Maintain a neutral, expert tone."),
-  winner: z.string().describe("The domain name of the winning website based on a holistic view of performance and security scores. If it's a tie or scores are very close, return 'Tie'."),
-});
-export type ComparisonOutput = z.infer<typeof ComparisonOutputSchema>;
 
 export async function compareWebsites(input: ComparisonInput): Promise<ComparisonOutput> {
   return compareWebsitesFlow(input);

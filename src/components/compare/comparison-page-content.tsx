@@ -4,11 +4,11 @@
 import { Suspense, useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { RefreshCw, Home, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult, type TechStackData } from '@/lib/types';
+import { type AnalysisResult, type TechStackData, type ComparisonInput, type ComparisonOutput } from '@/lib/types';
 import { getPerformanceAnalysis } from '@/app/actions/analyze';
 import { useRouter } from 'next/navigation';
 import { ComparisonDashboard } from './comparison-dashboard';
-import { ComparisonInput, ComparisonOutput, compareWebsites } from '@/ai/flows/compare-websites-flow';
+import { compareWebsites } from '@/ai/flows/compare-websites-flow';
 import { DashboardSkeleton } from '../analysis/dashboard-skeleton';
 
 type Urls = { url1: string; url2: string };
