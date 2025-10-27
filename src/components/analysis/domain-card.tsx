@@ -1,3 +1,4 @@
+
 'use client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import type { DomainData, DomainContact } from '@/lib/types';
@@ -180,8 +181,8 @@ export function DomainCard({ data }: { data?: DomainData }) {
                     <CardContent>
                         {data.status && data.status.length > 0 ? (
                             <div className="flex flex-wrap gap-2">
-                                {data.status.map(s => (
-                                    <Badge key={s} className={getStatusVariant(s)}>{s}</Badge>
+                                {data.status.map((s, i) => (
+                                    <Badge key={s + i} className={getStatusVariant(s)}>{s}</Badge>
                                 ))}
                             </div>
                         ) : (
