@@ -89,7 +89,7 @@ export function URLSuggestionsScroller() {
                             onClick={() => handleAnalyse(site.url)}
                             className="inline-flex items-center gap-2 px-4 py-2 mx-2 rounded-full cursor-pointer transition-all duration-300 bg-white/5 backdrop-blur-md border border-white/10 shadow-md hover:scale-105 hover:shadow-primary/20 hover:border-primary/30"
                         >
-                            <Favicon domain={site.url} />
+                            <Favicon domain={site.domain} />
                             <span className="text-sm font-medium text-foreground">{site.name}</span>
                         </div>
                     ))}
