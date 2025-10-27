@@ -72,19 +72,19 @@
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle at 15% 50%, hsla(var(--primary), 0.15), transparent 30%),
-        radial-gradient(circle at 85% 50%, hsla(var(--chart-2), 0.15), transparent 30%);
-    background-size: 400% 400%;
-    filter: blur(100px);
+        radial-gradient(circle at 15% 50%, hsla(var(--primary), 0.1), transparent 30%),
+        radial-gradient(circle at 85% 50%, hsla(var(--chart-2), 0.1), transparent 30%);
+    background-size: 300% 300%;
+    filter: blur(120px);
     z-index: -1;
     pointer-events: none;
-    animation: background-pan 15s ease-in-out infinite;
+    animation: background-pan 20s ease-in-out infinite;
   }
   
   .dark body::before {
      background-image: 
-        radial-gradient(circle at 15% 50%, hsla(var(--primary), 0.25), transparent 30%),
-        radial-gradient(circle at 85% 50%, hsla(var(--chart-2), 0.25), transparent 30%);
+        radial-gradient(circle at 15% 50%, hsla(var(--primary), 0.2), transparent 30%),
+        radial-gradient(circle at 85% 50%, hsla(var(--chart-2), 0.2), transparent 30%);
   }
 
   @keyframes background-pan {
@@ -102,10 +102,10 @@
 
 @layer utilities {
   .glass-card {
-    @apply bg-card/60 dark:bg-card/40 backdrop-blur-lg border rounded-xl shadow-lg dark:shadow-black/40;
+    @apply bg-card/50 dark:bg-card/30 backdrop-blur-xl border-border/50 shadow-lg dark:shadow-black/20;
   }
   .glow-border {
-    @apply shadow-2xl shadow-primary/20;
+    @apply shadow-lg shadow-primary/10;
   }
   .gradient-text {
     @apply text-foreground;
