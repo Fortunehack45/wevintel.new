@@ -34,7 +34,7 @@ const techIcons: { [key: string]: React.ElementType } = {
     // Database & API
     'mysql': SiMysql, 'postgresql': SiPostgresql, 'mongodb': SiMongodb, 'redis': SiRedis, 'graphql': SiGraphql, 'apollo': SiApollographql,
     // Analytics & Marketing
-    'google analytics': SiGoogleanalytics, 'google tag manager': SiGoogletagmanager, 'adobe target': SiAdobe, 'segment': SiSegment,
+    'google analytics': SiGoogleanalytics, 'google tag manager': SiGoogletagmanager, 'adobe': SiAdobe, 'segment': SiSegment,
     // UI Frameworks
     'bootstrap': SiBootstrap, 'tailwind css': SiTailwindcss, 'material-ui': SiMui, 'chakra ui': SiChakraui,
     // Testing
