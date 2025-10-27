@@ -122,5 +122,3 @@ export function AuditsCard({ data }: { data?: AuditInfo }) {
     </Card>
   );
 }
-
-    

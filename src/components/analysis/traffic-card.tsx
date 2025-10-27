@@ -146,5 +146,3 @@ export function TrafficCard({ data }: { data: TrafficData }) {
     </Card>
   );
 }
-
-    

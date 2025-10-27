@@ -121,5 +121,3 @@ export function SummaryCard({ data }: { data: Partial<AnalysisResult> }) {
         </Card>
     )
 }
-
-    

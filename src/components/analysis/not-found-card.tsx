@@ -24,5 +24,3 @@ export function NotFoundCard({ url }: { url: string }) {
     </Card>
   );
 }
-
-    
