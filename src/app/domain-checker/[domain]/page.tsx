@@ -3,7 +3,7 @@ import { getDomainInfo } from '@/app/actions/get-additional-analysis';
 import { DomainCard } from '@/components/analysis/domain-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Home, Search } from 'lucide-react';
+import { Globe, Home, Search } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function DomainResultPage({ params }: { params: { domain: string } }) {
@@ -17,12 +17,20 @@ export default async function DomainResultPage({ params }: { params: { domain: s
                  <h1 className="text-4xl font-bold">Domain Intelligence</h1>
                  <p className="text-muted-foreground text-lg">{decodedDomain}</p>
             </div>
-            <Button asChild variant="outline">
-                <Link href="/domain-checker">
-                  <Search className="mr-2 h-4 w-4" />
-                  New Search
-                </Link>
-            </Button>
+            <div className='flex items-center gap-2'>
+                <Button asChild variant="outline">
+                    <a href={`https://${decodedDomain}`} target="_blank" rel="noopener noreferrer">
+                        <Globe className="mr-2 h-4 w-4" />
+                        Visit Site
+                    </a>
+                </Button>
+                <Button asChild variant="outline">
+                    <Link href="/domain-checker">
+                    <Search className="mr-2 h-4 w-4" />
+                    New Search
+                    </Link>
+                </Button>
+            </div>
         </div>
 
       {domainInfo ? (
