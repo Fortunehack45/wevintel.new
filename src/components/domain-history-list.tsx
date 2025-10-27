@@ -20,9 +20,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useMemo } from 'react';
 
 export function DomainHistoryList({ limit }: { limit?: number }) {
-  const [history, setHistory] = useLocalStorage<DomainHistoryItem[]>('webintel_domain_history', []);
+  const stableInitialValue = useMemo(() => [], []);
+  const [history, setHistory] = useLocalStorage<DomainHistoryItem[]>('webintel_domain_history', stableInitialValue);
   const itemsToDisplay = limit ? history.slice(0, limit) : history;
 
   const deleteItem = (id: string) => {

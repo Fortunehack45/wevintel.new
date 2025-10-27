@@ -1,6 +1,6 @@
 
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { getDomainInfo } from '@/app/actions/get-additional-analysis';
 import { DomainCard } from '@/components/analysis/domain-card';
 import { Button } from '@/components/ui/button';
@@ -44,7 +44,8 @@ export default function DomainResultPage() {
   const decodedDomain = params ? decodeURIComponent(params.domain) : '';
   const [domainInfo, setDomainInfo] = React.useState<DomainData | null | undefined>(undefined);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [history, setHistory] = useLocalStorage<DomainHistoryItem[]>('webintel_domain_history', []);
+  const stableInitialValue = useMemo(() => [], []);
+  const [history, setHistory] = useLocalStorage<DomainHistoryItem[]>('webintel_domain_history', stableInitialValue);
   const [error, setError] = useState<string | null>(null);
 
   const fetchAndSaveHistory = useCallback(async () => {
@@ -327,5 +328,3 @@ export default function DomainResultPage() {
     </div>
   );
 }
-
-    

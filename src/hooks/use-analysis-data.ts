@@ -1,7 +1,8 @@
 
+
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useLocalStorage } from './use-local-storage';
 import type { AnalysisResult, WebsiteAnalysisInput } from '@/lib/types';
 import { getPerformanceAnalysis, getFastAnalysis } from '@/app/actions/analyze';
@@ -27,7 +28,8 @@ export function useAnalysisData(url: string, initialData: Partial<AnalysisResult
     const [result, setResult] = useState<AnalysisResult | null>(initialData as AnalysisResult);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [cache, setCache] = useLocalStorage<AnalysisCache>('webintel_analysis_cache', {});
+    const stableInitialValue = useMemo(() => ({}), []);
+    const [cache, setCache] = useLocalStorage<AnalysisCache>('webintel_analysis_cache', stableInitialValue);
     const isFetching = useRef(false);
 
     useEffect(() => {
@@ -121,7 +123,7 @@ export function useAnalysisData(url: string, initialData: Partial<AnalysisResult
 
         fetchFullAnalysis();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [url]); 
+    }, [url, setCache]); 
 
     return { result, loading, error };
 }

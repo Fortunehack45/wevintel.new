@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { RefreshCw, ArrowLeft, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult, type ComparisonInput, type ComparisonOutput, type ComparisonHistoryItem } from '@/lib/types';
@@ -25,7 +25,8 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
     
     const [isDownloading, setIsDownloading] = useState(false);
     const [comparisonSummary, setComparisonSummary] = useState<ComparisonOutput | { error: string } | null>(null);
-    const [history, setHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', []);
+    const stableInitialValue = useMemo(() => [], []);
+    const [history, setHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', stableInitialValue);
     
     const getAIComparison = useCallback(async (site1: AnalysisResult, site2: AnalysisResult) => {
         try {

@@ -1,7 +1,8 @@
 
+
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,8 @@ export function UrlForm() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const [history] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
+  const stableInitialValue = useMemo(() => [], []);
+  const [history] = useLocalStorage<AnalysisResult[]>('webintel_history', stableInitialValue);
   const [suggestions, setSuggestions] = useState<AnalysisResult[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [autoCompleteIndex, setAutoCompleteIndex] = useState(-1);

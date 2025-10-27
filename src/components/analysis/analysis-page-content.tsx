@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { RefreshCw, Download, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult, type AuditInfo } from '@/lib/types';

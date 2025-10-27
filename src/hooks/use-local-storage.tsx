@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -23,7 +24,8 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
       console.warn(`Error reading localStorage key “${key}”:`, error);
       return initialValue;
     }
-  }, [isClient, key, initialValue]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isClient, key]);
 
   const [storedValue, setStoredValue] = useState<T>(readValue);
 

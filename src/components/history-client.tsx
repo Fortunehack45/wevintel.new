@@ -25,9 +25,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useMemo } from 'react';
 
 function WebsiteHistoryList({ limit }: { limit?: number }) {
-  const [history, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
+  const stableInitialValue = useMemo(() => [], []);
+  const [history, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', stableInitialValue);
   const itemsToDisplay = limit ? history.slice(0, limit) : history;
 
   const deleteItem = (id: string) => {
@@ -128,7 +130,8 @@ function WebsiteHistoryList({ limit }: { limit?: number }) {
 }
 
 function ComparisonHistoryList({ limit }: { limit?: number }) {
-  const [history, setHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', []);
+  const stableInitialValue = useMemo(() => [], []);
+  const [history, setHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', stableInitialValue);
   const itemsToDisplay = limit ? history.slice(0, limit) : history;
 
   const deleteItem = (id: string) => {
@@ -207,8 +210,10 @@ function ComparisonHistoryList({ limit }: { limit?: number }) {
 }
 
 export function HistoryClient({ limit, type = 'website' }: { limit?: number, type?: 'website' | 'domain' | 'comparison' }) {
-  const [analysisHistory, setAnalysisHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
-  const [comparisonHistory, setComparisonHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', []);
+  const stableInitialAnalysis = useMemo(() => [], []);
+  const stableInitialComparison = useMemo(() => [], []);
+  const [analysisHistory, setAnalysisHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', stableInitialAnalysis);
+  const [comparisonHistory, setComparisonHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', stableInitialComparison);
 
   const clearAllHistory = () => {
     setAnalysisHistory([]);

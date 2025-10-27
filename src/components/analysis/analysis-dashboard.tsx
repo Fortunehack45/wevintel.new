@@ -1,3 +1,4 @@
+
 'use client';
 import type { AnalysisResult, AuditInfo } from '@/lib/types';
 import { OverviewCard } from './overview-card';
@@ -34,7 +35,8 @@ const cardVariants = {
 };
 
 export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult }) {
-  const [, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
+  const stableInitialValue = useMemo(() => [], []);
+  const [, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', stableInitialValue);
   
   useEffect(() => {
     // Only save to history if we have the full performance data
