@@ -47,7 +47,7 @@ export function TrafficCard({ data }: { data: TrafficData }) {
   const topCountries = data.topCountries || [];
 
   return (
-    <Card className="h-full glass-card lg:col-span-2">
+    <Card className="h-full glass-card">
       <CardHeader>
         <div className="flex justify-between items-start">
             <div>
@@ -59,7 +59,7 @@ export function TrafficCard({ data }: { data: TrafficData }) {
             </div>
             <TooltipProvider>
                 <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger asChild>
                         <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent>
