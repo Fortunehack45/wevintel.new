@@ -1,8 +1,9 @@
+
 'use client';
 import {
     SiNextdotjs, SiReact, SiVuedotjs, SiAngular, SiNodedotjs, SiPhp, SiRubyonrails, SiPython, SiGo,
     SiTypescript, SiJavascript, SiHtml5, SiCss3, SiSass, SiLess, SiWebpack, SiVite, SiEslint, SiPrettier,
-    SiDocker, SiKubernetes, SiAmazon, SiGooglecloud, SiMicrosoftazure, SiVercel, SiNetlify, SiHeroku,
+    SiDocker, SiKubernetes, SiAmazon, SiGooglecloud, SiVercel, SiNetlify, SiHeroku,
     SiNginx, SiApache, SiCloudflare, SiFastly, SiAkamai,
     SiWordpress, SiJoomla, SiDrupal, SiShopify, SiMagento, SiBigcommerce, SiWix, SiSquarespace,
     SiMysql, SiPostgresql, SiMongodb, SiRedis, SiGraphql, SiApollographql,
@@ -25,7 +26,7 @@ const techIcons: { [key: string]: React.ElementType } = {
     // Build Tools & Devops
     'webpack': SiWebpack, 'vite': SiVite, 'eslint': SiEslint, 'prettier': SiPrettier, 'docker': SiDocker, 'kubernetes': SiKubernetes,
     // Hosting & CDN
-    'aws': SiAmazon, 'google cloud': SiGooglecloud, 'azure': SiMicrosoftazure, 'vercel': SiVercel, 'netlify': SiNetlify,
+    'aws': SiAmazon, 'google cloud': SiGooglecloud, 'vercel': SiVercel, 'netlify': SiNetlify,
     'heroku': SiHeroku, 'nginx': SiNginx, 'apache': SiApache, 'cloudflare': SiCloudflare, 'fastly': SiFastly, 'akamai': SiAkamai,
     // CMS & E-commerce
     'wordpress': SiWordpress, 'joomla': SiJoomla, 'drupal': SiDrupal, 'shopify': SiShopify, 'magento': SiMagento,
