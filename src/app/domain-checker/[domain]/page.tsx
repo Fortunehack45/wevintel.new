@@ -1,4 +1,3 @@
-
 'use client';
 import { useEffect } from 'react';
 import { getDomainInfo } from '@/app/actions/get-additional-analysis';
