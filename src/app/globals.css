@@ -63,13 +63,6 @@
     @apply bg-background text-foreground;
     overflow-x: hidden;
   }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-  }
 }
 
 @layer components {

@@ -1,17 +1,14 @@
-
 'use client';
 
 import { UrlForm } from '@/components/url-form';
 import { HistoryClient } from '@/components/history-client';
 import { motion } from 'framer-motion';
-import { URLSuggestionsScroller } from '@/components/URLSuggestionsScroller';
-
 
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center text-center">
       <div className="max-w-3xl w-full">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
@@ -25,19 +22,15 @@ export default function Home() {
           </p>
         </motion.div>
         <UrlForm />
-        <URLSuggestionsScroller />
         <p className="mt-4 text-sm text-muted-foreground">
           Get insights on performance, security, SEO, and more.
         </p>
       </div>
 
       <div className="w-full max-w-5xl mt-24">
-          <h2 className="text-3xl font-bold mb-6 text-left">Recent Analyses</h2>
-          <HistoryClient limit={6} />
+        <h2 className="text-3xl font-bold mb-6 text-left">Recent Analyses</h2>
+        <HistoryClient limit={6} />
       </div>
-
     </div>
   );
 }
-
-    
