@@ -215,21 +215,30 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 currentY += 30;
             };
 
-            const addKeyValue = (key: string, value: string | number | boolean | undefined | null) => {
-                if (value === undefined || value === null || value === '') return;
-                checkAndAddPage();
+            const addKeyValue = (key: string, value: string | number | boolean | undefined | null, xPos: number, yPos: number): number => {
+                if (value === undefined || value === null || value === '') return yPos;
+                
+                const keyWidth = 130;
+                const valueWidth = contentWidth / 2 - keyWidth;
+
+                if (yPos > pdfHeight - margin - 40) {
+                   pdf.addPage();
+                   addPageHeader();
+                   yPos = currentY;
+                }
+
                 pdf.setFont('helvetica', 'bold');
                 pdf.setFontSize(10);
                 pdf.setTextColor(textColor);
-                const splitKey = pdf.splitTextToSize(key, contentWidth * 0.4);
-                pdf.text(splitKey, margin, currentY);
+                const splitKey = pdf.splitTextToSize(key, keyWidth);
+                pdf.text(splitKey, xPos, yPos);
                 
                 pdf.setFont('helvetica', 'normal');
-                const valueX = margin + 150;
-                const valueWidth = contentWidth - 150;
+                const valueX = xPos + keyWidth;
                 const splitValue = pdf.splitTextToSize(String(value), valueWidth);
-                pdf.text(splitValue, valueX, currentY);
-                currentY += (Math.max(splitKey.length, splitValue.length) * 12) + 8;
+                pdf.text(splitValue, valueX, yPos);
+                
+                return yPos + (Math.max(splitKey.length, splitValue.length) * 12) + 8;
             };
 
             const drawScoreGauge = (x: number, y: number, score: number, label: string) => {
@@ -288,11 +297,12 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
 
             // --- Overview Section ---
             addSectionTitle('Website Overview');
-            addKeyValue('URL', data.overview.url);
-            addKeyValue('Title', data.overview.title);
-            addKeyValue('Description', data.overview.description);
-            addKeyValue('Language', data.overview.language?.toUpperCase());
-            currentY += 10;
+            let tempY = currentY;
+            tempY = addKeyValue('URL', data.overview.url, margin, tempY);
+            tempY = addKeyValue('Title', data.overview.title, margin, tempY);
+            tempY = addKeyValue('Description', data.overview.description, margin, tempY);
+            tempY = addKeyValue('Language', data.overview.language?.toUpperCase(), margin, tempY);
+            currentY = tempY + 10;
             
             // --- Performance Section ---
             if (data.performance) {
@@ -335,10 +345,12 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 currentY += 100;
                 
                 checkAndAddPage();
-                addKeyValue('Largest Contentful Paint', data.performance.mobile.largestContentfulPaint);
-                addKeyValue('Cumulative Layout Shift', data.performance.mobile.cumulativeLayoutShift);
-                addKeyValue('Speed Index', data.performance.mobile.speedIndex);
-                addKeyValue('Total Blocking Time', data.performance.mobile.totalBlockingTime);
+                let perfY = currentY;
+                perfY = addKeyValue('Largest Contentful Paint', data.performance.mobile.largestContentfulPaint, margin, perfY);
+                perfY = addKeyValue('Cumulative Layout Shift', data.performance.mobile.cumulativeLayoutShift, margin, perfY);
+                perfY = addKeyValue('Speed Index', data.performance.mobile.speedIndex, margin, perfY);
+                perfY = addKeyValue('Total Blocking Time', data.performance.mobile.totalBlockingTime, margin, perfY);
+                currentY = perfY;
             }
             
             // --- Security & Hosting ---
@@ -348,31 +360,35 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             currentY += 20;
 
             const boxWidth = contentWidth / 2 - 10;
-            const securityY = currentY;
+            const initialY = currentY;
+            
+            let securityCurrentY = initialY;
+            let hostingCurrentY = initialY;
 
             // Security Box
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(12);
             pdf.setTextColor(textColor);
-            pdf.text('Security', margin, currentY);
-            currentY += 20;
-            addKeyValue('SSL Enabled', data.security?.isSecure ? 'Yes' : 'No');
+            pdf.text('Security', margin, securityCurrentY);
+            securityCurrentY += 20;
+            securityCurrentY = addKeyValue('SSL Enabled', data.security?.isSecure ? 'Yes' : 'No', margin, securityCurrentY);
             Object.entries(data.security?.securityHeaders || {}).forEach(([key, value]) => {
-                addKeyValue(key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), value ? 'Present' : 'Missing');
+                securityCurrentY = addKeyValue(key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), value ? 'Present' : 'Missing', margin, securityCurrentY);
             });
 
             // Hosting Box
-            const hostingY = securityY;
             const hostingX = margin + boxWidth + 20;
-            currentY = hostingY;
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(12);
             pdf.setTextColor(textColor);
-            pdf.text('Hosting', hostingX, currentY);
-            currentY += 20;
-            addKeyValue('IP Address', data.hosting?.ip);
-            addKeyValue('ISP', data.hosting?.isp);
-            addKeyValue('Country', data.hosting?.country);
+            pdf.text('Hosting', hostingX, hostingCurrentY);
+            hostingCurrentY += 20;
+            hostingCurrentY = addKeyValue('IP Address', data.hosting?.ip, hostingX, hostingCurrentY);
+            hostingCurrentY = addKeyValue('ISP', data.hosting?.isp, hostingX, hostingCurrentY);
+            hostingCurrentY = addKeyValue('Country', data.hosting?.country, hostingX, hostingCurrentY);
+            
+            currentY = Math.max(securityCurrentY, hostingCurrentY);
+
 
             // --- AI Summary ---
             if (data.aiSummary?.summary) {
@@ -496,3 +512,5 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         </div>
     );
 }
+
+    
