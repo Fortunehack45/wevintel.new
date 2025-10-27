@@ -92,6 +92,8 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
         if (initialSummary === null) {
             setError(true);
             setIsLoading(false);
+        } else if (initialSummary !== undefined) {
+            setError(false);
         }
     }, [initialSummary]);
 
@@ -117,7 +119,7 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
                         <CardContent>
                             {isLoading && <SummarySkeleton />}
                             {error && <ErrorState onRetry={generateSummary} />}
-                            {summary && (
+                            {summary && !error && (
                                 <div className="space-y-6">
                                     <div>
                                         <h4 className="font-semibold mb-2 flex items-center gap-2"><Lightbulb className="text-yellow-400"/> Quick Summary</h4>
