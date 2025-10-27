@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { AnalysisResult } from "@/lib/types";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { OverviewCard } from "./overview-card";
+import { SummaryCard } from "./summary-card";
 
 function PerformancePlaceholder() {
     return (
@@ -37,25 +38,6 @@ function ScorePlaceholder() {
           <Skeleton className="w-full h-24" />
         </CardContent>
       </Card>
-    )
-}
-
-function SummaryPlaceholder() {
-    return (
-        <Card className="glass-card h-full">
-            <CardHeader>
-                <Skeleton className="h-6 w-40 mb-2" />
-                <Skeleton className="h-4 w-56" />
-            </CardHeader>
-            <CardContent>
-                <div className="space-y-4 py-4">
-                    <Skeleton className="h-4 w-3/4 mb-4" />
-                    <Skeleton className="h-4 w-full mb-2" />
-                    <Skeleton className="h-4 w-full mb-2" />
-                    <Skeleton className="h-4 w-1/2" />
-                </div>
-            </CardContent>
-        </Card>
     )
 }
 
@@ -111,7 +93,9 @@ function DashboardSkeleton({ initialData }: { initialData?: Partial<AnalysisResu
       ) : (
         <Skeleton className="h-40 rounded-xl lg:col-span-4" />
       )}
-      <div className="lg:col-span-2"><SummaryPlaceholder/></div>
+      <div className="lg:col-span-2">
+          <SummaryCard data={initialData || {}} summary={initialData?.aiSummary} isLoading={!initialData?.aiSummary} />
+      </div>
       <div className="lg:col-span-2"><TrafficPlaceholder/></div>
       <div className="lg:col-span-4"><PerformancePlaceholder /></div>
       <Skeleton className="h-48 rounded-xl lg:col-span-1" />
@@ -127,8 +111,9 @@ function DashboardSkeleton({ initialData }: { initialData?: Partial<AnalysisResu
 
 DashboardSkeleton.PerformancePlaceholder = PerformancePlaceholder;
 DashboardSkeleton.ScorePlaceholder = ScorePlaceholder;
-DashboardSkeleton.SummaryPlaceholder = SummaryPlaceholder;
 DashboardSkeleton.TrafficPlaceholder = TrafficPlaceholder;
 DashboardSkeleton.AuditPlaceholder = AuditPlaceholder;
 
 export { DashboardSkeleton };
+
+    

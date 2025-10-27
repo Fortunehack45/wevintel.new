@@ -18,6 +18,7 @@ export type AnalysisResult = {
   createdAt: string; // ISO 8601 string
   error?: string;
   partial?: boolean;
+  aiSummary?: AISummary | null;
 };
 
 export type WebsiteOverview = {
@@ -105,3 +106,5 @@ export type AISummary = {
 }
 
 export type HistoryItem = Pick<AnalysisResult, 'id' | 'overview' | 'performance' | 'security' | 'createdAt'>;
+
+    

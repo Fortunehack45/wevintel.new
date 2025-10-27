@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { RefreshCw, Download, Home } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult, type AuditItem, AuditInfo, TrafficData, WebsiteOverview, SecurityData, HostingInfo, Metadata, HeaderInfo } from '@/lib/types';
+import { type AnalysisResult, type AuditItem, AuditInfo, TrafficData, WebsiteOverview, SecurityData, HostingInfo, Metadata, HeaderInfo, AISummary } from '@/lib/types';
 import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
@@ -15,6 +15,7 @@ import { NotFoundCard } from './not-found-card';
 import { DashboardSkeleton } from './dashboard-skeleton';
 import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
 import { useLocalStorage } from '@/hooks/use-local-storage';
+import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
 
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
@@ -466,11 +467,37 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
                 setIsLoading(false);
                 return;
             }
+
+            const aiSummaryInput: WebsiteAnalysisInput = {
+                overview: {
+                    url: fastResult.overview!.url,
+                    domain: fastResult.overview!.domain,
+                    title: fastResult.overview!.title,
+                    description: fastResult.overview!.description,
+                },
+                security: {
+                    isSecure: fastResult.security!.isSecure,
+                    securityHeaders: fastResult.security!.securityHeaders,
+                },
+                hosting: {
+                    ip: fastResult.hosting!.ip,
+                    isp: fastResult.hosting!.isp,
+                    country: fastResult.hosting!.country,
+                },
+                headers: fastResult.headers,
+            }
             
+            // Run summary generation, but don't wait for it
+            const summaryPromise = summarizeWebsite(aiSummaryInput).catch(e => {
+              console.error("AI Summary failed in initial load", e);
+              return null; // Return null on error to not block anything
+            });
+
             const partialData = {
               ...fastResult,
               id: fastResult.id || crypto.randomUUID(),
               createdAt: fastResult.createdAt || new Date().toISOString(),
+              aiSummary: await summaryPromise,
             } as AnalysisResult;
             
             setAnalysisResult(partialData);
@@ -486,7 +513,11 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
 
 
   const handleFullDataLoaded = useCallback((fullData: AnalysisResult) => {
-    setAnalysisResult(fullData);
+    setAnalysisResult(currentData => ({
+        ...currentData,
+        ...fullData,
+        aiSummary: currentData?.aiSummary || fullData.aiSummary, // Prioritize initially loaded summary
+    }));
     onDataLoaded(fullData);
   }, [onDataLoaded]);
 

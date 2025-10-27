@@ -1,6 +1,6 @@
 
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -35,13 +35,19 @@ const ErrorState = ({ onRetry }: { onRetry: () => void }) => (
     </Alert>
 );
 
-export function SummaryCard({ data }: { data: Partial<AnalysisResult> }) {
-    const [summary, setSummary] = useState<AISummary | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+interface SummaryCardProps {
+    data: Partial<AnalysisResult>;
+    summary?: AISummary | null;
+    isLoading?: boolean;
+}
+
+export function SummaryCard({ data, summary: initialSummary, isLoading: initialIsLoading }: SummaryCardProps) {
+    const [summary, setSummary] = useState<AISummary | null | undefined>(initialSummary);
+    const [isLoading, setIsLoading] = useState(initialIsLoading);
     const [error, setError] = useState(false);
     const isMobile = useIsMobile();
 
-    const generateSummary = async () => {
+    const generateSummary = useCallback(async () => {
         if (!data.overview || !data.security || !data.hosting) return;
 
         setIsLoading(true);
@@ -75,12 +81,15 @@ export function SummaryCard({ data }: { data: Partial<AnalysisResult> }) {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [data]);
 
     useEffect(() => {
-        generateSummary();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data.id]);
+        setSummary(initialSummary);
+    }, [initialSummary]);
+
+    useEffect(() => {
+        setIsLoading(initialIsLoading);
+    }, [initialIsLoading]);
 
 
     return (
@@ -121,3 +130,5 @@ export function SummaryCard({ data }: { data: Partial<AnalysisResult> }) {
         </Card>
     )
 }
+
+    
