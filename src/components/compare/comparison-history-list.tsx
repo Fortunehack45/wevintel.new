@@ -75,24 +75,24 @@ export function ComparisonHistoryList({ limit }: { limit?: number }) {
                     </AlertDialogContent>
                 </AlertDialog>
 
-                <CardHeader>
-                    <div className="flex items-center justify-around gap-2 text-center">
-                        <div className="flex flex-col items-center gap-2 overflow-hidden w-2/5">
-                            <Image src={`https://www.google.com/s2/favicons?domain=${item.domain1}&sz=32`} alt={`${item.domain1} favicon`} width={32} height={32} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
-                            <CardTitle className="truncate text-sm font-semibold w-full">{item.domain1}</CardTitle>
-                        </div>
-                        <Scale className="h-6 w-6 text-muted-foreground flex-shrink-0" />
-                        <div className="flex flex-col items-center gap-2 overflow-hidden w-2/5">
-                            <Image src={`https://www.google.com/s2/favicons?domain=${item.domain2}&sz=32`} alt={`${item.domain2} favicon`} width={32} height={32} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
-                            <CardTitle className="truncate text-sm font-semibold w-full">{item.domain2}</CardTitle>
-                        </div>
+                <CardContent className="flex-1 flex flex-col justify-center items-center p-6 text-center">
+                    <div className="flex flex-col items-center gap-2 overflow-hidden">
+                        <Image src={`https://www.google.com/s2/favicons?domain=${item.domain1}&sz=32`} alt={`${item.domain1} favicon`} width={32} height={32} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
+                        <CardTitle className="truncate text-sm font-semibold w-full">{item.domain1}</CardTitle>
                     </div>
-                </CardHeader>
-                 <CardContent className="flex-1">
-                    <p className="text-xs text-muted-foreground text-center">
+
+                    <Scale className="h-6 w-6 text-muted-foreground my-3" />
+
+                    <div className="flex flex-col items-center gap-2 overflow-hidden">
+                        <Image src={`https://www.google.com/s2/favicons?domain=${item.domain2}&sz=32`} alt={`${item.domain2} favicon`} width={32} height={32} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
+                        <CardTitle className="truncate text-sm font-semibold w-full">{item.domain2}</CardTitle>
+                    </div>
+
+                    <p className="text-xs text-muted-foreground mt-4">
                         {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
                     </p>
-                 </CardContent>
+                </CardContent>
+
                 <CardFooter>
                    <Button asChild className="w-full" variant="default">
                        <Link href={`/compare/${encodeURIComponent(item.url1)}/${encodeURIComponent(item.url2)}`}>View comparison &rarr;</Link>
