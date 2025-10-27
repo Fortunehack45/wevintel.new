@@ -530,7 +530,7 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
   }
 
   if (error) {
-    if (error === 'Domain not found. The website is not reachable.') {
+    if (error === 'Domain not found. The website is not reachable.' || error === 'Could not fetch the main page of the website. It might be down or blocking requests.') {
         return <NotFoundCard url={url} />;
     }
     return <ErrorAlert title="Analysis Failed" description={error} />;
