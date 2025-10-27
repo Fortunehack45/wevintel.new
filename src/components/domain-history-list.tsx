@@ -84,7 +84,7 @@ export function DomainHistoryList({ limit }: { limit?: number }) {
                 </CardHeader>
                 <CardContent className="flex-1" />
                 <CardFooter>
-                   <Button asChild variant="secondary" className="w-full">
+                   <Button asChild className="w-full">
                        <Link href={`/domain-checker/${encodeURIComponent(item.domain)}`}>View domain details &rarr;</Link>
                     </Button>
                 </CardFooter>

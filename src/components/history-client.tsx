@@ -114,7 +114,7 @@ function WebsiteHistoryList({ limit }: { limit?: number }) {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button asChild variant="secondary" className="w-full">
+                    <Button asChild className="w-full">
                        <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`}>View full report &rarr;</Link>
                     </Button>
                 </CardFooter>
