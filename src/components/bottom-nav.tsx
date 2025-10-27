@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, History, Info } from 'lucide-react';
+import { Home, History, Info, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
 
 const navLinks = [
   { href: '/', label: 'Home', icon: Home },
+  { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { href: '/history', label: 'History', icon: History },
   { href: '/about', label: 'About', icon: Info },
 ];

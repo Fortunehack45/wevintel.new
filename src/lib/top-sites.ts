@@ -1,0 +1,22 @@
+export const topSites = [
+    { name: 'Google', domain: 'google.com', url: 'https://google.com', category: 'Search Engine' },
+    { name: 'YouTube', domain: 'youtube.com', url: 'https://youtube.com', category: 'Video' },
+    { name: 'Facebook', domain: 'facebook.com', url: 'https://facebook.com', category: 'Social Media' },
+    { name: 'Twitter', domain: 'twitter.com', url: 'https://x.com', category: 'Social Media' },
+    { name: 'Instagram', domain: 'instagram.com', url: 'https://instagram.com', category: 'Social Media' },
+    { name: 'Wikipedia', domain: 'wikipedia.org', url: 'https://wikipedia.org', category: 'Reference' },
+    { name: 'Amazon', domain: 'amazon.com', url: 'https://amazon.com', category: 'E-commerce' },
+    { name: 'Netflix', domain: 'netflix.com', url: 'https://netflix.com', category: 'Streaming' },
+    { name: 'Reddit', domain: 'reddit.com', url: 'https://reddit.com', category: 'Social Media' },
+    { name: 'LinkedIn', domain: 'linkedin.com', url: 'https://linkedin.com', category: 'Professional' },
+    { name: 'The New York Times', domain: 'nytimes.com', url: 'https://www.nytimes.com', category: 'News' },
+    { name: 'BBC', domain: 'bbc.com', url: 'https://www.bbc.com', category: 'News' },
+    { name: 'Microsoft', domain: 'microsoft.com', url: 'https://microsoft.com', category: 'Technology' },
+    { name: 'Apple', domain: 'apple.com', url: 'https://apple.com', category: 'Technology' },
+    { name: 'GitHub', domain: 'github.com', url: 'https://github.com', category: 'Developer' },
+    { name: 'Stack Overflow', domain: 'stackoverflow.com', url: 'https://stackoverflow.com', category: 'Developer' },
+    { name: 'Vercel', domain: 'vercel.com', url: 'https://vercel.com', category: 'Developer' },
+    { name: 'Figma', domain: 'figma.com', url: 'https://figma.com', category: 'Design' },
+    { name: 'Canva', domain: 'canva.com', url: 'https://canva.com', category: 'Design' },
+    { name: 'Spotify', domain: 'spotify.com', url: 'https://spotify.com', category: 'Music' }
+];
