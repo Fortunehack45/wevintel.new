@@ -44,7 +44,6 @@ interface SummaryCardProps {
 export function SummaryCard({ data, summary: initialSummary, isLoading: initialIsLoading }: SummaryCardProps) {
     const [summaryResult, setSummaryResult] = useState(initialSummary);
     const [isLoading, setIsLoading] = useState(initialIsLoading);
-    const isMobile = useIsMobile();
 
     const generateSummary = useCallback(async () => {
         if (!data.overview || !data.security || !data.hosting) return;
@@ -91,9 +90,9 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
 
 
     return (
-        <Card className="glass-card h-full">
-             <Accordion type="single" collapsible defaultValue={isMobile ? undefined : "item-1"}>
-                <AccordionItem value="item-1" className='border-none'>
+        <Card className="glass-card h-full min-h-[300px]">
+             <Accordion type="single" collapsible defaultValue="item-1" className="h-full">
+                <AccordionItem value="item-1" className='border-none h-full flex flex-col'>
                     <AccordionTrigger className='p-6 hover:no-underline'>
                          <div className='flex flex-col space-y-1.5 text-left'>
                             <CardTitle className="flex items-center gap-2">
@@ -103,7 +102,7 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
                             <CardDescription>A quick analysis and recommendations from our AI expert.</CardDescription>
                          </div>
                     </AccordionTrigger>
-                    <AccordionContent>
+                    <AccordionContent className="flex-1">
                         <CardContent>
                             {isLoading && <SummarySkeleton />}
                             {summaryResult?.error && <ErrorState onRetry={generateSummary} error={summaryResult.error} />}

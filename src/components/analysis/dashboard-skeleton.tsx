@@ -42,7 +42,7 @@ function ScorePlaceholder() {
 
 function TrafficPlaceholder() {
     return (
-        <Card className="glass-card h-full">
+        <Card className="glass-card h-full min-h-[300px]">
             <CardHeader>
                 <Skeleton className="h-6 w-40 mb-2" />
                 <Skeleton className="h-4 w-56" />
@@ -80,7 +80,7 @@ function AuditPlaceholder() {
 
 function SummaryPlaceholder() {
     return (
-        <Card className="glass-card h-full">
+        <Card className="glass-card h-full min-h-[300px]">
             <CardHeader>
                 <Skeleton className="h-6 w-44 mb-2" />
                 <Skeleton className="h-4 w-60" />
@@ -102,7 +102,7 @@ function SummaryPlaceholder() {
 
 function TechStackPlaceholder() {
     return (
-        <Card className="glass-card h-full">
+        <Card className="glass-card h-full min-h-[220px]">
             <CardHeader>
                 <Skeleton className="h-6 w-44 mb-2" />
                 <Skeleton className="h-4 w-60" />

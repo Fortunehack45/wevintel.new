@@ -170,7 +170,7 @@ export function TechStackCarousel({ data }: { data?: TechStackData }) {
 
     if (data.length === 0) {
         return (
-            <Card className="glass-card h-full">
+            <Card className="glass-card h-full min-h-[220px]">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <Layers className="h-5 w-5 text-primary" />

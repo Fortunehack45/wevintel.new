@@ -46,7 +46,7 @@ export function TrafficCard({ data }: { data: TrafficData }) {
   const topCountries = data.topCountries || [];
 
   return (
-    <Card className="h-full glass-card">
+    <Card className="h-full glass-card min-h-[300px]">
       <CardHeader>
         <div className="flex justify-between items-start">
             <div>
