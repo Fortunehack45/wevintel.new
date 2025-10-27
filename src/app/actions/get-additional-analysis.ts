@@ -52,7 +52,7 @@ export async function getAdditionalAnalysis(url: string): Promise<{ status: Stat
 export async function getDomainInfo(domainName: string): Promise<DomainData | null | undefined> {
     const apiKey = process.env.WHOIS_API_KEY;
     if (!apiKey) {
-        console.error("WHOIS_API_KEY is not set in environment variables.");
+        console.error("WHOIS_API_KEY is not set in environment variables. Please add it to your .env file.");
         return null;
     }
 
@@ -61,18 +61,18 @@ export async function getDomainInfo(domainName: string): Promise<DomainData | nu
     try {
         const res = await fetch(whoisApiUrl);
         if (!res.ok) {
-            console.error("Whois API request failed with status:", res.status);
+            console.error(`Whois API request failed with status: ${res.status}. URL: ${whoisApiUrl.replace(apiKey, 'REDACTED')}`);
             return null;
         }
 
         const data: WhoisResponse = await res.json();
 
         if (data.ErrorMessage) {
-            // Specifically check for API key related errors
-            if (data.ErrorMessage.msg.includes('API key') || data.ErrorMessage.msg.includes('credits')) {
-                console.error(`Whois API Error: ${data.ErrorMessage.msg}. Please check your WHOIS_API_KEY.`);
-            } else {
-                console.error("Whois API Error:", data.ErrorMessage.msg);
+            const errorMessage = data.ErrorMessage.msg;
+            console.error(`Whois API Error: ${errorMessage}.`);
+            // Specifically check for API key related errors to provide a more helpful message.
+            if (errorMessage.includes('API key') || errorMessage.includes('credits')) {
+                 return null;
             }
             return null;
         }
@@ -120,7 +120,7 @@ export async function getDomainInfo(domainName: string): Promise<DomainData | nu
         }
         return undefined; // No record found, but not an error
     } catch (e) {
-        console.error("Whois fetch failed:", e);
+        console.error("Failed to fetch from Whois API:", e);
         return null; // Represents an error state
     }
 }
