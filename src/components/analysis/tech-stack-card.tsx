@@ -7,7 +7,7 @@ import {
     SiNginx, SiApache, SiCloudflare, SiFastly, SiAkamai,
     SiWordpress, SiJoomla, SiDrupal, SiShopify, SiMagento, SiBigcommerce, SiWix, SiSquarespace,
     SiMysql, SiPostgresql, SiMongodb, SiRedis, SiGraphql, SiApollographql,
-    SiGoogleanalytics, SiGoogletagmanager, SiAdobe, SiSegment,
+    SiGoogleanalytics, SiGoogletagmanager, SiAdobe,
     SiBootstrap, SiTailwindcss, SiMui, SiChakraui,
     SiJest, SiCypress, SiStorybook,
 } from 'react-icons/si';
@@ -34,7 +34,7 @@ const techIcons: { [key: string]: React.ElementType } = {
     // Database & API
     'mysql': SiMysql, 'postgresql': SiPostgresql, 'mongodb': SiMongodb, 'redis': SiRedis, 'graphql': SiGraphql, 'apollo': SiApollographql,
     // Analytics & Marketing
-    'google analytics': SiGoogleanalytics, 'google tag manager': SiGoogletagmanager, 'adobe': SiAdobe, 'segment': SiSegment,
+    'google analytics': SiGoogleanalytics, 'google tag manager': SiGoogletagmanager, 'adobe': SiAdobe,
     // UI Frameworks
     'bootstrap': SiBootstrap, 'tailwind css': SiTailwindcss, 'material-ui': SiMui, 'chakra ui': SiChakraui,
     // Testing
