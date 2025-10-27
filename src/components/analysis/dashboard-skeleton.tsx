@@ -63,15 +63,15 @@ function TrafficPlaceholder() {
 
 function AuditPlaceholder() {
     return (
-      <Card className="h-full glass-card">
+      <Card className="h-full glass-card min-h-[580px]">
         <CardHeader>
           <Skeleton className="h-6 w-48 mb-2" />
           <Skeleton className="h-4 w-64" />
         </CardHeader>
         <CardContent>
           <div className="space-y-4 py-4">
-              <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-72 w-full mt-4" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-[450px] w-full mt-4" />
           </div>
         </CardContent>
       </Card>

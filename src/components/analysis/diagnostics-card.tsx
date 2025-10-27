@@ -4,12 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { AuditItem, AuditInfo } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Wrench, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '../ui/skeleton';
@@ -33,31 +27,29 @@ const AuditList = ({ audits }: { audits: AuditItem[] }) => {
     }
 
     return (
-        <div className="rounded-md border">
-            <Accordion type="single" collapsible className="w-full">
+        <ScrollArea className="h-[450px] rounded-md border">
+             <div className="p-4 text-sm">
                 {audits.map((audit) => (
-                    <AccordionItem value={audit.id} key={audit.id}>
-                        <AccordionTrigger className="p-4 text-sm font-medium hover:no-underline">
-                            <div className="flex items-center gap-3 text-left flex-1">
-                                <div className={getScoreColor(audit.score)}>
-                                    {getScoreIcon(audit.score)}
-                                </div>
-                                <span className="flex-1">{audit.title}</span>
-                                {audit.displayValue && <Badge variant="outline">{audit.displayValue}</Badge>}
+                   <div key={audit.id} className="[&_p]:text-xs [&:not(:last-child)]:border-b [&:not(:last-child)]:pb-3 mb-3">
+                        <div className="flex items-center gap-3 text-left flex-1">
+                            <div className={getScoreColor(audit.score)}>
+                                {getScoreIcon(audit.score)}
                             </div>
-                            {audit.score !== null && (
+                            <span className="flex-1 font-medium">{audit.title}</span>
+                            {audit.displayValue && <Badge variant="outline">{audit.displayValue}</Badge>}
+                             {audit.score !== null && (
                                 <div className={`text-sm font-bold ml-4 ${getScoreColor(audit.score)}`}>
                                     {Math.round(audit.score * 100)}
                                 </div>
                             )}
-                        </AccordionTrigger>
-                        <AccordionContent className="px-4 pb-4 text-muted-foreground">
-                           {audit.description.replace(/\[(.*?)\]\(.*?\)/g, '$1')}
-                        </AccordionContent>
-                    </AccordionItem>
+                        </div>
+                        <p className="pl-7 text-muted-foreground mt-1">
+                            {audit.description.replace(/\[(.*?)\]\(.*?\)/g, '$1')}
+                        </p>
+                   </div>
                 ))}
-            </Accordion>
-        </div>
+            </div>
+        </ScrollArea>
     );
 };
 
@@ -106,14 +98,10 @@ export function DiagnosticsCard({ data }: { data?: AuditInfo }) {
               <TabsTrigger value="passed">Passed ({passed.length})</TabsTrigger>
             </TabsList>
             <TabsContent value="issues" className="mt-4">
-              <ScrollArea className="h-[450px]">
                 <AuditList audits={[...withIssues, ...informational]} />
-              </ScrollArea>
             </TabsContent>
             <TabsContent value="passed" className="mt-4">
-              <ScrollArea className="h-[450px]">
                 <AuditList audits={passed} />
-              </ScrollArea>
             </TabsContent>
           </Tabs>
         ) : <p className="text-muted-foreground text-sm">No diagnostic information was found.</p>}
