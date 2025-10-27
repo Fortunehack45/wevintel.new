@@ -32,7 +32,15 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
     const [isDownloading, setIsDownloading] = useState(false);
     const [analysisDataForPdf, setAnalysisDataForPdf] = useState<AnalysisResult | null>(null);
+    const [fullAnalysisResult, setFullAnalysisResult] = useState<AnalysisResult | null>(null);
     const router = useRouter();
+
+    useEffect(() => {
+        if (fullAnalysisResult) {
+            setAnalysisDataForPdf(fullAnalysisResult);
+        }
+    }, [fullAnalysisResult]);
+
 
     const handleDownloadPdf = async () => {
         if (!analysisDataForPdf) return;
@@ -356,7 +364,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
             <AnalysisData 
               url={decodedUrl} 
               cacheKey={key} 
-              onDataLoaded={setAnalysisDataForPdf} 
+              onDataLoaded={setFullAnalysisResult} 
             />
         </div>
     );
@@ -458,7 +466,6 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
         setIsLoading(true);
         setError(null);
         setAnalysisResult(null);
-        onDataLoaded(null);
 
         try {
             const fastResult = await getFastAnalysis(url);
@@ -510,7 +517,8 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
         }
     }
     fetchFastData();
-  }, [url, cacheKey, onDataLoaded]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url, cacheKey]);
 
 
   const handleFullDataLoaded = useCallback((fullData: AnalysisResult) => {
