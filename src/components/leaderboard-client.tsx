@@ -104,8 +104,7 @@ export function LeaderboardClient() {
   const sortedCategories = useMemo(() => {
       const categories = Object.keys(groupedAndSortedSites);
       if (sortOrder === 'rank') {
-          // A bit complex to sort categories by the rank of their best site
-          // For now, let's keep them alphabetically sorted for predictability
+          // Sort categories by the rank of their best site
           return categories.sort((a, b) => {
               const rankA = groupedAndSortedSites[a][0]?.rank || Infinity;
               const rankB = groupedAndSortedSites[b][0]?.rank || Infinity;
@@ -135,11 +134,11 @@ export function LeaderboardClient() {
                 <RadioGroup defaultValue="rank" onValueChange={(value) => setSortOrder(value as SortOrder)} className="flex items-center">
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="rank" id="rank" />
-                        <Label htmlFor="rank" className="flex items-center gap-2"><SortDesc />Rank</Label>
+                        <Label htmlFor="rank" className="flex items-center gap-2 cursor-pointer"><SortDesc />Rank</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="alpha" id="alpha" />
-                        <Label htmlFor="alpha" className="flex items-center gap-2"><SortAsc />A-Z</Label>
+                        <Label htmlFor="alpha" className="flex items-center gap-2 cursor-pointer"><SortAsc />A-Z</Label>
                     </div>
                 </RadioGroup>
             </div>
@@ -151,8 +150,8 @@ export function LeaderboardClient() {
               {sortedCategories.map(category => {
                 const Icon = categoryIcons[category] || categoryIcons['Default'];
                 return (
-                  <AccordionItem value={category} key={category} className="border-b-0">
-                    <AccordionTrigger className="hover:no-underline px-4 rounded-lg hover:bg-muted/50">
+                  <AccordionItem value={category} key={category} className="border-b-0 mb-2 last:mb-0 rounded-lg bg-background/50 data-[state=open]:bg-background/70 transition-colors">
+                    <AccordionTrigger className="hover:no-underline px-4 py-3 rounded-lg hover:bg-muted/50 w-full">
                       <div className="flex items-center gap-3">
                         <Icon className="h-5 w-5 text-primary" />
                         <span className="font-semibold text-base">{category}</span>
@@ -160,7 +159,7 @@ export function LeaderboardClient() {
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
-                      <div className="pt-2">
+                      <div className="pt-2 px-4 pb-2">
                         <ul className="space-y-1">
                           {groupedAndSortedSites[category].map(site => (
                              <li key={site.name} className="flex items-center justify-between p-3 hover:bg-muted/50 rounded-md transition-colors">
