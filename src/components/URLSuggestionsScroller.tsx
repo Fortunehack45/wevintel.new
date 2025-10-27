@@ -1,4 +1,3 @@
-
 'use client';
 
 import { topSites } from "@/lib/top-sites";
