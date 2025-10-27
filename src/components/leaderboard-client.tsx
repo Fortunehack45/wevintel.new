@@ -1,7 +1,6 @@
 
 "use client";
 import { useState, useMemo } from "react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { topSites } from "@/lib/top-sites";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
@@ -9,6 +8,7 @@ import Image from "next/image";
 import { Input } from "./ui/input";
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { BarChart, Tv, ShoppingCart, Newspaper, Cpu, Code, Brush, Music, Video, VenetianMask, MessageCircle, Gamepad, BookOpen, Building2, Cloud, DollarSign, Plane, Car, Utensils, Home, Bot, FlaskConical, Search, Globe, Wind, Building as BuildingIcon, Package, Clapperboard, Palette, Headphones, Drama, Play, Library, Landmark, Brain, Heart, ChefHat, Briefcase, Trophy, Sun, Ship, Mail, Handshake, PenTool, Tv2, Webhook, Rss, Book, University, Atom, Stethoscope, Salad, UtensilsCrossed, Hand, Tent, Bus, Forklift, NewspaperIcon, Palette as ArtIcon, Network, GitBranch, SortAsc, SortDesc } from "lucide-react";
 
 
@@ -67,53 +67,26 @@ export function LeaderboardClient() {
     router.push(`/analysis/${encodedUrl}`);
   };
 
-  const filteredSites = useMemo(() => {
+  const sortedSites = useMemo(() => {
     let sites = [...topSites];
+    
     if (searchTerm) {
       sites = sites.filter(site =>
         site.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        site.domain.toLowerCase().includes(searchTerm.toLowerCase())
+        site.domain.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        site.category.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    return sites;
-  }, [searchTerm]);
-
-  const groupedAndSortedSites = useMemo(() => {
-    const grouped = filteredSites.reduce((acc, site) => {
-      const category = site.category;
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      acc[category].push(site);
-      return acc;
-    }, {} as Record<string, typeof topSites>);
     
-    // Sort sites within each category
-    Object.keys(grouped).forEach(category => {
-        grouped[category].sort((a, b) => {
-            if (sortOrder === 'rank') {
-                return a.rank - b.rank;
-            }
-            return a.name.localeCompare(b.name);
-        });
+    sites.sort((a, b) => {
+        if (sortOrder === 'rank') {
+            return a.rank - b.rank;
+        }
+        return a.name.localeCompare(b.name);
     });
 
-    return grouped;
-  }, [filteredSites, sortOrder]);
-  
-  const sortedCategories = useMemo(() => {
-      const categories = Object.keys(groupedAndSortedSites);
-      if (sortOrder === 'rank') {
-          // Sort categories by the rank of their best site
-          return categories.sort((a, b) => {
-              const rankA = groupedAndSortedSites[a][0]?.rank || Infinity;
-              const rankB = groupedAndSortedSites[b][0]?.rank || Infinity;
-              if (rankA === rankB) return a.localeCompare(b);
-              return rankA - rankB;
-          });
-      }
-      return categories.sort();
-  }, [groupedAndSortedSites, sortOrder]);
+    return sites;
+  }, [searchTerm, sortOrder]);
 
 
   return (
@@ -123,7 +96,7 @@ export function LeaderboardClient() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
                     type="text"
-                    placeholder="Search for a site..."
+                    placeholder="Search by site, domain, or category..."
                     className="w-full pl-10 h-12 text-base"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -144,63 +117,66 @@ export function LeaderboardClient() {
             </div>
         </div>
 
-        <div className="rounded-xl border bg-card/60 dark:bg-card/40 backdrop-blur-lg shadow-lg dark:shadow-black/40 p-2 md:p-4">
-          {sortedCategories.length > 0 ? (
-            <Accordion type="multiple" defaultValue={sortedCategories.slice(0, 3)} className="w-full">
-              {sortedCategories.map(category => {
-                const Icon = categoryIcons[category] || categoryIcons['Default'];
-                return (
-                  <AccordionItem value={category} key={category} className="border-b-0 mb-2 last:mb-0 rounded-lg bg-background/50 data-[state=open]:bg-background/70 transition-colors">
-                    <AccordionTrigger className="hover:no-underline px-4 py-3 rounded-lg hover:bg-muted/50 w-full">
-                      <div className="flex items-center gap-3">
-                        <Icon className="h-5 w-5 text-primary" />
-                        <span className="font-semibold text-base">{category}</span>
-                        <span className="text-sm text-muted-foreground">({groupedAndSortedSites[category].length} sites)</span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="pt-2 px-4 pb-2">
-                        <ul className="space-y-1">
-                          {groupedAndSortedSites[category].map(site => (
-                             <li key={site.name} className="flex items-center justify-between p-3 hover:bg-muted/50 rounded-md transition-colors">
-                                <div className="flex items-center gap-4 flex-1 min-w-0">
-                                   <span className="font-mono text-sm text-muted-foreground w-8 text-center flex-shrink-0">{sortOrder === 'rank' ? site.rank : '•'}</span>
-                                  <Image
-                                    src={`https://www.google.com/s2/favicons?domain=${site.domain}&sz=32`}
-                                    alt={`${site.name} favicon`}
-                                    width={24}
-                                    height={24}
-                                    className="rounded-full flex-shrink-0"
-                                    crossOrigin="anonymous"
-                                  />
-                                  <div className="flex-1 min-w-0">
-                                    <p className="font-medium text-sm truncate">{site.name}</p>
-                                    <p className="text-xs text-muted-foreground truncate">{site.domain}</p>
-                                  </div>
+        <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+          <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[80px] text-center">Rank</TableHead>
+                  <TableHead>Site</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead className="text-right">Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sortedSites.length > 0 ? (
+                  sortedSites.map(site => {
+                    const Icon = categoryIcons[site.category] || categoryIcons['Default'];
+                    return (
+                        <TableRow key={site.rank}>
+                            <TableCell className="font-mono text-center text-muted-foreground">{site.rank}</TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-3">
+                                    <Image
+                                        src={`https://www.google.com/s2/favicons?domain=${site.domain}&sz=32`}
+                                        alt={`${site.name} favicon`}
+                                        width={24}
+                                        height={24}
+                                        className="rounded-full flex-shrink-0"
+                                        crossOrigin="anonymous"
+                                    />
+                                    <div>
+                                        <p className="font-medium">{site.name}</p>
+                                        <p className="text-sm text-muted-foreground">{site.domain}</p>
+                                    </div>
                                 </div>
+                            </TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-2">
+                                    <Icon className="h-4 w-4 text-muted-foreground" />
+                                    <span className="text-sm">{site.category}</span>
+                                </div>
+                            </TableCell>
+                            <TableCell className="text-right">
                                 <Button
                                   variant="secondary"
                                   size="sm"
-                                  className="ml-4 flex-shrink-0"
                                   onClick={(e) => handleAnalyze(e, site.url)}
                                 >
                                   Analyze
                                 </Button>
-                             </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                )
-              })}
-            </Accordion>
-          ) : (
-            <div className="text-center p-8">
-                <h3 className="text-xl font-semibold">No sites found.</h3>
-                <p className="text-muted-foreground mt-2">Try adjusting your search term.</p>
-            </div>
-          )}
+                            </TableCell>
+                        </TableRow>
+                    )
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4} className="h-24 text-center">
+                        No sites found. Try adjusting your search.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+          </Table>
         </div>
     </div>
   );
