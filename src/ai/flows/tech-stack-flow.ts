@@ -46,12 +46,12 @@ Analyze the provided HTML content, URL, and HTTP headers to identify the key tec
 
 Look for clues in:
 - HTML meta tags (e.g., "generator" tags for WordPress, Wix)
-- Specific script tags or global JavaScript variables (e.g., "React", "Vue", "jQuery")
+- Specific script tags or global JavaScript variables (e.g., "__NEXT_DATA__" for Next.js, "React", "Vue", "jQuery")
 - Unique HTML structures or class names (e.g., those used by Shopify, Squarespace)
 - HTTP headers (e.g., "server" for Nginx, "x-powered-by" for Next.js, Express)
 
-Based on your analysis, provide a list of up to 12 of the most prominent technologies. For each, specify its name, category, and your confidence level in the detection.
-Prioritize frameworks, platforms, and servers over small libraries.
+Based on your analysis, provide a list of up to 12 of the most prominent technologies. 
+IMPORTANT: If a core JavaScript framework (like React, Next.js, Vue, Angular, Svelte) is detected, it MUST be included in the list. Prioritize frameworks, platforms, and servers over small libraries.
 
 Website URL: {{{url}}}
 Response Headers: {{{json headers}}}
