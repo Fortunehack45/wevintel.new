@@ -37,7 +37,7 @@ export default function AboutPage() {
               WebIntel is a powerful, privacy-focused tool designed to give developers, marketers, and curious minds a comprehensive analysis of any website. 
             </p>
             <p>
-              It aggregates public data from various open APIs and uses AI to provide deep insights into a site&apos;s performance, security, SEO, and hosting infrastructure, all presented in a beautiful and easy-to-understand dashboard.
+              It aggregates public data from various open APIs and uses AI to provide deep insights into a site's performance, security, SEO, and hosting infrastructure, all presented in a beautiful and easy-to-understand dashboard.
             </p>
           </CardContent>
         </Card>
@@ -55,7 +55,7 @@ export default function AboutPage() {
             </p>
             <ul className="list-disc pl-5 space-y-2">
               <li><span className="font-semibold text-foreground">No Backend Tracking:</span> We do not have a traditional backend server that logs your activity or the URLs you analyse.</li>
-              <li><span className="font-semibold text-foreground">Local Storage:</span> Your analysis history is stored exclusively in your browser&apos;s local storage, which you can clear at any time.</li>
+              <li><span className="font-semibold text-foreground">Local Storage:</span> Your analysis history is stored exclusively in your browser's local storage, which you can clear at any time.</li>
             </ul>
           </CardContent>
         </Card>

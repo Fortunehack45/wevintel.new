@@ -10,7 +10,7 @@ export function NotFoundCard({ url }: { url: string }) {
         <CardHeader>
             <CardTitle className="text-3xl font-bold">No Site Found on this Domain</CardTitle>
             <CardDescription className="text-lg">
-                We couldn&apos;t reach <span className="font-semibold text-primary">{new URL(url).hostname}</span>.
+                We couldn't reach <span className="font-semibold text-primary">{new URL(url).hostname}</span>.
             </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center">
@@ -18,7 +18,7 @@ export function NotFoundCard({ url }: { url: string }) {
                 <Lottie animationData={searchingAnimation} loop={true} />
             </div>
             <p className="mt-4 text-muted-foreground">
-                This could be because the domain is incorrect, the site is temporarily down, or it doesn&apos;t exist. Please check the URL and try again.
+                This could be because the domain is incorrect, the site is temporarily down, or it doesn't exist. Please check the URL and try again.
             </p>
         </CardContent>
     </Card>

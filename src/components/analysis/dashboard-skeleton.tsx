@@ -1,5 +1,4 @@
 
-
 'use client';
 import { Skeleton } from "@/components/ui/skeleton";
 import type { AnalysisResult } from "@/lib/types";
@@ -138,4 +137,3 @@ DashboardSkeleton.AuditPlaceholder = AuditPlaceholder;
 DashboardSkeleton.SummaryPlaceholder = SummaryPlaceholder;
 
 export { DashboardSkeleton };
-

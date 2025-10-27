@@ -463,7 +463,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
 
     const renderContent = () => {
         if (isLoading) {
-            return <DashboardSkeleton />;
+            return <DashboardSkeleton initialData={analysisResult || {}} />;
         }
         if (error) {
             if (error === 'Domain not found. The website is not reachable.' || error === 'Could not fetch the main page of the website. It might be down or blocking requests.') {

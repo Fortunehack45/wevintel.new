@@ -1,5 +1,4 @@
 
-
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import type { SecurityData, AuditInfo, AuditItem } from '@/lib/types';
 import { ShieldCheck, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
