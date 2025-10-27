@@ -8,7 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card'
 import { Badge } from './ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import Image from 'next/image';
-import { Globe, ShieldCheck, Trash2, Smartphone, X } from 'lucide-react';
+import { Globe, ShieldCheck, Trash2, Smartphone, X, FileSearch } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
@@ -65,7 +65,7 @@ function WebsiteHistoryList({ limit }: { limit?: number }) {
             transition={{ delay: index * 0.05 }}
             className="relative group"
           >
-            <Card className="h-full hover:border-primary/50 transition-all glass-card glow-border">
+            <Card className="h-full flex flex-col glass-card glow-border">
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
                         <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-70 hover:!opacity-100 hover:bg-destructive/20 hover:text-destructive transition-opacity z-10">
@@ -85,38 +85,39 @@ function WebsiteHistoryList({ limit }: { limit?: number }) {
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
-                <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`} className="block h-full flex flex-col">
-                    <CardHeader>
-                        <div className="flex items-center gap-3">
-                            <Image src={`https://www.google.com/s2/favicons?domain=${item.overview.domain}&sz=32`} alt="favicon" width={32} height={32} className="rounded-md bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous" />
-                            <div className="flex-1 overflow-hidden">
-                                <CardTitle className="truncate">{item.overview.domain}</CardTitle>
-                                <p className="text-xs text-muted-foreground">
-                                    {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
-                                </p>
-                            </div>
+                
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                        <Image src={`https://www.google.com/s2/favicons?domain=${item.overview.domain}&sz=32`} alt="favicon" width={32} height={32} className="rounded-md bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous" />
+                        <div className="flex-1 overflow-hidden">
+                            <CardTitle className="truncate">{item.overview.domain}</CardTitle>
+                            <p className="text-xs text-muted-foreground">
+                                {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
+                            </p>
                         </div>
-                    </CardHeader>
-                    <CardContent className="grid grid-cols-2 gap-4 text-sm flex-1">
-                        <div className="flex items-center gap-2">
-                            <Smartphone className="h-4 w-4 text-muted-foreground"/>
-                            <span className="font-semibold">{mobilePerformance || 'N/A'}%</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <ShieldCheck className="h-4 w-4 text-muted-foreground"/>
-                            <Badge variant={getScoreBadgeVariant(securityScore)} className={getScoreBadgeVariant(securityScore) === 'default' ? 'bg-green-500/20 text-green-700 border-green-300' : ''}>
-                                {securityScore !== undefined ? `${securityScore}%` : 'N/A'}
-                            </Badge>
-                        </div>
-                        <div className="flex items-center gap-2 col-span-2">
-                            <Globe className="h-4 w-4 text-muted-foreground"/>
-                            <span className="font-semibold">{item.hosting?.country || 'N/A'}</span>
-                        </div>
-                    </CardContent>
-                    <CardFooter>
-                       <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">View full report &rarr;</p>
-                    </CardFooter>
-                </Link>
+                    </div>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 gap-4 text-sm flex-1">
+                    <div className="flex items-center gap-2">
+                        <Smartphone className="h-4 w-4 text-muted-foreground"/>
+                        <span className="font-semibold">{mobilePerformance || 'N/A'}%</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <ShieldCheck className="h-4 w-4 text-muted-foreground"/>
+                        <Badge variant={getScoreBadgeVariant(securityScore)} className={getScoreBadgeVariant(securityScore) === 'default' ? 'bg-green-500/20 text-green-700 border-green-300' : ''}>
+                            {securityScore !== undefined ? `${securityScore}%` : 'N/A'}
+                        </Badge>
+                    </div>
+                    <div className="flex items-center gap-2 col-span-2">
+                        <Globe className="h-4 w-4 text-muted-foreground"/>
+                        <span className="font-semibold">{item.hosting?.country || 'N/A'}</span>
+                    </div>
+                </CardContent>
+                <CardFooter>
+                    <Button asChild variant="secondary" className="w-full">
+                       <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`}>View full report &rarr;</Link>
+                    </Button>
+                </CardFooter>
             </Card>
             </motion.div>
         )

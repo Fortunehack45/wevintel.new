@@ -50,7 +50,7 @@ export function DomainHistoryList({ limit }: { limit?: number }) {
             transition={{ delay: index * 0.05 }}
             className="relative group"
           >
-            <Card className="h-full hover:border-primary/50 transition-all glass-card glow-border">
+            <Card className="h-full flex flex-col glass-card glow-border">
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
                         <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-70 hover:!opacity-100 hover:bg-destructive/20 hover:text-destructive transition-opacity z-10">
@@ -70,23 +70,24 @@ export function DomainHistoryList({ limit }: { limit?: number }) {
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
-                <Link href={`/domain-checker/${encodeURIComponent(item.domain)}`} className="block h-full flex flex-col">
-                    <CardHeader>
-                        <div className="flex items-center gap-3">
-                            <FileSearch className="h-8 w-8 text-primary" />
-                            <div className="flex-1 overflow-hidden">
-                                <CardTitle className="truncate">{item.domain}</CardTitle>
-                                <p className="text-xs text-muted-foreground">
-                                    {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
-                                </p>
-                            </div>
+
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                        <FileSearch className="h-8 w-8 text-primary" />
+                        <div className="flex-1 overflow-hidden">
+                            <CardTitle className="truncate">{item.domain}</CardTitle>
+                            <p className="text-xs text-muted-foreground">
+                                {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
+                            </p>
                         </div>
-                    </CardHeader>
-                    <CardContent className="flex-1" />
-                    <CardFooter>
-                       <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">View domain details &rarr;</p>
-                    </CardFooter>
-                </Link>
+                    </div>
+                </CardHeader>
+                <CardContent className="flex-1" />
+                <CardFooter>
+                   <Button asChild variant="secondary" className="w-full">
+                       <Link href={`/domain-checker/${encodeURIComponent(item.domain)}`}>View domain details &rarr;</Link>
+                    </Button>
+                </CardFooter>
             </Card>
             </motion.div>
         )
