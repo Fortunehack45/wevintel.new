@@ -5,6 +5,7 @@ import { useState } from "react";
 
 export function Favicon({ domain }: { domain: string }) {
   const [hasError, setHasError] = useState(false);
+  // Corrected the parameter from `domain` to `domain_url`
   const faviconUrl = `https://www.google.com/s2/favicons?domain_url=${domain}&sz=32`;
 
   const handleError = () => {
