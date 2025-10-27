@@ -57,6 +57,7 @@ const getPerformanceData = (pageSpeedData: any): PerformanceData => {
         firstContentfulPaint: audits?.['first-contentful-paint']?.displayValue,
         largestContentfulPaint: audits?.['largest-contentful-paint']?.displayValue,
         cumulativeLayoutShift: audits?.['cumulative-layout-shift']?.displayValue,
+        interactionToNextPaint: audits?.['interaction-to-next-paint']?.displayValue,
     }
 }
 

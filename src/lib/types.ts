@@ -40,6 +40,7 @@ export type PerformanceData = {
   totalBlockingTime?: string;
   firstContentfulPaint?: string;
   cumulativeLayoutShift?: string;
+  interactionToNextPaint?: string;
 };
 
 export type SecurityData = {

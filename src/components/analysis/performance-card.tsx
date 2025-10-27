@@ -2,7 +2,7 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import type { PerformanceData } from '@/lib/types';
-import { TrendingUp, Gauge, Timer, Milestone, PencilRuler, Smartphone, Monitor } from 'lucide-react';
+import { TrendingUp, Gauge, Timer, Milestone, PencilRuler, Smartphone, Monitor, Pointer } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '../ui/skeleton';
@@ -97,10 +97,11 @@ const PerformanceReport = ({ data }: { data?: PerformanceData }) => {
   ].filter(d => typeof d.score === 'number') as { label: string, score: number }[];
 
   const detailedMetrics = [
-      { icon: Gauge, label: 'Speed Index', value: data.speedIndex },
       { icon: Milestone, label: 'Largest Contentful Paint', value: data.largestContentfulPaint },
+      { icon: Pointer, label: 'Interaction to Next Paint', value: data.interactionToNextPaint },
       { icon: PencilRuler, label: 'Cumulative Layout Shift', value: data.cumulativeLayoutShift },
       { icon: Timer, label: 'Total Blocking Time', value: data.totalBlockingTime },
+      { icon: Gauge, label: 'Speed Index', value: data.speedIndex },
       { icon: Milestone, label: 'First Contentful Paint', value: data.firstContentfulPaint },
   ];
 
