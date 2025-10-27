@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect } from 'react';
 import { Card } from './ui/card';
@@ -14,12 +15,14 @@ export function MaintenanceBanner() {
     useEffect(() => {
         const checkTime = () => {
             const now = new Date();
-            const dayOfWeek = now.getUTCDay(); // Sunday = 0, Monday = 1
-            const hours = now.getUTCHours();
-            const minutes = now.getUTCMinutes();
-
-            // Show at the beginning of the week (Monday 00:00 - 00:30 UTC)
-            if (dayOfWeek === 1 && hours === 0 && minutes < 30) {
+            // FORCED VISIBILITY FOR DEMO:
+            // This is temporarily set to true.
+            // Original logic:
+            // const dayOfWeek = now.getUTCDay(); // Sunday = 0, Monday = 1
+            // const hours = now.getUTCHours();
+            // const minutes = now.getUTCMinutes();
+            // if (dayOfWeek === 1 && hours === 0 && minutes < 30) {
+            if (true) {
                 const lastDismissed = sessionStorage.getItem('maintenanceDismissed');
                 if (!lastDismissed || (now.getTime() - new Date(lastDismissed).getTime() > 60 * 60 * 1000)) {
                     setIsVisible(true);
@@ -30,9 +33,9 @@ export function MaintenanceBanner() {
         };
 
         checkTime();
-        const interval = setInterval(checkTime, 60000); // Check every minute
-
-        return () => clearInterval(interval);
+        // We don't need an interval for demo purposes
+        // const interval = setInterval(checkTime, 60000); 
+        // return () => clearInterval(interval);
     }, []);
 
     const handleDismiss = () => {
