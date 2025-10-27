@@ -48,9 +48,10 @@ export function DomainHistoryList({ limit }: { limit?: number }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
-            className="relative group"
+            whileTap={{ scale: 0.98 }}
+            className="relative group h-full"
           >
-            <Card className="h-full flex flex-col glass-card glow-border">
+            <Card className="h-full flex flex-col glass-card glow-border transition-shadow duration-300 hover:shadow-primary/20">
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
                         <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-70 hover:!opacity-100 hover:bg-destructive/20 hover:text-destructive transition-opacity z-10">
@@ -84,7 +85,7 @@ export function DomainHistoryList({ limit }: { limit?: number }) {
                 </CardHeader>
                 <CardContent className="flex-1" />
                 <CardFooter>
-                   <Button asChild className="w-full">
+                   <Button asChild className="w-full" variant="default">
                        <Link href={`/domain-checker/${encodeURIComponent(item.domain)}`}>View domain details &rarr;</Link>
                     </Button>
                 </CardFooter>
