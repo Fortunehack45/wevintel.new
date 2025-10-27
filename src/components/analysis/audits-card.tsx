@@ -93,18 +93,7 @@ export function AuditsCard({ data }: { data?: AuditInfo }) {
       </CardHeader>
       <CardContent>
         {allAudits.length > 0 ? (
-          <Tabs defaultValue="opportunities" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="opportunities">Opportunities ({opportunities.length + informational.length})</TabsTrigger>
-              <TabsTrigger value="passed">Passed ({passed.length})</TabsTrigger>
-            </TabsList>
-            <TabsContent value="opportunities" className="mt-4">
-                <AuditList audits={[...opportunities, ...informational]} />
-            </TabsContent>
-            <TabsContent value="passed" className="mt-4">
-                <AuditList audits={passed} />
-            </TabsContent>
-          </Tabs>
+            <AuditList audits={[...opportunities, ...informational, ...passed]} />
         ) : <p className="text-muted-foreground text-sm">No detailed audit information was found.</p>}
       </CardContent>
     </Card>

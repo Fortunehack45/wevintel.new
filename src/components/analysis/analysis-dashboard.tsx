@@ -104,7 +104,7 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
         </motion.div>
       }
       
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="col-span-2">
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="col-span-2 lg:col-span-2">
         <SummaryCard 
           data={initialData}
           summary={aiSummary}
@@ -113,11 +113,11 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
       </motion.div>
 
       {isLoadingFullReport || !traffic ? (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-2 lg:col-span-2">
            <DashboardSkeleton.TrafficPlaceholder />
         </motion.div>
       ) : (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-2 lg:col-span-2">
           <TrafficCard data={traffic} />
         </motion.div>
       )}
@@ -180,7 +180,7 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
             <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={11} className="col-span-2">
                 <DashboardSkeleton.AuditPlaceholder />
             </motion.div>
-            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-2">
+            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-2 lg:col-span-2">
                 <DashboardSkeleton.AuditPlaceholder />
             </motion.div>
         </>
@@ -193,7 +193,7 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
             }
             
             {diagnosticsAudits &&
-                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-2">
+                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-2 lg:col-span-2">
                 <DiagnosticsCard data={diagnosticsAudits} />
                 </motion.div>
             }

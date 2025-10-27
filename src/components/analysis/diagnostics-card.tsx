@@ -92,18 +92,7 @@ export function DiagnosticsCard({ data }: { data?: AuditInfo }) {
       </CardHeader>
       <CardContent>
         {allAudits.length > 0 ? (
-          <Tabs defaultValue="issues" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="issues">Issues ({withIssues.length + informational.length})</TabsTrigger>
-              <TabsTrigger value="passed">Passed ({passed.length})</TabsTrigger>
-            </TabsList>
-            <TabsContent value="issues" className="mt-4">
-                <AuditList audits={[...withIssues, ...informational]} />
-            </TabsContent>
-            <TabsContent value="passed" className="mt-4">
-                <AuditList audits={passed} />
-            </TabsContent>
-          </Tabs>
+            <AuditList audits={[...withIssues, ...informational, ...passed]} />
         ) : <p className="text-muted-foreground text-sm">No diagnostic information was found.</p>}
       </CardContent>
     </Card>
