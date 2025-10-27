@@ -22,22 +22,24 @@ export function URLSuggestionsScroller() {
         router.push(`/analysis/${encodedUrl}`);
     };
     
+    const animationDefinition = {
+      x: ["0%", "-50%"],
+      transition: {
+        x: {
+          repeat: Infinity,
+          repeatType: "loop",
+          duration: 40,
+          ease: "linear",
+        },
+      },
+    };
+
     useEffect(() => {
         const startAnimation = () => {
             const scrollWidth = scrollRef.current?.scrollWidth ?? 0;
             const clientWidth = scrollRef.current?.clientWidth ?? 0;
             if (scrollWidth > clientWidth) {
-                 controls.start({
-                    x: [0, -(scrollWidth / 2)],
-                    transition: {
-                        x: {
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            duration: 40,
-                            ease: "linear",
-                        },
-                    },
-                });
+                 controls.start(animationDefinition);
             }
         };
 
@@ -46,15 +48,15 @@ export function URLSuggestionsScroller() {
 
         return () => clearTimeout(animationTimeout);
 
-    }, [controls, suggestions]);
+    }, [controls, suggestions, animationDefinition]);
 
     useEffect(() => {
         if(isHovering || isScrolling) {
             controls.stop();
         } else {
-             controls.start(controls.get() || { x: 0 });
+             controls.start(animationDefinition);
         }
-    }, [isHovering, isScrolling, controls]);
+    }, [isHovering, isScrolling, controls, animationDefinition]);
 
     const handleScroll = () => {
         setIsScrolling(true);
