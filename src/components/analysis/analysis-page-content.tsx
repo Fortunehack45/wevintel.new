@@ -1,6 +1,5 @@
 
 
-
 'use client';
 
 import { Suspense, useEffect, useState, useMemo, useRef } from 'react';
@@ -16,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { NotFoundCard } from './not-found-card';
 import { DashboardSkeleton } from './dashboard-skeleton';
 import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
@@ -368,8 +368,33 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [trafficCache, setTrafficCache] = useLocalStorage<Record<string, {data: TrafficData, timestamp: string}>>('webintel_traffic_cache', {});
 
   useEffect(() => {
+    async function getTrafficData(url: string, description: string): Promise<TrafficData> {
+        const cached = trafficCache[url];
+        const now = new Date();
+        
+        if (cached && cached.timestamp) {
+            const cachedDate = new Date(cached.timestamp);
+            const oneMonth = 30 * 24 * 60 * 60 * 1000;
+            if (now.getTime() - cachedDate.getTime() < oneMonth) {
+                return cached.data;
+            }
+        }
+        
+        const freshData = await estimateTraffic({ url, description });
+        setTrafficCache(prev => ({
+            ...prev,
+            [url]: {
+                data: freshData,
+                timestamp: now.toISOString()
+            }
+        }));
+        return freshData;
+    }
+
+
     async function fetchData() {
         setIsLoading(true);
         setError(null);
@@ -377,10 +402,9 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
         onDataLoaded(null!);
 
         try {
-            const [fastResult, perfResult, trafficResult] = await Promise.all([
+            const [fastResult, perfResult] = await Promise.all([
                 getFastAnalysis(url),
                 getPerformanceAnalysis(url),
-                estimateTraffic({ url, description: '' }) // Description can be added later
             ]);
 
             if ('error' in fastResult) {
@@ -389,6 +413,8 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
                 return;
             }
             
+            const trafficResult = await getTrafficData(url, perfResult.overview?.description || fastResult.overview?.description || '');
+
             // Combine results
             const securityAudits = perfResult.securityAudits || {};
             let securityScoreTotal = 0;
@@ -443,7 +469,7 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
         }
     }
     fetchData();
-  }, [url, cacheKey, onDataLoaded]);
+  }, [url, cacheKey, onDataLoaded, setTrafficCache, trafficCache]);
 
   if (isLoading) {
     return <DashboardSkeleton />;
