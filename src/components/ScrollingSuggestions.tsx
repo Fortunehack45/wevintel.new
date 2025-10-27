@@ -7,16 +7,22 @@ import { cn } from '@/lib/utils';
 
 const suggestions = topSites.map(site => site.name).slice(0, 15);
 
-export function ScrollingSuggestions({ isVisible }: { isVisible: boolean }) {
+export function ScrollingSuggestions({ isVisible, onSuggestionChange }: { isVisible: boolean, onSuggestionChange: (index: number) => void }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    onSuggestionChange(index);
     const interval = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % suggestions.length);
+      setIndex((prevIndex) => {
+        const nextIndex = (prevIndex + 1) % suggestions.length;
+        onSuggestionChange(nextIndex);
+        return nextIndex;
+      });
     }, 3000); // Wait for 3 seconds before showing the next suggestion
 
     return () => clearInterval(interval);
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index, onSuggestionChange]);
 
   return (
     <div

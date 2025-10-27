@@ -12,6 +12,7 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 import { type AnalysisResult } from '@/lib/types';
 import { Card } from './ui/card';
 import { ScrollingSuggestions } from './ScrollingSuggestions';
+import { topSites } from '@/lib/top-sites';
 
 export function UrlForm() {
   const [url, setUrl] = useState('');
@@ -22,7 +23,9 @@ export function UrlForm() {
   const [history] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
   const [suggestions, setSuggestions] = useState<AnalysisResult[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [autoCompleteIndex, setAutoCompleteIndex] = useState(-1);
+  const [scrollingSuggestionIndex, setScrollingSuggestionIndex] = useState(0);
+
   const formRef = useRef<HTMLDivElement>(null);
 
 
@@ -77,12 +80,19 @@ export function UrlForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!url) return;
     
     let targetUrl = url;
-    if (activeIndex > -1 && suggestions[activeIndex]) {
-        targetUrl = suggestions[activeIndex].overview.url;
+
+    // If a suggestion from the autocomplete dropdown is selected
+    if (autoCompleteIndex > -1 && suggestions[autoCompleteIndex]) {
+        targetUrl = suggestions[autoCompleteIndex].overview.url;
+    } 
+    // If the input is empty but a scrolling suggestion is visible
+    else if (!targetUrl && topSites[scrollingSuggestionIndex]) {
+        targetUrl = topSites[scrollingSuggestionIndex].url;
     }
+    
+    if (!targetUrl) return;
     
     analyseUrl(targetUrl);
   };
@@ -91,10 +101,10 @@ export function UrlForm() {
     if (showSuggestions) {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setActiveIndex(prev => (prev < suggestions.length - 1 ? prev + 1 : prev));
+        setAutoCompleteIndex(prev => (prev < suggestions.length - 1 ? prev + 1 : prev));
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setActiveIndex(prev => (prev > 0 ? prev - 1 : 0));
+        setAutoCompleteIndex(prev => (prev > 0 ? prev - 1 : 0));
       } else if (e.key === 'Escape') {
         setShowSuggestions(false);
       }
@@ -127,7 +137,7 @@ export function UrlForm() {
                     disabled={isLoading}
                     autoComplete="off"
                 />
-                <Button type="submit" size="lg" className="h-12 rounded-lg" disabled={isLoading || !url}>
+                <Button type="submit" size="lg" className="h-12 rounded-lg" disabled={isLoading && !url}>
                     {isLoading ? (
                         <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -137,7 +147,10 @@ export function UrlForm() {
                     <span className="hidden md:inline ml-2">Analyse</span>
                 </Button>
             </form>
-            <ScrollingSuggestions isVisible={!url && !isLoading} />
+            <ScrollingSuggestions 
+                isVisible={!url && !isLoading}
+                onSuggestionChange={setScrollingSuggestionIndex}
+            />
         </Card>
         {showSuggestions && suggestions.length > 0 && (
           <Card className="absolute top-full w-full mt-2 p-2 shadow-xl border z-20">
@@ -145,9 +158,9 @@ export function UrlForm() {
               {suggestions.map((item, index) => (
                 <li
                   key={item.id}
-                  className={`p-2 rounded-md cursor-pointer hover:bg-muted ${index === activeIndex ? 'bg-muted' : ''}`}
+                  className={`p-2 rounded-md cursor-pointer hover:bg-muted ${index === autoCompleteIndex ? 'bg-muted' : ''}`}
                   onClick={() => handleSuggestionClick(item.overview.url)}
-                  onMouseEnter={() => setActiveIndex(index)}
+                  onMouseEnter={() => setAutoCompleteIndex(index)}
                 >
                   <p className="text-sm font-medium text-foreground">{item.overview.domain}</p>
                   <p className="text-xs text-muted-foreground truncate">{item.overview.url}</p>
