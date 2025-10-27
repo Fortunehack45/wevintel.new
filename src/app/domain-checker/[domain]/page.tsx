@@ -3,7 +3,7 @@ import { getDomainInfo } from '@/app/actions/get-additional-analysis';
 import { DomainCard } from '@/components/analysis/domain-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Home } from 'lucide-react';
+import { Home, Search } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function DomainResultPage({ params }: { params: { domain: string } }) {
@@ -11,24 +11,26 @@ export default async function DomainResultPage({ params }: { params: { domain: s
   const domainInfo = await getDomainInfo(decodedDomain);
 
   return (
-    <div className="max-w-2xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+    <div className="max-w-4xl mx-auto">
+        <div className="flex flex-wrap justify-between items-center mb-8 gap-4">
             <div>
-                 <h1 className="text-4xl font-bold">Domain Details</h1>
+                 <h1 className="text-4xl font-bold">Domain Intelligence</h1>
                  <p className="text-muted-foreground text-lg">{decodedDomain}</p>
             </div>
             <Button asChild variant="outline">
                 <Link href="/domain-checker">
-                <Home className="mr-2 h-4 w-4" />
-                New Search
+                  <Search className="mr-2 h-4 w-4" />
+                  New Search
                 </Link>
             </Button>
         </div>
 
       {domainInfo ? (
-        <DomainCard data={domainInfo} />
+        <div className="grid gap-6">
+            <DomainCard data={domainInfo} />
+        </div>
       ) : (
-        <Card className="w-full text-center">
+        <Card className="w-full text-center glass-card">
             <CardHeader>
                 <CardTitle>No Information Found</CardTitle>
                 <CardDescription>We could not retrieve WHOIS information for this domain.</CardDescription>
