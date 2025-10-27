@@ -55,6 +55,20 @@ export type SecurityData = {
 export type TrafficData = {
     estimatedMonthlyVisits?: number;
     estimationConfidence?: 'low' | 'medium' | 'high';
+    trafficSources?: {
+        direct: number;
+        search: number;
+        social: number;
+        referral: number;
+    };
+    topCountries?: {
+        country: string;
+        percentage: number;
+    }[];
+    engagement?: {
+        avgSessionDuration: string; // e.g., "5m 30s"
+        bounceRate: number; // percentage
+    };
 }
 
 export type Metadata = {

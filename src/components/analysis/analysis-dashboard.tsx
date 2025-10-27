@@ -1,6 +1,5 @@
 
 
-
 'use client';
 import type { AnalysisResult, AuditInfo } from '@/lib/types';
 import { OverviewCard } from './overview-card';
@@ -93,63 +92,64 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
         <SummaryCard data={initialData} />
       </motion.div>
 
+      {traffic && 
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-2">
+          <TrafficCard data={traffic} />
+        </motion.div>
+      }
+
       {performance ? (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-4">
           <PerformanceCard data={performance} />
         </motion.div>
       ) : (
-         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2">
+         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-4">
           <DashboardSkeleton.PerformancePlaceholder />
         </motion.div>
       )}
 
       {security && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-1">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="lg:col-span-1">
           <SecurityCard data={security} audits={securityAudits} />
         </motion.div>
       }
       
-       {traffic && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-1">
-          <TrafficCard data={traffic} />
-        </motion.div>
-      }
-
       {hosting && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-1">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="lg:col-span-1">
           <HostingCard data={hosting} />
         </motion.div>
       }
       
       {performance ? (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-1">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="lg:col-span-1">
           <OverallScoreCard score={totalAuditScore} />
         </motion.div>
       ) : (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-1">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="lg:col-span-1">
            <DashboardSkeleton.ScorePlaceholder />
         </motion.div>
       )}
 
+      {metadata &&
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="lg:col-span-1">
+          <MetadataCard data={metadata} />
+        </motion.div>
+      }
+
       {performanceAudits && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="lg:col-span-2">
           <AuditsCard data={performanceAudits} />
         </motion.div>
       }
       
       {diagnosticsAudits &&
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="lg:col-span-2">
           <DiagnosticsCard data={diagnosticsAudits} />
         </motion.div>
       }
 
-      {metadata &&
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="lg:col-span-2">
-          <MetadataCard data={metadata} />
-        </motion.div>
-      }
       {headers && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={8} className="lg:col-span-4">
           <HeadersCard data={headers} />
         </motion.div>
       }
