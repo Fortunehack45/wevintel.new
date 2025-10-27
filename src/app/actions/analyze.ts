@@ -125,15 +125,12 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
     const domain = urlObject.hostname;
     
     const ipApiUrl = `http://ip-api.com/json/${domain}`;
-    const sitemapUrl = `${urlObject.origin}/sitemap.xml`;
     
     const [
         ipInfoRes, 
-        sitemapRes, 
         pageHtmlRes
     ] = await Promise.allSettled([
       fetch(ipApiUrl),
-      fetch(sitemapUrl, { method: 'HEAD' }),
       fetch(url, { headers: { 'User-Agent': 'WebIntel-Analysis-Bot/1.0' }})
     ]);
 
@@ -149,13 +146,12 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
     
     let pageHtml = '';
     let responseHeaders = { all: {}, security: {} };
+    let sitemapExists = false;
+
     if (pageHtmlRes.status === 'fulfilled' && pageHtmlRes.value.ok) {
         pageHtml = await pageHtmlRes.value.text();
         responseHeaders = getHeaders(pageHtmlRes.value);
     } else {
-        // If the main fetch failed, we can still proceed with a partial analysis
-        // but we should flag it and maybe return a more specific error.
-        // For now, let's return a specific error if we can't get basic info.
         return { error: 'Could not fetch the main page of the website. It might be down or blocking requests.' };
     }
     
@@ -179,7 +175,7 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
       metadata: {
         openGraphTags: getOgTags(pageHtml),
         hasRobotsTxt: false, // will be updated by pagespeed
-        hasSitemapXml: sitemapRes.status === 'fulfilled' && sitemapRes.value.ok,
+        hasSitemapXml: false, // will be updated by pagespeed
       },
       hosting: {
         ip: ipInfoData?.query,
@@ -209,9 +205,11 @@ export async function getPerformanceAnalysis(url: string): Promise<Pick<Analysis
     const [
         pageSpeedMobileRes, 
         pageSpeedDesktopRes, 
+        sitemapRes,
     ] = await Promise.allSettled([
       fetch(pageSpeedMobileUrl),
       fetch(pageSpeedDesktopUrl),
+      fetch(`${new URL(url).origin}/sitemap.xml`, { method: 'HEAD' })
     ]);
 
     const pageSpeedMobileData = pageSpeedMobileRes.status === 'fulfilled' && pageSpeedMobileRes.value.ok ? await pageSpeedMobileRes.value.json() : null;
@@ -243,9 +241,7 @@ export async function getPerformanceAnalysis(url: string): Promise<Pick<Analysis
         metadata: { // This will update the existing metadata
             openGraphTags: {}, // Already fetched in fast analysis
             hasRobotsTxt: audits?.['robots-txt']?.score === 1,
-            hasSitemapXml: false, // Already fetched
+            hasSitemapXml: sitemapRes.status === 'fulfilled' && sitemapRes.value.ok,
         }
     };
 }
-
-    

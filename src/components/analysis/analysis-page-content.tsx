@@ -429,6 +429,7 @@ function FullAnalysisLoader({ initialData, onFullData }: { initialData: Analysis
                 metadata: {
                     ...initialData.metadata,
                     hasRobotsTxt: perfResult.metadata.hasRobotsTxt,
+                    hasSitemapXml: perfResult.metadata.hasSitemapXml,
                 } as Metadata,
                 security: {
                     ...initialData.security,
@@ -513,12 +514,15 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
 
 
   const handleFullDataLoaded = useCallback((fullData: AnalysisResult) => {
-    setAnalysisResult(currentData => ({
-        ...currentData,
-        ...fullData,
-        aiSummary: currentData?.aiSummary || fullData.aiSummary, // Prioritize initially loaded summary
-    }));
-    onDataLoaded(fullData);
+    setAnalysisResult(currentData => {
+        const updatedData = {
+            ...currentData,
+            ...fullData,
+            aiSummary: currentData?.aiSummary || fullData.aiSummary, // Prioritize initially loaded summary
+        } as AnalysisResult;
+        onDataLoaded(updatedData);
+        return updatedData;
+    });
   }, [onDataLoaded]);
 
   if (isLoading) {
@@ -548,5 +552,3 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
 
   return null;
 }
-
-    
