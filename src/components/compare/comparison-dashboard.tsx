@@ -28,8 +28,7 @@ interface ComparisonDashboardProps {
     data1?: AnalysisResult | null;
     data2?: AnalysisResult | null;
     summary: ComparisonOutput | { error: string } | null;
-    isLoading1: boolean;
-    isLoading2: boolean;
+    isLoading: boolean;
 }
 
 const SiteColumn = ({ data, isLoading, customDelay }: { data?: AnalysisResult | null, isLoading: boolean, customDelay: number }) => {
@@ -73,7 +72,7 @@ const SiteColumn = ({ data, isLoading, customDelay }: { data?: AnalysisResult | 
     )
 }
 
-export function ComparisonDashboard({ data1, data2, summary, isLoading1, isLoading2 }: ComparisonDashboardProps) {
+export function ComparisonDashboard({ data1, data2, summary, isLoading }: ComparisonDashboardProps) {
 
   return (
     <div className='space-y-8'>
@@ -82,8 +81,8 @@ export function ComparisonDashboard({ data1, data2, summary, isLoading1, isLoadi
         </motion.div>
         
         <div className="grid grid-cols-2 gap-4 md:gap-8 items-start">
-            <SiteColumn data={data1} isLoading={isLoading1 || !data1} customDelay={0} />
-            <SiteColumn data={data2} isLoading={isLoading2 || !data2} customDelay={0.1} />
+            <SiteColumn data={data1} isLoading={isLoading || !data1} customDelay={0} />
+            <SiteColumn data={data2} isLoading={isLoading || !data2} customDelay={0.1} />
         </div>
     </div>
   );

@@ -26,7 +26,7 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
     const [isDownloading, setIsDownloading] = useState(false);
     const [comparisonSummary, setComparisonSummary] = useState<ComparisonOutput | { error: string } | null>(null);
     const stableInitialValue = useMemo(() => [], []);
-    const [, setHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', stableInitialValue);
+    const [history, setHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', stableInitialValue);
     
     const getAIComparison = useCallback(async (site1: AnalysisResult, site2: AnalysisResult) => {
         try {
@@ -55,7 +55,7 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
     }, []);
 
     useEffect(() => {
-        if (data1 && data2 && !loading1 && !loading2) {
+        if (data1 && data2 && !loading1 && !loading2 && !comparisonSummary) {
             getAIComparison(data1, data2);
 
             setHistory(prev => {
@@ -69,7 +69,9 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
                 };
                  // Remove existing entry for this pair to add the new one on top
                 const filteredHistory = prev.filter(item => {
-                    return !(item.url1 === newEntry.url1 && item.url2 === newEntry.url2);
+                    const existing = (item.url1 === newEntry.url1 && item.url2 === newEntry.url2);
+                    const swapped = (item.url1 === newEntry.url2 && item.url2 === newEntry.url1);
+                    return !existing && !swapped;
                 });
                 const newHistory = [newEntry, ...filteredHistory];
                 return newHistory.slice(0, 50);
@@ -268,7 +270,8 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
         }
     };
     
-    const canDownload = !loading1 && !loading2 && !!data1 && !!data2 && !!comparisonSummary && !('error' in comparisonSummary);
+    const isLoading = loading1 || loading2;
+    const canDownload = !isLoading && !!data1 && !!data2 && !!comparisonSummary && !('error' in comparisonSummary);
 
     return (
         <div className="flex-1">
@@ -305,8 +308,7 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
                 data1={data1}
                 data2={data2}
                 summary={comparisonSummary}
-                isLoading1={loading1}
-                isLoading2={loading2}
+                isLoading={isLoading}
             />
         </div>
     );
