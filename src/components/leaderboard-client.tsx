@@ -1,6 +1,6 @@
 
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { topSites } from "@/lib/top-sites";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
@@ -60,6 +60,8 @@ export function LeaderboardClient() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState<SortOrder>('rank');
+  const [currentPage, setCurrentPage] = useState(1);
+  const sitesPerPage = 10;
 
   const handleAnalyze = (e: React.MouseEvent, url: string) => {
     e.stopPropagation();
@@ -87,6 +89,24 @@ export function LeaderboardClient() {
 
     return sites;
   }, [searchTerm, sortOrder]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, sortOrder]);
+
+  const totalPages = Math.ceil(sortedSites.length / sitesPerPage);
+  const paginatedSites = sortedSites.slice(
+    (currentPage - 1) * sitesPerPage,
+    currentPage * sitesPerPage
+  );
+
+  const goToNextPage = () => {
+    setCurrentPage((page) => Math.min(page + 1, totalPages));
+  };
+
+  const goToPreviousPage = () => {
+    setCurrentPage((page) => Math.max(page - 1, 1));
+  };
 
 
   return (
@@ -128,8 +148,8 @@ export function LeaderboardClient() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sortedSites.length > 0 ? (
-                  sortedSites.map(site => {
+                {paginatedSites.length > 0 ? (
+                  paginatedSites.map(site => {
                     const Icon = categoryIcons[site.category] || categoryIcons['Default'];
                     return (
                         <TableRow key={site.rank}>
@@ -177,6 +197,31 @@ export function LeaderboardClient() {
                 )}
               </TableBody>
           </Table>
+        </div>
+        <div className="flex items-center justify-between mt-4">
+            <div>
+                <p className="text-sm text-muted-foreground">
+                    Page {currentPage} of {totalPages}
+                </p>
+            </div>
+            <div className="flex items-center gap-2">
+                <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={goToPreviousPage}
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </Button>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={goToNextPage}
+                    disabled={currentPage === totalPages}
+                >
+                    Next
+                </Button>
+            </div>
         </div>
     </div>
   );
