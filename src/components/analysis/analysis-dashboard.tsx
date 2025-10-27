@@ -81,7 +81,7 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
     return Math.round((totalScore / scoreCount) * 100);
   }, [initialData]);
 
-  const { overview, security, hosting, metadata, headers, performance, performanceAudits, securityAudits, diagnosticsAudits, traffic } = initialData;
+  const { overview, security, hosting, metadata, headers, performance, performanceAudits, securityAudits, diagnosticsAudits, traffic, aiSummary } = initialData;
 
   const isLoadingFullReport = !performance;
 
@@ -95,16 +95,14 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
           />
         </motion.div>
       }
-
-      {isLoadingFullReport ? (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2">
-            <DashboardSkeleton.SummaryPlaceholder />
-        </motion.div>
-      ) : (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2">
-          <SummaryCard data={initialData} />
-        </motion.div>
-      )}
+      
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2">
+        <SummaryCard 
+          data={initialData}
+          summary={aiSummary}
+          isLoading={!aiSummary}
+        />
+      </motion.div>
 
 
       {isLoadingFullReport || !traffic ? (

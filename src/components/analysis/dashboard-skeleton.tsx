@@ -79,6 +79,28 @@ function AuditPlaceholder() {
     )
   }
 
+function SummaryPlaceholder() {
+    return (
+        <Card className="glass-card h-full">
+            <CardHeader>
+                <Skeleton className="h-6 w-44 mb-2" />
+                <Skeleton className="h-4 w-60" />
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-4 py-4">
+                    <Skeleton className="h-4 w-3/4 mb-4" />
+                    <Skeleton className="h-4 w-full mb-2" />
+                    <Skeleton className="h-4 w-full mb-2" />
+                    <Skeleton className="h-4 w-1/2 mb-6" />
+                    <Skeleton className="h-4 w-1/4 mb-4" />
+                    <Skeleton className="h-4 w-full mb-2" />
+                    <Skeleton className="h-4 w-full mb-2" />
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
 
 function DashboardSkeleton({ initialData }: { initialData?: Partial<AnalysisResult> }) {
   return (
@@ -113,7 +135,7 @@ DashboardSkeleton.PerformancePlaceholder = PerformancePlaceholder;
 DashboardSkeleton.ScorePlaceholder = ScorePlaceholder;
 DashboardSkeleton.TrafficPlaceholder = TrafficPlaceholder;
 DashboardSkeleton.AuditPlaceholder = AuditPlaceholder;
+DashboardSkeleton.SummaryPlaceholder = SummaryPlaceholder;
 
 export { DashboardSkeleton };
 
-    
