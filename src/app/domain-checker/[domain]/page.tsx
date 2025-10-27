@@ -88,83 +88,86 @@ export default function DomainResultPage() {
         setIsDownloading(true);
 
         const generatePdfFromData = (data: DomainData) => {
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'pt',
-                format: 'a4'
-            });
-
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
             const margin = 40;
             const contentWidth = pdfWidth - margin * 2;
             let currentY = 0;
-            const primaryColor = '#3b82f6';
-            const textColor = '#374151';
-            const mutedColor = '#6b7280';
-            const whiteColor = '#ffffff';
-            const lightGrayColor = '#f3f4f6';
+
+            // Colors
+            const primaryColor = '#2563EB';
+            const textColor = '#1F2937';
+            const mutedColor = '#6B7280';
+            const whiteColor = '#FFFFFF';
+            const borderColor = '#E5E7EB';
             
-            const addPageHeader = (title: string) => {
+            // Helper functions
+            const addPageHeader = () => {
                 pdf.setFont('helvetica', 'bold');
                 pdf.setFontSize(10);
                 pdf.setTextColor(mutedColor);
-                pdf.text(title, margin, 30);
-                pdf.setDrawColor(lightGrayColor);
+                pdf.text('WebIntel Domain Report', margin, 30);
+                pdf.setDrawColor(borderColor);
                 pdf.line(margin, 35, pdfWidth - margin, 35);
                 currentY = 60;
             };
 
             const addPageFooter = () => {
                 const pageCount = pdf.internal.pages.length;
-                const generationTime = new Date().toLocaleString();
                 for (let i = 1; i <= pageCount; i++) {
                     pdf.setPage(i);
                     pdf.setFontSize(8);
                     pdf.setTextColor(mutedColor);
                     pdf.text(`Page ${i} of ${pageCount}`, pdfWidth / 2, pdfHeight - 20, { align: 'center' });
-                    pdf.text(`Report generated on ${generationTime}`, margin, pdfHeight - 20);
+                    pdf.text(`Report for ${decodedDomain}`, margin, pdfHeight - 20);
                 }
             };
 
-            const checkAndAddPage = () => {
-                if (currentY > pdfHeight - 60) {
+            const checkAndAddPage = (spaceNeeded = 40) => {
+                if (currentY > pdfHeight - margin - spaceNeeded) {
                     pdf.addPage();
-                    addPageHeader(decodedDomain);
+                    addPageHeader();
                 }
             };
             
             const addSectionTitle = (title: string) => {
-                checkAndAddPage();
+                checkAndAddPage(60);
                 currentY += (currentY === 60 ? 0 : 20);
                 pdf.setFont('helvetica', 'bold');
-                pdf.setFontSize(14);
-                pdf.setTextColor(textColor);
+                pdf.setFontSize(16);
+                pdf.setTextColor(primaryColor);
                 pdf.text(title, margin, currentY);
-                currentY += 20;
+                pdf.setDrawColor(primaryColor);
+                pdf.setLineWidth(1.5);
+                pdf.line(margin, currentY + 5, margin + 40, currentY + 5);
+                currentY += 30;
             };
 
             const addKeyValue = (key: string, value: string | string[] | undefined | null) => {
                 if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) return;
                 checkAndAddPage();
+
+                const keyX = margin + 15;
+                const valueX = margin + 180;
+                const valueWidth = contentWidth - 180;
+
                 pdf.setFont('helvetica', 'bold');
                 pdf.setFontSize(10);
                 pdf.setTextColor(textColor);
-                const splitKey = pdf.splitTextToSize(key, contentWidth * 0.3);
-                pdf.text(splitKey, margin + 10, currentY);
+                const splitKey = pdf.splitTextToSize(key, 150);
+                pdf.text(splitKey, keyX, currentY);
                 
                 pdf.setFont('helvetica', 'normal');
-                
                 if (Array.isArray(value)) {
-                    const listYStart = currentY;
                     value.forEach((v, i) => {
-                       const itemY = listYStart + (i * 14);
-                       pdf.text(`- ${v}`, margin + 150, itemY);
+                       const itemY = currentY + (i * 14);
+                       pdf.text(`- ${v}`, valueX, itemY);
                     });
                     currentY += value.length * 14 + 6;
                 } else {
-                    const splitValue = pdf.splitTextToSize(String(value), contentWidth * 0.6);
-                    pdf.text(splitValue, margin + 150, currentY);
+                    const splitValue = pdf.splitTextToSize(String(value), valueWidth);
+                    pdf.text(splitValue, valueX, currentY);
                     currentY += Math.max(splitKey.length, splitValue.length) * 12 + 6;
                 }
             };
@@ -178,26 +181,39 @@ export default function DomainResultPage() {
                      addKeyValue(key, dateStr);
                 }
             }
+
+            const addContactCard = (title: string, contact: typeof data.registrant) => {
+                if (!contact) return;
+                checkAndAddPage(120);
+                addSectionTitle(title);
+                addKeyValue('Name', contact.name);
+                addKeyValue('Organization', contact.organization);
+                addKeyValue('Email', contact.email);
+                addKeyValue('Telephone', contact.telephone);
+                const address = [contact.street, contact.city, contact.state, contact.postalCode, contact.country].filter(Boolean).join(', ');
+                addKeyValue('Address', address);
+            };
+
             
             // --- Cover Page ---
             pdf.setFillColor(primaryColor);
             pdf.rect(0, 0, pdfWidth, pdfHeight, 'F');
             
             pdf.setFont('helvetica', 'bold');
-            pdf.setFontSize(28);
+            pdf.setFontSize(32);
             pdf.setTextColor(whiteColor);
-            pdf.text('WebIntel Domain Report', pdfWidth / 2, pdfHeight / 2 - 40, { align: 'center' });
+            pdf.text('Domain Whois Report', pdfWidth / 2, pdfHeight / 2 - 60, { align: 'center' });
 
-            pdf.setFontSize(16);
+            pdf.setFontSize(20);
             pdf.text(decodedDomain, pdfWidth / 2, pdfHeight / 2, { align: 'center' });
 
             pdf.setFont('helvetica', 'normal');
             pdf.setFontSize(10);
-            pdf.text(`Generated on: ${new Date().toLocaleString()}`, pdfWidth / 2, pdfHeight / 2 + 30, { align: 'center'});
+            pdf.text(`Generated on: ${new Date().toLocaleString()}`, pdfWidth / 2, pdfHeight / 2 + 40, { align: 'center'});
 
             // --- Start Content Pages ---
             pdf.addPage();
-            addPageHeader(decodedDomain);
+            addPageHeader();
             
             // Registration Details
             addSectionTitle('Registration Details');
@@ -211,27 +227,16 @@ export default function DomainResultPage() {
             addKeyValue('Domain Status', data.status);
             addKeyValue('Nameservers', data.nameservers);
 
-            const addContactSection = (title: string, contact: typeof data.registrant) => {
-                if (!contact) return;
-                addSectionTitle(title);
-                addKeyValue('Name', contact.name);
-                addKeyValue('Organization', contact.organization);
-                addKeyValue('Email', contact.email);
-                addKeyValue('Telephone', contact.telephone);
-                const address = [contact.street, contact.city, contact.state, contact.postalCode, contact.country].filter(Boolean).join(', ');
-                addKeyValue('Address', address);
-            };
-
             // Contact Sections
-            addContactSection('Registrant Contact', data.registrant);
-            addContactSection('Administrative Contact', data.admin);
-            addContactSection('Technical Contact', data.tech);
+            addContactCard('Registrant Contact', data.registrant);
+            addContactCard('Administrative Contact', data.admin);
+            addContactCard('Technical Contact', data.tech);
 
             // --- Finalise Pages ---
             addPageFooter();
 
             try {
-                pdf.save(`webintel-domain-report-${decodedDomain}.pdf`);
+                pdf.save(`WebIntel-Domain-Report-${decodedDomain}.pdf`);
             } catch (error) {
                  console.error("Failed to generate PDF", error);
             }
@@ -314,3 +319,5 @@ export default function DomainResultPage() {
     </div>
   );
 }
+
+    
