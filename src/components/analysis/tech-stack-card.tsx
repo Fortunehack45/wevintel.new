@@ -1,7 +1,7 @@
 
 'use client';
 import {
-    SiNextdotjs, SiReact, SiVuedotjs, SiAngellist, SiNodedotjs, SiPhp, SiRubyonrails, SiPython, SiGo, SiJava,
+    SiNextdotjs, SiReact, SiVuedotjs, SiAngular, SiNodedotjs, SiPhp, SiRubyonrails, SiPython, SiGo, SiJava,
     SiTypescript, SiJavascript, SiHtml5, SiCss3, SiSass, SiLess, SiWebpack, SiVite, SiEslint, SiPrettier,
     SiDocker, SiKubernetes, SiAmazon, SiGooglecloud, SiMicrosoftazure, SiVercel, SiNetlify, SiHeroku,
     SiNginx, SiApache, SiCloudflare, SiFastly, SiAkamai,
@@ -19,7 +19,7 @@ import { DashboardSkeleton } from './dashboard-skeleton';
 
 const techIcons: { [key: string]: React.ElementType } = {
     // Frameworks & Libraries
-    'next.js': SiNextdotjs, 'react': SiReact, 'vue.js': SiVuedotjs, 'angular': SiAngellist, 'node.js': SiNodedotjs,
+    'next.js': SiNextdotjs, 'react': SiReact, 'vue.js': SiVuedotjs, 'angular': SiAngular, 'node.js': SiNodedotjs,
     'php': SiPhp, 'ruby on rails': SiRubyonrails, 'python': SiPython, 'go': SiGo, 'java': SiJava,
     // Languages
     'typescript': SiTypescript, 'javascript': SiJavascript, 'html5': SiHtml5, 'css3': SiCss3, 'sass': SiSass, 'less': SiLess,
