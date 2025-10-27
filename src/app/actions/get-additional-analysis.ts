@@ -1,4 +1,3 @@
-
 'use server';
 
 import type { DomainData, StatusData, DomainContact } from '@/lib/types';
@@ -50,77 +49,31 @@ export async function getAdditionalAnalysis(url: string): Promise<{ status: Stat
 
 
 export async function getDomainInfo(domainName: string): Promise<DomainData | null | undefined> {
-    const apiKey = process.env.WHOIS_API_KEY;
-    if (!apiKey) {
-        console.error("WHOIS_API_KEY is not set in environment variables. Please add it to your .env file.");
-        return null;
-    }
-
-    const whoisApiUrl = `https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=${apiKey}&domainName=${domainName}&outputFormat=JSON`;
-
     try {
-        const res = await fetch(whoisApiUrl);
+        // The base URL should be the one for your deployment, but /api/whois works for local dev
+        const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002'}/api/whois?domainName=${domainName}`);
+
         if (!res.ok) {
-            console.error(`Whois API request failed with status: ${res.status}. URL: ${whoisApiUrl.replace(apiKey, 'REDACTED')}`);
+            const errorData = await res.json();
+            console.error(`Internal API Error for WHOIS lookup: ${errorData.error}`);
             return null;
         }
 
-        const data: WhoisResponse = await res.json();
-
-        if (data.ErrorMessage) {
-            const errorMessage = data.ErrorMessage.msg;
-            console.error(`Whois API Error: ${errorMessage}.`);
-            // Specifically check for API key related errors to provide a more helpful message.
-            if (errorMessage.includes('API key') || errorMessage.includes('credits')) {
-                 return null;
-            }
-            return null;
+        const data = await res.json();
+        
+        if (data.error) {
+             console.error(`WHOIS service error: ${data.error}`);
+             return null;
         }
         
-        if (data && data.WhoisRecord) {
-            const record = data.WhoisRecord;
-            
-            let statusArray: string[] = [];
-            if(record.status) {
-                const statusString = Array.isArray(record.status) ? record.status.join(' ') : record.status;
-                statusArray = statusString.split(' ').map(s => s.trim()).filter(Boolean);
-            }
-            
-            let nameservers: string[] = [];
-            if(record.nameServers?.rawText) {
-                nameservers = record.nameServers.rawText.split('\n').map(ns => ns.trim()).filter(Boolean);
-            }
-            
-            const parseContact = (contact: any): DomainContact | undefined => {
-                if (!contact) return undefined;
-                return {
-                    name: contact.name,
-                    organization: contact.organization,
-                    email: contact.email,
-                    telephone: contact.telephone,
-                    street: contact.street,
-                    city: contact.city,
-                    state: contact.state,
-                    postalCode: contact.postalCode,
-                    country: contact.country
-                }
-            }
-
-            return {
-                registrar: record.registrarName,
-                creationDate: record.createdDate,
-                expirationDate: record.expiresDate,
-                updatedDate: record.updatedDate,
-                status: statusArray,
-                nameservers: nameservers,
-                registrant: parseContact(record.registrant),
-                admin: parseContact(record.administrativeContact),
-                tech: parseContact(record.technicalContact),
-            };
+        if (Object.keys(data).length === 0) {
+            return undefined; // No record found
         }
-        return undefined; // No record found, but not an error
+        
+        return data as DomainData;
+
     } catch (e) {
-        console.error("Failed to fetch from Whois API:", e);
-        return null; // Represents an error state
+        console.error("Failed to fetch from internal WHOIS API route:", e);
+        return null; // Represents a network or other fetch error
     }
 }

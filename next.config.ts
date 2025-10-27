@@ -38,7 +38,6 @@ const nextConfig: NextConfig = {
     ],
   },
   env: {
-    WHOIS_API_KEY: process.env.WHOIS_API_KEY,
     PAGESPEED_API_KEY: process.env.PAGESPEED_API_KEY,
   }
 };
