@@ -25,19 +25,40 @@ const cardVariants = {
 };
 
 interface ComparisonDashboardProps {
-    data1: AnalysisResult;
-    data2: AnalysisResult;
+    data1?: AnalysisResult | null;
+    data2?: AnalysisResult | null;
     summary: ComparisonOutput | { error: string } | null;
+    isLoading1: boolean;
+    isLoading2: boolean;
 }
 
-const SiteColumn = ({ data, isLoading, customDelay }: { data: AnalysisResult, isLoading: boolean, customDelay: number }) => {
+const SiteColumn = ({ data, isLoading, customDelay }: { data?: AnalysisResult | null, isLoading: boolean, customDelay: number }) => {
+    if (isLoading || !data) {
+        return (
+            <div className="space-y-6">
+                 <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.1}>
+                    <DashboardSkeleton.SummaryPlaceholder />
+                 </motion.div>
+                 <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.2}>
+                    <DashboardSkeleton.PerformancePlaceholder />
+                 </motion.div>
+                 <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.3}>
+                    <DashboardSkeleton.AuditPlaceholder />
+                 </motion.div>
+                 <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.4}>
+                    <DashboardSkeleton.TechStackPlaceholder />
+                 </motion.div>
+            </div>
+        )
+    }
+    
     return (
         <div className="space-y-6">
              <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.1}>
                  <OverviewCard data={data.overview} isLoading={isLoading} />
              </motion.div>
              <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.2}>
-                {isLoading ? <DashboardSkeleton.PerformancePlaceholder /> : <PerformanceCard data={data.performance} />}
+                <PerformanceCard data={data.performance} />
              </motion.div>
              <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.3}>
                  <SecurityCard data={data.security} audits={data.securityAudits} />
@@ -46,16 +67,13 @@ const SiteColumn = ({ data, isLoading, customDelay }: { data: AnalysisResult, is
                  <HostingCard data={data.hosting} />
              </motion.div>
              <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.5}>
-                {isLoading ? <DashboardSkeleton.TechStackPlaceholder /> : <TechStackCarousel data={data.techStack} />}
+                <TechStackCarousel data={data.techStack} />
             </motion.div>
         </div>
     )
 }
 
-export function ComparisonDashboard({ data1, data2, summary }: ComparisonDashboardProps) {
-
-  const isLoading1 = !data1.performance;
-  const isLoading2 = !data2.performance;
+export function ComparisonDashboard({ data1, data2, summary, isLoading1, isLoading2 }: ComparisonDashboardProps) {
 
   return (
     <div className='space-y-8'>
@@ -64,8 +82,8 @@ export function ComparisonDashboard({ data1, data2, summary }: ComparisonDashboa
         </motion.div>
         
         <div className="grid grid-cols-2 gap-4 md:gap-8 items-start">
-            <SiteColumn data={data1} isLoading={isLoading1} customDelay={0} />
-            <SiteColumn data={data2} isLoading={isLoading2} customDelay={0.1} />
+            <SiteColumn data={data1} isLoading={isLoading1 || !data1} customDelay={0} />
+            <SiteColumn data={data2} isLoading={isLoading2 || !data2} customDelay={0.1} />
         </div>
     </div>
   );

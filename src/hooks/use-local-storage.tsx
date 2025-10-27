@@ -1,11 +1,10 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 
 // Custom hook to handle local storage with SSR safety
 export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val: T) => T)) => void] {
-  // Memoize initialValue to prevent re-creation on every render
-  const memoizedInitialValue = useMemo(() => initialValue, [key]); // key dependency to re-evaluate if key changes
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -14,17 +13,17 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
 
   const readValue = useCallback((): T => {
     if (!isClient) {
-      return memoizedInitialValue;
+      return initialValue;
     }
 
     try {
       const item = window.localStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : memoizedInitialValue;
+      return item ? (JSON.parse(item) as T) : initialValue;
     } catch (error) {
       console.warn(`Error reading localStorage key “${key}”:`, error);
-      return memoizedInitialValue;
+      return initialValue;
     }
-  }, [isClient, key, memoizedInitialValue]);
+  }, [isClient, key, initialValue]);
 
   const [storedValue, setStoredValue] = useState<T>(readValue);
 
@@ -38,7 +37,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
       const valueToStore = value instanceof Function ? value(readValue()) : value;
       window.localStorage.setItem(key, JSON.stringify(valueToStore));
       setStoredValue(valueToStore);
-      window.dispatchEvent(new Event('local-storage-change'));
+      window.dispatchEvent(new CustomEvent('local-storage-change', { detail: { key } }));
     } catch (error) {
       console.warn(`Error setting localStorage key “${key}”:`, error);
     }
@@ -56,8 +55,11 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
             setStoredValue(readValue());
         }
     };
-    const handleCustomEvent = () => {
-        setStoredValue(readValue());
+    const handleCustomEvent = (event: Event) => {
+        const customEvent = event as CustomEvent;
+        if (customEvent.detail.key === key) {
+            setStoredValue(readValue());
+        }
     }
     
     window.addEventListener('storage', handleStorageChange);

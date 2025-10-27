@@ -24,12 +24,12 @@ const getScoreColor = (score: number | null | undefined): string => {
     return "text-red-500";
 }
 
-export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: ComparisonOutput | { error: string } | null, data1: AnalysisResult, data2: AnalysisResult }) {
+export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: ComparisonOutput | { error: string } | null, data1?: AnalysisResult | null, data2?: AnalysisResult | null }) {
     
     const winnerHostname = summary && 'winner' in summary ? summary.winner : null;
     const isTie = winnerHostname === 'Tie';
-    const isWinner1 = winnerHostname === data1.overview.domain;
-    const isWinner2 = winnerHostname === data2.overview.domain;
+    const isWinner1 = winnerHostname === data1?.overview.domain;
+    const isWinner2 = winnerHostname === data2?.overview.domain;
     
     const title = summary && 'title' in summary ? summary.title : "Comparison Summary";
     const summaryText = summary && 'summary' in summary ? summary.summary : "";
@@ -58,28 +58,28 @@ export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: Comp
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center bg-muted/30 p-4 rounded-lg">
                             <div className={`text-center p-4 rounded-lg transition-all ${isWinner1 ? 'bg-primary/20 ring-2 ring-primary' : ''}`}>
-                                <h3 className='font-bold text-lg'>{data1.overview.domain}</h3>
+                                <h3 className='font-bold text-lg'>{data1?.overview.domain}</h3>
                                 <div className='flex justify-center gap-4 mt-2'>
-                                    <div className={`font-bold text-lg flex items-center gap-1.5 ${getScoreColor(data1.performance?.mobile.performanceScore)}`}>
+                                    <div className={`font-bold text-lg flex items-center gap-1.5 ${getScoreColor(data1?.performance?.mobile.performanceScore)}`}>
                                         <TrendingUp className="h-4 w-4" />
-                                        {data1.performance?.mobile.performanceScore ?? 'N/A'}
+                                        {data1?.performance?.mobile.performanceScore ?? 'N/A'}
                                     </div>
-                                    <div className={`font-bold text-lg flex items-center gap-1.5 ${getScoreColor(data1.security?.securityScore)}`}>
+                                    <div className={`font-bold text-lg flex items-center gap-1.5 ${getScoreColor(data1?.security?.securityScore)}`}>
                                         <ShieldCheck className="h-4 w-4" />
-                                        {data1.security?.securityScore ?? 'N/A'}
+                                        {data1?.security?.securityScore ?? 'N/A'}
                                     </div>
                                 </div>
                             </div>
                              <div className={`text-center p-4 rounded-lg transition-all ${isWinner2 ? 'bg-primary/20 ring-2 ring-primary' : ''}`}>
-                                <h3 className='font-bold text-lg'>{data2.overview.domain}</h3>
+                                <h3 className='font-bold text-lg'>{data2?.overview.domain}</h3>
                                 <div className='flex justify-center gap-4 mt-2'>
-                                    <div className={`font-bold text-lg flex items-center gap-1.5 ${getScoreColor(data2.performance?.mobile.performanceScore)}`}>
+                                    <div className={`font-bold text-lg flex items-center gap-1.5 ${getScoreColor(data2?.performance?.mobile.performanceScore)}`}>
                                         <TrendingUp className="h-4 w-4" />
-                                        {data2.performance?.mobile.performanceScore ?? 'N/A'}
+                                        {data2?.performance?.mobile.performanceScore ?? 'N/A'}
                                     </div>
-                                     <div className={`font-bold text-lg flex items-center gap-1.5 ${getScoreColor(data2.security?.securityScore)}`}>
+                                     <div className={`font-bold text-lg flex items-center gap-1.5 ${getScoreColor(data2?.security?.securityScore)}`}>
                                         <ShieldCheck className="h-4 w-4" />
-                                        {data2.security?.securityScore ?? 'N/A'}
+                                        {data2?.security?.securityScore ?? 'N/A'}
                                     </div>
                                 </div>
                             </div>
@@ -94,12 +94,12 @@ export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: Comp
                         <div className='flex items-center justify-center flex-col gap-2 pt-4 border-t'>
                             <h4 className='font-semibold flex items-center gap-2'><Trophy className="h-5 w-5 text-yellow-400"/> Overall Winner</h4>
                             {isTie && <Badge size="lg" variant="secondary">It's a Tie!</Badge>}
-                            {isWinner1 && <Badge size="lg" className="bg-primary/80">{data1.overview.domain}</Badge>}
-                            {isWinner2 && <Badge size="lg" className="bg-primary/80">{data2.overview.domain}</Badge>}
+                            {isWinner1 && <Badge size="lg" className="bg-primary/80">{data1?.overview.domain}</Badge>}
+                            {isWinner2 && <Badge size="lg" className="bg-primary/80">{data2?.overview.domain}</Badge>}
                         </div>
                     </>
                 )}
             </CardContent>
         </Card>
-    )
+    );
 }
