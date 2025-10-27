@@ -1,5 +1,6 @@
+
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { getDomainInfo } from '@/app/actions/get-additional-analysis';
 import { DomainCard } from '@/components/analysis/domain-card';
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,7 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 import { type DomainHistoryItem, type DomainData } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import React from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
 import { format, parseISO } from 'date-fns';
 
@@ -38,37 +39,38 @@ function DomainResultSkeleton() {
 
 export default function DomainResultPage() {
   const params = useParams<{ domain: string }>();
+  const router = useRouter();
   const decodedDomain = params ? decodeURIComponent(params.domain) : '';
   const [domainInfo, setDomainInfo] = React.useState<DomainData | null | undefined>(undefined);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [, setHistory] = useLocalStorage<DomainHistoryItem[]>('webintel_domain_history', []);
+  const [history, setHistory] = useLocalStorage<DomainHistoryItem[]>('webintel_domain_history', []);
 
-  useEffect(() => {
+  const fetchAndSaveHistory = useCallback(async () => {
     if (!decodedDomain) return;
 
-    const fetchAndSaveHistory = async () => {
-      setDomainInfo(undefined); // Set to loading state
-      const info = await getDomainInfo(decodedDomain);
-      setDomainInfo(info);
+    setDomainInfo(undefined); // Set to loading state
+    const info = await getDomainInfo(decodedDomain);
+    setDomainInfo(info);
 
-      if (info) {
-        setHistory(prevHistory => {
-          // Remove existing entry for the same domain to avoid duplicates
-          const newHistory = prevHistory.filter(item => item.domain !== decodedDomain);
-          // Add the new lookup to the top of the history
-          newHistory.unshift({
-            id: crypto.randomUUID(),
-            domain: decodedDomain,
-            createdAt: new Date().toISOString(),
-          });
-          // Limit history to 50 items
-          return newHistory.slice(0, 50);
+    if (info) {
+      setHistory(prevHistory => {
+        // Remove existing entry for the same domain to avoid duplicates
+        const newHistory = prevHistory.filter(item => item.domain !== decodedDomain);
+        // Add the new lookup to the top of the history
+        newHistory.unshift({
+          id: crypto.randomUUID(),
+          domain: decodedDomain,
+          createdAt: new Date().toISOString(),
         });
-      }
-    };
-
-    fetchAndSaveHistory();
+        // Limit history to 50 items
+        return newHistory.slice(0, 50);
+      });
+    }
   }, [decodedDomain, setHistory]);
+
+  useEffect(() => {
+    fetchAndSaveHistory();
+  }, [decodedDomain, fetchAndSaveHistory]);
 
 
   const handleDownloadPdf = async () => {
@@ -277,8 +279,12 @@ export default function DomainResultPage() {
             </CardHeader>
             <CardContent>
                 <p className="text-sm text-muted-foreground">
-                    This could be because the domain is not registered, has privacy protection enabled, or there was a temporary issue with the lookup service. Please check your API key if the issue persists.
+                    This could be because the domain is not registered, has privacy protection enabled, or there was a temporary issue with the lookup service. Please check that you have set a valid WHOIS_API_KEY if the issue persists.
                 </p>
+                 <Button onClick={() => router.push('/domain-checker')} className="mt-4">
+                    <Search className="mr-2 h-4 w-4" />
+                    Try another domain
+                </Button>
             </CardContent>
         </Card>
       )}

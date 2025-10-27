@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Search, Globe } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { motion } from 'framer-motion';
-import { HistoryClient } from '@/components/history-client';
+import { DomainHistoryList } from '@/components/domain-history-list';
 
 export default function DomainCheckerPage() {
   const [domain, setDomain] = useState('');
@@ -80,7 +80,7 @@ export default function DomainCheckerPage() {
                         disabled={isLoading}
                         autoComplete="off"
                     />
-                    <Button type="submit" size="lg" className="h-12 rounded-lg" disabled={isLoading && !domain}>
+                    <Button type="submit" size="lg" className="h-12 rounded-lg" disabled={isLoading || !domain}>
                         {isLoading ? (
                             <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -99,7 +99,7 @@ export default function DomainCheckerPage() {
 
        <div className="w-full max-w-5xl mt-24">
         <h2 className="text-3xl font-bold mb-6 text-left">Recent Lookups</h2>
-        <HistoryClient limit={6} type="domain" />
+        <DomainHistoryList limit={6} />
       </div>
     </div>
   );
