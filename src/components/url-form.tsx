@@ -123,7 +123,7 @@ export function UrlForm() {
         transition={{ duration: 0.5 }}
         className="relative w-full max-w-xl mx-auto"
     >
-        <Card className="p-2 rounded-xl shadow-lg border relative overflow-hidden">
+        <div className="p-2 rounded-xl relative overflow-hidden glass-card">
             <form onSubmit={handleSubmit} className="flex w-full items-center space-x-2 relative z-10">
                 <Input
                     type="text"
@@ -151,7 +151,7 @@ export function UrlForm() {
                 isVisible={!url && !isLoading}
                 onSuggestionChange={setScrollingSuggestionIndex}
             />
-        </Card>
+        </div>
         {showSuggestions && suggestions.length > 0 && (
           <Card className="absolute top-full w-full mt-2 p-2 shadow-xl border z-20">
             <ul>
