@@ -7,12 +7,11 @@ import { RefreshCw, Download, Home } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult, type AuditItem, AuditInfo, TrafficData, WebsiteOverview, SecurityData, HostingInfo, Metadata, HeaderInfo, AISummary, TechStackData, DomainData, StatusData } from '@/lib/types';
-import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
+import { getPerformanceAnalysis } from '@/app/actions/analyze';
 import { getAdditionalAnalysis } from '@/app/actions/get-additional-analysis';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import { useRouter } from 'next/navigation';
-import { NotFoundCard } from './not-found-card';
 import { DashboardSkeleton } from './dashboard-skeleton';
 import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
 import { detectTechStack } from '@/ai/flows/tech-stack-flow';
@@ -30,10 +29,10 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
     );
 }
 
-export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
+export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: string, initialData: Partial<AnalysisResult> }) {
     const [key, setKey] = useState(Date.now());
     const [isDownloading, setIsDownloading] = useState(false);
-    const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+    const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(initialData as AnalysisResult);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [trafficCache, setTrafficCache] = useLocalStorage<Record<string, {data: TrafficData, timestamp: string}>>('webintel_traffic_cache', {});
@@ -64,38 +63,29 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     }, [setTrafficCache, trafficCache]);
 
     useEffect(() => {
-        const fetchAnalysis = async () => {
-            setIsLoading(true);
-            setError(null);
-            setAnalysisResult(null);
-
-            // 1. Fast Analysis
-            const fastResult = await getFastAnalysis(decodedUrl);
-
-            if ('error' in fastResult) {
-                setError(fastResult.error);
-                setIsLoading(false);
-                return;
-            }
+        const fetchRemainingAnalysis = async () => {
+             if (!initialData) return;
             
-            // 2. AI Summary (in parallel with fast analysis result processing)
+             setIsLoading(true);
+
+            // 1. AI Summary (in parallel with fast analysis result processing)
             const aiSummaryInput: WebsiteAnalysisInput = {
                 overview: {
-                    url: fastResult.overview!.url,
-                    domain: fastResult.overview!.domain,
-                    title: fastResult.overview!.title,
-                    description: fastResult.overview!.description,
+                    url: initialData.overview!.url,
+                    domain: initialData.overview!.domain,
+                    title: initialData.overview!.title,
+                    description: initialData.overview!.description,
                 },
                 security: {
-                    isSecure: fastResult.security!.isSecure,
-                    securityHeaders: fastResult.security!.securityHeaders,
+                    isSecure: initialData.security!.isSecure,
+                    securityHeaders: initialData.security!.securityHeaders,
                 },
                 hosting: {
-                    ip: fastResult.hosting!.ip,
-                    isp: fastResult.hosting!.isp,
-                    country: fastResult.hosting!.country,
+                    ip: initialData.hosting!.ip,
+                    isp: initialData.hosting!.isp,
+                    country: initialData.hosting!.country,
                 },
-                headers: fastResult.headers,
+                headers: initialData.headers,
             };
             
             const summaryPromise = summarizeWebsite(aiSummaryInput).catch(e => {
@@ -103,24 +93,21 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
               return null;
             });
             
-            const partialData = {
-              ...fastResult,
-              id: fastResult.id || crypto.randomUUID(),
-              createdAt: fastResult.createdAt || new Date().toISOString(),
+            setAnalysisResult(current => ({
+              ...(current as AnalysisResult),
               aiSummary: await summaryPromise,
-            } as AnalysisResult;
+            }));
 
-            setAnalysisResult(partialData);
             setIsLoading(false);
             
-            // 3. Full Performance and Additional Analysis (after fast analysis is displayed)
+            // 2. Full Performance and Additional Analysis (after fast analysis is displayed)
             const [perfResult, trafficResult, techStackResult, additionalResult] = await Promise.allSettled([
                 getPerformanceAnalysis(decodedUrl),
-                getTrafficData(decodedUrl, partialData.overview?.description || ''),
+                getTrafficData(decodedUrl, initialData.overview?.description || ''),
                 detectTechStack({
                     url: decodedUrl,
-                    htmlContent: partialData.overview?.htmlContent || '',
-                    headers: partialData.headers || {}
+                    htmlContent: initialData.overview?.htmlContent || '',
+                    headers: initialData.headers || {}
                 }),
                 getAdditionalAnalysis(decodedUrl),
             ]);
@@ -131,10 +118,10 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
             let securityScoreTotal = 0;
             let securityItemsScored = 0;
             
-            if (partialData.security?.isSecure) securityScoreTotal += 1;
+            if (initialData.security?.isSecure) securityScoreTotal += 1;
             securityItemsScored++;
 
-            Object.values(partialData.security?.securityHeaders || {}).forEach(present => {
+            Object.values(initialData.security?.securityHeaders || {}).forEach(present => {
                 if (present) securityScoreTotal++;
                 securityItemsScored++;
             });
@@ -172,11 +159,10 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                 techStack: techStackResult.status === 'fulfilled' ? techStackResult.value : undefined,
                 domain: additionalResult.status === 'fulfilled' ? additionalResult.value.domain : undefined,
                 status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
-                aiSummary: currentData?.aiSummary, // Keep the summary that was loaded first
             }));
         };
 
-        fetchAnalysis().catch(e => {
+        fetchRemainingAnalysis().catch(e => {
             console.error("An error occurred during analysis:", e);
             setError(e.message || "An unexpected error occurred.");
             setIsLoading(false);
@@ -477,13 +463,10 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     };
 
     const renderContent = () => {
-        if (isLoading) {
-            return <DashboardSkeleton initialData={analysisResult || {}} />;
+        if (!analysisResult) {
+            return <DashboardSkeleton />;
         }
         if (error) {
-            if (error === 'Domain not found. The website is not reachable.' || error === 'Could not fetch the main page of the website. It might be down or blocking requests.') {
-                return <NotFoundCard url={decodedUrl} />;
-            }
             return <ErrorAlert title="Analysis Failed" description={error} />;
         }
         if (analysisResult) {
@@ -506,7 +489,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                         <Home className="mr-2 h-4 w-4" />
                         Back to Home
                     </Button>
-                    <Button variant="outline" onClick={() => setKey(Date.now())} disabled={isDownloading}>
+                    <Button variant="outline" onClick={() => router.push(`/analysis/${encodeURIComponent(decodedUrl)}?t=${Date.now()}`)} disabled={isDownloading}>
                         <RefreshCw className="mr-2 h-4 w-4" />
                         Re-analyse
                     </Button>

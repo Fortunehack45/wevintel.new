@@ -52,7 +52,7 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
 
         setIsLoading(true);
         setError(false);
-        setSummary(null);
+        setSummary(undefined);
 
         try {
             const input: WebsiteAnalysisInput = {
@@ -90,6 +90,13 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
     useEffect(() => {
         setIsLoading(initialIsLoading);
     }, [initialIsLoading]);
+
+    useEffect(() => {
+        if(initialIsLoading === false && initialSummary === undefined && !error) {
+            generateSummary();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initialIsLoading, initialSummary, error])
 
 
     return (

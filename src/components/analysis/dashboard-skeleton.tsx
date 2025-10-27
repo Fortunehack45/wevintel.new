@@ -136,7 +136,7 @@ function DashboardSkeleton({ initialData }: { initialData?: Partial<AnalysisResu
         <Skeleton className="h-40 rounded-xl lg:col-span-4" />
       )}
       <div className="lg:col-span-2">
-          <SummaryCard data={initialData || {}} summary={initialData?.aiSummary} isLoading={!initialData?.aiSummary} />
+          { initialData?.aiSummary ? <SummaryCard data={initialData} summary={initialData.aiSummary} /> : <SummaryPlaceholder /> }
       </div>
       <div className="lg:col-span-2"><TrafficPlaceholder/></div>
       <div className="lg:col-span-4"><PerformancePlaceholder /></div>

@@ -42,18 +42,28 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
     // Only save to history if we have the full performance data
     if (initialData.performance) {
       setHistory(prevHistory => {
-        const newHistory = [...prevHistory];
-        const existingIndex = newHistory.findIndex(item => item.overview.url === initialData.overview?.url);
+        // Create a new array with the updated item
+        const updatedHistory = prevHistory.map(item => 
+          item.overview.url === initialData.overview?.url ? initialData : item
+        );
         
-        if (existingIndex > -1) {
-            // Update the existing record with the latest full data
-            newHistory[existingIndex] = initialData;
-        } else {
-            // Add new record
-            newHistory.unshift(initialData);
+        // If the item was not in the history, add it to the beginning
+        if (!updatedHistory.some(item => item.overview.url === initialData.overview?.url)) {
+            updatedHistory.unshift(initialData);
         }
 
-        return newHistory.slice(0, 20);
+        // Check if the initialData was already there and just updated
+        const existingIndex = prevHistory.findIndex(item => item.overview.url === initialData.overview?.url);
+        if (existingIndex === -1) {
+             // If it's a new item, add it.
+             const newHistory = [initialData, ...prevHistory];
+             return newHistory.slice(0, 20);
+        } else {
+            // If it's an existing item, replace it to update.
+            const newHistory = [...prevHistory];
+            newHistory[existingIndex] = initialData;
+            return newHistory;
+        }
       });
     }
   }, [initialData, setHistory]);
@@ -100,7 +110,7 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
         <SummaryCard 
           data={initialData}
           summary={aiSummary}
-          isLoading={!aiSummary}
+          isLoading={aiSummary === undefined}
         />
       </motion.div>
 
