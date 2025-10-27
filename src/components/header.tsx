@@ -2,7 +2,7 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Compass, Menu, Bot, Moon, Sun } from 'lucide-react';
+import { Compass, Menu, Bot, Moon, Sun, Trophy } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
