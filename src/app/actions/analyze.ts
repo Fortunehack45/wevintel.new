@@ -138,22 +138,13 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
 
     if (pageHtmlRes.status === 'rejected' || (pageHtmlRes.status === 'fulfilled' && !pageHtmlRes.value.ok)) {
         if (ipInfoData && ipInfoData.status === 'fail') {
-            return { error: 'Domain not found. The website is not reachable.' };
+             return { error: 'Domain not found. The website is not reachable.' };
         }
-    }
-    
-    let pageHtml = '';
-    let responseHeaders = { all: {}, security: {} };
-
-    if (pageHtmlRes.status === 'fulfilled' && pageHtmlRes.value.ok) {
-        // This is tricky because a body can only be read once.
-        // We clone the response to be able to read it twice (once for headers, once for text)
-        const responseForHeaders = pageHtmlRes.value;
-        responseHeaders = getHeaders(responseForHeaders);
-        pageHtml = await pageHtmlRes.value.text();
-    } else {
         return { error: 'Could not fetch the main page of the website. It might be down or blocking requests.' };
     }
+    
+    const responseHeaders = getHeaders(pageHtmlRes.value);
+    const pageHtml = await pageHtmlRes.value.text();
     
     const tempTitle = pageHtml.match(/<title>(.*?)<\/title>/)?.[1];
     const tempDescription = getMetaDescription(pageHtml);
@@ -204,8 +195,8 @@ export async function getPerformanceAnalysis(url: string): Promise<Pick<Analysis
 
     const [
         pageSpeedMobileRes, 
-        pageSpeedDesktopRes, 
-        sitemapRes,
+        pageSpeedDesktopRes,
+        sitemapRes, 
     ] = await Promise.allSettled([
       fetch(pageSpeedMobileUrl),
       fetch(pageSpeedDesktopUrl),
