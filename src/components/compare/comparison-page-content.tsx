@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { RefreshCw, ArrowLeft, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult, type ComparisonInput, type ComparisonOutput, type ComparisonHistoryItem } from '@/lib/types';
@@ -20,11 +20,8 @@ type InitialData = { data1: Partial<AnalysisResult>; data2: Partial<AnalysisResu
 export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initialData: InitialData }) {
     const router = useRouter();
     
-    const memoizedInitialData1 = useMemo(() => initialData.data1, [initialData.data1]);
-    const memoizedInitialData2 = useMemo(() => initialData.data2, [initialData.data2]);
-
-    const { result: data1, loading: loading1, error: error1 } = useAnalysisData(urls.url1, memoizedInitialData1);
-    const { result: data2, loading: loading2, error: error2 } = useAnalysisData(urls.url2, memoizedInitialData2);
+    const { result: data1, loading: loading1, error: error1 } = useAnalysisData(urls.url1, initialData.data1);
+    const { result: data2, loading: loading2, error: error2 } = useAnalysisData(urls.url2, initialData.data2);
     
     const [isDownloading, setIsDownloading] = useState(false);
     const [comparisonSummary, setComparisonSummary] = useState<ComparisonOutput | { error: string } | null>(null);
@@ -300,8 +297,8 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
             </div>
             
             <ComparisonDashboard 
-                data1={data1 as AnalysisResult}
-                data2={data2 as AnalysisResult}
+                data1={data1}
+                data2={data2}
                 summary={comparisonSummary}
                 isLoading1={loading1}
                 isLoading2={loading2}

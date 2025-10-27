@@ -121,7 +121,7 @@ export function useAnalysisData(url: string, initialData: Partial<AnalysisResult
 
         fetchFullAnalysis();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [url, initialData]); 
+    }, [url]); 
 
     return { result, loading, error };
 }

@@ -1,10 +1,10 @@
 
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useState } from 'react';
 import { RefreshCw, Download, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult } from '@/lib/types';
+import { type AnalysisResult, type AuditInfo } from '@/lib/types';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import { useRouter } from 'next/navigation';
@@ -76,7 +76,6 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 if (currentY > pdfHeight - margin - spaceNeeded) {
                     pdf.addPage();
                     addPageHeader();
-                    currentY = 60;
                 }
             };
             
@@ -248,12 +247,12 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             pdf.setTextColor(textColor);
             pdf.text('Security', margin, securityCurrentY);
             securityCurrentY += 20;
-            currentY = securityCurrentY;
-            currentY = addKeyValue('SSL Enabled', data.security?.isSecure ? 'Yes' : 'No', margin, currentY);
+            let tempSecurityY = securityCurrentY;
+            tempSecurityY = addKeyValue('SSL Enabled', data.security?.isSecure ? 'Yes' : 'No', margin, tempSecurityY);
             Object.entries(data.security?.securityHeaders || {}).forEach(([key, value]) => {
-                currentY = addKeyValue(key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), value ? 'Present' : 'Missing', margin, currentY);
+                tempSecurityY = addKeyValue(key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), value ? 'Present' : 'Missing', margin, tempSecurityY);
             });
-            securityCurrentY = currentY;
+            securityCurrentY = tempSecurityY;
 
             // Hosting Box
             const hostingX = margin + boxWidth + 20;
@@ -262,11 +261,11 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             pdf.setTextColor(textColor);
             pdf.text('Hosting', hostingX, hostingCurrentY);
             hostingCurrentY += 20;
-            currentY = hostingCurrentY;
-            currentY = addKeyValue('IP Address', data.hosting?.ip, hostingX, currentY);
-            currentY = addKeyValue('ISP', data.hosting?.isp, hostingX, currentY);
-            currentY = addKeyValue('Country', data.hosting?.country, hostingX, currentY);
-            hostingCurrentY = currentY;
+            let tempHostingY = hostingCurrentY;
+            tempHostingY = addKeyValue('IP Address', data.hosting?.ip, hostingX, tempHostingY);
+            tempHostingY = addKeyValue('ISP', data.hosting?.isp, hostingX, tempHostingY);
+            tempHostingY = addKeyValue('Country', data.hosting?.country, hostingX, tempHostingY);
+            hostingCurrentY = tempHostingY;
             
             currentY = Math.max(securityCurrentY, hostingCurrentY);
 
@@ -292,7 +291,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             }
 
             // --- Audit Sections ---
-            const addAuditList = (title: string, audits: typeof data.performanceAudits) => {
+            const addAuditList = (title: string, audits: AuditInfo | undefined) => {
                 const auditItems = audits ? Object.values(audits) : [];
                 if (auditItems.length === 0) return;
                 
@@ -349,7 +348,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
 
 
     const renderContent = () => {
-        if (loading && !analysisResult) {
+        if (loading && !analysisResult?.performance) {
             return <DashboardSkeleton initialData={initialData} />;
         }
         if (error) {
