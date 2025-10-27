@@ -2,7 +2,7 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Compass, Menu, Bot, Moon, Sun, Trophy } from 'lucide-react';
+import { Compass, Menu, Bot, Moon, Sun, Scale } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
@@ -11,6 +11,7 @@ import { useTheme } from 'next-themes';
 
 const navLinks = [
     { href: '/', label: 'Home' },
+    { href: '/compare', label: 'Compare' },
     { href: '/leaderboard', label: 'Leaderboard' },
     { href: '/history', label: 'History' },
     { href: '/about', label: 'About' },
@@ -51,9 +52,8 @@ export function Header() {
         {navLinks.map(link => (
             <Button
                 key={link.href}
-                variant={pathname === link.href ? "secondary" : "ghost"}
+                variant={pathname.startsWith(link.href) && (link.href !== '/' || pathname === '/') ? "secondary" : "ghost"}
                 asChild
-                onClick={() => {}}
             >
                 <Link href={link.href}>{link.label}</Link>
             </Button>

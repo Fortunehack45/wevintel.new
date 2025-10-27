@@ -3,13 +3,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, History, Info, Trophy, Search } from 'lucide-react';
+import { Home, History, Info, Trophy, Scale } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
 
 const navLinks = [
   { href: '/', label: 'Home', icon: Home },
+  { href: '/compare', label: 'Compare', icon: Scale },
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { href: '/history', label: 'History', icon: History },
   { href: '/about', label: 'About', icon: Info },
@@ -32,7 +33,7 @@ export function BottomNav() {
     >
       <nav className="flex h-full items-center justify-around">
         {navLinks.map((link) => {
-          const isActive = pathname === link.href;
+          const isActive = pathname.startsWith(link.href) && (link.href !== '/' || pathname === '/');
           return (
             <Link
               key={link.href}
