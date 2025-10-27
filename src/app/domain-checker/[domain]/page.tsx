@@ -45,25 +45,31 @@ export default function DomainResultPage() {
 
   useEffect(() => {
     if (!decodedDomain) return;
-    async function fetchDomainInfo() {
+
+    const fetchAndSaveHistory = async () => {
+      setDomainInfo(undefined); // Set to loading state
       const info = await getDomainInfo(decodedDomain);
       setDomainInfo(info);
 
       if (info) {
         setHistory(prevHistory => {
+          // Remove existing entry for the same domain to avoid duplicates
           const newHistory = prevHistory.filter(item => item.domain !== decodedDomain);
+          // Add the new lookup to the top of the history
           newHistory.unshift({
             id: crypto.randomUUID(),
             domain: decodedDomain,
             createdAt: new Date().toISOString(),
           });
+          // Limit history to 50 items
           return newHistory.slice(0, 50);
         });
       }
-    }
-    fetchDomainInfo();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [decodedDomain]);
+    };
+
+    fetchAndSaveHistory();
+  }, [decodedDomain, setHistory]);
+
 
   const handleDownloadPdf = async () => {
         if (!domainInfo) return;
@@ -285,5 +291,3 @@ export default function DomainResultPage() {
     </div>
   );
 }
-
-    
