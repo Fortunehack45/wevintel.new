@@ -21,7 +21,7 @@ export function OverviewCard({ data, isLoading }: OverviewCardProps) {
             alt={`${data.domain} favicon`} 
             width={64} 
             height={64} 
-            className="rounded-lg border-2"
+            className="rounded-lg border-2 bg-slate-100 dark:bg-white/10 p-1"
             crossOrigin="anonymous"
           />
         )}

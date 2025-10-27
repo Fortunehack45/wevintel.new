@@ -161,7 +161,7 @@ export function LeaderboardClient() {
                                         alt={`${site.name} favicon`}
                                         width={24}
                                         height={24}
-                                        className="rounded-full flex-shrink-0"
+                                        className="rounded-full flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5"
                                         crossOrigin="anonymous"
                                     />
                                     <div>

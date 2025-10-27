@@ -117,7 +117,7 @@ export function HistoryClient() {
                         <Link href={`/analysis/${encodeURIComponent(item.overview.url)}`} className="block h-full">
                             <CardHeader>
                                 <div className="flex items-center gap-3">
-                                    <Image src={item.overview.favicon || '/fallback-favicon.svg'} alt="favicon" width={32} height={32} className="rounded-md" crossOrigin="anonymous" />
+                                    <Image src={item.overview.favicon || '/fallback-favicon.svg'} alt="favicon" width={32} height={32} className="rounded-md bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous" />
                                     <div className="flex-1 overflow-hidden">
                                         <CardTitle className="truncate">{item.overview.domain}</CardTitle>
                                         <p className="text-xs text-muted-foreground">
