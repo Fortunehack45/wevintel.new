@@ -1,3 +1,4 @@
+
 'use client';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import {
@@ -54,7 +55,7 @@ const TechCard = ({ tech }: { tech: TechStackData[0] }) => {
         <Tooltip>
             <TooltipTrigger asChild>
                 <div 
-                    className="flex-shrink-0 w-48 h-full rounded-2xl p-4 flex flex-col justify-center items-center gap-3 cursor-pointer transition-all duration-300
+                    className="flex-shrink-0 w-48 h-40 rounded-2xl p-4 flex flex-col justify-center items-center gap-3 cursor-pointer transition-all duration-300
                                 bg-card/5 backdrop-blur-sm border border-white/10 
                                 hover:bg-card/20 hover:border-primary/50 hover:scale-105"
                 >
