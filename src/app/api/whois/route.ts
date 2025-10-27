@@ -1,3 +1,4 @@
+
 import { NextResponse } from 'next/server';
 import type { DomainData, DomainContact } from '@/lib/types';
 
@@ -58,7 +59,7 @@ export async function GET(request: Request) {
     const res = await fetch(whoisApiUrl);
     
     if (!res.ok) {
-        console.error(`Whois API request failed with status: ${res.status}.`);
+        console.error(`Whois API request failed with status: ${res.status}. URL: ${whoisApiUrl.replace(apiKey, '***')}`);
         return NextResponse.json({ error: `Failed to fetch data from WHOIS provider. Status: ${res.status}` }, { status: res.status });
     }
 
@@ -85,7 +86,7 @@ export async function GET(request: Request) {
         
         let nameservers: string[] = [];
         if (record.nameServers?.rawText) {
-            nameservers = record.nameServers.rawText.split('\\n').map(ns => ns.trim()).filter(Boolean);
+            nameservers = record.nameServers.rawText.split(/\\n|\s+/).map(ns => ns.trim()).filter(Boolean);
         }
 
         const domainData: DomainData = {
