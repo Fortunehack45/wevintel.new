@@ -161,10 +161,13 @@ export default function DomainResultPage() {
                 pdf.setFont('helvetica', 'normal');
                 if (Array.isArray(value)) {
                     value.forEach((v, i) => {
+                       checkAndAddPage(20);
                        const itemY = currentY + (i * 14);
                        pdf.text(`- ${v}`, valueX, itemY);
+                       if (i === value.length - 1) {
+                         currentY = itemY + 14 + 6;
+                       }
                     });
-                    currentY += value.length * 14 + 6;
                 } else {
                     const splitValue = pdf.splitTextToSize(String(value), valueWidth);
                     pdf.text(splitValue, valueX, currentY);
@@ -186,10 +189,15 @@ export default function DomainResultPage() {
                 if (!contact) return;
                 checkAndAddPage(120);
                 addSectionTitle(title);
+                checkAndAddPage();
                 addKeyValue('Name', contact.name);
+                checkAndAddPage();
                 addKeyValue('Organization', contact.organization);
+                checkAndAddPage();
                 addKeyValue('Email', contact.email);
+                checkAndAddPage();
                 addKeyValue('Telephone', contact.telephone);
+                checkAndAddPage();
                 const address = [contact.street, contact.city, contact.state, contact.postalCode, contact.country].filter(Boolean).join(', ');
                 addKeyValue('Address', address);
             };
