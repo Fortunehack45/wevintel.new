@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
-    --primary: 217 91% 60%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 47.4% 11.2%;
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 213 31% 91%;
+    --primary: 204 100% 50%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 28% 17%;
+    --muted-foreground: 218 11% 65%;
+    --accent: 215 28% 17%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 204 100% 50%;
     --radius: 0.75rem; /* rounded-xl */
     --chart-1: 217 91% 60%;
     --chart-2: 258 87% 66%;
@@ -32,25 +32,25 @@
   }
 
   .dark {
-    --background: 0 0% 0%;
-    --foreground: 210 40% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217 91% 60%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 213 31% 91%;
+    --primary: 204 100% 50%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 28% 17%;
+    --muted-foreground: 218 11% 65%;
+    --accent: 215 28% 17%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 204 100% 50%;
   }
 }
 
@@ -71,38 +71,35 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
-        radial-gradient(circle at 15% 50%, hsla(var(--primary), 0.15), transparent 40%),
-        radial-gradient(circle at 85% 30%, hsla(var(--chart-2), 0.15), transparent 40%);
-    background-size: 250% 250%;
-    filter: blur(140px);
+    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, hsla(var(--primary), 0.3), transparent);
+    filter: blur(120px);
     z-index: -1;
     pointer-events: none;
-    animation: background-pan 18s ease-in-out infinite;
-  }
-  
-  .dark body::before {
-     background-image: 
-        radial-gradient(circle at 15% 50%, hsla(var(--primary), 0.25), transparent 40%),
-        radial-gradient(circle at 85% 30%, hsla(var(--chart-2), 0.25), transparent 40%);
+    animation: background-pan 15s linear infinite;
   }
 
   @keyframes background-pan {
     0% {
-      background-position: 0% 50%;
+      transform: translateX(-10%) translateY(-10%) rotate(0deg);
+    }
+    25% {
+        transform: translateX(10%) translateY(10%) rotate(90deg);
     }
     50% {
-      background-position: 100% 50%;
+      transform: translateX(-10%) translateY(10%) rotate(180deg);
+    }
+    75% {
+        transform: translateX(10%) translateY(-10%) rotate(270deg);
     }
     100% {
-      background-position: 0% 50%;
+      transform: translateX(-10%) translateY(-10%) rotate(360deg);
     }
   }
 }
 
 @layer utilities {
   .glass-card {
-    @apply bg-card/50 dark:bg-card/30 backdrop-blur-xl border-border/50 shadow-lg dark:shadow-black/20;
+    @apply bg-card/60 dark:bg-card/40 backdrop-blur-lg border-border/50 shadow-xl dark:shadow-black/30;
   }
   .glow-border {
     @apply shadow-lg shadow-primary/10;
