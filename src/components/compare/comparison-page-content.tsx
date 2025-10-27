@@ -26,7 +26,7 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
     const [isDownloading, setIsDownloading] = useState(false);
     const [comparisonSummary, setComparisonSummary] = useState<ComparisonOutput | { error: string } | null>(null);
     const stableInitialValue = useMemo(() => [], []);
-    const [history, setHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', stableInitialValue);
+    const [, setHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', stableInitialValue);
     
     const getAIComparison = useCallback(async (site1: AnalysisResult, site2: AnalysisResult) => {
         try {
@@ -66,8 +66,12 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
                     domain1: new URL(urls.url1).hostname,
                     domain2: new URL(urls.url2).hostname,
                     createdAt: new Date().toISOString(),
-                }
-                const newHistory = [newEntry, ...prev.filter(item => !(item.url1 === newEntry.url1 && item.url2 === newEntry.url2))];
+                };
+                 // Remove existing entry for this pair to add the new one on top
+                const filteredHistory = prev.filter(item => {
+                    return !(item.url1 === newEntry.url1 && item.url2 === newEntry.url2);
+                });
+                const newHistory = [newEntry, ...filteredHistory];
                 return newHistory.slice(0, 50);
             });
         }

@@ -3,6 +3,7 @@
 import { CompareForm } from '@/components/compare/compare-form';
 import { motion } from 'framer-motion';
 import { Scale } from 'lucide-react';
+import { ComparisonHistoryList } from '@/components/compare/comparison-history-list';
 
 export default function ComparePage() {
   return (
@@ -25,6 +26,11 @@ export default function ComparePage() {
         <p className="mt-4 text-sm text-muted-foreground">
           Enter two URLs to see who comes out on top.
         </p>
+      </div>
+      
+       <div className="w-full max-w-5xl mt-24">
+        <h2 className="text-3xl font-bold mb-6 text-left">Recent Comparisons</h2>
+        <ComparisonHistoryList limit={6} />
       </div>
     </div>
   );
