@@ -1,8 +1,8 @@
 
 'use client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import type { DomainData } from '@/lib/types';
-import { Globe2, Calendar, Server, ShieldCheck, Clock, User, Building, Landmark, Hash } from 'lucide-react';
+import type { DomainData, DomainContact } from '@/lib/types';
+import { Globe2, Calendar, Server, ShieldCheck, Clock, User, Building, Mail, Phone, MapPin } from 'lucide-react';
 import { Skeleton } from '../ui/skeleton';
 import { Badge } from '../ui/badge';
 import { format, parseISO, differenceInDays, formatDistanceToNowStrict } from 'date-fns';
@@ -19,7 +19,7 @@ const DetailRow = ({ icon: Icon, label, value, className }: { icon: React.Elemen
     ) : value;
 
   return (
-    <div className={`flex items-start gap-4 py-3 border-t first:pt-0 last:pb-0 ${className}`}>
+    <div className={`flex items-start gap-4 py-3 border-t first:pt-0 last:pb-0 first:border-none ${className}`}>
       <Icon className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />
       <div className="flex flex-col gap-1 w-full overflow-hidden">
           <span className="text-sm font-medium text-muted-foreground">{label}</span>
@@ -55,7 +55,7 @@ const DateDetailRow = ({ icon: Icon, label, date, className }: { icon: React.Ele
     if (!date) return null;
 
     return (
-        <div className={`flex items-start gap-4 py-3 border-t first:pt-0 last:pb-0 ${className}`}>
+        <div className={`flex items-start gap-4 py-3 border-t first:pt-0 last:pb-0 first:border-none ${className}`}>
             <Icon className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />
             <div className="flex flex-col gap-1">
                 <span className="text-sm font-medium text-muted-foreground">{label}</span>
@@ -82,7 +82,7 @@ const RegistrationTimeline = ({ creationDate, expirationDate }: { creationDate?:
         const progress = Math.max(0, Math.min(100, (elapsedDuration / totalDuration) * 100));
 
         return (
-            <div className="space-y-3 pt-4">
+            <div className="space-y-3 pt-4 border-t">
                 <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                     <Clock className="h-4 w-4" />
                     Registration Timeline
@@ -99,6 +99,30 @@ const RegistrationTimeline = ({ creationDate, expirationDate }: { creationDate?:
         return null;
     }
 }
+
+const ContactCard = ({ title, icon: Icon, contact }: { title: string, icon: React.ElementType, contact?: DomainContact }) => {
+    if (!contact) return null;
+    
+    const address = [contact.street, contact.city, contact.state, contact.postalCode, contact.country].filter(Boolean).join(', ');
+
+    return (
+        <Card className="glass-card">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                    <Icon className="h-6 w-6 text-primary" />
+                    {title}
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <DetailRow icon={User} label="Name" value={contact.name} />
+                <DetailRow icon={Building} label="Organisation" value={contact.organization} />
+                <DetailRow icon={Mail} label="Email" value={contact.email} />
+                <DetailRow icon={Phone} label="Telephone" value={contact.telephone} />
+                <DetailRow icon={MapPin} label="Address" value={address} />
+            </CardContent>
+        </Card>
+    );
+};
 
 
 export function DomainCard({ data }: { data?: DomainData }) {
@@ -127,65 +151,70 @@ export function DomainCard({ data }: { data?: DomainData }) {
 
 
   return (
-    <div className='grid md:grid-cols-3 gap-6'>
-        <div className="md:col-span-2 space-y-6">
-            <Card className="glass-card">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-3">
-                        <Globe2 className="h-6 w-6 text-primary" />
-                        Registration Details
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <DetailRow icon={Landmark} label="Registrar" value={data.registrar} />
-                    <DateDetailRow icon={Calendar} label="Creation Date" date={data.creationDate} />
-                    <DateDetailRow icon={Calendar} label="Expiration Date" date={data.expirationDate} />
-                    <DateDetailRow icon={Calendar} label="Last Updated Date" date={data.updatedDate} />
-                     <RegistrationTimeline creationDate={data.creationDate} expirationDate={data.expirationDate} />
-                </CardContent>
-            </Card>
-        </div>
-        <div className="space-y-6">
-             <Card className="glass-card">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <ShieldCheck className="h-5 w-5 text-primary" />
-                        Domain Status
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    {data.status && data.status.length > 0 ? (
-                        <div className="flex flex-wrap gap-2">
-                            {data.status.map(s => (
-                                <Badge key={s} className={getStatusVariant(s)}>{s}</Badge>
-                            ))}
-                        </div>
-                    ) : (
-                        <p className='text-sm text-muted-foreground'>No status information available.</p>
-                    )}
-                </CardContent>
-            </Card>
+    <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
+        <div className="lg:col-span-3 grid md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 space-y-6">
+                <Card className="glass-card">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-3">
+                            <Globe2 className="h-6 w-6 text-primary" />
+                            Registration Details
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <DetailRow icon={Building} label="Registrar" value={data.registrar} />
+                        <DateDetailRow icon={Calendar} label="Creation Date" date={data.creationDate} />
+                        <DateDetailRow icon={Calendar} label="Expiration Date" date={data.expirationDate} />
+                        <DateDetailRow icon={Calendar} label="Last Updated Date" date={data.updatedDate} />
+                        <RegistrationTimeline creationDate={data.creationDate} expirationDate={data.expirationDate} />
+                    </CardContent>
+                </Card>
+            </div>
+            <div className="space-y-6">
+                <Card className="glass-card">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <ShieldCheck className="h-5 w-5 text-primary" />
+                            Domain Status
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {data.status && data.status.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                                {data.status.map(s => (
+                                    <Badge key={s} className={getStatusVariant(s)}>{s}</Badge>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className='text-sm text-muted-foreground'>No status information available.</p>
+                        )}
+                    </CardContent>
+                </Card>
 
-            <Card className="glass-card">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Server className="h-5 w-5 text-primary" />
-                        Nameservers
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                     {data.nameservers && data.nameservers.length > 0 ? (
-                        <div className="space-y-2">
-                            {data.nameservers.map((ns, i) => (
-                                <p key={i} className="text-sm font-mono bg-muted/50 rounded px-2 py-1">{ns}</p>
-                            ))}
-                        </div>
-                    ) : (
-                        <p className='text-sm text-muted-foreground'>No nameservers found.</p>
-                    )}
-                </CardContent>
-            </Card>
+                <Card className="glass-card">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <Server className="h-5 w-5 text-primary" />
+                            Nameservers
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {data.nameservers && data.nameservers.length > 0 ? (
+                            <div className="space-y-2">
+                                {data.nameservers.map((ns, i) => (
+                                    <p key={i} className="text-sm font-mono bg-muted/50 rounded px-2 py-1">{ns}</p>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className='text-sm text-muted-foreground'>No nameservers found.</p>
+                        )}
+                    </CardContent>
+                </Card>
+            </div>
         </div>
+        <ContactCard title="Registrant Contact" icon={User} contact={data.registrant} />
+        <ContactCard title="Admin Contact" icon={User} contact={data.admin} />
+        <ContactCard title="Tech Contact" icon={User} contact={data.tech} />
     </div>
   );
 }

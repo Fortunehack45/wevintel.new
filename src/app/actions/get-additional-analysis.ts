@@ -1,7 +1,7 @@
 
 'use server';
 
-import type { DomainData, StatusData } from '@/lib/types';
+import type { DomainData, StatusData, DomainContact } from '@/lib/types';
 
 interface WhoisResponse {
     WhoisRecord: {
@@ -12,7 +12,10 @@ interface WhoisResponse {
         status?: string;
         nameServers?: {
             rawText: string;
-        }
+        };
+        registrant?: any;
+        administrativeContact?: any;
+        technicalContact?: any;
     }
 }
 
@@ -71,6 +74,21 @@ export async function getDomainInfo(domainName: string): Promise<DomainData | un
             if(record.nameServers?.rawText) {
                 nameservers = record.nameServers.rawText.split('\n').map(ns => ns.trim()).filter(Boolean);
             }
+            
+            const parseContact = (contact: any): DomainContact | undefined => {
+                if (!contact) return undefined;
+                return {
+                    name: contact.name,
+                    organization: contact.organization,
+                    email: contact.email,
+                    telephone: contact.telephone,
+                    street: contact.street,
+                    city: contact.city,
+                    state: contact.state,
+                    postalCode: contact.postalCode,
+                    country: contact.country
+                }
+            }
 
             return {
                 registrar: record.registrarName,
@@ -79,6 +97,9 @@ export async function getDomainInfo(domainName: string): Promise<DomainData | un
                 updatedDate: record.updatedDate,
                 status: statusArray,
                 nameservers: nameservers,
+                registrant: parseContact(record.registrant),
+                admin: parseContact(record.administrativeContact),
+                tech: parseContact(record.technicalContact),
             };
         }
         return undefined;

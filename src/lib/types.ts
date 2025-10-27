@@ -90,7 +90,7 @@ export type HostingInfo = {
 };
 
 export type HeaderInfo = {
-    [key: string]: string;
+    [key:string]: string;
 }
 
 export type AuditItem = {
@@ -121,6 +121,18 @@ export type TechStackItem = {
 
 export type TechStackData = TechStackItem[];
 
+export type DomainContact = {
+    name?: string;
+    organization?: string;
+    email?: string;
+    telephone?: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    country?: string;
+}
+
 export type DomainData = {
   registrar?: string;
   creationDate?: string;
@@ -128,6 +140,9 @@ export type DomainData = {
   updatedDate?: string;
   status?: string[];
   nameservers?: string[];
+  registrant?: DomainContact;
+  admin?: DomainContact;
+  tech?: DomainContact;
 };
 
 export type StatusData = {
