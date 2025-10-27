@@ -44,7 +44,7 @@ const AISummarySchema = z.object({
 });
 export type AISummary = z.infer<typeof AISummarySchema>;
 
-export async function summarizeWebsite(input: WebsiteAnalysisInput): Promise<AISummary> {
+export async function summarizeWebsite(input: WebsiteAnalysisInput): Promise<AISummary | null> {
   return summarizeWebsiteFlow(input);
 }
 
@@ -78,10 +78,15 @@ const summarizeWebsiteFlow = ai.defineFlow(
   {
     name: 'summarizeWebsiteFlow',
     inputSchema: WebsiteAnalysisInputSchema,
-    outputSchema: AISummarySchema,
+    outputSchema: z.nullable(AISummarySchema),
   },
   async (input) => {
-    const { output } = await prompt(input);
-    return output!;
+    try {
+      const { output } = await prompt(input);
+      return output;
+    } catch (e) {
+      console.error("AI summary flow failed:", e);
+      return null;
+    }
   }
 );

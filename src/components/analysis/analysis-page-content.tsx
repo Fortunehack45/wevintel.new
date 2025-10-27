@@ -88,10 +88,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 headers: initialData.headers,
             };
             
-            const summaryPromise = summarizeWebsite(aiSummaryInput).catch(e => {
-              console.error("AI Summary failed in initial load", e);
-              return null;
-            });
+            const summaryPromise = summarizeWebsite(aiSummaryInput);
             
             const resolvedSummary = await summaryPromise;
 

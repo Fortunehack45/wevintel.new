@@ -74,7 +74,11 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
                 headers: data.headers,
             }
             const result = await summarizeWebsite(input);
-            setSummary(result);
+            if (result) {
+                setSummary(result);
+            } else {
+                setError(true);
+            }
         } catch (e) {
             console.error("AI summary failed:", e);
             setError(true);
@@ -85,18 +89,15 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
 
     useEffect(() => {
         setSummary(initialSummary);
+        if (initialSummary === null) {
+            setError(true);
+            setIsLoading(false);
+        }
     }, [initialSummary]);
 
     useEffect(() => {
         setIsLoading(initialIsLoading);
     }, [initialIsLoading]);
-
-    useEffect(() => {
-        if(initialIsLoading === false && initialSummary === undefined && !error) {
-            generateSummary();
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [initialIsLoading, initialSummary, error])
 
 
     return (
