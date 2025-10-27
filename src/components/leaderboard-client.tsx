@@ -9,7 +9,7 @@ import Image from "next/image";
 import { Input } from "./ui/input";
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { BarChart, Tv, ShoppingCart, Newspaper, Cpu, Code, Brush, Music, Video, VenetianMask, MessageCircle, Gamepad, BookOpen, Building2, Cloud, DollarSign, Plane, Car, Utensils, Home, Bot, FlaskConical, Search, Globe, Wind, Building, Package, Clapperboard, Palette, Headphones, Drama, Play, Library, Landmark, Brain, Heart, ChefHat, Briefcase, Trophy, Sun, Ship, Mail, Handshake, PenTool, Tv2, Webhook, Rss, Book, University, Atom, Stethoscope, Salad, UtensilsCross, Hand, Tent, Bus, Forklift, NewspaperIcon, Palette as ArtIcon, Network, GitBranch, SortAsc, SortDesc } from "lucide-react";
+import { BarChart, Tv, ShoppingCart, Newspaper, Cpu, Code, Brush, Music, Video, VenetianMask, MessageCircle, Gamepad, BookOpen, Building2, Cloud, DollarSign, Plane, Car, Utensils, Home, Bot, FlaskConical, Search, Globe, Wind, Building as BuildingIcon, Package, Clapperboard, Palette, Headphones, Drama, Play, Library, Landmark, Brain, Heart, ChefHat, Briefcase, Trophy, Sun, Ship, Mail, Handshake, PenTool, Tv2, Webhook, Rss, Book, University, Atom, Stethoscope, Salad, UtensilsCrossed, Hand, Tent, Bus, Forklift, NewspaperIcon, Palette as ArtIcon, Network, GitBranch, SortAsc, SortDesc } from "lucide-react";
 
 
 const categoryIcons: { [key: string]: React.ElementType } = {
@@ -31,7 +31,7 @@ const categoryIcons: { [key: string]: React.ElementType } = {
     'Science': Atom,
     'Health': Stethoscope,
     'Food': ChefHat,
-    'Business': Building,
+    'Business': BuildingIcon,
     'Sports': Trophy,
     'Cloud Storage': Cloud,
     'Productivity': Bot,
@@ -39,7 +39,7 @@ const categoryIcons: { [key: string]: React.ElementType } = {
     'Blogging': PenTool,
     'Travel': Plane,
     'Transportation': Bus,
-    'Food Delivery': UtensilsCross,
+    'Food Delivery': UtensilsCrossed,
     'CMS': Webhook,
     'Website Builder': Tv2,
     'Tech News': Rss,
@@ -106,7 +106,12 @@ export function LeaderboardClient() {
       if (sortOrder === 'rank') {
           // A bit complex to sort categories by the rank of their best site
           // For now, let's keep them alphabetically sorted for predictability
-          return categories.sort();
+          return categories.sort((a, b) => {
+              const rankA = groupedAndSortedSites[a][0]?.rank || Infinity;
+              const rankB = groupedAndSortedSites[b][0]?.rank || Infinity;
+              if (rankA === rankB) return a.localeCompare(b);
+              return rankA - rankB;
+          });
       }
       return categories.sort();
   }, [groupedAndSortedSites, sortOrder]);
@@ -142,7 +147,7 @@ export function LeaderboardClient() {
 
         <div className="rounded-xl border bg-card/60 dark:bg-card/40 backdrop-blur-lg shadow-lg dark:shadow-black/40 p-2 md:p-4">
           {sortedCategories.length > 0 ? (
-            <Accordion type="multiple" defaultValue={sortedCategories} className="w-full">
+            <Accordion type="multiple" defaultValue={sortedCategories.slice(0, 3)} className="w-full">
               {sortedCategories.map(category => {
                 const Icon = categoryIcons[category] || categoryIcons['Default'];
                 return (
