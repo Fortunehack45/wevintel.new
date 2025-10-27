@@ -28,7 +28,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn(
           `${poppins.variable} font-body antialiased`,
-          "relative isolate"
         )}>
         <ThemeProvider
             attribute="class"
