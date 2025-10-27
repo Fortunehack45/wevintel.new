@@ -21,6 +21,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useMemo } from 'react';
+import Image from 'next/image';
 
 export function ComparisonHistoryList({ limit }: { limit?: number }) {
   const stableInitialValue = useMemo(() => [], []);
@@ -75,12 +76,15 @@ export function ComparisonHistoryList({ limit }: { limit?: number }) {
                 </AlertDialog>
 
                 <CardHeader>
-                    <div className="flex items-center gap-3">
-                        <Scale className="h-8 w-8 text-primary" />
-                        <div className="flex-1 overflow-hidden">
-                            <CardTitle className="truncate text-base">{item.domain1}</CardTitle>
-                            <p className="text-sm text-muted-foreground">vs</p>
-                            <CardTitle className="truncate text-base">{item.domain2}</CardTitle>
+                    <div className="flex items-center justify-around gap-2 text-center">
+                        <div className="flex flex-col items-center gap-2 overflow-hidden w-2/5">
+                            <Image src={`https://www.google.com/s2/favicons?domain=${item.domain1}&sz=32`} alt={`${item.domain1} favicon`} width={32} height={32} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
+                            <CardTitle className="truncate text-sm font-semibold w-full">{item.domain1}</CardTitle>
+                        </div>
+                        <Scale className="h-6 w-6 text-muted-foreground flex-shrink-0" />
+                        <div className="flex flex-col items-center gap-2 overflow-hidden w-2/5">
+                            <Image src={`https://www.google.com/s2/favicons?domain=${item.domain2}&sz=32`} alt={`${item.domain2} favicon`} width={32} height={32} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
+                            <CardTitle className="truncate text-sm font-semibold w-full">{item.domain2}</CardTitle>
                         </div>
                     </div>
                 </CardHeader>
