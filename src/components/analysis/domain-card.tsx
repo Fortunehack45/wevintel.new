@@ -7,6 +7,7 @@ import { Skeleton } from '../ui/skeleton';
 import { Badge } from '../ui/badge';
 import { format, parseISO, differenceInDays, formatDistanceToNowStrict } from 'date-fns';
 import { Progress } from '../ui/progress';
+import { useEffect, useState } from 'react';
 
 const DetailRow = ({ icon: Icon, label, value, className }: { icon: React.ElementType, label: string; value?: string | string[] | null, className?: string }) => {
   if (!value || (Array.isArray(value) && value.length === 0)) return null;
@@ -29,23 +30,39 @@ const DetailRow = ({ icon: Icon, label, value, className }: { icon: React.Elemen
 };
 
 const DateDetailRow = ({ icon: Icon, label, date, className }: { icon: React.ElementType, label: string, date?: string, className?: string }) => {
-    if (!date) return null;
-    let formattedDate, relativeDate;
+    const [relativeDate, setRelativeDate] = useState<string>('');
+    
+    let formattedDate: string;
     try {
-        const parsedDate = parseISO(date);
-        formattedDate = format(parsedDate, 'PPP p');
-        relativeDate = formatDistanceToNowStrict(parsedDate, { addSuffix: true});
+        const parsedDate = parseISO(date || '');
+        formattedDate = format(parsedDate, 'PPP'); // Format without time to avoid timezone issues
     } catch(e) {
-        formattedDate = date;
-        relativeDate = "Invalid date";
+        formattedDate = date || 'Invalid Date';
     }
+    
+    useEffect(() => {
+        // Defer relative time calculation to client-side only
+        if (date) {
+            try {
+                const parsedDate = parseISO(date);
+                setRelativeDate(formatDistanceToNowStrict(parsedDate, { addSuffix: true }));
+            } catch (e) {
+                setRelativeDate('Invalid date');
+            }
+        }
+    }, [date]);
+
+    if (!date) return null;
 
     return (
         <div className={`flex items-start gap-4 py-3 border-t first:pt-0 last:pb-0 ${className}`}>
             <Icon className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />
             <div className="flex flex-col gap-1">
                 <span className="text-sm font-medium text-muted-foreground">{label}</span>
-                <span className="font-semibold text-foreground text-sm">{formattedDate} <span className="text-muted-foreground text-xs">({relativeDate})</span></span>
+                <span className="font-semibold text-foreground text-sm">
+                    {formattedDate} 
+                    {relativeDate && <span className="text-muted-foreground text-xs ml-1">({relativeDate})</span>}
+                </span>
             </div>
         </div>
     )
