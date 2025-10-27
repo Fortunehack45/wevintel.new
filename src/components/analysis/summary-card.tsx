@@ -130,5 +130,3 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
         </Card>
     )
 }
-
-    
