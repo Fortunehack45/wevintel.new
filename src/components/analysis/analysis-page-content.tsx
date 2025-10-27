@@ -93,9 +93,10 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
               return null;
             });
             
+            const resolvedSummary = await summaryPromise;
             setAnalysisResult(current => ({
               ...(current as AnalysisResult),
-              aiSummary: await summaryPromise,
+              aiSummary: resolvedSummary,
             }));
 
             setIsLoading(false);
