@@ -70,7 +70,7 @@ export function AuditsCard({ data }: { data?: AuditInfo }) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <SlidersHorizontal className="h-5 w-5 text-primary" />
-            Performance & Optimization
+            Performance & Optimisation
           </CardTitle>
           <CardDescription>Metrics and opportunities for improvement.</CardDescription>
         </CardHeader>
@@ -95,7 +95,7 @@ export function AuditsCard({ data }: { data?: AuditInfo }) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <SlidersHorizontal className="h-5 w-5 text-primary" />
-          Performance & Optimization
+          Performance & Optimisation
         </CardTitle>
         <CardDescription>Opportunities for improvement from Lighthouse.</CardDescription>
       </CardHeader>
@@ -122,3 +122,5 @@ export function AuditsCard({ data }: { data?: AuditInfo }) {
     </Card>
   );
 }
+
+    

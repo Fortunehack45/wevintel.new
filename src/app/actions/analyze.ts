@@ -86,7 +86,7 @@ const getPerformanceAudits = (pageSpeedData: any): AuditInfo => {
         'server-response-time', 'network-requests', 'render-blocking-resources',
         'uses-responsive-images', 'uses-webp-images', 'offscreen-images', 
         'unminified-css', 'unminified-javascript', 'unused-css-rules', 'unused-javascript', 
-        'uses-optimized-images', 'uses-long-cache-ttl', 'total-byte-weight', 'dom-size',
+        'uses-optimised-images', 'uses-long-cache-ttl', 'total-byte-weight', 'dom-size',
         'mainthread-work-breakdown', 'efficient-animated-content', 'lcp-lazy-loaded',
         'max-potential-fid', 'interactive',
     ];
@@ -247,3 +247,5 @@ export async function getPerformanceAnalysis(url: string): Promise<Pick<Analysis
         }
     };
 }
+
+    

@@ -24,7 +24,7 @@ import {
   buttonVariants
 } from "@/components/ui/alert-dialog"
 
-export function HistoryClient() {
+export function HistoryClient({ limit }: { limit?: number }) {
   const [history, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
 
   const clearHistory = () => {
@@ -43,10 +43,12 @@ export function HistoryClient() {
     return "default";
   }
 
+  const itemsToDisplay = limit ? history.slice(0, limit) : history;
+
   if (history.length === 0) {
     return (
         <div className="text-center p-8 border-2 border-dashed rounded-2xl glass-card">
-            <h3 className="text-xl font-semibold">No sites analyzed yet.</h3>
+            <h3 className="text-xl font-semibold">No sites analysed yet.</h3>
             <p className="text-muted-foreground mt-2">Start exploring to see your history here!</p>
         </div>
     );
@@ -54,34 +56,36 @@ export function HistoryClient() {
 
   return (
     <div>
-        <div className="flex justify-end mb-4">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button 
-                    size="sm" 
-                    className="group transition-colors duration-200 ease-in-out bg-primary hover:bg-destructive text-primary-foreground"
-                >
-                    <Trash2 className="mr-2 h-4 w-4 transition-transform duration-200 ease-in-out group-hover:scale-110" />
-                    Clear History
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete your
-                    analysis history from this device.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={clearHistory} className={buttonVariants({ variant: "destructive" })}>Continue</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-        </div>
+        {!limit && (
+            <div className="flex justify-end mb-4">
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button 
+                        size="sm" 
+                        className="group transition-colors duration-200 ease-in-out bg-primary hover:bg-destructive text-primary-foreground"
+                    >
+                        <Trash2 className="mr-2 h-4 w-4 transition-transform duration-200 ease-in-out group-hover:scale-110" />
+                        Clear History
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your
+                        analysis history from this device.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={clearHistory} className={buttonVariants({ variant: "destructive" })}>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+            </div>
+        )}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {history.map((item, index) => {
+        {itemsToDisplay.map((item, index) => {
             const mobilePerformance = item.performance?.mobile?.performanceScore;
             
             const securityScore = item.security?.securityScore;
@@ -154,3 +158,5 @@ export function HistoryClient() {
     </div>
   );
 }
+
+    

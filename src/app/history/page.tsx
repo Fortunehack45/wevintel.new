@@ -1,3 +1,4 @@
+
 import { HistoryClient } from "@/components/history-client";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
@@ -20,3 +21,5 @@ export default function HistoryPage() {
         </div>
     )
 }
+
+    

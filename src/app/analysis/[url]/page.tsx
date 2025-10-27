@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           alt: `Favicon for ${domain}`
         }
       ],
-      locale: 'en_US',
+      locale: 'en_GB',
       type: 'website',
     },
   }
@@ -81,3 +81,5 @@ export default function AnalysisPage({ params }: { params: { url: string } }) {
   // We pass the clean, validated string as a prop to the client component.
   return <AnalysisPageContent decodedUrl={decodedUrl} />;
 }
+
+    

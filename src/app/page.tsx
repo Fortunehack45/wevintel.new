@@ -1,3 +1,4 @@
+
 'use client';
 
 import { UrlForm } from '@/components/url-form';
@@ -30,9 +31,11 @@ export default function Home() {
 
       <div className="w-full max-w-5xl mt-24">
           <h2 className="text-3xl font-bold mb-6 text-left">Recent Analyses</h2>
-          <HistoryClient />
+          <HistoryClient limit={6} />
       </div>
 
     </div>
   );
 }
+
+    

@@ -1,3 +1,4 @@
+
 export function Footer() {
   const currentYear = new Date().getFullYear();
   return (
@@ -9,3 +10,5 @@ export function Footer() {
     </footer>
   );
 }
+
+    

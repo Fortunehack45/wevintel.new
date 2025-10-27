@@ -11,7 +11,7 @@ export default function LeaderboardPage() {
             <div className="flex flex-wrap justify-between items-center mb-8 gap-4">
                 <div className="space-y-1">
                     <h1 className="text-4xl font-bold flex items-center gap-3"><Trophy className="text-primary h-8 w-8" /> Leaderboard</h1>
-                    <p className="text-muted-foreground">Explore and analyze a curated list of top websites from various categories.</p>
+                    <p className="text-muted-foreground">Explore and analyse a curated list of top websites from various categories.</p>
                 </div>
                 <Button asChild variant="outline">
                   <Link href="/">
@@ -24,3 +24,5 @@ export default function LeaderboardPage() {
         </div>
     )
 }
+
+    

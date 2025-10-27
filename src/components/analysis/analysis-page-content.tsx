@@ -288,7 +288,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
             }
             
             // --- Audits Sections ---
-            addAuditList('Performance & Optimization Audits', data.performanceAudits);
+            addAuditList('Performance & Optimisation Audits', data.performanceAudits);
             addAuditList('Security Audits', data.securityAudits);
             addAuditList('Diagnostics & Best Practices', data.diagnosticsAudits);
 
@@ -305,7 +305,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
             }
 
 
-            // --- Finalize Pages ---
+            // --- Finalise Pages ---
             addPageFooter();
 
             try {
@@ -340,7 +340,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                     </Button>
                     <Button variant="outline" onClick={() => setKey(Date.now())} disabled={isDownloading}>
                         <RefreshCw className="mr-2 h-4 w-4" />
-                        Re-analyze
+                        Re-analyse
                     </Button>
                     <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisDataForPdf || !analysisDataForPdf.performance}>
                          {isDownloading ? (
@@ -517,3 +517,5 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
 
   return null;
 }
+
+    

@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Info, Database, Shield, Home, Settings, Layers, Code, User, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -53,7 +54,7 @@ export default function AboutPage() {
               Your privacy is paramount. WebIntel operates entirely on your client-side (your browser) for history storage.
             </p>
             <ul className="list-disc pl-5 space-y-2">
-              <li><span className="font-semibold text-foreground">No Backend Tracking:</span> We do not have a traditional backend server that logs your activity or the URLs you analyze.</li>
+              <li><span className="font-semibold text-foreground">No Backend Tracking:</span> We do not have a traditional backend server that logs your activity or the URLs you analyse.</li>
               <li><span className="font-semibold text-foreground">Local Storage:</span> Your analysis history is stored exclusively in your browser&apos;s local storage, which you can clear at any time.</li>
             </ul>
           </CardContent>
@@ -172,7 +173,7 @@ export default function AboutPage() {
             <div className="max-w-xl">
                 <h3 className="text-2xl font-bold">Fortune</h3>
                 <p className="text-muted-foreground mt-2">
-                    Fortune is a passionate software and web developer with a love for building creative and impactful solutions. With a keen eye for detail and a drive for excellence, he specializes in turning complex problems into elegant, user-friendly applications.
+                    Fortune is a passionate software and web developer with a love for building creative and impactful solutions. With a keen eye for detail and a drive for excellence, he specialises in turning complex problems into elegant, user-friendly applications.
                 </p>
                 <p className="text-muted-foreground mt-4">
                     If you are interested in collaborating on a project or exploring partnership opportunities, feel free to get in touch.
@@ -189,3 +190,5 @@ export default function AboutPage() {
     </div>
   );
 }
+
+    

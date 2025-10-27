@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
@@ -16,7 +17,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: 'WebIntel',
-  description: 'Analyze any website URL for a full public intelligence report.',
+  description: 'Analyse any website URL for a full public intelligence report.',
 };
 
 export default function RootLayout({
@@ -25,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-GB" suppressHydrationWarning>
       <body className={cn(
           `${poppins.variable} font-body antialiased`,
         )}>
@@ -50,3 +51,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    

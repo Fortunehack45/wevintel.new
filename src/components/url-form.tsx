@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -48,7 +49,7 @@ export function UrlForm() {
   }, []);
 
 
-  const analyzeUrl = (targetUrl: string) => {
+  const analyseUrl = (targetUrl: string) => {
     setIsLoading(true);
 
     let cleanUrl = targetUrl.trim();
@@ -82,7 +83,7 @@ export function UrlForm() {
         targetUrl = suggestions[activeIndex].overview.url;
     }
     
-    analyzeUrl(targetUrl);
+    analyseUrl(targetUrl);
   };
   
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -100,7 +101,7 @@ export function UrlForm() {
   }
   
   const handleSuggestionClick = (suggestionUrl: string) => {
-      analyzeUrl(suggestionUrl);
+      analyseUrl(suggestionUrl);
   }
 
   return (
@@ -132,7 +133,7 @@ export function UrlForm() {
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                     ) : <Search className="h-5 w-5" />}
-                    <span className="hidden md:inline ml-2">Analyze</span>
+                    <span className="hidden md:inline ml-2">Analyse</span>
                 </Button>
             </form>
         </Card>
@@ -156,3 +157,5 @@ export function UrlForm() {
     </motion.div>
   );
 }
+
+    

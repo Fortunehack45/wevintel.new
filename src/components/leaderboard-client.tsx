@@ -63,7 +63,7 @@ export function LeaderboardClient() {
   const [currentPage, setCurrentPage] = useState(1);
   const sitesPerPage = 10;
 
-  const handleAnalyze = (e: React.MouseEvent, url: string) => {
+  const handleAnalyse = (e: React.MouseEvent, url: string) => {
     e.stopPropagation();
     const encodedUrl = encodeURIComponent(url);
     router.push(`/analysis/${encodedUrl}`);
@@ -180,9 +180,9 @@ export function LeaderboardClient() {
                                 <Button
                                   variant="secondary"
                                   size="sm"
-                                  onClick={(e) => handleAnalyze(e, site.url)}
+                                  onClick={(e) => handleAnalyse(e, site.url)}
                                 >
-                                  Analyze
+                                  Analyse
                                 </Button>
                             </TableCell>
                         </TableRow>
@@ -226,3 +226,5 @@ export function LeaderboardClient() {
     </div>
   );
 }
+
+    
