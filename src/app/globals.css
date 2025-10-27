@@ -79,29 +79,32 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, hsla(var(--primary), 0.3), transparent);
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(ellipse 80% 80% at 50% 50%, hsla(var(--primary), 0.55), transparent);
+    animation: background-pan 10s ease-in-out infinite;
     z-index: -1;
     pointer-events: none;
-    animation: background-pan 15s linear infinite;
   }
 
   @keyframes background-pan {
     0% {
-      transform: translateX(-10%) translateY(-10%) rotate(0deg);
+      background-position: 0% 50%;
+      transform: scale(1.2) rotate(0deg);
     }
     25% {
-        transform: translateX(10%) translateY(10%) rotate(90deg);
+      background-position: 100% 50%;
     }
     50% {
-      transform: translateX(-10%) translateY(10%) rotate(180deg);
+      background-position: 0% 50%;
+      transform: scale(1.5) rotate(10deg);
     }
     75% {
-        transform: translateX(10%) translateY(-10%) rotate(270deg);
+      background-position: 100% 50%;
     }
     100% {
-      transform: translateX(-10%) translateY(-10%) rotate(360deg);
+      background-position: 0% 50%;
+      transform: scale(1.2) rotate(0deg);
     }
   }
 }
