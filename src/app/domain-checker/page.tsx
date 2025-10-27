@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Search, Globe } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { HistoryClient } from '@/components/history-client';
 
 export default function DomainCheckerPage() {
   const [domain, setDomain] = useState('');
@@ -95,6 +95,11 @@ export default function DomainCheckerPage() {
               Get registrar, creation date, expiration date, and nameserver details.
             </p>
         </motion.div>
+      </div>
+
+       <div className="w-full max-w-5xl mt-24">
+        <h2 className="text-3xl font-bold mb-6 text-left">Recent Lookups</h2>
+        <HistoryClient limit={6} type="domain" />
       </div>
     </div>
   );
