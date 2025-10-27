@@ -4,6 +4,7 @@
 import { UrlForm } from '@/components/url-form';
 import { HistoryClient } from '@/components/history-client';
 import { motion } from 'framer-motion';
+import { URLSuggestionsScroller } from '@/components/URLSuggestionsScroller';
 
 
 export default function Home() {
@@ -24,6 +25,7 @@ export default function Home() {
           </p>
         </motion.div>
         <UrlForm />
+        <URLSuggestionsScroller />
         <p className="mt-4 text-sm text-muted-foreground">
           Get insights on performance, security, SEO, and more.
         </p>
