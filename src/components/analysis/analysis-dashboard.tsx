@@ -33,14 +33,12 @@ const cardVariants = {
   })
 };
 
-export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: AnalysisResult, onDataLoaded: (data: AnalysisResult) => void }) {
+export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult }) {
   const [, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
   
   useEffect(() => {
     // Only save to history if we have the full performance data
     if (initialData.performance) {
-      onDataLoaded(initialData);
-
       setHistory(prevHistory => {
         const newHistory = [...prevHistory];
         const existingIndex = newHistory.findIndex(item => item.overview.url === initialData.overview?.url);
@@ -56,7 +54,7 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
         return newHistory.slice(0, 20);
       });
     }
-  }, [initialData, onDataLoaded, setHistory]);
+  }, [initialData, setHistory]);
 
 
   const totalAuditScore = useMemo(() => {

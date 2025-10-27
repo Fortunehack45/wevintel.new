@@ -31,19 +31,147 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
 export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [key, setKey] = useState(Date.now());
     const [isDownloading, setIsDownloading] = useState(false);
-    const [analysisDataForPdf, setAnalysisDataForPdf] = useState<AnalysisResult | null>(null);
-    const [fullAnalysisResult, setFullAnalysisResult] = useState<AnalysisResult | null>(null);
+    const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [trafficCache, setTrafficCache] = useLocalStorage<Record<string, {data: TrafficData, timestamp: string}>>('webintel_traffic_cache', {});
+
     const router = useRouter();
 
-    useEffect(() => {
-        if (fullAnalysisResult) {
-            setAnalysisDataForPdf(fullAnalysisResult);
+    const getTrafficData = useCallback(async (url: string, description: string): Promise<TrafficData> => {
+        const cached = trafficCache[url];
+        const now = new Date();
+        
+        if (cached && cached.timestamp) {
+            const cachedDate = new Date(cached.timestamp);
+            const oneMonth = 30 * 24 * 60 * 60 * 1000;
+            if (now.getTime() - cachedDate.getTime() < oneMonth) {
+                return cached.data;
+            }
         }
-    }, [fullAnalysisResult]);
+        
+        const freshData = await estimateTraffic({ url, description });
+        setTrafficCache(prev => ({
+            ...prev,
+            [url]: {
+                data: freshData,
+                timestamp: now.toISOString()
+            }
+        }));
+        return freshData;
+    }, [setTrafficCache, trafficCache]);
+
+    useEffect(() => {
+        const fetchAnalysis = async () => {
+            setIsLoading(true);
+            setError(null);
+            setAnalysisResult(null);
+
+            // 1. Fast Analysis
+            const fastResult = await getFastAnalysis(decodedUrl);
+
+            if ('error' in fastResult) {
+                setError(fastResult.error);
+                setIsLoading(false);
+                return;
+            }
+            
+            // 2. AI Summary (in parallel with fast analysis result processing)
+            const aiSummaryInput: WebsiteAnalysisInput = {
+                overview: {
+                    url: fastResult.overview!.url,
+                    domain: fastResult.overview!.domain,
+                    title: fastResult.overview!.title,
+                    description: fastResult.overview!.description,
+                },
+                security: {
+                    isSecure: fastResult.security!.isSecure,
+                    securityHeaders: fastResult.security!.securityHeaders,
+                },
+                hosting: {
+                    ip: fastResult.hosting!.ip,
+                    isp: fastResult.hosting!.isp,
+                    country: fastResult.hosting!.country,
+                },
+                headers: fastResult.headers,
+            };
+            
+            const summaryPromise = summarizeWebsite(aiSummaryInput).catch(e => {
+              console.error("AI Summary failed in initial load", e);
+              return null;
+            });
+            
+            const partialData = {
+              ...fastResult,
+              id: fastResult.id || crypto.randomUUID(),
+              createdAt: fastResult.createdAt || new Date().toISOString(),
+              aiSummary: await summaryPromise,
+            } as AnalysisResult;
+
+            setAnalysisResult(partialData);
+            setIsLoading(false);
+            
+            // 3. Full Performance and Traffic Analysis (after fast analysis is displayed)
+            const [perfResult, trafficResult] = await Promise.all([
+                getPerformanceAnalysis(decodedUrl),
+                getTrafficData(decodedUrl, partialData.overview?.description || ''),
+            ]);
+
+            const securityAudits = perfResult.securityAudits || {};
+            let securityScoreTotal = 0;
+            let securityItemsScored = 0;
+            
+            if (partialData.security?.isSecure) securityScoreTotal += 1;
+            securityItemsScored++;
+
+            Object.values(partialData.security?.securityHeaders || {}).forEach(present => {
+                if (present) securityScoreTotal++;
+                securityItemsScored++;
+            });
+
+            Object.values(securityAudits).forEach(audit => {
+                if (audit.score !== null) {
+                    securityScoreTotal += audit.score;
+                    securityItemsScored++;
+                }
+            });
+            const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
+
+            // Combine all results and update state
+            setAnalysisResult(currentData => ({
+                ...(currentData as AnalysisResult),
+                ...perfResult,
+                overview: {
+                    ...currentData!.overview,
+                    ...perfResult.overview,
+                    title: perfResult.overview?.title || currentData!.overview?.title,
+                    description: perfResult.overview?.description || currentData!.overview?.description,
+                },
+                metadata: {
+                    ...currentData!.metadata,
+                    hasRobotsTxt: perfResult.metadata.hasRobotsTxt,
+                    hasSitemapXml: perfResult.metadata.hasSitemapXml,
+                } as Metadata,
+                security: {
+                    ...currentData!.security,
+                    securityScore: calculatedSecurityScore,
+                } as SecurityData,
+                traffic: trafficResult,
+                aiSummary: currentData?.aiSummary, // Keep the summary that was loaded first
+            }));
+        };
+
+        fetchAnalysis().catch(e => {
+            console.error("An error occurred during analysis:", e);
+            setError(e.message || "An unexpected error occurred.");
+            setIsLoading(false);
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [decodedUrl, key, getTrafficData]);
 
 
     const handleDownloadPdf = async () => {
-        if (!analysisDataForPdf) return;
+        if (!analysisResult || !analysisResult.performance) return;
         
         setIsDownloading(true);
 
@@ -325,13 +453,29 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
         }
 
         try {
-            generatePdfFromData(analysisDataForPdf);
+            generatePdfFromData(analysisResult);
         } catch (error) {
             console.error("PDF generation failed:", error);
         } finally {
             setIsDownloading(false);
         }
     };
+
+    const renderContent = () => {
+        if (isLoading) {
+            return <DashboardSkeleton />;
+        }
+        if (error) {
+            if (error === 'Domain not found. The website is not reachable.' || error === 'Could not fetch the main page of the website. It might be down or blocking requests.') {
+                return <NotFoundCard url={decodedUrl} />;
+            }
+            return <ErrorAlert title="Analysis Failed" description={error} />;
+        }
+        if (analysisResult) {
+            return <AnalysisDashboard initialData={analysisResult} />;
+        }
+        return null;
+    }
     
     return (
         <div className="flex-1">
@@ -351,7 +495,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                         <RefreshCw className="mr-2 h-4 w-4" />
                         Re-analyse
                     </Button>
-                    <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisDataForPdf || !analysisDataForPdf.performance}>
+                    <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisResult || !analysisResult.performance}>
                          {isDownloading ? (
                             <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                          ) : (
@@ -361,202 +505,7 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                     </Button>
                 </div>
             </div>
-            <AnalysisData 
-              url={decodedUrl} 
-              cacheKey={key} 
-              onDataLoaded={setFullAnalysisResult} 
-            />
+            {renderContent()}
         </div>
     );
-}
-
-function FullAnalysisLoader({ initialData, onFullData }: { initialData: AnalysisResult, onFullData: (data: AnalysisResult) => void }) {
-    const [trafficCache, setTrafficCache] = useLocalStorage<Record<string, {data: TrafficData, timestamp: string}>>('webintel_traffic_cache', {});
-
-    const getTrafficData = useCallback(async (url: string, description: string): Promise<TrafficData> => {
-        const cached = trafficCache[url];
-        const now = new Date();
-        
-        if (cached && cached.timestamp) {
-            const cachedDate = new Date(cached.timestamp);
-            const oneMonth = 30 * 24 * 60 * 60 * 1000;
-            if (now.getTime() - cachedDate.getTime() < oneMonth) {
-                return cached.data;
-            }
-        }
-        
-        const freshData = await estimateTraffic({ url, description });
-        setTrafficCache(prev => ({
-            ...prev,
-            [url]: {
-                data: freshData,
-                timestamp: now.toISOString()
-            }
-        }));
-        return freshData;
-    }, [setTrafficCache, trafficCache]);
-
-    useEffect(() => {
-        const fetchFullAnalysis = async () => {
-            const [perfResult, trafficResult] = await Promise.all([
-                getPerformanceAnalysis(initialData.overview.url),
-                getTrafficData(initialData.overview.url, initialData.overview?.description || ''),
-            ]);
-
-            const securityAudits = perfResult.securityAudits || {};
-            let securityScoreTotal = 0;
-            let securityItemsScored = 0;
-            
-            if (initialData.security?.isSecure) {
-                securityScoreTotal += 1;
-            }
-            securityItemsScored++;
-
-            Object.values(initialData.security?.securityHeaders || {}).forEach(present => {
-                if (present) securityScoreTotal++;
-                securityItemsScored++;
-            });
-
-            Object.values(securityAudits).forEach(audit => {
-                if (audit.score !== null) {
-                    securityScoreTotal += audit.score;
-                    securityItemsScored++;
-                }
-            });
-            const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
-
-            const combinedData: AnalysisResult = {
-                ...initialData,
-                ...perfResult,
-                overview: {
-                    ...initialData.overview,
-                    ...perfResult.overview,
-                    title: perfResult.overview?.title || initialData.overview?.title,
-                    description: perfResult.overview?.description || initialData.overview?.description,
-                },
-                metadata: {
-                    ...initialData.metadata,
-                    hasRobotsTxt: perfResult.metadata.hasRobotsTxt,
-                    hasSitemapXml: perfResult.metadata.hasSitemapXml,
-                } as Metadata,
-                security: {
-                    ...initialData.security,
-                    securityScore: calculatedSecurityScore,
-                } as SecurityData,
-                traffic: trafficResult,
-            };
-            onFullData(combinedData);
-        };
-
-        fetchFullAnalysis();
-    }, [initialData, onFullData, getTrafficData]);
-
-
-    return null; // This component does not render anything itself
-}
-
-
-function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: number, onDataLoaded: (data: AnalysisResult | null) => void; }) {
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchFastData() {
-        setIsLoading(true);
-        setError(null);
-        setAnalysisResult(null);
-
-        try {
-            const fastResult = await getFastAnalysis(url);
-
-            if ('error' in fastResult) {
-                setError(fastResult.error);
-                setIsLoading(false);
-                return;
-            }
-
-            const aiSummaryInput: WebsiteAnalysisInput = {
-                overview: {
-                    url: fastResult.overview!.url,
-                    domain: fastResult.overview!.domain,
-                    title: fastResult.overview!.title,
-                    description: fastResult.overview!.description,
-                },
-                security: {
-                    isSecure: fastResult.security!.isSecure,
-                    securityHeaders: fastResult.security!.securityHeaders,
-                },
-                hosting: {
-                    ip: fastResult.hosting!.ip,
-                    isp: fastResult.hosting!.isp,
-                    country: fastResult.hosting!.country,
-                },
-                headers: fastResult.headers,
-            }
-            
-            // Run summary generation, but don't wait for it
-            const summaryPromise = summarizeWebsite(aiSummaryInput).catch(e => {
-              console.error("AI Summary failed in initial load", e);
-              return null; // Return null on error to not block anything
-            });
-
-            const partialData = {
-              ...fastResult,
-              id: fastResult.id || crypto.randomUUID(),
-              createdAt: fastResult.createdAt || new Date().toISOString(),
-              aiSummary: await summaryPromise,
-            } as AnalysisResult;
-            
-            setAnalysisResult(partialData);
-
-        } catch (error: any) {
-            setError(error.message);
-        } finally {
-            setIsLoading(false);
-        }
-    }
-    fetchFastData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, cacheKey]);
-
-
-  const handleFullDataLoaded = useCallback((fullData: AnalysisResult) => {
-    setAnalysisResult(currentData => {
-        const updatedData = {
-            ...currentData,
-            ...fullData,
-            aiSummary: currentData?.aiSummary || fullData.aiSummary, // Prioritize initially loaded summary
-        } as AnalysisResult;
-        onDataLoaded(updatedData);
-        return updatedData;
-    });
-  }, [onDataLoaded]);
-
-  if (isLoading) {
-    return <DashboardSkeleton />;
-  }
-
-  if (error) {
-    if (error === 'Domain not found. The website is not reachable.' || error === 'Could not fetch the main page of the website. It might be down or blocking requests.') {
-        return <NotFoundCard url={url} />;
-    }
-    return <ErrorAlert title="Analysis Failed" description={error} />;
-  }
-  
-  if (analysisResult) {
-    return (
-      <>
-        {!analysisResult.performance && (
-            <FullAnalysisLoader initialData={analysisResult} onFullData={handleFullDataLoaded} />
-        )}
-        <AnalysisDashboard 
-          initialData={analysisResult} 
-          onDataLoaded={onDataLoaded}
-        />
-      </>
-    );
-  }
-
-  return null;
 }
