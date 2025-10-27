@@ -11,18 +11,18 @@ export function ScrollingSuggestions({ isVisible, onSuggestionChange }: { isVisi
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    onSuggestionChange(index);
     const interval = setInterval(() => {
-      setIndex((prevIndex) => {
-        const nextIndex = (prevIndex + 1) % suggestions.length;
-        onSuggestionChange(nextIndex);
-        return nextIndex;
-      });
+      setIndex((prevIndex) => (prevIndex + 1) % suggestions.length);
     }, 3000); // Wait for 3 seconds before showing the next suggestion
 
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    onSuggestionChange(index);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, onSuggestionChange]);
+  }, [index]);
+
 
   return (
     <div
