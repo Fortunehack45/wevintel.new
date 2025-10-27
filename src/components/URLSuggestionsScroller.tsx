@@ -2,9 +2,9 @@
 
 import { topSites } from "@/lib/top-sites";
 import { motion, useAnimation } from "framer-motion";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Favicon } from "./Favicon";
 
 export function URLSuggestionsScroller() {
     const router = useRouter();
@@ -89,15 +89,7 @@ export function URLSuggestionsScroller() {
                             onClick={() => handleAnalyse(site.url)}
                             className="inline-flex items-center gap-2 px-4 py-2 mx-2 rounded-full cursor-pointer transition-all duration-300 bg-white/5 backdrop-blur-md border border-white/10 shadow-md hover:scale-105 hover:shadow-primary/20 hover:border-primary/30"
                         >
-                            <Image
-                                src={`https://www.google.com/s2/favicons?domain_url=${site.url}&sz=32`}
-                                alt={`${site.name} favicon`}
-                                width={20}
-                                height={20}
-                                className="rounded-full flex-shrink-0"
-                                unoptimized
-                                crossOrigin="anonymous"
-                            />
+                            <Favicon domain={site.url} />
                             <span className="text-sm font-medium text-foreground">{site.name}</span>
                         </div>
                     ))}
