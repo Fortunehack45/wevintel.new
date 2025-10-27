@@ -32,7 +32,7 @@
   }
 
   .dark {
-    --background: 224 71% 4%;
+    --background: 0 0% 0%;
     --foreground: 213 31% 91%;
     --card: 224 71% 4%;
     --card-foreground: 213 31% 91%;
@@ -60,6 +60,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
   }
 }
 
@@ -73,38 +74,39 @@
   .gradient-text {
     @apply text-foreground;
   }
+}
 
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: radial-gradient(ellipse 80% 80% at 50% 50%, hsla(var(--primary), 0.55), transparent);
-    animation: background-pan 10s ease-in-out infinite;
-    z-index: -1;
-    pointer-events: none;
+@layer utilities {
+  @keyframes wave {
+    0% { transform: translateX(-50%) translateY(-25%) rotate(0deg); }
+    50% { transform: translateX(-50%) translateY(-25%) rotate(180deg); }
+    100% { transform: translateX(-50%) translateY(-25%) rotate(360deg); }
   }
 
-  @keyframes background-pan {
-    0% {
-      background-position: 0% 50%;
-      transform: scale(1.2) rotate(0deg);
-    }
-    25% {
-      background-position: 100% 50%;
-    }
-    50% {
-      background-position: 0% 50%;
-      transform: scale(1.5) rotate(10deg);
-    }
-    75% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-      transform: scale(1.2) rotate(0deg);
-    }
+  .wave-container {
+    @apply fixed top-0 left-0 w-full h-[50vh] -z-10 overflow-hidden pointer-events-none;
+  }
+
+  .wave-light {
+    @apply absolute left-1/2 top-1/2 w-[200vw] h-[200vw] max-w-[1000px] max-h-[1000px];
+    transform: translateX(-50%) translateY(-25%);
+    animation: wave 20s linear infinite;
+  }
+
+  .wave-light::before,
+  .wave-light::after {
+    content: '';
+    @apply absolute w-full h-full;
+    border-radius: 45%;
+  }
+
+  .wave-light::before {
+     background: radial-gradient(circle, hsla(var(--primary), 0.6) 0%, transparent 70%);
+     animation: wave 25s linear infinite reverse;
+  }
+  
+  .wave-light::after {
+    background: radial-gradient(circle, hsla(var(--primary), 0.4) 0%, transparent 70%);
+     animation: wave 30s linear infinite;
   }
 }

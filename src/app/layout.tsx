@@ -35,6 +35,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
+          <div className="wave-container">
+            <div className="wave-light"></div>
+          </div>
           <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-1 container mx-auto px-4 py-8 pb-24 md:pb-12 pt-28">{children}</main>
