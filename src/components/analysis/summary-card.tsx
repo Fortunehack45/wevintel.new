@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Wand2, CheckCircle, Lightbulb, AlertTriangle } from 'lucide-react';
-import type { AnalysisResult, AISummary } from '@/lib/types';
-import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
+import type { AnalysisResult } from '@/lib/types';
+import { summarizeWebsite, WebsiteAnalysisInput, AISummary } from '@/ai/flows/summarize-flow';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { useIsMobile } from '@/hooks/use-mobile';
