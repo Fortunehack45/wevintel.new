@@ -7,7 +7,6 @@ import { Poppins } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { BottomNav } from '@/components/bottom-nav';
 import { cn } from '@/lib/utils';
-import { MaintenanceBanner } from '@/components/maintenance-banner';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -41,7 +40,6 @@ export default function RootLayout({
           </div>
           <div className="flex flex-col min-h-screen">
             <Header />
-            <MaintenanceBanner />
             <main className="flex-1 container mx-auto px-4 py-8 pb-24 md:pb-12 pt-12">{children}</main>
             <Footer />
           </div>
