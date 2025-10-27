@@ -37,24 +37,31 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
   const [, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
   
   useEffect(() => {
-    onDataLoaded(initialData);
+    // Only save to history if we have the full performance data
+    if (initialData.performance) {
+      onDataLoaded(initialData);
 
-    setHistory(prevHistory => {
-      const newHistory = [...prevHistory];
-      const existingIndex = newHistory.findIndex(item => item.overview.url === initialData.overview?.url);
-      
-      if (existingIndex > -1) {
-          newHistory[existingIndex] = initialData;
-      } else {
-          newHistory.unshift(initialData);
-      }
+      setHistory(prevHistory => {
+        const newHistory = [...prevHistory];
+        const existingIndex = newHistory.findIndex(item => item.overview.url === initialData.overview?.url);
+        
+        if (existingIndex > -1) {
+            // Update the existing record with the latest full data
+            newHistory[existingIndex] = initialData;
+        } else {
+            // Add new record
+            newHistory.unshift(initialData);
+        }
 
-      return newHistory.slice(0, 20);
-    });
+        return newHistory.slice(0, 20);
+      });
+    }
   }, [initialData, onDataLoaded, setHistory]);
 
 
   const totalAuditScore = useMemo(() => {
+    if (!initialData.performance) return null; // Don't calculate score for partial data
+    
     const allAudits: (AuditInfo | undefined)[] = [initialData.performanceAudits, initialData.securityAudits, initialData.diagnosticsAudits];
     let totalScore = 0;
     let scoreCount = 0;
@@ -76,35 +83,47 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
 
   const { overview, security, hosting, metadata, headers, performance, performanceAudits, securityAudits, diagnosticsAudits, traffic } = initialData;
 
+  const isLoadingFullReport = !performance;
+
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {overview && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="lg:col-span-4">
           <OverviewCard 
             data={overview}
-            hasPerformanceRun={!!performance}
-            isLoading={false}
+            isLoading={isLoadingFullReport}
           />
         </motion.div>
       }
 
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2">
-        <SummaryCard data={initialData} />
-      </motion.div>
+      {isLoadingFullReport ? (
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2">
+            <DashboardSkeleton.SummaryPlaceholder />
+        </motion.div>
+      ) : (
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="lg:col-span-2">
+          <SummaryCard data={initialData} />
+        </motion.div>
+      )}
 
-      {traffic && 
+
+      {isLoadingFullReport || !traffic ? (
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-2">
+           <DashboardSkeleton.TrafficPlaceholder />
+        </motion.div>
+      ) : (
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="lg:col-span-2">
           <TrafficCard data={traffic} />
         </motion.div>
-      }
+      )}
 
-      {performance ? (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-4">
-          <PerformanceCard data={performance} />
-        </motion.div>
-      ) : (
+      {isLoadingFullReport ? (
          <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-4">
           <DashboardSkeleton.PerformancePlaceholder />
+        </motion.div>
+      ) : (
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="lg:col-span-4">
+          <PerformanceCard data={performance} />
         </motion.div>
       )}
 
@@ -120,13 +139,13 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
         </motion.div>
       }
       
-      {performance ? (
+      {isLoadingFullReport ? (
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="lg:col-span-1">
-          <OverallScoreCard score={totalAuditScore} />
+           <DashboardSkeleton.ScorePlaceholder />
         </motion.div>
       ) : (
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="lg:col-span-1">
-           <DashboardSkeleton.ScorePlaceholder />
+          <OverallScoreCard score={totalAuditScore} />
         </motion.div>
       )}
 
@@ -136,17 +155,31 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
         </motion.div>
       }
 
-      {performanceAudits && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="lg:col-span-2">
-          <AuditsCard data={performanceAudits} />
-        </motion.div>
-      }
-      
-      {diagnosticsAudits &&
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="lg:col-span-2">
-          <DiagnosticsCard data={diagnosticsAudits} />
-        </motion.div>
-      }
+      {isLoadingFullReport ? (
+        <>
+            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="lg:col-span-2">
+                <DashboardSkeleton.AuditPlaceholder />
+            </motion.div>
+            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="lg:col-span-2">
+                <DashboardSkeleton.AuditPlaceholder />
+            </motion.div>
+        </>
+      ) : (
+        <>
+            {performanceAudits && 
+                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="lg:col-span-2">
+                <AuditsCard data={performanceAudits} />
+                </motion.div>
+            }
+            
+            {diagnosticsAudits &&
+                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="lg:col-span-2">
+                <DiagnosticsCard data={diagnosticsAudits} />
+                </motion.div>
+            }
+        </>
+      )}
+
 
       {headers && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={8} className="lg:col-span-4">

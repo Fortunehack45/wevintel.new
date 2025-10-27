@@ -1,13 +1,12 @@
 
-
 'use client';
 
-import { Suspense, useEffect, useState, useMemo, useRef } from 'react';
+import { Suspense, useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AlertTriangle, RefreshCw, Download, Home } from 'lucide-react';
+import { RefreshCw, Download, Home } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult, type AuditItem, AuditInfo, TrafficData } from '@/lib/types';
+import { type AnalysisResult, type AuditItem, AuditInfo, TrafficData, WebsiteOverview, SecurityData, HostingInfo, Metadata, HeaderInfo } from '@/lib/types';
 import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
@@ -21,7 +20,7 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 function ErrorAlert({title, description}: {title: string, description: string}) {
     return (
         <Alert variant="destructive">
-            <AlertTriangle className="h-4 w-4" />
+            <RefreshCw className="h-4 w-4" />
             <AlertTitle>{title}</AlertTitle>
             <AlertDescription>{description}</AlertDescription>
         </Alert>
@@ -33,7 +32,6 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     const [isDownloading, setIsDownloading] = useState(false);
     const [analysisDataForPdf, setAnalysisDataForPdf] = useState<AnalysisResult | null>(null);
     const router = useRouter();
-
 
     const handleDownloadPdf = async () => {
         if (!analysisDataForPdf) return;
@@ -363,15 +361,10 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
     );
 }
 
+function FullAnalysisLoader({ initialData, onFullData }: { initialData: AnalysisResult, onFullData: (data: AnalysisResult) => void }) {
+    const [trafficCache, setTrafficCache] = useLocalStorage<Record<string, {data: TrafficData, timestamp: string}>>('webintel_traffic_cache', {});
 
-function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: number, onDataLoaded: (data: AnalysisResult | null) => void; }) {
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [trafficCache, setTrafficCache] = useLocalStorage<Record<string, {data: TrafficData, timestamp: string}>>('webintel_traffic_cache', {});
-
-  useEffect(() => {
-    async function getTrafficData(url: string, description: string): Promise<TrafficData> {
+    const getTrafficData = useCallback(async (url: string, description: string): Promise<TrafficData> => {
         const cached = trafficCache[url];
         const now = new Date();
         
@@ -392,40 +385,25 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
             }
         }));
         return freshData;
-    }
+    }, [setTrafficCache, trafficCache]);
 
-
-    async function fetchData() {
-        setIsLoading(true);
-        setError(null);
-        setAnalysisResult(null);
-        onDataLoaded(null!);
-
-        try {
-            const [fastResult, perfResult] = await Promise.all([
-                getFastAnalysis(url),
-                getPerformanceAnalysis(url),
+    useEffect(() => {
+        const fetchFullAnalysis = async () => {
+            const [perfResult, trafficResult] = await Promise.all([
+                getPerformanceAnalysis(initialData.overview.url),
+                getTrafficData(initialData.overview.url, initialData.overview?.description || ''),
             ]);
 
-            if ('error' in fastResult) {
-                setError(fastResult.error);
-                setIsLoading(false);
-                return;
-            }
-            
-            const trafficResult = await getTrafficData(url, perfResult.overview?.description || fastResult.overview?.description || '');
-
-            // Combine results
             const securityAudits = perfResult.securityAudits || {};
             let securityScoreTotal = 0;
             let securityItemsScored = 0;
             
-            if (fastResult.security?.isSecure) {
+            if (initialData.security?.isSecure) {
                 securityScoreTotal += 1;
             }
             securityItemsScored++;
 
-            Object.values(fastResult.security?.securityHeaders || {}).forEach(present => {
+            Object.values(initialData.security?.securityHeaders || {}).forEach(present => {
                 if (present) securityScoreTotal++;
                 securityItemsScored++;
             });
@@ -436,31 +414,66 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
                     securityItemsScored++;
                 }
             });
-
             const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
 
+            const combinedData: AnalysisResult = {
+                ...initialData,
+                ...perfResult,
+                overview: {
+                    ...initialData.overview,
+                    ...perfResult.overview,
+                    title: perfResult.overview?.title || initialData.overview?.title,
+                    description: perfResult.overview?.description || initialData.overview?.description,
+                },
+                metadata: {
+                    ...initialData.metadata,
+                    hasRobotsTxt: perfResult.metadata.hasRobotsTxt,
+                } as Metadata,
+                security: {
+                    ...initialData.security,
+                    securityScore: calculatedSecurityScore,
+                } as SecurityData,
+                traffic: trafficResult,
+            };
+            onFullData(combinedData);
+        };
 
-            const combinedData = {
+        fetchFullAnalysis();
+    }, [initialData, onFullData, getTrafficData]);
+
+
+    return null; // This component does not render anything itself
+}
+
+
+function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: number, onDataLoaded: (data: AnalysisResult | null) => void; }) {
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchFastData() {
+        setIsLoading(true);
+        setError(null);
+        setAnalysisResult(null);
+        onDataLoaded(null);
+
+        try {
+            const fastResult = await getFastAnalysis(url);
+
+            if ('error' in fastResult) {
+                setError(fastResult.error);
+                setIsLoading(false);
+                return;
+            }
+            
+            const partialData = {
               ...fastResult,
-              ...perfResult,
-              overview: {
-                ...fastResult.overview,
-                ...perfResult.overview,
-                title: perfResult.overview?.title || fastResult.overview?.title,
-                description: perfResult.overview?.description || fastResult.overview?.description,
-              },
-              metadata: {
-                ...fastResult.metadata,
-                hasRobotsTxt: perfResult.metadata.hasRobotsTxt,
-              },
-              security: {
-                ...fastResult.security,
-                securityScore: calculatedSecurityScore,
-              },
-               traffic: trafficResult,
+              id: fastResult.id || crypto.randomUUID(),
+              createdAt: fastResult.createdAt || new Date().toISOString(),
             } as AnalysisResult;
             
-            setAnalysisResult(combinedData);
+            setAnalysisResult(partialData);
 
         } catch (error: any) {
             setError(error.message);
@@ -468,8 +481,14 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
             setIsLoading(false);
         }
     }
-    fetchData();
-  }, [url, cacheKey, onDataLoaded, setTrafficCache, trafficCache]);
+    fetchFastData();
+  }, [url, cacheKey, onDataLoaded]);
+
+
+  const handleFullDataLoaded = useCallback((fullData: AnalysisResult) => {
+    setAnalysisResult(fullData);
+    onDataLoaded(fullData);
+  }, [onDataLoaded]);
 
   if (isLoading) {
     return <DashboardSkeleton />;
@@ -484,16 +503,17 @@ function AnalysisData({ url, cacheKey, onDataLoaded }: { url: string; cacheKey: 
   
   if (analysisResult) {
     return (
-      <Suspense fallback={<DashboardSkeleton />}>
+      <>
+        {!analysisResult.performance && (
+            <FullAnalysisLoader initialData={analysisResult} onFullData={handleFullDataLoaded} />
+        )}
         <AnalysisDashboard 
           initialData={analysisResult} 
-          onDataLoaded={onDataLoaded as (data: AnalysisResult) => void}
+          onDataLoaded={onDataLoaded}
         />
-      </Suspense>
+      </>
     );
   }
 
   return null;
 }
-
-    

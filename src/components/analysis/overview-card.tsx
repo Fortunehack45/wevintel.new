@@ -3,16 +3,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { WebsiteOverview } from '@/lib/types';
 import Image from 'next/image';
-import { Languages, FileText } from 'lucide-react';
+import { Languages, FileText, Loader } from 'lucide-react';
 import { Button } from '../ui/button';
 
 interface OverviewCardProps {
   data: WebsiteOverview;
-  hasPerformanceRun: boolean;
   isLoading: boolean;
 }
 
-export function OverviewCard({ data, hasPerformanceRun, isLoading }: OverviewCardProps) {
+export function OverviewCard({ data, isLoading }: OverviewCardProps) {
   return (
     <Card className="glass-card">
       <CardHeader className="flex flex-col md:flex-row items-start md:items-center gap-4 space-y-0">
@@ -27,7 +26,10 @@ export function OverviewCard({ data, hasPerformanceRun, isLoading }: OverviewCar
           />
         )}
         <div className='flex-1'>
-          <h3 className="text-2xl font-bold tracking-tight">{data.title || data.domain}</h3>
+          <div className="flex items-center gap-3">
+             <h3 className="text-2xl font-bold tracking-tight">{data.title || data.domain}</h3>
+             {isLoading && <Loader className="h-5 w-5 text-primary animate-spin" />}
+          </div>
           <p className="text-muted-foreground">{data.domain}</p>
         </div>
       </CardHeader>
