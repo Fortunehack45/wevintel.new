@@ -94,6 +94,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             });
             
             const resolvedSummary = await summaryPromise;
+
             setAnalysisResult(current => ({
               ...(current as AnalysisResult),
               aiSummary: resolvedSummary,
@@ -158,7 +159,6 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 } as SecurityData,
                 traffic: trafficResult.status === 'fulfilled' ? trafficResult.value : undefined,
                 techStack: techStackResult.status === 'fulfilled' ? techStackResult.value : undefined,
-                domain: additionalResult.status === 'fulfilled' ? additionalResult.value.domain : undefined,
                 status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
             }));
         };

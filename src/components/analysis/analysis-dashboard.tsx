@@ -18,7 +18,6 @@ import { getPerformanceAnalysis } from '@/app/actions/analyze';
 import { SummaryCard } from './summary-card';
 import { TrafficCard } from './traffic-card';
 import { TechStackCard } from './tech-stack-card';
-import { DomainCard } from './domain-card';
 import { StatusCard } from './status-card';
 
 
@@ -154,10 +153,6 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
           <SecurityCard data={security} audits={securityAudits} />
         </motion.div>
       }
-
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="lg:col-span-1">
-        <DomainCard data={domain} />
-      </motion.div>
       
       {hosting && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={8} className="lg:col-span-1">
@@ -166,11 +161,11 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
       }
 
       {isLoadingFullReport ? (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={9} className="lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={9} className="lg:col-span-1">
            <DashboardSkeleton.ScorePlaceholder />
         </motion.div>
       ) : (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={9} className="lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={9} className="lg:col-span-1">
           <OverallScoreCard score={totalAuditScore} />
         </motion.div>
       )}

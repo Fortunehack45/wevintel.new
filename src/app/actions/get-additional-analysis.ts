@@ -13,10 +13,7 @@ interface WhoisResponse {
 }
 
 
-export async function getAdditionalAnalysis(url: string): Promise<{ domain?: DomainData; status: StatusData }> {
-  const urlObject = new URL(url);
-  const domainName = urlObject.hostname;
-  
+export async function getAdditionalAnalysis(url: string): Promise<{ status: StatusData }> {
   const startTime = Date.now();
   const statusPromise = fetch(url, { method: 'HEAD', redirect: 'follow', headers: { 'User-Agent': 'WebIntel-Status-Checker/1.0' } })
     .then(response => {
@@ -35,8 +32,15 @@ export async function getAdditionalAnalysis(url: string): Promise<{ domain?: Dom
             responseTime: endTime - startTime,
         };
     });
-    
-  const whoisPromise = fetch(`https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=${process.env.WHOIS_API_KEY}&domainName=${domainName}&outputFormat=JSON`)
+
+  const status = await statusPromise;
+  
+  return { status };
+}
+
+
+export async function getDomainInfo(domainName: string): Promise<DomainData | undefined> {
+    const whoisPromise = fetch(`https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=${process.env.WHOIS_API_KEY}&domainName=${domainName}&outputFormat=JSON`)
     .then(res => res.json())
     .then(data => {
         if (data.WhoisRecord) {
@@ -57,7 +61,5 @@ export async function getAdditionalAnalysis(url: string): Promise<{ domain?: Dom
         return undefined;
     });
 
-  const [status, domain] = await Promise.all([statusPromise, whoisPromise]);
-  
-  return { status, domain };
+    return whoisPromise;
 }
