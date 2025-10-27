@@ -161,27 +161,28 @@ export function LeaderboardClient() {
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="pt-2">
-                        <ul className="divide-y divide-border">
+                        <ul className="space-y-1">
                           {groupedAndSortedSites[category].map(site => (
-                             <li key={site.name} className="flex items-center justify-between p-3 hover:bg-muted/50 rounded-md">
-                                <div className="flex items-center gap-4">
-                                   <span className="font-mono text-sm text-muted-foreground w-6 text-center">{sortOrder === 'rank' ? site.rank : '•'}</span>
+                             <li key={site.name} className="flex items-center justify-between p-3 hover:bg-muted/50 rounded-md transition-colors">
+                                <div className="flex items-center gap-4 flex-1 min-w-0">
+                                   <span className="font-mono text-sm text-muted-foreground w-8 text-center flex-shrink-0">{sortOrder === 'rank' ? site.rank : '•'}</span>
                                   <Image
                                     src={`https://www.google.com/s2/favicons?domain=${site.domain}&sz=32`}
                                     alt={`${site.name} favicon`}
                                     width={24}
                                     height={24}
-                                    className="rounded-full"
+                                    className="rounded-full flex-shrink-0"
                                     crossOrigin="anonymous"
                                   />
-                                  <div className="flex flex-col">
-                                    <span className="font-medium text-sm">{site.name}</span>
-                                    <span className="text-xs text-muted-foreground">{site.domain}</span>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="font-medium text-sm truncate">{site.name}</p>
+                                    <p className="text-xs text-muted-foreground truncate">{site.domain}</p>
                                   </div>
                                 </div>
                                 <Button
                                   variant="secondary"
                                   size="sm"
+                                  className="ml-4 flex-shrink-0"
                                   onClick={(e) => handleAnalyze(e, site.url)}
                                 >
                                   Analyze
