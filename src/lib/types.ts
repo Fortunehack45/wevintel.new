@@ -114,6 +114,15 @@ export type AISummary = {
 
 export type HistoryItem = Pick<AnalysisResult, 'id' | 'overview' | 'performance' | 'security' | 'createdAt'>;
 
+export type ComparisonHistoryItem = {
+  id: string;
+  url1: string;
+  url2: string;
+  domain1: string;
+  domain2: string;
+  createdAt: string;
+}
+
 export type TechStackItem = {
   name: string;
   category: string;

@@ -1,16 +1,18 @@
 
+
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { RefreshCw, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult, type TechStackData, type ComparisonInput, type ComparisonOutput } from '@/lib/types';
+import { type AnalysisResult, type TechStackData, type ComparisonInput, type ComparisonOutput, type ComparisonHistoryItem } from '@/lib/types';
 import { getPerformanceAnalysis } from '@/app/actions/analyze';
 import { useRouter } from 'next/navigation';
 import { ComparisonDashboard } from './comparison-dashboard';
 import { compareWebsites } from '@/ai/flows/compare-websites-flow';
 import { DashboardSkeleton } from '../analysis/dashboard-skeleton';
 import { detectTechStack } from '@/ai/flows/tech-stack-flow';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 type Urls = { url1: string; url2: string };
 type InitialData = { data1: Partial<AnalysisResult>; data2: Partial<AnalysisResult> };
@@ -18,9 +20,11 @@ type InitialData = { data1: Partial<AnalysisResult>; data2: Partial<AnalysisResu
 export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initialData: InitialData }) {
     const router = useRouter();
     const isFetching = useRef(false);
+    const hasSavedHistory = useRef(false);
 
     const [fullData, setFullData] = useState<InitialData>(initialData);
     const [comparisonSummary, setComparisonSummary] = useState<ComparisonOutput | { error: string } | null>(null);
+    const [, setHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', []);
 
     const getSecurityScore = (data: Partial<AnalysisResult>) => {
         if (!data.security) return 0;
@@ -53,6 +57,8 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
             const techData2 = tech2.status === 'fulfilled' ? tech2.value : [];
 
             // Immediately update state with performance and tech stack data
+            let finalData1: AnalysisResult, finalData2: AnalysisResult;
+
             setFullData(currentData => {
                 const updatedData1 = { ...currentData.data1, ...perfData1, techStack: techData1 };
                 const updatedData2 = { ...currentData.data2, ...perfData2, techStack: techData2 };
@@ -60,8 +66,11 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
                 // Recalculate security scores with new audit data
                 if (updatedData1.security) updatedData1.security.securityScore = getSecurityScore(updatedData1);
                 if (updatedData2.security) updatedData2.security.securityScore = getSecurityScore(updatedData2);
+                
+                finalData1 = updatedData1 as AnalysisResult;
+                finalData2 = updatedData2 as AnalysisResult;
 
-                return { data1: updatedData1, data2: updatedData2 };
+                return { data1: finalData1, data2: finalData2 };
             });
 
             // Now, get the AI comparison using the newly fetched data
@@ -88,6 +97,23 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
             } catch (e: any) {
                 setComparisonSummary({ error: e.message || "Failed to generate AI comparison." });
             }
+
+             if (!hasSavedHistory.current) {
+                setHistory(prev => {
+                    const newEntry: ComparisonHistoryItem = {
+                        id: crypto.randomUUID(),
+                        url1: urls.url1,
+                        url2: urls.url2,
+                        domain1: new URL(urls.url1).hostname,
+                        domain2: new URL(urls.url2).hostname,
+                        createdAt: new Date().toISOString(),
+                    }
+                    const newHistory = [newEntry, ...prev.filter(item => !(item.url1 === newEntry.url1 && item.url2 === newEntry.url2))];
+                    return newHistory.slice(0, 50);
+                });
+                hasSavedHistory.current = true;
+            }
+
 
             isFetching.current = false;
         };
