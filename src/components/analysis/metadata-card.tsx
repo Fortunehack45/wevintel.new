@@ -6,7 +6,7 @@ export function MetadataCard({ data }: { data: Metadata }) {
   const ogTags = Object.entries(data.openGraphTags);
 
   return (
-    <Card className="h-full">
+    <Card className="h-full glass-card">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Code className="h-5 w-5 text-primary" />

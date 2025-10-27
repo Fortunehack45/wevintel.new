@@ -2,8 +2,24 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { HeaderInfo } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ListTree } from 'lucide-react';
+import { Skeleton } from '../ui/skeleton';
 
-export function HeadersCard({ data }: { data: HeaderInfo }) {
+export function HeadersCard({ data }: { data?: HeaderInfo }) {
+
+  if (!data) {
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <Skeleton className="h-5 w-32" />
+          <Skeleton className="h-4 w-56" />
+        </CardHeader>
+        <CardContent>
+          <Skeleton className="h-64 w-full" />
+        </CardContent>
+      </Card>
+    );
+  }
+
   const headers = Object.entries(data);
 
   return (

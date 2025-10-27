@@ -100,6 +100,27 @@ function SummaryPlaceholder() {
     )
 }
 
+function TechStackPlaceholder() {
+    return (
+        <Card className="glass-card h-full">
+            <CardHeader>
+                <Skeleton className="h-6 w-44 mb-2" />
+                <Skeleton className="h-4 w-60" />
+            </CardHeader>
+            <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 py-4">
+                    <Skeleton className="h-16 w-full" />
+                    <Skeleton className="h-16 w-full" />
+                    <Skeleton className="h-16 w-full" />
+                    <Skeleton className="h-16 w-full" />
+                    <Skeleton className="h-16 w-full" />
+                    <Skeleton className="h-16 w-full" />
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
 
 function DashboardSkeleton({ initialData }: { initialData?: Partial<AnalysisResult> }) {
   return (
@@ -119,10 +140,13 @@ function DashboardSkeleton({ initialData }: { initialData?: Partial<AnalysisResu
       </div>
       <div className="lg:col-span-2"><TrafficPlaceholder/></div>
       <div className="lg:col-span-4"><PerformancePlaceholder /></div>
+      <div className="lg:col-span-4"><TechStackPlaceholder /></div>
       <Skeleton className="h-48 rounded-xl lg:col-span-1" />
       <Skeleton className="h-48 rounded-xl lg:col-span-1" />
-      <ScorePlaceholder />
       <Skeleton className="h-48 rounded-xl lg:col-span-1" />
+      <Skeleton className="h-48 rounded-xl lg:col-span-1" />
+      <div className="lg:col-span-2"><ScorePlaceholder /></div>
+      <div className="lg:col-span-2"><Skeleton className="h-48 rounded-xl" /></div>
       <div className="lg:col-span-2"><AuditPlaceholder /></div>
       <div className="lg:col-span-2"><AuditPlaceholder /></div>
       <Skeleton className="h-64 rounded-xl lg:col-span-4" />
@@ -135,5 +159,6 @@ DashboardSkeleton.ScorePlaceholder = ScorePlaceholder;
 DashboardSkeleton.TrafficPlaceholder = TrafficPlaceholder;
 DashboardSkeleton.AuditPlaceholder = AuditPlaceholder;
 DashboardSkeleton.SummaryPlaceholder = SummaryPlaceholder;
+DashboardSkeleton.TechStackPlaceholder = TechStackPlaceholder;
 
 export { DashboardSkeleton };

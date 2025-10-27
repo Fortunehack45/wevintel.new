@@ -3,18 +3,21 @@
 export type AnalysisResult = {
   id: string;
   overview: WebsiteOverview;
-  performance: {
+  performance?: {
     mobile: PerformanceData;
     desktop: PerformanceData;
   };
-  security: SecurityData;
-  traffic: TrafficData;
-  metadata: Metadata;
-  hosting: HostingInfo;
-  headers: HeaderInfo;
-  performanceAudits: AuditInfo;
-  securityAudits: AuditInfo;
-  diagnosticsAudits: AuditInfo;
+  security?: SecurityData;
+  traffic?: TrafficData;
+  metadata?: Metadata;
+  hosting?: HostingInfo;
+  headers?: HeaderInfo;
+  performanceAudits?: AuditInfo;
+  securityAudits?: AuditInfo;
+  diagnosticsAudits?: AuditInfo;
+  techStack?: TechStackData;
+  domain?: DomainData;
+  status?: StatusData;
   createdAt: string; // ISO 8601 string
   error?: string;
   partial?: boolean;
@@ -28,6 +31,7 @@ export type WebsiteOverview = {
   description?: string;
   language?: string;
   favicon?: string;
+  htmlContent?: string;
 };
 
 export type PerformanceData = {
@@ -108,4 +112,27 @@ export type AISummary = {
 
 export type HistoryItem = Pick<AnalysisResult, 'id' | 'overview' | 'performance' | 'security' | 'createdAt'>;
 
-    
+export type TechStackItem = {
+  name: string;
+  category: string;
+  confidence: number;
+  description?: string;
+};
+
+export type TechStackData = TechStackItem[];
+
+export type DomainData = {
+  registrar?: string;
+  creationDate?: string;
+  expirationDate?: string;
+  updatedDate?: string;
+  status?: string[];
+  nameservers?: string[];
+};
+
+export type StatusData = {
+  isOnline: boolean;
+  httpStatus?: number;
+  responseTime?: number; // in ms
+  finalUrl?: string; // To check for redirects
+};

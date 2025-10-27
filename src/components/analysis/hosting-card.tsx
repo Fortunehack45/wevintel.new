@@ -2,8 +2,24 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import type { HostingInfo } from '@/lib/types';
 import { Server } from 'lucide-react';
+import { Skeleton } from '../ui/skeleton';
 
-export function HostingCard({ data }: { data: HostingInfo }) {
+export function HostingCard({ data }: { data?: HostingInfo }) {
+  if (!data) {
+    return (
+      <Card className="h-full">
+        <CardHeader className="pb-2">
+          <Skeleton className="h-5 w-24" />
+        </CardHeader>
+        <CardContent className="grid gap-4 text-sm pt-2">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-full" />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="h-full">
       <CardHeader className="pb-2">

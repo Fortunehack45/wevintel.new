@@ -6,14 +6,16 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { RefreshCw, Download, Home } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult, type AuditItem, AuditInfo, TrafficData, WebsiteOverview, SecurityData, HostingInfo, Metadata, HeaderInfo, AISummary } from '@/lib/types';
+import { type AnalysisResult, type AuditItem, AuditInfo, TrafficData, WebsiteOverview, SecurityData, HostingInfo, Metadata, HeaderInfo, AISummary, TechStackData, DomainData, StatusData } from '@/lib/types';
 import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
+import { getAdditionalAnalysis } from '@/app/actions/get-additional-analysis';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import { useRouter } from 'next/navigation';
 import { NotFoundCard } from './not-found-card';
 import { DashboardSkeleton } from './dashboard-skeleton';
 import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
+import { detectTechStack } from '@/ai/flows/tech-stack-flow';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
 
@@ -111,13 +113,21 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
             setAnalysisResult(partialData);
             setIsLoading(false);
             
-            // 3. Full Performance and Traffic Analysis (after fast analysis is displayed)
-            const [perfResult, trafficResult] = await Promise.all([
+            // 3. Full Performance and Additional Analysis (after fast analysis is displayed)
+            const [perfResult, trafficResult, techStackResult, additionalResult] = await Promise.allSettled([
                 getPerformanceAnalysis(decodedUrl),
                 getTrafficData(decodedUrl, partialData.overview?.description || ''),
+                detectTechStack({
+                    url: decodedUrl,
+                    htmlContent: partialData.overview?.htmlContent || '',
+                    headers: partialData.headers || {}
+                }),
+                getAdditionalAnalysis(decodedUrl),
             ]);
 
-            const securityAudits = perfResult.securityAudits || {};
+            const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
+            const securityAudits = 'securityAudits' in fullPerfData ? fullPerfData.securityAudits : {};
+            
             let securityScoreTotal = 0;
             let securityItemsScored = 0;
             
@@ -129,34 +139,39 @@ export function AnalysisPageContent({ decodedUrl }: { decodedUrl: string }) {
                 securityItemsScored++;
             });
 
-            Object.values(securityAudits).forEach(audit => {
-                if (audit.score !== null) {
-                    securityScoreTotal += audit.score;
-                    securityItemsScored++;
-                }
-            });
+            if (securityAudits) {
+                Object.values(securityAudits).forEach(audit => {
+                    if (audit.score !== null) {
+                        securityScoreTotal += audit.score;
+                        securityItemsScored++;
+                    }
+                });
+            }
             const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
 
             // Combine all results and update state
             setAnalysisResult(currentData => ({
                 ...(currentData as AnalysisResult),
-                ...perfResult,
+                ...fullPerfData,
                 overview: {
                     ...currentData!.overview,
-                    ...perfResult.overview,
-                    title: perfResult.overview?.title || currentData!.overview?.title,
-                    description: perfResult.overview?.description || currentData!.overview?.description,
+                    ...('overview' in fullPerfData ? fullPerfData.overview : {}),
+                    title: ('overview' in fullPerfData && fullPerfData.overview?.title) || currentData!.overview?.title,
+                    description: ('overview' in fullPerfData && fullPerfData.overview?.description) || currentData!.overview?.description,
                 },
                 metadata: {
                     ...currentData!.metadata,
-                    hasRobotsTxt: perfResult.metadata.hasRobotsTxt,
-                    hasSitemapXml: perfResult.metadata.hasSitemapXml,
+                    hasRobotsTxt: 'metadata' in fullPerfData ? fullPerfData.metadata.hasRobotsTxt : false,
+                    hasSitemapXml: 'metadata' in fullPerfData ? fullPerfData.metadata.hasSitemapXml : false,
                 } as Metadata,
                 security: {
                     ...currentData!.security,
                     securityScore: calculatedSecurityScore,
                 } as SecurityData,
-                traffic: trafficResult,
+                traffic: trafficResult.status === 'fulfilled' ? trafficResult.value : undefined,
+                techStack: techStackResult.status === 'fulfilled' ? techStackResult.value : undefined,
+                domain: additionalResult.status === 'fulfilled' ? additionalResult.value.domain : undefined,
+                status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
                 aiSummary: currentData?.aiSummary, // Keep the summary that was loaded first
             }));
         };

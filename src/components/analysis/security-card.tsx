@@ -48,7 +48,22 @@ const AuditList = ({ audits }: { audits: AuditItem[] }) => {
 };
 
 
-export function SecurityCard({ data, audits }: { data: SecurityData, audits?: AuditInfo }) {
+export function SecurityCard({ data, audits }: { data?: SecurityData, audits?: AuditInfo }) {
+  if (!data) {
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <Skeleton className="h-5 w-24" />
+          <Skeleton className="h-4 w-48" />
+        </CardHeader>
+        <CardContent>
+          <Skeleton className="h-24 w-full" />
+        </CardContent>
+      </Card>
+    );
+  }
+  
+  
   const securityHeaders = [
       { key: 'content-security-policy', name: 'CSP'},
       { key: 'strict-transport-security', name: 'HSTS'},

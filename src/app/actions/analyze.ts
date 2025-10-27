@@ -1,7 +1,7 @@
 
 'use server';
 
-import type { AnalysisResult, PerformanceData, SecurityData, AuditInfo, AuditItem } from '@/lib/types';
+import type { AnalysisResult, PerformanceData, SecurityData, AuditInfo, AuditItem, WebsiteOverview } from '@/lib/types';
 import 'dotenv/config';
 
 // Helper function to parse Open Graph tags from HTML
@@ -159,6 +159,7 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
         title: tempTitle,
         description: tempDescription,
         favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
+        htmlContent: pageHtml, // Pass the HTML for tech stack analysis
       },
       security: {
         isSecure: url.startsWith('https://'),
