@@ -83,7 +83,7 @@ export function SecurityCard({ data, audits }: { data?: SecurityData, audits?: A
   }
 
   return (
-    <Card className="h-full">
+    <Card className="h-full glass-card">
       <CardHeader>
         <div className="flex justify-between items-start">
             <div>

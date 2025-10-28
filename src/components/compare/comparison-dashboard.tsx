@@ -52,20 +52,20 @@ const SiteColumn = ({ data, isLoading, customDelay }: { data?: AnalysisResult | 
     }
     
     return (
-        <div className="space-y-6">
-             <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.1}>
+        <div className="flex flex-col space-y-6">
+             <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.1} className="h-full">
                  <OverviewCard data={data.overview} isLoading={isLoading} />
              </motion.div>
-             <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.2}>
+             <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.2} className="h-full">
                 <PerformanceCard data={data.performance} />
              </motion.div>
-             <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.3}>
+             <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.3} className="h-full">
                  <SecurityCard data={data.security} audits={data.securityAudits} />
              </motion.div>
-              <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.4}>
+              <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.4} className="h-full">
                  <HostingCard data={data.hosting} />
              </motion.div>
-             <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.5}>
+             <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.5} className="h-full">
                 <TechStackCarousel data={data.techStack} />
             </motion.div>
         </div>
@@ -80,7 +80,7 @@ export function ComparisonDashboard({ data1, data2, summary, isLoading }: Compar
             <ComparisonSummaryCard summary={summary} data1={data1} data2={data2} />
         </motion.div>
         
-        <div className="grid grid-cols-2 gap-4 md:gap-8 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-start">
             <SiteColumn data={data1} isLoading={isLoading || !data1} customDelay={0} />
             <SiteColumn data={data2} isLoading={isLoading || !data2} customDelay={0.1} />
         </div>

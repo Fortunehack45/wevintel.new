@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { RefreshCw, ArrowLeft, Download } from 'lucide-react';
+import { RefreshCw, ArrowLeft, Download, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult, type ComparisonInput, type ComparisonOutput, type ComparisonHistoryItem } from '@/lib/types';
 import { useRouter } from 'next/navigation';
@@ -11,7 +11,15 @@ import { compareWebsites } from '@/ai/flows/compare-websites-flow';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useAnalysisData } from '@/hooks/use-analysis-data';
 import jsPDF from 'jspdf';
-import { format, parseISO } from 'date-fns';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { CompareForm } from './compare-form';
+import Image from 'next/image';
 
 
 type Urls = { url1: string; url2: string };
@@ -24,6 +32,7 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
     const { result: data2, loading: loading2, error: error2 } = useAnalysisData(urls.url2, initialData.data2);
     
     const [isDownloading, setIsDownloading] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
     const [comparisonSummary, setComparisonSummary] = useState<ComparisonOutput | { error: string } | null>(null);
     const stableInitialValue = useMemo(() => [], []);
     const [history, setHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', stableInitialValue);
@@ -273,33 +282,59 @@ export function ComparisonPageContent({ urls, initialData }: { urls: Urls, initi
     const isLoading = loading1 || loading2;
     const canDownload = !isLoading && !!data1 && !!data2 && !!comparisonSummary && !('error' in comparisonSummary);
 
+    const handleEditCompare = (newUrls: {url1: string, url2: string}) => {
+        setEditOpen(false);
+        router.push(`/compare/${encodeURIComponent(newUrls.url1)}/${encodeURIComponent(newUrls.url2)}`);
+    }
+
     return (
         <div className="flex-1">
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-                <div>
+                <div className="space-y-2">
                     <h1 className="text-3xl font-bold">Comparison Report</h1>
-                    <div className="text-muted-foreground flex items-center gap-2 flex-wrap">
-                        <a href={urls.url1} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">{new URL(urls.url1).hostname}</a>
-                        <span>vs</span>
-                        <a href={urls.url2} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">{new URL(urls.url2).hostname}</a>
+                    <div className="text-muted-foreground flex items-center gap-3 flex-wrap bg-muted p-2 rounded-lg">
+                        <div className='flex items-center gap-2'>
+                           <Image src={`https://www.google.com/s2/favicons?domain=${new URL(urls.url1).hostname}&sz=32`} alt={`${new URL(urls.url1).hostname} favicon`} width={20} height={20} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
+                            <a href={urls.url1} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">{new URL(urls.url1).hostname}</a>
+                        </div>
+                        <span className="font-bold">vs</span>
+                        <div className='flex items-center gap-2'>
+                           <Image src={`https://www.google.com/s2/favicons?domain=${new URL(urls.url2).hostname}&sz=32`} alt={`${new URL(urls.url2).hostname} favicon`} width={20} height={20} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
+                            <a href={urls.url2} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">{new URL(urls.url2).hostname}</a>
+                        </div>
                     </div>
                 </div>
                 <div className='flex items-center gap-2'>
                      <Button variant="outline" onClick={() => router.push('/compare')} disabled={isDownloading}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        New Comparison
+                        New
                     </Button>
-                    <Button variant="outline" onClick={() => router.push(`/compare/${encodeURIComponent(urls.url1)}/${encodeURIComponent(urls.url2)}?t=${Date.now()}`)} disabled={isDownloading}>
-                        <RefreshCw className="mr-2 h-4 w-4" />
-                        Re-analyse
-                    </Button>
+                    <Dialog open={editOpen} onOpenChange={setEditOpen}>
+                        <DialogTrigger asChild>
+                            <Button variant="outline" disabled={isDownloading}>
+                                <Pencil className="mr-2 h-4 w-4" />
+                                Edit
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Edit Comparison</DialogTitle>
+                            </DialogHeader>
+                            <CompareForm 
+                                initialUrl1={urls.url1} 
+                                initialUrl2={urls.url2} 
+                                onCompare={handleEditCompare} 
+                                isDialog 
+                            />
+                        </DialogContent>
+                    </Dialog>
                      <Button onClick={handleDownloadPdf} disabled={isDownloading || !canDownload}>
                          {isDownloading ? (
                             <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                          ) : (
                             <Download className="mr-2 h-4 w-4" />
                          )}
-                        Download PDF
+                        PDF
                     </Button>
                 </div>
             </div>

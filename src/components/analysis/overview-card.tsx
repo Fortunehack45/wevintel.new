@@ -12,7 +12,7 @@ interface OverviewCardProps {
 
 export function OverviewCard({ data, isLoading }: OverviewCardProps) {
   return (
-    <Card className="glass-card">
+    <Card className="glass-card h-full">
       <CardHeader className="flex flex-col md:flex-row items-start md:items-center gap-4 space-y-0">
         {data.favicon && (
           <Image 

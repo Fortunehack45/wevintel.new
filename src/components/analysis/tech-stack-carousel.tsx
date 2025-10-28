@@ -189,7 +189,7 @@ export function TechStackCarousel({ data }: { data?: TechStackData }) {
     const extendedData = [...data, ...data];
 
     return (
-        <Card className="glass-card">
+        <Card className="glass-card h-full">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <Layers className="h-5 w-5 text-primary" />
