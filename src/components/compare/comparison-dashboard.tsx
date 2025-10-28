@@ -80,7 +80,7 @@ export function ComparisonDashboard({ data1, data2, summary, isLoading }: Compar
             <ComparisonSummaryCard summary={summary} data1={data1} data2={data2} />
         </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-start">
+        <div className="grid grid-cols-2 gap-4 items-start">
             <SiteColumn data={data1} isLoading={isLoading || !data1} customDelay={0} />
             <SiteColumn data={data2} isLoading={isLoading || !data2} customDelay={0.1} />
         </div>
