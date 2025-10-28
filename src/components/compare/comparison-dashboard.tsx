@@ -10,6 +10,7 @@ import type { ComparisonOutput } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { DashboardSkeleton } from '../analysis/dashboard-skeleton';
 import { HostingCard } from '../analysis/hosting-card';
+import { Card, CardContent } from '../ui/card';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -28,11 +29,10 @@ interface ComparisonDashboardProps {
     data1?: AnalysisResult | null;
     data2?: AnalysisResult | null;
     summary: ComparisonOutput | { error: string } | null;
-    isLoading: boolean;
 }
 
-const SiteColumn = ({ data, isLoading, customDelay }: { data?: AnalysisResult | null, isLoading: boolean, customDelay: number }) => {
-    if (isLoading || !data) {
+const SiteColumn = ({ data, customDelay }: { data?: AnalysisResult | null, customDelay: number }) => {
+    if (!data) {
         return (
             <div className="space-y-6">
                  <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.1}>
@@ -54,7 +54,7 @@ const SiteColumn = ({ data, isLoading, customDelay }: { data?: AnalysisResult | 
     return (
         <div className="flex flex-col space-y-6">
              <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.1} className="h-full">
-                 <OverviewCard data={data.overview} isLoading={isLoading} />
+                 <OverviewCard data={data.overview} isLoading={false} />
              </motion.div>
              <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.2} className="h-full">
                 <PerformanceCard data={data.performance} />
@@ -72,7 +72,23 @@ const SiteColumn = ({ data, isLoading, customDelay }: { data?: AnalysisResult | 
     )
 }
 
-export function ComparisonDashboard({ data1, data2, summary, isLoading }: ComparisonDashboardProps) {
+const LoadingState = () => (
+    <div className='space-y-8'>
+        <Card className="w-full">
+            <CardContent className="p-6">
+                <DashboardSkeleton.SummaryPlaceholder />
+            </CardContent>
+        </Card>
+        <div className="grid grid-cols-2 gap-4 items-start">
+             <SiteColumn customDelay={0} />
+             <SiteColumn customDelay={0.1} />
+        </div>
+    </div>
+);
+
+
+export function ComparisonDashboard({ data1, data2, summary }: ComparisonDashboardProps) {
+    const isLoading = !data1 || !data2;
 
   return (
     <div className='space-y-8'>
@@ -81,8 +97,8 @@ export function ComparisonDashboard({ data1, data2, summary, isLoading }: Compar
         </motion.div>
         
         <div className="grid grid-cols-2 gap-4 items-start">
-            <SiteColumn data={data1} isLoading={isLoading || !data1} customDelay={0} />
-            <SiteColumn data={data2} isLoading={isLoading || !data2} customDelay={0.1} />
+            <SiteColumn data={data1} customDelay={0} />
+            <SiteColumn data={data2} customDelay={0.1} />
         </div>
     </div>
   );

@@ -1,18 +1,17 @@
 
 'use client';
 
-import { Suspense, useEffect, useState, useMemo, useRef, useCallback } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { RefreshCw, Download, Home } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult, type AuditItem, AuditInfo, TrafficData, WebsiteOverview, SecurityData, HostingInfo, Metadata, HeaderInfo, AISummary, TechStackData, DomainData, StatusData } from '@/lib/types';
+import { type AnalysisResult, type AuditInfo, type Metadata, type SecurityData } from '@/lib/types';
 import { getPerformanceAnalysis } from '@/app/actions/analyze';
-import { getAdditionalAnalysis } from '@/app/actions/get-additional-analysis';
+import { getAdditionalAnalysis, getDomainInfo } from '@/app/actions/get-additional-analysis';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import { useRouter } from 'next/navigation';
-import { DashboardSkeleton } from './dashboard-skeleton';
+import { DashboardSkeleton } from '@/components/analysis/dashboard-skeleton';
 import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
 import { detectTechStack } from '@/ai/flows/tech-stack-flow';
 import { useLocalStorage } from '@/hooks/use-local-storage';
@@ -30,54 +29,31 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
 }
 
 export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: string, initialData: Partial<AnalysisResult> }) {
-    const [key, setKey] = useState(Date.now());
     const [isDownloading, setIsDownloading] = useState(false);
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(initialData as AnalysisResult);
     const [error, setError] = useState<string | null>(null);
-    const stableInitialValue = useMemo(() => ({}), []);
-    const [trafficCache, setTrafficCache] = useLocalStorage<Record<string, {data: TrafficData, timestamp: string}>>('webintel_traffic_cache', stableInitialValue);
-
     const router = useRouter();
     const isFetching = useRef(false);
+    const stableInitialValue = useMemo(() => ({}), []);
+    const [cache, setCache] = useLocalStorage<Record<string, { data: AnalysisResult, timestamp: string }>>('webintel_analysis_cache', stableInitialValue);
 
-    const getTrafficData = useCallback(async (url: string, description?: string): Promise<TrafficData> => {
-        const cached = trafficCache[url];
-        const now = new Date();
+
+    const fetchFullAnalysis = useCallback(async () => {
+        if (!initialData || isFetching.current) return;
+        isFetching.current = true;
         
-        if (cached && cached.timestamp) {
-            const cachedDate = new Date(cached.timestamp);
-            const oneMonth = 30 * 24 * 60 * 60 * 1000;
-            if (now.getTime() - cachedDate.getTime() < oneMonth) {
-                return cached.data;
+        // Check cache first
+        const cachedItem = cache[decodedUrl];
+        if (cachedItem) {
+            const oneDay = 24 * 60 * 60 * 1000;
+            if (new Date().getTime() - new Date(cachedItem.timestamp).getTime() < oneDay) {
+                setAnalysisResult(cachedItem.data);
+                isFetching.current = false;
+                return;
             }
         }
         
-        const freshData = await estimateTraffic({ url, description: description || '' });
-        setTrafficCache(prev => ({
-            ...prev,
-            [url]: {
-                data: freshData,
-                timestamp: now.toISOString()
-            }
-        }));
-        return freshData;
-    }, [setTrafficCache, trafficCache]);
-
-    const getSummaryData = useCallback(async (input: WebsiteAnalysisInput) => {
-        return summarizeWebsite(input);
-    }, []);
-
-    const getTechStackData = useCallback(async (url: string, htmlContent: string, headers: HeaderInfo) => {
-         return detectTechStack({ url, htmlContent, headers });
-    }, []);
-
-
-    useEffect(() => {
-        const fetchRemainingAnalysis = async () => {
-             if (!initialData || isFetching.current) return;
-            
-             isFetching.current = true;
-            
+        try {
             const aiSummaryInput: WebsiteAnalysisInput = {
                 overview: initialData.overview!,
                 security: initialData.security!,
@@ -85,12 +61,13 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 headers: initialData.headers,
             };
             
-            const [perfResult, summaryResult, trafficResult, techStackResult, additionalResult] = await Promise.allSettled([
+            const [perfResult, summaryResult, trafficResult, techStackResult, additionalResult, domainResult] = await Promise.allSettled([
                 getPerformanceAnalysis(decodedUrl),
-                getSummaryData(aiSummaryInput),
-                getTrafficData(decodedUrl, initialData.overview?.description),
-                getTechStackData(decodedUrl, initialData.overview?.htmlContent || '', initialData.headers || {}),
+                summarizeWebsite(aiSummaryInput),
+                estimateTraffic({ url: decodedUrl, description: initialData.overview?.description || '' }),
+                detectTechStack({ url: decodedUrl, htmlContent: initialData.overview?.htmlContent || '', headers: initialData.headers || {} }),
                 getAdditionalAnalysis(decodedUrl),
+                getDomainInfo(initialData.overview!.domain),
             ]);
 
             const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
@@ -117,40 +94,51 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             }
             const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
 
-            // Combine all results and update state at once
-            setAnalysisResult(currentData => ({
-                ...(currentData as AnalysisResult),
+            const finalResult: AnalysisResult = {
+                ...(initialData as AnalysisResult),
                 ...fullPerfData,
                 overview: {
-                    ...currentData!.overview,
+                    ...initialData!.overview,
                     ...('overview' in fullPerfData ? fullPerfData.overview : {}),
-                    title: ('overview' in fullPerfData && fullPerfData.overview?.title) || currentData!.overview?.title,
-                    description: ('overview' in fullPerfData && fullPerfData.overview?.description) || currentData!.overview?.description,
+                    title: ('overview' in fullPerfData && fullPerfData.overview?.title) || initialData!.overview?.title,
+                    description: ('overview' in fullPerfData && fullPerfData.overview?.description) || initialData!.overview?.description,
                 },
                 metadata: {
-                    ...currentData!.metadata,
-                    hasRobotsTxt: 'metadata' in fullPerfData ? fullPerfData.metadata.hasRobotsTxt : false,
-                    hasSitemapXml: 'metadata' in fullPerfData ? fullPerfData.metadata.hasSitemapXml : false,
+                    ...initialData!.metadata,
+                    hasRobotsTxt: 'metadata' in fullPerfData && fullPerfData.metadata ? fullPerfData.metadata.hasRobotsTxt : false,
+                    hasSitemapXml: 'metadata' in fullPerfData && fullPerfData.metadata ? fullPerfData.metadata.hasSitemapXml : false,
                 } as Metadata,
                 security: {
-                    ...currentData!.security,
+                    ...initialData!.security,
                     securityScore: calculatedSecurityScore,
                 } as SecurityData,
                 aiSummary: summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.'},
                 traffic: trafficResult.status === 'fulfilled' ? trafficResult.value : undefined,
                 techStack: techStackResult.status === 'fulfilled' ? techStackResult.value : undefined,
                 status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
-            }));
-            isFetching.current = false;
-        };
+                domain: domainResult.status === 'fulfilled' ? domainResult.value : undefined,
+            };
 
-        fetchRemainingAnalysis().catch(e => {
+            setAnalysisResult(finalResult);
+            // Update cache
+            setCache(prev => ({
+                ...prev,
+                [decodedUrl]: { data: finalResult, timestamp: new Date().toISOString() }
+            }));
+
+        } catch (e: any) {
             console.error("An error occurred during analysis:", e);
             setError(e.message || "An unexpected error occurred.");
+        } finally {
             isFetching.current = false;
-        });
+        }
+    }, [decodedUrl, initialData, cache, setCache]);
+
+
+    useEffect(() => {
+        fetchFullAnalysis();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [decodedUrl, key]);
+    }, [decodedUrl]);
 
 
     const handleDownloadPdf = async () => {
@@ -200,6 +188,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 if (currentY > pdfHeight - margin - spaceNeeded) {
                     pdf.addPage();
                     addPageHeader();
+                    currentY = 60;
                 }
             };
             
@@ -222,24 +211,22 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 const keyWidth = 130;
                 const valueWidth = contentWidth / 2 - keyWidth;
 
-                if (yPos > pdfHeight - margin - 40) {
-                   pdf.addPage();
-                   addPageHeader();
-                   yPos = currentY;
-                }
+                checkAndAddPage();
 
                 pdf.setFont('helvetica', 'bold');
                 pdf.setFontSize(10);
                 pdf.setTextColor(textColor);
                 const splitKey = pdf.splitTextToSize(key, keyWidth);
-                pdf.text(splitKey, xPos, yPos);
+                pdf.text(splitKey, xPos, currentY);
                 
                 pdf.setFont('helvetica', 'normal');
                 const valueX = xPos + keyWidth;
                 const splitValue = pdf.splitTextToSize(String(value), valueWidth);
-                pdf.text(splitValue, valueX, yPos);
-                
-                return yPos + (Math.max(splitKey.length, splitValue.length) * 12) + 8;
+                pdf.text(splitValue, valueX, currentY);
+
+                const newY = currentY + (Math.max(splitKey.length, splitValue.length) * 12) + 8;
+                currentY = newY;
+                return newY;
             };
 
             const drawScoreGauge = (x: number, y: number, score: number, label: string) => {
@@ -299,11 +286,10 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             // --- Overview Section ---
             addSectionTitle('Website Overview');
             let tempY = currentY;
-            tempY = addKeyValue('URL', data.overview.url, margin, tempY);
-            tempY = addKeyValue('Title', data.overview.title, margin, tempY);
-            tempY = addKeyValue('Description', data.overview.description, margin, tempY);
-            tempY = addKeyValue('Language', data.overview.language?.toUpperCase(), margin, tempY);
-            currentY = tempY + 10;
+            addKeyValue('URL', data.overview.url, margin, tempY);
+            addKeyValue('Title', data.overview.title, margin, tempY);
+            addKeyValue('Description', data.overview.description, margin, tempY);
+            addKeyValue('Language', data.overview.language?.toUpperCase(), margin, tempY);
             
             // --- Performance Section ---
             if (data.performance) {
@@ -347,11 +333,10 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 
                 checkAndAddPage();
                 let perfY = currentY;
-                perfY = addKeyValue('Largest Contentful Paint', data.performance.mobile.largestContentfulPaint, margin, perfY);
-                perfY = addKeyValue('Cumulative Layout Shift', data.performance.mobile.cumulativeLayoutShift, margin, perfY);
-                perfY = addKeyValue('Speed Index', data.performance.mobile.speedIndex, margin, perfY);
-                perfY = addKeyValue('Total Blocking Time', data.performance.mobile.totalBlockingTime, margin, perfY);
-                currentY = perfY;
+                addKeyValue('Largest Contentful Paint', data.performance.mobile.largestContentfulPaint, margin, perfY);
+                addKeyValue('Cumulative Layout Shift', data.performance.mobile.cumulativeLayoutShift, margin, perfY);
+                addKeyValue('Speed Index', data.performance.mobile.speedIndex, margin, perfY);
+                addKeyValue('Total Blocking Time', data.performance.mobile.totalBlockingTime, margin, perfY);
             }
             
             // --- Security & Hosting ---
@@ -362,33 +347,31 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
 
             const boxWidth = contentWidth / 2 - 10;
             const initialY = currentY;
-            
-            let securityCurrentY = initialY;
-            let hostingCurrentY = initialY;
 
             // Security Box
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(12);
             pdf.setTextColor(textColor);
-            pdf.text('Security', margin, securityCurrentY);
-            securityCurrentY += 20;
-            securityCurrentY = addKeyValue('SSL Enabled', data.security?.isSecure ? 'Yes' : 'No', margin, securityCurrentY);
+            pdf.text('Security', margin, currentY);
+            currentY += 20;
+            addKeyValue('SSL Enabled', data.security?.isSecure ? 'Yes' : 'No', margin, currentY);
             Object.entries(data.security?.securityHeaders || {}).forEach(([key, value]) => {
-                securityCurrentY = addKeyValue(key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), value ? 'Present' : 'Missing', margin, securityCurrentY);
+                addKeyValue(key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), value ? 'Present' : 'Missing', margin, currentY);
             });
 
             // Hosting Box
+            let hostingY = initialY;
             const hostingX = margin + boxWidth + 20;
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(12);
             pdf.setTextColor(textColor);
-            pdf.text('Hosting', hostingX, hostingCurrentY);
-            hostingCurrentY += 20;
-            hostingCurrentY = addKeyValue('IP Address', data.hosting?.ip, hostingX, hostingCurrentY);
-            hostingCurrentY = addKeyValue('ISP', data.hosting?.isp, hostingX, hostingCurrentY);
-            hostingCurrentY = addKeyValue('Country', data.hosting?.country, hostingX, hostingCurrentY);
+            pdf.text('Hosting', hostingX, hostingY);
+            hostingY += 20;
+            addKeyValue('IP Address', data.hosting?.ip, hostingX, hostingY);
+            addKeyValue('ISP', data.hosting?.isp, hostingX, hostingY);
+            addKeyValue('Country', data.hosting?.country, hostingX, hostingY);
             
-            currentY = Math.max(securityCurrentY, hostingCurrentY);
+            currentY = Math.max(currentY, hostingY);
 
 
             // --- AI Summary ---
@@ -469,8 +452,8 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
 
 
     const renderContent = () => {
-        if (!analysisResult) {
-            return <DashboardSkeleton />;
+        if (!analysisResult?.performance) {
+            return <DashboardSkeleton initialData={initialData} />;
         }
         if (error) {
             return <ErrorAlert title="Analysis Failed" description={error} />;
@@ -478,7 +461,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         if (analysisResult) {
             return <AnalysisDashboard initialData={analysisResult} />;
         }
-        return null;
+        return <DashboardSkeleton />;
     }
     
     return (
@@ -495,11 +478,11 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                         <Home className="mr-2 h-4 w-4" />
                         Back to Home
                     </Button>
-                    <Button variant="outline" onClick={() => router.push(`/analysis/${encodeURIComponent(decodedUrl)}?t=${Date.now()}`)} disabled={isDownloading}>
+                    <Button variant="outline" onClick={() => { setCache(prev => { const newCache = {...prev}; delete newCache[decodedUrl]; return newCache; }); router.refresh(); }} disabled={isDownloading}>
                         <RefreshCw className="mr-2 h-4 w-4" />
                         Re-analyse
                     </Button>
-                    <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisResult || !analysisResult.performance}>
+                    <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisResult?.performance}>
                          {isDownloading ? (
                             <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                          ) : (
@@ -513,5 +496,3 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         </div>
     );
 }
-
-    
