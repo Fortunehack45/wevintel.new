@@ -38,20 +38,22 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
     const [cache, setCache] = useLocalStorage<Record<string, { data: AnalysisResult, timestamp: string }>>('webintel_analysis_cache', stableInitialValue);
 
 
-    const fetchFullAnalysis = useCallback(async () => {
+    const fetchFullAnalysis = useCallback(async (ignoreCache = false) => {
         if (!initialData || isFetching.current) return;
-        isFetching.current = true;
         
         // Check cache first
-        const cachedItem = cache[decodedUrl];
-        if (cachedItem) {
-            const oneDay = 24 * 60 * 60 * 1000;
-            if (new Date().getTime() - new Date(cachedItem.timestamp).getTime() < oneDay) {
-                setAnalysisResult(cachedItem.data);
-                isFetching.current = false;
-                return;
+        if (!ignoreCache) {
+            const cachedItem = cache[decodedUrl];
+            if (cachedItem) {
+                const oneDay = 24 * 60 * 60 * 1000;
+                if (new Date().getTime() - new Date(cachedItem.timestamp).getTime() < oneDay) {
+                    setAnalysisResult(cachedItem.data);
+                    return;
+                }
             }
         }
+        
+        isFetching.current = true;
         
         try {
             const aiSummaryInput: WebsiteAnalysisInput = {
@@ -130,13 +132,14 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         } finally {
             isFetching.current = false;
         }
-    }, [decodedUrl, initialData, cache, setCache]);
+    // We only want to run this on mount, and not when cache/setCache changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [decodedUrl, initialData]);
 
 
     useEffect(() => {
         fetchFullAnalysis();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [decodedUrl]);
+    }, [fetchFullAnalysis]);
 
 
     const handleDownloadPdf = async () => {
@@ -445,17 +448,31 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         }
     };
 
+    const handleReanalyze = () => {
+        // Clear cache for this specific URL
+        setCache(prev => {
+            const newCache = { ...prev };
+            delete newCache[decodedUrl];
+            return newCache;
+        });
+        // Reset state and fetch again
+        setAnalysisResult(initialData as AnalysisResult);
+        setError(null);
+        fetchFullAnalysis(true); // Pass true to ignore cache
+    };
 
     const renderContent = () => {
-        if (!analysisResult?.performance) {
-            return <DashboardSkeleton initialData={initialData} />;
-        }
         if (error) {
             return <ErrorAlert title="Analysis Failed" description={error} />;
         }
         if (analysisResult) {
-            return <AnalysisDashboard initialData={analysisResult} />;
+            // If we have full performance data, show the dashboard.
+            // Otherwise, show skeleton with initial data.
+            return analysisResult.performance ? 
+                <AnalysisDashboard initialData={analysisResult} /> : 
+                <DashboardSkeleton initialData={initialData} />;
         }
+        // Fallback to basic skeleton if no result at all
         return <DashboardSkeleton />;
     }
     
@@ -473,8 +490,8 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                         <Home className="mr-2 h-4 w-4" />
                         Back to Home
                     </Button>
-                    <Button variant="outline" onClick={() => { setCache(prev => { const newCache = {...prev}; delete newCache[decodedUrl]; return newCache; }); router.refresh(); }} disabled={isDownloading}>
-                        <RefreshCw className="mr-2 h-4 w-4" />
+                    <Button variant="outline" onClick={handleReanalyze} disabled={isFetching.current || isDownloading}>
+                        <RefreshCw className={`mr-2 h-4 w-4 ${isFetching.current ? 'animate-spin' : ''}`} />
                         Re-analyse
                     </Button>
                     <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisResult?.performance}>
@@ -491,5 +508,3 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         </div>
     );
 }
-
-    
