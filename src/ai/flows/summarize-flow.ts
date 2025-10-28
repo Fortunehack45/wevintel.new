@@ -95,7 +95,11 @@ const summarizeWebsiteFlow = ai.defineFlow(
       return { summary: output };
     } catch (e: any) {
       console.error("AI summary flow failed:", e);
-      return { error: e.message || 'An unexpected error occurred while generating the summary.' };
+      const errorMessage = e.message || 'An unexpected error occurred while generating the summary.';
+      if (errorMessage.includes('429')) {
+        return { error: 'The AI is currently receiving too many requests. Please try again in a few moments.' };
+      }
+      return { error: errorMessage };
     }
   }
 );

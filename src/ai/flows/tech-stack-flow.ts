@@ -29,12 +29,17 @@ const TechStackOutputSchema = z.array(z.object({
 
 export type TechStackOutput = z.infer<typeof TechStackOutputSchema>;
 
-export async function detectTechStack(input: TechStackInput): Promise<TechStackOutput> {
+export async function detectTechStack(input: TechStackInput): Promise<TechStackOutput | null> {
   // Truncate HTML content to avoid exceeding token limits
   if (input.htmlContent) {
     input.htmlContent = input.htmlContent.substring(0, 10000);
   }
-  return detectTechStackFlow(input);
+  try {
+    return await detectTechStackFlow(input);
+  } catch (e: any) {
+    console.error("Tech stack detection failed:", e);
+    return null; // Return null on failure
+  }
 }
 
 const prompt = ai.definePrompt({

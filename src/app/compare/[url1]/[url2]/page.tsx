@@ -70,8 +70,8 @@ const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> 
         const fastResult = await getFastAnalysis(url);
         if ('error' in fastResult) {
             console.error(`Fast analysis failed for ${url}: ${fastResult.error}`);
-            // Return a partial error result to show on the UI
             try {
+                // Try to return a partial result for display
                 return {
                     id: crypto.randomUUID(),
                     overview: { url, domain: new URL(url).hostname, favicon: `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`},
@@ -80,13 +80,7 @@ const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> 
                     partial: true
                 };
             } catch {
-                return {
-                    id: crypto.randomUUID(),
-                    overview: { url, domain: 'Invalid URL', favicon: '' },
-                    error: 'The provided URL was invalid.',
-                    createdAt: new Date().toISOString(),
-                    partial: true
-                };
+                return null;
             }
         }
 
@@ -97,15 +91,21 @@ const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> 
             headers: fastResult.headers,
         };
 
-        const [perfResult, summaryResult, trafficResult, techStackResult, additionalResult] = await Promise.allSettled([
-            getPerformanceAnalysis(url),
+        // Use Promise.allSettled for AI calls to prevent one failure from stopping others
+        const [summaryResult, trafficResult, techStackResult, perfResult, additionalResult] = await Promise.allSettled([
             summarizeWebsite(aiSummaryInput),
             estimateTraffic({ url, description: fastResult.overview?.description || '' }),
             detectTechStack({ url, htmlContent: fastResult.overview?.htmlContent || '', headers: fastResult.headers || {} }),
+            getPerformanceAnalysis(url), // This one can also fail
             getAdditionalAnalysis(url),
         ]);
-
+        
+        // Handle failed promises by assigning a default value
+        const summaryValue = summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.' };
+        const trafficValue = trafficResult.status === 'fulfilled' ? trafficResult.value : undefined;
+        const techStackValue = techStackResult.status === 'fulfilled' ? techStackResult.value : undefined;
         const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
+        const additionalValue = additionalResult.status === 'fulfilled' ? additionalResult.value : { status: undefined };
         
         const finalResult: AnalysisResult = {
             ...(fastResult as AnalysisResult),
@@ -125,14 +125,14 @@ const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> 
                 ...fastResult.security!,
                 securityScore: getSecurityScore({ ...fastResult, ...fullPerfData }),
             },
-            aiSummary: summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.'},
-            traffic: trafficResult.status === 'fulfilled' ? trafficResult.value : undefined,
-            techStack: techStackResult.status === 'fulfilled' ? techStackResult.value : undefined,
-            status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
+            aiSummary: summaryValue,
+            traffic: trafficValue,
+            techStack: techStackValue,
+            status: additionalValue.status,
         };
         return finalResult;
     } catch (e: any) {
-        console.error(`Failed to analyze ${url}:`, e);
+        console.error(`Unhandled error in fetchAnalysisForUrl for ${url}:`, e);
         try {
             return {
                 id: crypto.randomUUID(),
@@ -142,13 +142,7 @@ const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> 
                 partial: true
             };
         } catch {
-             return {
-                id: crypto.randomUUID(),
-                overview: { url, domain: 'Invalid URL', favicon: ''},
-                error: 'The provided URL was invalid.',
-                createdAt: new Date().toISOString(),
-                partial: true
-            };
+            return null; // Return null if URL is invalid
         }
     }
 };
@@ -195,10 +189,11 @@ export default async function CompareResultPage({ params }: Props) {
             };
             summary = await compareWebsites(aiInput);
         } catch (e: any) {
+            console.error("AI comparison generation failed:", e);
             summary = { error: e.message || "Failed to generate AI comparison." };
         }
     } else if (res1?.error || res2?.error) {
-        summary = { error: "AI comparison could not be generated because one or both sites failed to analyze." };
+        summary = { error: "AI comparison could not be generated because one or both sites failed to analyze completely." };
     }
 
     return (

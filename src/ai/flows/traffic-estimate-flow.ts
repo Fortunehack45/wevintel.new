@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A flow to estimate website traffic.
@@ -38,8 +39,13 @@ const TrafficEstimateOutputSchema = z.object({
 
 export type TrafficEstimateOutput = z.infer<typeof TrafficEstimateOutputSchema>;
 
-export async function estimateTraffic(input: TrafficEstimateInput): Promise<TrafficEstimateOutput> {
-  return estimateTrafficFlow(input);
+export async function estimateTraffic(input: TrafficEstimateInput): Promise<TrafficEstimateOutput | null> {
+    try {
+        return await estimateTrafficFlow(input);
+    } catch (e: any) {
+        console.error("Traffic estimation flow failed:", e);
+        return null; // Return null on any error
+    }
 }
 
 const prompt = ai.definePrompt({
@@ -66,19 +72,7 @@ const estimateTrafficFlow = ai.defineFlow(
     outputSchema: TrafficEstimateOutputSchema,
   },
   async (input) => {
-    try {
-        const { output } = await prompt(input);
-        return output!;
-    } catch (e) {
-        console.error("Traffic estimation flow failed:", e);
-        // Return a default/error state
-        return {
-            estimatedMonthlyVisits: 0,
-            estimationConfidence: 'low',
-            trafficSources: { direct: 0, search: 0, social: 0, referral: 0 },
-            topCountries: [{country: 'N/A', percentage: 0}, {country: 'N/A', percentage: 0}, {country: 'N.A', percentage: 0}],
-            engagement: { avgSessionDuration: '0s', bounceRate: 0 }
-        };
-    }
+    const { output } = await prompt(input);
+    return output!;
   }
 );
