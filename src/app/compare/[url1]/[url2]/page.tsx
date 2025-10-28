@@ -1,4 +1,6 @@
 
+'use server';
+
 import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { getAdditionalAnalysis } from '@/app/actions/get-additional-analysis';
 import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
@@ -70,18 +72,14 @@ const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> 
         const fastResult = await getFastAnalysis(url);
         if ('error' in fastResult) {
             console.error(`Fast analysis failed for ${url}: ${fastResult.error}`);
-            try {
-                // Try to return a partial result for display
-                return {
-                    id: crypto.randomUUID(),
-                    overview: { url, domain: new URL(url).hostname, favicon: `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`},
-                    error: fastResult.error,
-                    createdAt: new Date().toISOString(),
-                    partial: true
-                };
-            } catch {
-                return null;
-            }
+            // Return a partial error result to show on the UI
+             return {
+                id: crypto.randomUUID(),
+                overview: { url, domain: new URL(url).hostname, favicon: `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`},
+                error: fastResult.error,
+                createdAt: new Date().toISOString(),
+                partial: true
+            };
         }
 
         const aiSummaryInput: WebsiteAnalysisInput = {
@@ -91,21 +89,20 @@ const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> 
             headers: fastResult.headers,
         };
 
-        // Use Promise.allSettled for AI calls to prevent one failure from stopping others
-        const [summaryResult, trafficResult, techStackResult, perfResult, additionalResult] = await Promise.allSettled([
+        const [perfResult, additionalResult, summaryResult, trafficResult, techStackResult] = await Promise.allSettled([
+            getPerformanceAnalysis(url),
+            getAdditionalAnalysis(url),
             summarizeWebsite(aiSummaryInput),
             estimateTraffic({ url, description: fastResult.overview?.description || '' }),
             detectTechStack({ url, htmlContent: fastResult.overview?.htmlContent || '', headers: fastResult.headers || {} }),
-            getPerformanceAnalysis(url), // This one can also fail
-            getAdditionalAnalysis(url),
         ]);
-        
-        // Handle failed promises by assigning a default value
+
+        const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
+        const additionalValue = additionalResult.status === 'fulfilled' ? additionalResult.value : { status: undefined };
         const summaryValue = summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.' };
         const trafficValue = trafficResult.status === 'fulfilled' ? trafficResult.value : undefined;
         const techStackValue = techStackResult.status === 'fulfilled' ? techStackResult.value : undefined;
-        const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
-        const additionalValue = additionalResult.status === 'fulfilled' ? additionalResult.value : { status: undefined };
+
         
         const finalResult: AnalysisResult = {
             ...(fastResult as AnalysisResult),
@@ -148,7 +145,7 @@ const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> 
 };
 
 
-export default async function CompareResultPage({ params }: Props) {
+export default async function CompareResultPage({ params }: { params: { url1: string, url2: string } }) {
     let decodedUrl1 = '', decodedUrl2 = '';
 
     try {

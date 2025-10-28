@@ -71,10 +71,15 @@ const detectTechStackFlow = ai.defineFlow(
   {
     name: 'detectTechStackFlow',
     inputSchema: TechStackInputSchema,
-    outputSchema: TechStackOutputSchema,
+    outputSchema: z.nullable(TechStackOutputSchema),
   },
   async (input) => {
-    const { output } = await prompt(input);
-    return output!;
+    try {
+        const { output } = await prompt(input);
+        return output!;
+    } catch (e) {
+        console.error("Tech stack detection flow failed:", e);
+        return null;
+    }
   }
 );
