@@ -7,7 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult, type AuditInfo, type Metadata, type SecurityData } from '@/lib/types';
 import { getPerformanceAnalysis } from '@/app/actions/analyze';
-import { getAdditionalAnalysis, getDomainInfo } from '@/app/actions/get-additional-analysis';
+import { getAdditionalAnalysis } from '@/app/actions/get-additional-analysis';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import { useRouter } from 'next/navigation';
@@ -61,13 +61,12 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 headers: initialData.headers,
             };
             
-            const [perfResult, summaryResult, trafficResult, techStackResult, additionalResult, domainResult] = await Promise.allSettled([
+            const [perfResult, summaryResult, trafficResult, techStackResult, additionalResult] = await Promise.allSettled([
                 getPerformanceAnalysis(decodedUrl),
                 summarizeWebsite(aiSummaryInput),
                 estimateTraffic({ url: decodedUrl, description: initialData.overview?.description || '' }),
                 detectTechStack({ url: decodedUrl, htmlContent: initialData.overview?.htmlContent || '', headers: initialData.headers || {} }),
                 getAdditionalAnalysis(decodedUrl),
-                getDomainInfo(initialData.overview!.domain),
             ]);
 
             const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
@@ -116,7 +115,6 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 traffic: trafficResult.status === 'fulfilled' ? trafficResult.value : undefined,
                 techStack: techStackResult.status === 'fulfilled' ? techStackResult.value : undefined,
                 status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
-                domain: domainResult.status === 'fulfilled' ? domainResult.value : undefined,
             };
 
             setAnalysisResult(finalResult);

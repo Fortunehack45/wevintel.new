@@ -18,7 +18,6 @@ export type AnalysisResult = {
   securityAudits?: AuditInfo;
   diagnosticsAudits?: AuditInfo;
   techStack?: TechStackData;
-  domain?: DomainData;
   status?: StatusData;
   createdAt: string; // ISO 8601 string
   error?: string;
@@ -132,18 +131,6 @@ export type TechStackItem = {
 
 export type TechStackData = TechStackItem[];
 
-export type DomainContact = {
-    name?: string;
-    organization?: string;
-    email?: string;
-    telephone?: string;
-    street?: string;
-    city?: string;
-    state?: string;
-    postalCode?: string;
-    country?: string;
-}
-
 export type DomainData = {
   registrar?: string;
   creationDate?: string;
@@ -151,9 +138,6 @@ export type DomainData = {
   updatedDate?: string;
   status?: string[];
   nameservers?: string[];
-  registrant?: DomainContact;
-  admin?: DomainContact;
-  tech?: DomainContact;
 };
 
 export type StatusData = {
@@ -161,12 +145,6 @@ export type StatusData = {
   httpStatus?: number;
   responseTime?: number; // in ms
   finalUrl?: string; // To check for redirects
-};
-
-export type DomainHistoryItem = {
-  id: string;
-  domain: string;
-  createdAt: string; // ISO 8601 string
 };
 
 // Types for Website Comparison Flow

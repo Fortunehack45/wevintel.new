@@ -1,6 +1,6 @@
 
 import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
-import { getAdditionalAnalysis, getDomainInfo } from '@/app/actions/get-additional-analysis';
+import { getAdditionalAnalysis } from '@/app/actions/get-additional-analysis';
 import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
 import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
 import { detectTechStack } from '@/ai/flows/tech-stack-flow';
@@ -77,13 +77,12 @@ const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> 
             headers: fastResult.headers,
         };
 
-        const [perfResult, summaryResult, trafficResult, techStackResult, additionalResult, domainResult] = await Promise.allSettled([
+        const [perfResult, summaryResult, trafficResult, techStackResult, additionalResult] = await Promise.allSettled([
             getPerformanceAnalysis(url),
             summarizeWebsite(aiSummaryInput),
             estimateTraffic({ url, description: fastResult.overview?.description || '' }),
             detectTechStack({ url, htmlContent: fastResult.overview?.htmlContent || '', headers: fastResult.headers || {} }),
             getAdditionalAnalysis(url),
-            getDomainInfo(fastResult.overview!.domain),
         ]);
 
         const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
@@ -110,7 +109,6 @@ const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> 
             traffic: trafficResult.status === 'fulfilled' ? trafficResult.value : undefined,
             techStack: techStackResult.status === 'fulfilled' ? techStackResult.value : undefined,
             status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
-            domain: domainResult.status === 'fulfilled' ? domainResult.value : undefined,
         };
         return finalResult;
     } catch (e) {

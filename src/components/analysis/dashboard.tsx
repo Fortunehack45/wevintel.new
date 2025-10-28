@@ -36,30 +36,39 @@ const cardVariants = {
   })
 };
 
-export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: AnalysisResult, onDataLoaded: (data: AnalysisResult) => void }) {
-  const [, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
+export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult }) {
+  const stableInitialValue = useMemo(() => [], []);
+  const [, setHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', stableInitialValue);
   
   useEffect(() => {
     // Only save to history if we have the full performance data
     if (initialData.performance) {
-      onDataLoaded(initialData);
-
       setHistory(prevHistory => {
-        const newHistory = [...prevHistory];
-        const existingIndex = newHistory.findIndex(item => item.overview.url === initialData.overview?.url);
+        // Create a new array with the updated item
+        const updatedHistory = prevHistory.map(item => 
+          item.overview.url === initialData.overview?.url ? initialData : item
+        );
         
-        if (existingIndex > -1) {
-            // Update the existing record with the latest full data
-            newHistory[existingIndex] = initialData;
-        } else {
-            // Add new record
-            newHistory.unshift(initialData);
+        // If the item was not in the history, add it to the beginning
+        if (!updatedHistory.some(item => item.overview.url === initialData.overview?.url)) {
+            updatedHistory.unshift(initialData);
         }
 
-        return newHistory.slice(0, 20);
+        // Check if the initialData was already there and just updated
+        const existingIndex = prevHistory.findIndex(item => item.overview.url === initialData.overview?.url);
+        if (existingIndex === -1) {
+             // If it's a new item, add it.
+             const newHistory = [initialData, ...prevHistory];
+             return newHistory.slice(0, 20);
+        } else {
+            // If it's an existing item, replace it to update.
+            const newHistory = [...prevHistory];
+            newHistory[existingIndex] = initialData;
+            return newHistory;
+        }
       });
     }
-  }, [initialData, onDataLoaded, setHistory]);
+  }, [initialData, setHistory]);
 
 
   const totalAuditScore = useMemo(() => {
@@ -117,10 +126,6 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
         </motion.div>
       )}
 
-       <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="col-span-2 lg:col-span-4">
-          <AIRedesignCard />
-      </motion.div>
-
       {isLoadingFullReport ? (
          <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="col-span-2 lg:col-span-4">
           <DashboardSkeleton.PerformancePlaceholder />
@@ -173,31 +178,26 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
           <MetadataCard data={metadata} />
         </motion.div>
       }
-      
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={11} className="col-span-2">
-        <OverallScoreCard score={totalAuditScore} />
-      </motion.div>
-
 
       {isLoadingFullReport ? (
         <>
-            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-2">
+            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={11} className="col-span-2">
                 <DashboardSkeleton.AuditPlaceholder />
             </motion.div>
-            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={13} className="col-span-2 lg:col-span-2">
+            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-2 lg:col-span-2">
                 <DashboardSkeleton.AuditPlaceholder />
             </motion.div>
         </>
       ) : (
         <>
             {performanceAudits && 
-                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-2">
+                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={11} className="col-span-2">
                 <AuditsCard data={performanceAudits} />
                 </motion.div>
             }
             
             {diagnosticsAudits &&
-                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={13} className="col-span-2 lg:col-span-2">
+                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-2 lg:col-span-2">
                 <DiagnosticsCard data={diagnosticsAudits} />
                 </motion.div>
             }
@@ -206,7 +206,7 @@ export function AnalysisDashboard({ initialData, onDataLoaded }: { initialData: 
 
 
       {headers && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={14} className="col-span-2 lg:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={13} className="col-span-2 lg:col-span-4">
           <HeadersCard data={headers} />
         </motion.div>
       }
