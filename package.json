@@ -43,6 +43,7 @@
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^11.2.10",
     "genkit": "^1.20.0",
+    "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.475.0",
@@ -60,6 +61,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@types/html2canvas": "^1.0.0",
     "@types/jspdf": "^2.0.0",
     "@types/node": "^20",
     "@types/react": "^18",

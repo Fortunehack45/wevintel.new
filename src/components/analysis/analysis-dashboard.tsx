@@ -19,6 +19,7 @@ import { SummaryCard } from './summary-card';
 import { TrafficCard } from './traffic-card';
 import { TechStackCarousel } from './tech-stack-carousel';
 import { StatusCard } from './status-card';
+import { AIRedesignCard } from './ai-redesign-card';
 
 
 const cardVariants = {
@@ -96,7 +97,7 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
   const isLoadingFullReport = !performance;
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+    <div id="analysis-dashboard-content" className="grid grid-cols-2 lg:grid-cols-4 gap-6">
       {overview && 
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="col-span-2 lg:col-span-4">
           <OverviewCard 
@@ -124,33 +125,37 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
         </motion.div>
       )}
 
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="col-span-2 lg:col-span-4">
+        <AIRedesignCard />
+      </motion.div>
+
       {isLoadingFullReport ? (
-         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="col-span-2 lg:col-span-4">
+         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="col-span-2 lg:col-span-4">
           <DashboardSkeleton.PerformancePlaceholder />
         </motion.div>
       ) : (
         performance &&
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="col-span-2 lg:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="col-span-2 lg:col-span-4">
           <PerformanceCard data={performance} />
         </motion.div>
       )}
 
       {isLoadingFullReport || !techStack ? (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="col-span-2 lg:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="col-span-2 lg:col-span-4">
           <DashboardSkeleton.TechStackPlaceholder />
         </motion.div>
       ) : (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="col-span-2 lg:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="col-span-2 lg:col-span-4">
           <TechStackCarousel data={techStack} />
         </motion.div>
       )}
       
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="col-span-1">
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="col-span-1">
         <StatusCard data={status} />
       </motion.div>
 
       {security && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={6} className="col-span-1">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={7} className="col-span-1">
           <SecurityCard data={security} audits={securityAudits} />
         </motion.div>
       }
