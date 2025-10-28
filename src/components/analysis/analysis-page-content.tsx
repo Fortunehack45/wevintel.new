@@ -1,16 +1,22 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { Suspense, useEffect, useState, useMemo, useRef, useCallback } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { RefreshCw, Download, Home } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult, type AuditInfo } from '@/lib/types';
+import { type AnalysisResult, type AuditItem, AuditInfo, TrafficData, WebsiteOverview, SecurityData, HostingInfo, Metadata, HeaderInfo, AISummary, TechStackData, DomainData, StatusData } from '@/lib/types';
+import { getPerformanceAnalysis } from '@/app/actions/analyze';
+import { getAdditionalAnalysis, getDomainInfo } from '@/app/actions/get-additional-analysis';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import { useRouter } from 'next/navigation';
 import { DashboardSkeleton } from './dashboard-skeleton';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { useAnalysisData } from '@/hooks/use-analysis-data';
+import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
+import { detectTechStack } from '@/ai/flows/tech-stack-flow';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
 
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
@@ -25,9 +31,116 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
 
 export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: string, initialData: Partial<AnalysisResult> }) {
     const [isDownloading, setIsDownloading] = useState(false);
+    const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(initialData as AnalysisResult);
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
+    const isFetching = useRef(false);
+    const stableInitialValue = useMemo(() => ({}), []);
+    const [cache, setCache] = useLocalStorage<Record<string, {data: AnalysisResult, timestamp: string}>>('webintel_analysis_cache', stableInitialValue);
 
-    const { result: analysisResult, error, loading } = useAnalysisData(decodedUrl, initialData);
+
+    const fetchFullAnalysis = useCallback(async () => {
+        if (!initialData || isFetching.current) return;
+        isFetching.current = true;
+        
+        // Check cache first
+        const cachedItem = cache[decodedUrl];
+        if (cachedItem) {
+            const oneDay = 24 * 60 * 60 * 1000;
+            if (new Date().getTime() - new Date(cachedItem.timestamp).getTime() < oneDay) {
+                setAnalysisResult(cachedItem.data);
+                isFetching.current = false;
+                return;
+            }
+        }
+        
+        try {
+            const aiSummaryInput: WebsiteAnalysisInput = {
+                overview: initialData.overview!,
+                security: initialData.security!,
+                hosting: initialData.hosting!,
+                headers: initialData.headers,
+            };
+            
+            const [perfResult, summaryResult, trafficResult, techStackResult, additionalResult, domainResult] = await Promise.allSettled([
+                getPerformanceAnalysis(decodedUrl),
+                summarizeWebsite(aiSummaryInput),
+                estimateTraffic({ url: decodedUrl, description: initialData.overview?.description || '' }),
+                detectTechStack({ url: decodedUrl, htmlContent: initialData.overview?.htmlContent || '', headers: initialData.headers || {} }),
+                getAdditionalAnalysis(decodedUrl),
+                getDomainInfo(initialData.overview!.domain),
+            ]);
+
+            const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
+            const securityAudits = 'securityAudits' in fullPerfData ? fullPerfData.securityAudits : {};
+            
+            let securityScoreTotal = 0;
+            let securityItemsScored = 0;
+            
+            if (initialData.security?.isSecure) securityScoreTotal += 1;
+            securityItemsScored++;
+
+            Object.values(initialData.security?.securityHeaders || {}).forEach(present => {
+                if (present) securityScoreTotal++;
+                securityItemsScored++;
+            });
+
+            if (securityAudits) {
+                Object.values(securityAudits).forEach(audit => {
+                    if (audit.score !== null) {
+                        securityScoreTotal += audit.score;
+                        securityItemsScored++;
+                    }
+                });
+            }
+            const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
+
+            const finalResult: AnalysisResult = {
+                ...(initialData as AnalysisResult),
+                ...fullPerfData,
+                overview: {
+                    ...initialData!.overview,
+                    ...('overview' in fullPerfData ? fullPerfData.overview : {}),
+                    title: ('overview' in fullPerfData && fullPerfData.overview?.title) || initialData!.overview?.title,
+                    description: ('overview' in fullPerfData && fullPerfData.overview?.description) || initialData!.overview?.description,
+                },
+                metadata: {
+                    ...initialData!.metadata,
+                    hasRobotsTxt: 'metadata' in fullPerfData && fullPerfData.metadata ? fullPerfData.metadata.hasRobotsTxt : false,
+                    hasSitemapXml: 'metadata' in fullPerfData && fullPerfData.metadata ? fullPerfData.metadata.hasSitemapXml : false,
+                } as Metadata,
+                security: {
+                    ...initialData!.security,
+                    securityScore: calculatedSecurityScore,
+                } as SecurityData,
+                aiSummary: summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.'},
+                traffic: trafficResult.status === 'fulfilled' ? trafficResult.value : undefined,
+                techStack: techStackResult.status === 'fulfilled' ? techStackResult.value : undefined,
+                status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
+                domain: domainResult.status === 'fulfilled' ? domainResult.value : undefined,
+            };
+
+            setAnalysisResult(finalResult);
+            // Update cache
+            setCache(prev => ({
+                ...prev,
+                [decodedUrl]: { data: finalResult, timestamp: new Date().toISOString() }
+            }));
+
+        } catch (e: any) {
+            console.error("An error occurred during analysis:", e);
+            setError(e.message || "An unexpected error occurred.");
+        } finally {
+            isFetching.current = false;
+        }
+    }, [decodedUrl, initialData, cache, setCache]);
+
+
+    useEffect(() => {
+        fetchFullAnalysis();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [decodedUrl]);
+
 
     const handleDownloadPdf = async () => {
         if (!analysisResult || !analysisResult.performance) return;
@@ -76,6 +189,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 if (currentY > pdfHeight - margin - spaceNeeded) {
                     pdf.addPage();
                     addPageHeader();
+                    currentY = 60;
                 }
             };
             
@@ -98,21 +212,20 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 const keyWidth = 130;
                 const valueWidth = contentWidth / 2 - keyWidth;
 
-                checkAndAddPage(40);
-                yPos = currentY;
+                checkAndAddPage();
 
                 pdf.setFont('helvetica', 'bold');
                 pdf.setFontSize(10);
                 pdf.setTextColor(textColor);
                 const splitKey = pdf.splitTextToSize(key, keyWidth);
-                pdf.text(splitKey, xPos, yPos);
+                pdf.text(splitKey, xPos, currentY);
                 
                 pdf.setFont('helvetica', 'normal');
                 const valueX = xPos + keyWidth;
                 const splitValue = pdf.splitTextToSize(String(value), valueWidth);
-                pdf.text(splitValue, valueX, yPos);
+                pdf.text(splitValue, valueX, currentY);
 
-                const newY = yPos + (Math.max(splitKey.length, splitValue.length) * 12) + 8;
+                const newY = currentY + (Math.max(splitKey.length, splitValue.length) * 12) + 8;
                 currentY = newY;
                 return newY;
             };
@@ -174,11 +287,10 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             // --- Overview Section ---
             addSectionTitle('Website Overview');
             let tempY = currentY;
-            tempY = addKeyValue('URL', data.overview.url, margin, tempY);
-            tempY = addKeyValue('Title', data.overview.title, margin, tempY);
-            tempY = addKeyValue('Description', data.overview.description, margin, tempY);
-            tempY = addKeyValue('Language', data.overview.language?.toUpperCase(), margin, tempY);
-            currentY = tempY + 10;
+            addKeyValue('URL', data.overview.url, margin, tempY);
+            addKeyValue('Title', data.overview.title, margin, tempY);
+            addKeyValue('Description', data.overview.description, margin, tempY);
+            addKeyValue('Language', data.overview.language?.toUpperCase(), margin, tempY);
             
             // --- Performance Section ---
             if (data.performance) {
@@ -222,11 +334,10 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 
                 checkAndAddPage();
                 let perfY = currentY;
-                perfY = addKeyValue('Largest Contentful Paint', data.performance.mobile.largestContentfulPaint, margin, perfY);
-                perfY = addKeyValue('Cumulative Layout Shift', data.performance.mobile.cumulativeLayoutShift, margin, perfY);
-                perfY = addKeyValue('Speed Index', data.performance.mobile.speedIndex, margin, perfY);
-                perfY = addKeyValue('Total Blocking Time', data.performance.mobile.totalBlockingTime, margin, perfY);
-                currentY = perfY;
+                addKeyValue('Largest Contentful Paint', data.performance.mobile.largestContentfulPaint, margin, perfY);
+                addKeyValue('Cumulative Layout Shift', data.performance.mobile.cumulativeLayoutShift, margin, perfY);
+                addKeyValue('Speed Index', data.performance.mobile.speedIndex, margin, perfY);
+                addKeyValue('Total Blocking Time', data.performance.mobile.totalBlockingTime, margin, perfY);
             }
             
             // --- Security & Hosting ---
@@ -236,38 +347,31 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             currentY += 20;
 
             const boxWidth = contentWidth / 2 - 10;
-            const initialY = currentY;
             
-            let securityCurrentY = initialY;
-            let hostingCurrentY = initialY;
-
             // Security Box
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(12);
             pdf.setTextColor(textColor);
-            pdf.text('Security', margin, securityCurrentY);
-            securityCurrentY += 20;
-            let tempSecurityY = securityCurrentY;
-            tempSecurityY = addKeyValue('SSL Enabled', data.security?.isSecure ? 'Yes' : 'No', margin, tempSecurityY);
+            pdf.text('Security', margin, currentY);
+            currentY += 20;
+            addKeyValue('SSL Enabled', data.security?.isSecure ? 'Yes' : 'No', margin, currentY);
             Object.entries(data.security?.securityHeaders || {}).forEach(([key, value]) => {
-                tempSecurityY = addKeyValue(key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), value ? 'Present' : 'Missing', margin, tempSecurityY);
+                addKeyValue(key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), value ? 'Present' : 'Missing', margin, currentY);
             });
-            securityCurrentY = tempSecurityY;
 
             // Hosting Box
+            let hostingY = initialY;
             const hostingX = margin + boxWidth + 20;
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(12);
             pdf.setTextColor(textColor);
-            pdf.text('Hosting', hostingX, hostingCurrentY);
-            hostingCurrentY += 20;
-            let tempHostingY = hostingCurrentY;
-            tempHostingY = addKeyValue('IP Address', data.hosting?.ip, hostingX, tempHostingY);
-            tempHostingY = addKeyValue('ISP', data.hosting?.isp, hostingX, tempHostingY);
-            tempHostingY = addKeyValue('Country', data.hosting?.country, hostingX, tempHostingY);
-hostingCurrentY = tempHostingY;
+            pdf.text('Hosting', hostingX, hostingY);
+            hostingY += 20;
+            addKeyValue('IP Address', data.hosting?.ip, hostingX, hostingY);
+            addKeyValue('ISP', data.hosting?.isp, hostingX, hostingY);
+            addKeyValue('Country', data.hosting?.country, hostingX, hostingY);
             
-            currentY = Math.max(securityCurrentY, hostingCurrentY);
+            currentY = Math.max(currentY, hostingY);
 
 
             // --- AI Summary ---
@@ -348,7 +452,7 @@ hostingCurrentY = tempHostingY;
 
 
     const renderContent = () => {
-        if (loading && !analysisResult?.performance) {
+        if (!analysisResult?.performance) {
             return <DashboardSkeleton initialData={initialData} />;
         }
         if (error) {
@@ -374,11 +478,11 @@ hostingCurrentY = tempHostingY;
                         <Home className="mr-2 h-4 w-4" />
                         Back to Home
                     </Button>
-                    <Button variant="outline" onClick={() => router.push(`/analysis/${encodeURIComponent(decodedUrl)}?t=${Date.now()}`)} disabled={isDownloading}>
+                    <Button variant="outline" onClick={() => { setCache(prev => { delete prev[decodedUrl]; return prev; }); router.push(`/analysis/${encodeURIComponent(decodedUrl)}?t=${Date.now()}`); }} disabled={isDownloading}>
                         <RefreshCw className="mr-2 h-4 w-4" />
                         Re-analyse
                     </Button>
-                    <Button onClick={handleDownloadPdf} disabled={isDownloading || loading || !analysisResult?.performance}>
+                    <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisResult?.performance}>
                          {isDownloading ? (
                             <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
                          ) : (

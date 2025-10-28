@@ -63,22 +63,9 @@ export default async function CompareResultPage({ params }: Props) {
         return <ErrorAlert title="Invalid URL" description="One or both of the provided URLs are not valid. Please go back and try again." />;
     }
     
-    // Run initial analysis for both in parallel
-    const [result1, result2] = await Promise.all([
-        getFastAnalysis(decodedUrl1),
-        getFastAnalysis(decodedUrl2),
-    ]);
-    
-    if ('error' in result1 || 'error' in result2) {
-        const error1 = 'error' in result1 ? `Error for ${decodedUrl1}: ${result1.error}` : '';
-        const error2 = 'error' in result2 ? `Error for ${decodedUrl2}: ${result2.error}` : '';
-        return <ErrorAlert title="Analysis Failed" description={`${error1} ${error2}`.trim()} />;
-    }
-
     return (
         <ComparisonPageContent
             urls={{ url1: decodedUrl1, url2: decodedUrl2 }}
-            initialData={{ data1: result1, data2: result2 }}
         />
     )
 }

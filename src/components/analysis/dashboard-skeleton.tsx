@@ -143,7 +143,8 @@ function DashboardSkeleton({ initialData }: { initialData?: Partial<AnalysisResu
       <Skeleton className="h-48 rounded-xl col-span-1" />
       <Skeleton className="h-48 rounded-xl col-span-1" />
       <Skeleton className="h-48 rounded-xl col-span-1" />
-      <div className="col-span-2 lg:col-span-4"><Skeleton className="h-48 rounded-xl" /></div>
+      <Skeleton className="h-48 rounded-xl col-span-2" />
+      <Skeleton className="h-48 rounded-xl col-span-2" />
       <div className="col-span-2"><AuditPlaceholder /></div>
       <div className="col-span-2"><AuditPlaceholder /></div>
       <Skeleton className="h-64 rounded-xl col-span-2 lg:col-span-4" />
