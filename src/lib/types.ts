@@ -131,15 +131,6 @@ export type TechStackItem = {
 
 export type TechStackData = TechStackItem[];
 
-export type DomainData = {
-  registrar?: string;
-  creationDate?: string;
-  expirationDate?: string;
-  updatedDate?: string;
-  status?: string[];
-  nameservers?: string[];
-};
-
 export type StatusData = {
   isOnline: boolean;
   httpStatus?: number;

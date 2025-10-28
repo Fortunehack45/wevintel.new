@@ -10,7 +10,8 @@ import type { ComparisonOutput } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { DashboardSkeleton } from '../analysis/dashboard-skeleton';
 import { HostingCard } from '../analysis/hosting-card';
-import { Card, CardContent } from '../ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
+import { AlertTriangle } from 'lucide-react';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -31,22 +32,31 @@ interface ComparisonDashboardProps {
     summary: ComparisonOutput | { error: string } | null;
 }
 
+const AnalysisFailedCard = ({ error, domain }: { error: string, domain: string }) => {
+    return (
+        <Card className="h-full border-destructive">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-destructive">
+                    <AlertTriangle />
+                    Analysis Failed
+                </CardTitle>
+                <CardDescription>{domain}</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <p className="text-sm text-destructive-foreground bg-destructive/80 p-3 rounded-md">{error}</p>
+            </CardContent>
+        </Card>
+    )
+}
+
+
 const SiteColumn = ({ data, customDelay }: { data?: AnalysisResult | null, customDelay: number }) => {
-    if (!data) {
+    if (!data || data.error) {
         return (
             <div className="space-y-6">
-                 <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.1}>
-                    <DashboardSkeleton.SummaryPlaceholder />
-                 </motion.div>
-                 <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.2}>
-                    <DashboardSkeleton.PerformancePlaceholder />
-                 </motion.div>
-                 <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.3}>
-                    <DashboardSkeleton.AuditPlaceholder />
-                 </motion.div>
-                 <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.4}>
-                    <DashboardSkeleton.TechStackPlaceholder />
-                 </motion.div>
+                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={customDelay + 0.1}>
+                   {data && <AnalysisFailedCard error={data.error!} domain={data.overview.domain} />}
+                </motion.div>
             </div>
         )
     }
@@ -79,7 +89,7 @@ const LoadingState = () => (
                 <DashboardSkeleton.SummaryPlaceholder />
             </CardContent>
         </Card>
-        <div className="grid grid-cols-2 gap-4 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
              <SiteColumn customDelay={0} />
              <SiteColumn customDelay={0.1} />
         </div>
@@ -88,7 +98,9 @@ const LoadingState = () => (
 
 
 export function ComparisonDashboard({ data1, data2, summary }: ComparisonDashboardProps) {
-    const isLoading = !data1 || !data2;
+  if (!data1 || !data2) {
+    return <LoadingState />;
+  }
 
   return (
     <div className='space-y-8'>

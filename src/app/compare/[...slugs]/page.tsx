@@ -68,7 +68,17 @@ const getSecurityScore = (data: Partial<AnalysisResult>) => {
 const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> => {
     try {
         const fastResult = await getFastAnalysis(url);
-        if ('error' in fastResult) throw new Error(fastResult.error);
+        if ('error' in fastResult) {
+            console.error(`Fast analysis failed for ${url}: ${fastResult.error}`);
+             // Create a partial error result to show on the UI
+            return {
+                id: crypto.randomUUID(),
+                overview: { url, domain: new URL(url).hostname, favicon: `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`},
+                error: fastResult.error,
+                createdAt: new Date().toISOString(),
+                partial: true
+            };
+        }
 
         const aiSummaryInput: WebsiteAnalysisInput = {
             overview: fastResult.overview!,
@@ -111,9 +121,25 @@ const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> 
             status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
         };
         return finalResult;
-    } catch (e) {
+    } catch (e: any) {
         console.error(`Failed to analyze ${url}:`, e);
-        return null; // Return null on failure
+        try {
+            return {
+                id: crypto.randomUUID(),
+                overview: { url, domain: new URL(url).hostname, favicon: `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`},
+                error: e.message || 'An unknown error occurred during analysis.',
+                createdAt: new Date().toISOString(),
+                partial: true
+            };
+        } catch {
+             return {
+                id: crypto.randomUUID(),
+                overview: { url, domain: 'Invalid URL', favicon: ''},
+                error: 'The provided URL was invalid.',
+                createdAt: new Date().toISOString(),
+                partial: true
+            };
+        }
     }
 };
 
@@ -143,7 +169,7 @@ export default async function CompareResultPage({ params }: Props) {
     ]);
     
     let summary: ComparisonOutput | { error: string } | null = null;
-    if (res1 && res2) {
+    if (res1 && res2 && !res1.error && !res2.error) {
         try {
             const aiInput: ComparisonInput = {
                 site1: {
@@ -165,6 +191,8 @@ export default async function CompareResultPage({ params }: Props) {
         } catch (e: any) {
             summary = { error: e.message || "Failed to generate AI comparison." };
         }
+    } else if (res1?.error || res2?.error) {
+        summary = { error: "AI comparison could not be generated because one or both sites failed to analyze." };
     }
 
     return (

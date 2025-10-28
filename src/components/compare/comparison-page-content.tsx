@@ -37,7 +37,7 @@ export function ComparisonPageContent({ urls, data1, data2, summary }: Compariso
     const [history, setHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', stableInitialValue);
     
     useEffect(() => {
-        if (data1 && data2) {
+        if (data1 && data2 && !data1.error && !data2.error) {
              setHistory(prev => {
                 const newEntry: ComparisonHistoryItem = {
                     id: crypto.randomUUID(),
@@ -242,7 +242,9 @@ export function ComparisonPageContent({ urls, data1, data2, summary }: Compariso
         };
 
         try {
-            generatePdfFromData(data1 as AnalysisResult, data2 as AnalysisResult, summary as ComparisonOutput);
+            if (data1 && !data1.error && data2 && !data2.error) {
+                generatePdfFromData(data1 as AnalysisResult, data2 as AnalysisResult, summary as ComparisonOutput);
+            }
         } catch (error) {
             console.error("PDF generation failed:", error);
         } finally {
