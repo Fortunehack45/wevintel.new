@@ -80,6 +80,20 @@ Keep the language clear, professional, and easy to understand for a non-technica
 `,
 });
 
+// Helper function for retrying with exponential backoff
+async function retryWithBackoff<T>(fn: () => Promise<T>, retries = 3, delay = 100): Promise<T> {
+    try {
+        return await fn();
+    } catch (e: any) {
+        if (retries > 0 && e.message.includes('429')) {
+            console.warn(`AI rate limited. Retrying in ${delay}ms... (${retries} retries left)`);
+            await new Promise(res => setTimeout(res, delay));
+            return retryWithBackoff(fn, retries - 1, delay * 2);
+        }
+        throw e;
+    }
+}
+
 const summarizeWebsiteFlow = ai.defineFlow(
   {
     name: 'summarizeWebsiteFlow',
@@ -88,7 +102,8 @@ const summarizeWebsiteFlow = ai.defineFlow(
   },
   async (input) => {
     try {
-      const { output } = await prompt(input);
+      const { output } = await retryWithBackoff(() => prompt(input));
+      
       if (!output) {
         return { error: 'The AI model did not return a summary. Please try again.' };
       }
