@@ -34,7 +34,8 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
     const [isDownloading, setIsDownloading] = useState(false);
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(initialData as AnalysisResult);
     const [error, setError] = useState<string | null>(null);
-    const [trafficCache, setTrafficCache] = useLocalStorage<Record<string, {data: TrafficData, timestamp: string}>>('webintel_traffic_cache', {});
+    const stableInitialValue = useMemo(() => ({}), []);
+    const [trafficCache, setTrafficCache] = useLocalStorage<Record<string, {data: TrafficData, timestamp: string}>>('webintel_traffic_cache', stableInitialValue);
 
     const router = useRouter();
     const isFetching = useRef(false);
@@ -458,7 +459,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         };
 
         try {
-            generatePdfFromData(analysisResult);
+            generatePdfFromData(analysisResult as AnalysisResult);
         } catch (error) {
             console.error("PDF generation failed:", error);
         } finally {

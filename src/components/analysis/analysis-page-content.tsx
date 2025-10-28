@@ -265,7 +265,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             tempHostingY = addKeyValue('IP Address', data.hosting?.ip, hostingX, tempHostingY);
             tempHostingY = addKeyValue('ISP', data.hosting?.isp, hostingX, tempHostingY);
             tempHostingY = addKeyValue('Country', data.hosting?.country, hostingX, tempHostingY);
-            hostingCurrentY = tempHostingY;
+hostingCurrentY = tempHostingY;
             
             currentY = Math.max(securityCurrentY, hostingCurrentY);
 
