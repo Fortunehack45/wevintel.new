@@ -40,25 +40,27 @@ const redesignWebsiteFlow = ai.defineFlow(
   },
   async (input) => {
     try {
-      const { output } = await ai.generate({
+      const { output, media } = await ai.generate({
         model: 'googleai/gemini-pro-vision',
         prompt: [
             { media: { url: input.screenshotDataUri } },
             { text: `Redesign the provided website screenshot based on the following instruction: "${input.prompt}". In your response, provide ONLY a JSON object containing the redesigned image and a short 'reasoning' for your design choices.` },
         ],
-        config: {
-          responseModalities: ['TEXT', 'IMAGE'],
-        },
         output: {
-          schema: RedesignOutputSchema,
+          schema: z.object({
+            reasoning: z.string().describe("A brief explanation from the AI about the design choices it made based on the prompt."),
+          }),
         },
       });
 
-      if (!output) {
+      if (!output || !media?.url) {
         return { error: 'The AI model did not return a valid design. Please try again.' };
       }
       
-      return { design: output };
+      return { design: {
+        imageUrl: media.url,
+        reasoning: output.reasoning,
+      } };
     } catch (e: any) {
       console.error("AI redesign flow failed:", e);
       if (e.message && e.message.includes('429')) {
