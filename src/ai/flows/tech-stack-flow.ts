@@ -32,7 +32,7 @@ export type TechStackOutput = z.infer<typeof TechStackOutputSchema>;
 export async function detectTechStack(input: TechStackInput): Promise<TechStackOutput | null> {
   // Truncate HTML content to avoid exceeding token limits
   if (input.htmlContent) {
-    input.htmlContent = input.htmlContent.substring(0, 10000);
+    input.htmlContent = input.htmlContent.substring(0, 5000);
   }
   try {
     return await detectTechStackFlow(input);
