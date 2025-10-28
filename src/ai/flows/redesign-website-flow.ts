@@ -41,10 +41,10 @@ const redesignWebsiteFlow = ai.defineFlow(
   async (input) => {
     try {
       const { output } = await ai.generate({
-        model: 'googleai/gemini-2.5-flash-image-preview',
+        model: 'googleai/gemini-pro-vision',
         prompt: [
             { media: { url: input.screenshotDataUri } },
-            { text: `Redesign the provided website screenshot based on the following instruction: "${input.prompt}". In your response, provide the redesigned image and a short 'reasoning' for your design choices.` },
+            { text: `Redesign the provided website screenshot based on the following instruction: "${input.prompt}". In your response, provide ONLY a JSON object containing the redesigned image and a short 'reasoning' for your design choices.` },
         ],
         config: {
           responseModalities: ['TEXT', 'IMAGE'],
@@ -61,6 +61,9 @@ const redesignWebsiteFlow = ai.defineFlow(
       return { design: output };
     } catch (e: any) {
       console.error("AI redesign flow failed:", e);
+      if (e.message && e.message.includes('429')) {
+        return { error: 'The AI is currently receiving too many requests. Please try again in a few moments.' };
+      }
       return { error: e.message || 'An unexpected error occurred while generating the redesign.' };
     }
   }
