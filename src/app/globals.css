@@ -113,6 +113,37 @@
     50% { transform: translateX(-50%) translateY(-25%) rotate(180deg); }
     100% { transform: translateX(-50%) translateY(-25%) rotate(360deg); }
   }
+  
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+
+  .loading-spinner {
+    animation: rotate 2s linear infinite;
+  }
+  
+  .loading-spinner .path {
+    stroke: currentColor;
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
 
   .wave-container {
     @apply fixed top-0 left-0 w-full h-[50vh] -z-10 overflow-hidden pointer-events-none;

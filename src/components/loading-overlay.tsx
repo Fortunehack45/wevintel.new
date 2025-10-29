@@ -2,8 +2,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import Lottie from 'lottie-react';
-import searchingAnimation from '@/lib/searching-animation.json';
 
 const singleMessages = [
     "Warming up the engines...",
@@ -22,6 +20,20 @@ const comparisonMessages = [
     "Generating AI comparison...",
     "Building your report...",
 ]
+
+const Spinner = () => (
+    <svg className="loading-spinner h-16 w-16 text-primary" viewBox="0 0 50 50">
+      <circle
+        className="path"
+        cx="25"
+        cy="25"
+        r="20"
+        fill="none"
+        strokeWidth="5"
+      ></circle>
+    </svg>
+);
+
 
 export function LoadingOverlay({ isVisible, isComparison = false }: { isVisible: boolean, isComparison?: boolean }) {
     const [index, setIndex] = useState(0);
@@ -42,7 +54,7 @@ export function LoadingOverlay({ isVisible, isComparison = false }: { isVisible:
 
             return () => clearInterval(interval);
         }
-    }, [isVisible, messages.length, messages]);
+    }, [isVisible, messages, messages.length]);
 
     return (
         <AnimatePresence>
@@ -51,11 +63,9 @@ export function LoadingOverlay({ isVisible, isComparison = false }: { isVisible:
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center gap-4"
+                    className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center gap-6"
                 >
-                    <div className="w-64 h-64">
-                         <Lottie animationData={searchingAnimation} loop={true} />
-                    </div>
+                    <Spinner />
                     <div className="relative h-6 w-64 text-center">
                         <AnimatePresence mode="wait">
                             <motion.p
