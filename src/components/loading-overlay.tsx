@@ -63,7 +63,7 @@ export function LoadingOverlay({ isVisible, isComparison = false }: { isVisible:
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center gap-6"
+                    className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 flex flex-col items-center justify-center gap-6"
                 >
                     <Spinner />
                     <div className="relative h-6 w-64 text-center">

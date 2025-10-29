@@ -1,22 +1,22 @@
 
 'use client';
 
-import { Suspense, useEffect, useState, useMemo, useRef, useCallback } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { RefreshCw, Download, Home } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult, type AuditItem, AuditInfo, TrafficData, WebsiteOverview, SecurityData, HostingInfo, Metadata, HeaderInfo, AISummary, TechStackData, StatusData } from '@/lib/types';
+import { type AnalysisResult, type AuditInfo, type Metadata, type SecurityData } from '@/lib/types';
 import { getPerformanceAnalysis } from '@/app/actions/analyze';
 import { getAdditionalAnalysis } from '@/app/actions/get-additional-analysis';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import { useRouter } from 'next/navigation';
-import { DashboardSkeleton } from './dashboard-skeleton';
+import { DashboardSkeleton } from '@/components/analysis/dashboard-skeleton';
 import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
 import { detectTechStack } from '@/ai/flows/tech-stack-flow';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
+import { LoadingOverlay } from '@/components/loading-overlay';
 
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
@@ -32,27 +32,33 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
 export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: string, initialData: Partial<AnalysisResult> }) {
     const [isDownloading, setIsDownloading] = useState(false);
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(initialData as AnalysisResult);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
     const isFetching = useRef(false);
     const stableInitialValue = useMemo(() => ({}), []);
-    const [cache, setCache] = useLocalStorage<Record<string, {data: AnalysisResult, timestamp: string}>>('webintel_analysis_cache', stableInitialValue);
+    const [cache, setCache] = useLocalStorage<Record<string, { data: AnalysisResult, timestamp: string }>>('webintel_analysis_cache', stableInitialValue);
 
 
-    const fetchFullAnalysis = useCallback(async () => {
+    const fetchFullAnalysis = useCallback(async (ignoreCache = false) => {
         if (!initialData || isFetching.current) return;
-        isFetching.current = true;
         
         // Check cache first
-        const cachedItem = cache[decodedUrl];
-        if (cachedItem) {
-            const oneDay = 24 * 60 * 60 * 1000;
-            if (new Date().getTime() - new Date(cachedItem.timestamp).getTime() < oneDay) {
-                setAnalysisResult(cachedItem.data);
-                isFetching.current = false;
-                return;
+        if (!ignoreCache) {
+            const cachedItem = cache[decodedUrl];
+            if (cachedItem) {
+                const oneDay = 24 * 60 * 60 * 1000;
+                if (new Date().getTime() - new Date(cachedItem.timestamp).getTime() < oneDay) {
+                    setAnalysisResult(cachedItem.data);
+                    setIsLoading(false);
+                    return;
+                }
             }
         }
+        
+        isFetching.current = true;
+        setIsLoading(true);
+        setError(null);
         
         try {
             const aiSummaryInput: WebsiteAnalysisInput = {
@@ -71,6 +77,12 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             ]);
 
             const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
+            const summaryValue = summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.' };
+            const trafficValue = trafficResult.status === 'fulfilled' ? trafficResult.value : null;
+            const techStackValue = techStackResult.status === 'fulfilled' ? techStackResult.value : null;
+            const additionalValue = additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined;
+
+
             const securityAudits = 'securityAudits' in fullPerfData ? fullPerfData.securityAudits : {};
             
             let securityScoreTotal = 0;
@@ -112,10 +124,10 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                     ...initialData!.security,
                     securityScore: calculatedSecurityScore,
                 } as SecurityData,
-                aiSummary: summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.'},
-                traffic: trafficResult.status === 'fulfilled' ? trafficResult.value : undefined,
-                techStack: techStackResult.status === 'fulfilled' ? techStackResult.value : undefined,
-                status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
+                aiSummary: summaryValue,
+                traffic: trafficValue,
+                techStack: techStackValue,
+                status: additionalValue,
             };
 
             setAnalysisResult(finalResult);
@@ -130,14 +142,16 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             setError(e.message || "An unexpected error occurred.");
         } finally {
             isFetching.current = false;
+            setIsLoading(false);
         }
-    }, [decodedUrl, initialData, cache, setCache]);
+    // We only want to run this on mount, and not when cache/setCache changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [decodedUrl, initialData]);
 
 
     useEffect(() => {
         fetchFullAnalysis();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [decodedUrl]);
+    }, [fetchFullAnalysis]);
 
 
     const handleDownloadPdf = async () => {
@@ -446,22 +460,31 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         }
     };
 
+    const handleReanalyze = () => {
+        // Clear cache for this specific URL and re-fetch
+        setCache(prev => {
+            const newCache = { ...prev };
+            delete newCache[decodedUrl];
+            return newCache;
+        });
+        setAnalysisResult(initialData as AnalysisResult);
+        setError(null);
+        fetchFullAnalysis(true);
+    };
 
     const renderContent = () => {
-        if (!analysisResult?.performance) {
-            return <DashboardSkeleton initialData={initialData} />;
-        }
         if (error) {
             return <ErrorAlert title="Analysis Failed" description={error} />;
         }
-        if (analysisResult) {
-            return <AnalysisDashboard initialData={analysisResult} />;
+        if (isLoading && !analysisResult?.performance) {
+            return <DashboardSkeleton initialData={initialData} />;
         }
-        return <DashboardSkeleton />;
+        return <AnalysisDashboard initialData={analysisResult!} />;
     }
     
     return (
         <div className="flex-1">
+            <LoadingOverlay isVisible={isLoading} />
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold">Analysis Report</h1>
@@ -474,8 +497,8 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                         <Home className="mr-2 h-4 w-4" />
                         Back to Home
                     </Button>
-                    <Button variant="outline" onClick={() => { setCache(prev => { const newCache = {...prev}; delete newCache[decodedUrl]; return newCache; }); router.refresh(); }} disabled={isDownloading}>
-                        <RefreshCw className="mr-2 h-4 w-4" />
+                    <Button variant="outline" onClick={handleReanalyze} disabled={isLoading || isDownloading}>
+                        <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                         Re-analyse
                     </Button>
                     <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisResult?.performance}>

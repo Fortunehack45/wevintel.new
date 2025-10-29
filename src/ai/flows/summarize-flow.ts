@@ -81,7 +81,7 @@ Keep the language clear, professional, and easy to understand for a non-technica
 });
 
 // Helper function for retrying with exponential backoff
-async function retryWithBackoff<T>(fn: () => Promise<T>, retries = 3, delay = 100): Promise<T> {
+async function retryWithBackoff<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
     try {
         return await fn();
     } catch (e: any) {
@@ -110,9 +110,11 @@ const summarizeWebsiteFlow = ai.defineFlow(
       return { summary: output };
     } catch (e: any) {
       console.error("AI summary flow failed:", e);
-      const errorMessage = e.message || 'An unexpected error occurred while generating the summary.';
+      let errorMessage = e.message || 'An unexpected error occurred while generating the summary.';
       if (errorMessage.includes('429')) {
-        return { error: 'The AI is currently receiving too many requests. Please try again in a few moments.' };
+        errorMessage = 'The AI is currently receiving too many requests. Please try again in a few moments.';
+      } else if (errorMessage.includes('400')) {
+        errorMessage = 'There was a problem with the request to the AI service (Bad Request).';
       }
       return { error: errorMessage };
     }

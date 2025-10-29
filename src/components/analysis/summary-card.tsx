@@ -9,8 +9,6 @@ import type { AnalysisResult } from '@/lib/types';
 import { summarizeWebsite, WebsiteAnalysisInput, AISummary } from '@/ai/flows/summarize-flow';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
-import { useIsMobile } from '@/hooks/use-mobile';
-
 
 const SummarySkeleton = () => (
     <div>
@@ -44,7 +42,6 @@ interface SummaryCardProps {
 export function SummaryCard({ data, summary: initialSummary, isLoading: initialIsLoading }: SummaryCardProps) {
     const [summaryResult, setSummaryResult] = useState(initialSummary);
     const [isLoading, setIsLoading] = useState(initialIsLoading);
-    const isMobile = useIsMobile();
 
     const generateSummary = useCallback(async () => {
         if (!data.overview || !data.security || !data.hosting) return;
