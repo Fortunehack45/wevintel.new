@@ -39,7 +39,7 @@ export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: Comp
             <CardHeader>
                 <CardTitle className="flex items-center gap-3 truncate">
                     <Scale className="h-6 w-6 text-primary shrink-0" />
-                    {summary ? title : <Skeleton className="h-6 w-56" />}
+                    <span className="truncate">{summary ? title : <Skeleton className="h-6 w-56" />}</span>
                 </CardTitle>
                 <CardDescription>An AI-powered summary of the key differences between the two sites.</CardDescription>
             </CardHeader>

@@ -168,22 +168,22 @@ export function ComparisonPageContent({ urls, initialData1, initialData2 }: Comp
     return (
         <div className="flex-1">
              <LoadingOverlay isVisible={isLoading} isComparison />
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-                <div className="space-y-2 flex-1 min-w-0">
+            <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                <div className="space-y-3">
                     <h1 className="text-3xl font-bold">Comparison Report</h1>
-                    <div className="text-muted-foreground flex items-center gap-3 flex-wrap bg-muted p-2 rounded-lg">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 text-muted-foreground bg-muted p-2 rounded-lg">
                         <div className='flex items-center gap-2 min-w-0'>
                            <Image src={`https://www.google.com/s2/favicons?domain=${new URL(urls.url1).hostname}&sz=32`} alt={`${new URL(urls.url1).hostname} favicon`} width={20} height={20} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
                             <a href={urls.url1} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium truncate">{new URL(urls.url1).hostname}</a>
                         </div>
-                        <span className="font-bold">vs</span>
-                        <div className='flex items-center gap-2 min-w-0'>
+                        <span className="font-bold hidden sm:block">vs</span>
+                         <div className='flex items-center gap-2 min-w-0'>
                            <Image src={`https://www.google.com/s2/favicons?domain=${new URL(urls.url2).hostname}&sz=32`} alt={`${new URL(urls.url2).hostname} favicon`} width={20} height={20} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
                             <a href={urls.url2} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium truncate">{new URL(urls.url2).hostname}</a>
                         </div>
                     </div>
                 </div>
-                <div className='flex items-center gap-2 flex-wrap'>
+                <div className='flex items-center gap-2 flex-wrap justify-start md:justify-end'>
                      <Button variant="outline" onClick={() => router.push('/compare')} disabled={isDownloading}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         New
