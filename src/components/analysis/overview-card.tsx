@@ -26,7 +26,7 @@ export function OverviewCard({ data, isLoading }: OverviewCardProps) {
         )}
         <div className='flex-1 min-w-0'>
           <div className="flex items-center gap-3">
-             <h3 className="text-2xl font-bold tracking-tight truncate">{data.title || data.domain}</h3>
+             <h3 className="text-2xl font-bold tracking-tight">{data.title || data.domain}</h3>
              {isLoading && <Loader className="h-5 w-5 text-primary animate-spin shrink-0" />}
           </div>
           <p className="text-muted-foreground truncate">{data.domain}</p>
