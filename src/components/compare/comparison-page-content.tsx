@@ -20,6 +20,8 @@ import { CompareForm } from './compare-form';
 import Image from 'next/image';
 import { compareWebsites } from '@/ai/flows/compare-websites-flow';
 import { LoadingOverlay } from '../loading-overlay';
+import { getFullAnalysis } from '@/app/actions/get-full-analysis';
+
 
 type Urls = { url1: string; url2: string };
 
@@ -27,10 +29,9 @@ interface ComparisonPageContentProps {
     urls: Urls;
     initialData1: Partial<AnalysisResult> | { error: string; overview: { url: string; domain: string; }};
     initialData2: Partial<AnalysisResult> | { error: string; overview: { url: string; domain: string; }};
-    getFullAnalysis: (url: string) => Promise<AnalysisResult | { error: string }>;
 }
 
-export function ComparisonPageContent({ urls, initialData1, initialData2, getFullAnalysis }: ComparisonPageContentProps) {
+export function ComparisonPageContent({ urls, initialData1, initialData2 }: ComparisonPageContentProps) {
     const router = useRouter();
     const [isDownloading, setIsDownloading] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
