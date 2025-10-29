@@ -176,7 +176,7 @@ export function ComparisonPageContent({ urls, initialData1, initialData2 }: Comp
                            <Image src={`https://www.google.com/s2/favicons?domain=${new URL(urls.url1).hostname}&sz=32`} alt={`${new URL(urls.url1).hostname} favicon`} width={20} height={20} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
                             <a href={urls.url1} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium truncate">{new URL(urls.url1).hostname}</a>
                         </div>
-                        <span className="font-bold hidden sm:block">vs</span>
+                        <span className="font-bold sm:block">vs</span>
                          <div className='flex items-center gap-2 min-w-0'>
                            <Image src={`https://www.google.com/s2/favicons?domain=${new URL(urls.url2).hostname}&sz=32`} alt={`${new URL(urls.url2).hostname} favicon`} width={20} height={20} className="rounded-md flex-shrink-0 bg-slate-100 dark:bg-white/10 p-0.5" crossOrigin="anonymous"/>
                             <a href={urls.url2} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium truncate">{new URL(urls.url2).hostname}</a>
