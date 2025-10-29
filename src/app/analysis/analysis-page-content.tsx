@@ -411,11 +411,11 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold">Analysis Report</h1>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground break-all">
                         Results for: <a href={decodedUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{decodedUrl}</a>
                     </p>
                 </div>
-                <div className='flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto'>
+                <div className='flex flex-wrap items-center justify-start sm:justify-end gap-2 w-full sm:w-auto'>
                     <Button variant="outline" onClick={() => router.push('/')} disabled={isDownloading}>
                         <Home className="mr-2 h-4 w-4" />
                         Back to Home
