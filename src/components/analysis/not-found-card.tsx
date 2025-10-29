@@ -1,8 +1,7 @@
 
 'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import Lottie from 'lottie-react';
-import searchingAnimation from '@/lib/searching-animation.json';
+import { FileSearch } from 'lucide-react';
 
 export function NotFoundCard({ url, message }: { url: string; message?: string }) {
   let hostname = "the site";
@@ -21,8 +20,8 @@ export function NotFoundCard({ url, message }: { url: string; message?: string }
             </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center">
-            <div className="w-64 h-64">
-                <Lottie animationData={searchingAnimation} loop={true} />
+            <div className="w-48 h-48 flex items-center justify-center text-muted-foreground/20">
+                <FileSearch className="h-32 w-32" />
             </div>
             <p className="mt-4 text-muted-foreground">
                 {message || "This could be because the domain is incorrect, the site is temporarily down, or it doesn't exist. Please check the URL and try again."}
