@@ -27,7 +27,7 @@ interface ComparisonPageContentProps {
     urls: Urls;
     initialData1: Partial<AnalysisResult> | { error: string; overview: { url: string; domain: string; }};
     initialData2: Partial<AnalysisResult> | { error: string; overview: { url: string; domain: string; }};
-    getFullAnalysis: (url: string) => Promise<AnalysisResult>;
+    getFullAnalysis: (url: string) => Promise<AnalysisResult | { error: string }>;
 }
 
 export function ComparisonPageContent({ urls, initialData1, initialData2, getFullAnalysis }: ComparisonPageContentProps) {
@@ -47,12 +47,12 @@ export function ComparisonPageContent({ urls, initialData1, initialData2, getFul
         setIsLoading(true);
 
         const results = await Promise.allSettled([
-            'error' in initialData1 ? Promise.resolve({ error: initialData1.error }) : getFullAnalysis(urls.url1),
-            'error' in initialData2 ? Promise.resolve({ error: initialData2.error }) : getFullAnalysis(urls.url2)
+            'error' in initialData1 ? Promise.resolve({ ...initialData1, overview: { url: urls.url1, domain: new URL(urls.url1).hostname, ...initialData1.overview } }) : getFullAnalysis(urls.url1),
+            'error' in initialData2 ? Promise.resolve({ ...initialData2, overview: { url: urls.url2, domain: new URL(urls.url2).hostname, ...initialData2.overview } }) : getFullAnalysis(urls.url2)
         ]);
         
-        const res1 = results[0].status === 'fulfilled' ? results[0].value : { error: results[0].reason?.message || 'Unknown error' };
-        const res2 = results[1].status === 'fulfilled' ? results[1].value : { error: results[1].reason?.message || 'Unknown error' };
+        const res1 = results[0].status === 'fulfilled' ? results[0].value : { error: results[0].reason?.message || 'Unknown error', overview: { url: urls.url1, domain: new URL(urls.url1).hostname } };
+        const res2 = results[1].status === 'fulfilled' ? results[1].value : { error: results[1].reason?.message || 'Unknown error', overview: { url: urls.url2, domain: new URL(urls.url2).hostname } };
         
         setData1(res1);
         setData2(res2);
@@ -218,8 +218,8 @@ export function ComparisonPageContent({ urls, initialData1, initialData2, getFul
             </div>
             
             <ComparisonDashboard 
-                initialData1={'error' in initialData1 ? { ...initialData1, id: '1' } : initialData1}
-                initialData2={'error' in initialData2 ? { ...initialData2, id: '2' } : initialData2}
+                initialData1={initialData1}
+                initialData2={initialData2}
                 data1={data1}
                 data2={data2}
                 summary={summary}

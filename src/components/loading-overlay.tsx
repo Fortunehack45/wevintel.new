@@ -42,7 +42,7 @@ export function LoadingOverlay({ isVisible, isComparison = false }: { isVisible:
 
             return () => clearInterval(interval);
         }
-    }, [isVisible, messages.length]);
+    }, [isVisible, messages.length, messages]);
 
     return (
         <AnimatePresence>

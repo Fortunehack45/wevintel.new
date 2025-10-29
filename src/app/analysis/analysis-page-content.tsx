@@ -32,7 +32,7 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
 export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: string, initialData: Partial<AnalysisResult> }) {
     const [isDownloading, setIsDownloading] = useState(false);
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(initialData as AnalysisResult);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
     const isFetching = useRef(false);
@@ -50,6 +50,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                 const oneDay = 24 * 60 * 60 * 1000;
                 if (new Date().getTime() - new Date(cachedItem.timestamp).getTime() < oneDay) {
                     setAnalysisResult(cachedItem.data);
+                    setIsLoading(false);
                     return;
                 }
             }
@@ -76,8 +77,8 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
 
             const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
             const summaryValue = summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.' };
-            const trafficValue = trafficResult.status === 'fulfilled' ? trafficResult.value : undefined;
-            const techStackValue = techStackResult.status === 'fulfilled' ? techStackResult.value : undefined;
+            const trafficValue = trafficResult.status === 'fulfilled' ? trafficResult.value : null;
+            const techStackValue = techStackResult.status === 'fulfilled' ? techStackResult.value : null;
             const additionalValue = additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined;
 
 
@@ -474,24 +475,15 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         if (error) {
             return <ErrorAlert title="Analysis Failed" description={error} />;
         }
-        if (!analysisResult) {
-            return <DashboardSkeleton />;
+        if (isLoading || !analysisResult?.performance) {
+            return <DashboardSkeleton initialData={initialData} />;
         }
-        // If we don't have the full report yet, show skeleton with initial data.
-        if (isLoading || !analysisResult.performance) {
-            return (
-                <>
-                    <LoadingOverlay isVisible={isLoading} />
-                    <DashboardSkeleton initialData={initialData} />
-                </>
-            );
-        }
-        // Otherwise, show the full dashboard.
         return <AnalysisDashboard initialData={analysisResult} />;
     }
     
     return (
         <div className="flex-1">
+            <LoadingOverlay isVisible={isLoading} />
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold">Analysis Report</h1>
