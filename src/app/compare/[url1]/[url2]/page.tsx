@@ -49,7 +49,11 @@ export default async function CompareResultPage({ params }: { params: { url1: st
         new URL(decodedUrl1);
         new URL(decodedUrl2);
     } catch(e) {
-        return <NotFoundCard url={decodedUrl1 || decodedUrl2} message="One or both of the provided URLs are not valid. Please go back and try again." />;
+        return (
+            <div className="px-4 py-8">
+                <NotFoundCard url={decodedUrl1 || decodedUrl2} message="One or both of the provided URLs are not valid. Please go back and try again." />
+            </div>
+        )
     }
     
     // Server-side fast analysis
@@ -62,7 +66,7 @@ export default async function CompareResultPage({ params }: { params: { url1: st
     // This makes the initial page load much faster.
 
     return (
-        <div>
+        <div className="px-4 py-8 pb-24 md:pb-16">
             <ComparisonPageContent
                 urls={{ url1: decodedUrl1, url2: decodedUrl2 }}
                 initialData1={!('error' in fastRes1) ? fastRes1 : { error: fastRes1.error, overview: {url: decodedUrl1, domain: new URL(decodedUrl1).hostname}}}

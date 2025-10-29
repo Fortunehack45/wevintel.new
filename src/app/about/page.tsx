@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function AboutPage() {
   return (
-    <div className="max-w-5xl mx-auto space-y-12">
+    <div className="container mx-auto px-4 py-8 max-w-5xl space-y-12">
       <div className="mb-8">
         <Button asChild variant="outline">
           <Link href="/">

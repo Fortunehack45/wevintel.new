@@ -74,7 +74,9 @@ export default async function AnalysisPage({ params, searchParams }: Props) {
     }
   } catch (e) {
     return (
+      <div className="px-4 py-8">
         <NotFoundCard url={decodedUrl} message="The provided URL is not valid. Please go back and try again with a valid URL (e.g., https://example.com)." />
+      </div>
     )
   }
 
@@ -88,13 +90,23 @@ export default async function AnalysisPage({ params, searchParams }: Props) {
 
   if ('error' in fastResult) {
       if (fastResult.error === 'Domain not found. The website is not reachable.' || fastResult.error === 'Could not fetch the main page of the website. It might be down or blocking requests.') {
-          return <NotFoundCard url={decodedUrl} message={fastResult.error} />;
+          return (
+            <div className="px-4 py-8">
+                <NotFoundCard url={decodedUrl} message={fastResult.error} />
+            </div>
+          );
       }
-      return <ErrorAlert title="Analysis Failed" description={fastResult.error} />;
+      return (
+        <div className="px-4 py-8">
+            <ErrorAlert title="Analysis Failed" description={fastResult.error} />
+        </div>
+      );
   }
 
   // Pass the initial data to the client component to handle the rest.
-  return <AnalysisPageContent decodedUrl={decodedUrl} initialData={fastResult} />;
+  return (
+    <div className="px-4 py-8 pb-24 md:pb-16">
+        <AnalysisPageContent decodedUrl={decodedUrl} initialData={fastResult} />
+    </div>
+  );
 }
-
-    
