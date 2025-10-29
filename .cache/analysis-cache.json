@@ -1654,5 +1654,60 @@
         "hasSitemapXml": false
       }
     }
+  },
+  "tech-stack:https://Fzmovies.host": {
+    "timestamp": 1761742373668,
+    "data": [
+      {
+        "name": "PHP",
+        "category": "Programming Language",
+        "confidence": 100,
+        "description": "PHP is a popular general-purpose scripting language especially suited to web development."
+      },
+      {
+        "name": "Cloudflare",
+        "category": "CDN",
+        "confidence": 100,
+        "description": "Cloudflare is a web infrastructure and website security company, providing content delivery network services, DDoS mitigation, and Internet security."
+      },
+      {
+        "name": "Google Analytics",
+        "category": "Analytics",
+        "confidence": 100,
+        "description": "Google Analytics is a web analytics service offered by Google that tracks and reports website traffic."
+      },
+      {
+        "name": "Google Identity Services",
+        "category": "Authentication",
+        "confidence": 95,
+        "description": "Google Identity Services provides a secure and easy way for users to sign in to websites with their Google Account."
+      },
+      {
+        "name": "Google Fonts",
+        "category": "Font Hosting",
+        "confidence": 90,
+        "description": "Google Fonts is a library of free licensed font families and an interactive web directory for browsing the library."
+      },
+      {
+        "name": "HTML5",
+        "category": "Markup Language",
+        "confidence": 100,
+        "description": "HTML5 is the latest revision of the Hypertext Markup Language, offering enhanced features for web content structuring."
+      },
+      {
+        "name": "CSS3",
+        "category": "Stylesheet Language",
+        "confidence": 100,
+        "description": "CSS3 is the latest evolution of the Cascading Style Sheets language, used for describing the presentation of web pages."
+      }
+    ]
+  },
+  "comparison:https://Google.com:https://Fzmovies.host": {
+    "timestamp": 1761742383013,
+    "data": {
+      "title": "Web Performance and Security Comparison: Google.com vs. Fzmovies.host",
+      "summary": "Both Google.com and Fzmovies.host demonstrate exemplary security, each achieving a perfect score of 100. However, Fzmovies.host significantly outperforms Google.com in the realm of web performance, registering an impressive score of 87 compared to Google.com's 57, suggesting a more optimized user experience in loading times and responsiveness for Fzmovies.host. Despite Google's global presence, its primary domain shows room for performance improvement relative to the other site.The technology stacks reveal distinct approaches. Google.com employs a highly proprietary architecture, featuring a 'Google Web Server' and 'Custom Google JavaScript,' alongside 'Schema.org,' 'Google Fonts,' and 'Brotli' for content delivery, all hosted in the Czech Republic (CZ). In contrast, Fzmovies.host utilizes a more standard, yet effective, combination of 'PHP,' 'Cloudflare' for content delivery and security, 'Google Analytics,' 'Google Identity Services,' 'Google Fonts,' 'HTML5,' and 'CSS3,' hosted in Great Britain (GB). The integration of Cloudflare by Fzmovies.host likely plays a pivotal role in its superior performance metrics.",
+      "winner": "Fzmovies.host"
+    }
   }
 }
