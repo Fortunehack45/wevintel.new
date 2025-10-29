@@ -37,8 +37,8 @@ export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: Comp
     return (
         <Card className="glass-card w-full">
             <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                    <Scale className="h-6 w-6 text-primary" />
+                <CardTitle className="flex items-center gap-3 truncate">
+                    <Scale className="h-6 w-6 text-primary shrink-0" />
                     {summary ? title : <Skeleton className="h-6 w-56" />}
                 </CardTitle>
                 <CardDescription>An AI-powered summary of the key differences between the two sites.</CardDescription>
@@ -58,7 +58,7 @@ export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: Comp
                     <>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center bg-muted/30 p-4 rounded-lg">
                             <div className={`text-center p-4 rounded-lg transition-all ${isWinner1 ? 'bg-primary/20 ring-2 ring-primary' : ''}`}>
-                                <h3 className='font-bold text-lg'>{data1?.overview.domain}</h3>
+                                <h3 className='font-bold text-lg truncate'>{data1?.overview.domain}</h3>
                                 <div className='flex justify-center gap-4 mt-2'>
                                     <div className={`font-bold text-lg flex items-center gap-1.5 ${getScoreColor(data1?.performance?.mobile.performanceScore)}`}>
                                         <TrendingUp className="h-4 w-4" />
@@ -71,7 +71,7 @@ export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: Comp
                                 </div>
                             </div>
                              <div className={`text-center p-4 rounded-lg transition-all ${isWinner2 ? 'bg-primary/20 ring-2 ring-primary' : ''}`}>
-                                <h3 className='font-bold text-lg'>{data2?.overview.domain}</h3>
+                                <h3 className='font-bold text-lg truncate'>{data2?.overview.domain}</h3>
                                 <div className='flex justify-center gap-4 mt-2'>
                                     <div className={`font-bold text-lg flex items-center gap-1.5 ${getScoreColor(data2?.performance?.mobile.performanceScore)}`}>
                                         <TrendingUp className="h-4 w-4" />
