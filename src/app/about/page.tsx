@@ -1,4 +1,5 @@
 
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Info, Database, Shield, Home, Settings, Layers, Code, User, Send, Compass, ArrowRight, TrendingUp, BarChart, FileSearch } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function AboutPage() {
   return (
-    <div className="max-w-5xl mx-auto space-y-12">
+    <div className="max-w-5xl mx-auto space-y-12 container px-4 py-8 pb-24 md:pb-16 pt-12">
       <div className="mb-8">
         <Button asChild variant="outline">
           <Link href="/">

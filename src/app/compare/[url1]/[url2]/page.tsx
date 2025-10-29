@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { getFastAnalysis } from '@/app/actions/analyze';
@@ -61,10 +62,12 @@ export default async function CompareResultPage({ params }: { params: { url1: st
     // This makes the initial page load much faster.
 
     return (
-        <ComparisonPageContent
-            urls={{ url1: decodedUrl1, url2: decodedUrl2 }}
-            initialData1={!('error' in fastRes1) ? fastRes1 : { error: fastRes1.error, overview: {url: decodedUrl1, domain: new URL(decodedUrl1).hostname}}}
-            initialData2={!('error' in fastRes2) ? fastRes2 : { error: fastRes2.error, overview: {url: decodedUrl2, domain: new URL(decodedUrl2).hostname}}}
-        />
+        <div className="container mx-auto px-4 py-8 pb-24 md:pb-16 pt-12">
+            <ComparisonPageContent
+                urls={{ url1: decodedUrl1, url2: decodedUrl2 }}
+                initialData1={!('error' in fastRes1) ? fastRes1 : { error: fastRes1.error, overview: {url: decodedUrl1, domain: new URL(decodedUrl1).hostname}}}
+                initialData2={!('error' in fastRes2) ? fastRes2 : { error: fastRes2.error, overview: {url: decodedUrl2, domain: new URL(decodedUrl2).hostname}}}
+            />
+        </div>
     )
 }
