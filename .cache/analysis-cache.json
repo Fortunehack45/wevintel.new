@@ -315,5 +315,37 @@
         "bounceRate": 75
       }
     }
+  },
+  "additional-analysis:https://instagram.com/": {
+    "timestamp": 1761738058449,
+    "data": {
+      "status": {
+        "isOnline": true,
+        "httpStatus": 200,
+        "responseTime": 956,
+        "finalUrl": "https://www.instagram.com/"
+      }
+    }
+  },
+  "performance:https://instagram.com/": {
+    "timestamp": 1761738058774,
+    "data": {
+      "performance": {
+        "mobile": {},
+        "desktop": {}
+      },
+      "performanceAudits": {},
+      "securityAudits": {},
+      "diagnosticsAudits": {},
+      "overview": {
+        "url": "https://instagram.com/",
+        "domain": "instagram.com"
+      },
+      "metadata": {
+        "openGraphTags": {},
+        "hasRobotsTxt": false,
+        "hasSitemapXml": false
+      }
+    }
   }
 }
