@@ -12,6 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AnalysisResult, ComparisonInput, ComparisonOutput, Metadata, SecurityData } from '@/lib/types';
 import { AlertTriangle } from 'lucide-react';
 import type { Metadata as NextMetadata } from 'next';
+import { NotFoundCard } from '@/components/analysis/not-found-card';
 
 function ErrorAlert({ title, description }: { title: string, description: string }) {
     return (
@@ -56,149 +57,98 @@ export async function generateMetadata({ params }: Props): Promise<NextMetadata>
   }
 }
 
-const getSecurityScore = (data: Partial<AnalysisResult>) => {
-    if (!data.security) return 0;
-    let total = 0, count = 0;
-    if(data.security.isSecure) { total++; count++; }
-    Object.values(data.security.securityHeaders || {}).forEach(v => { if(v) total++; count++; });
-    if(data.securityAudits) {
-        Object.values(data.securityAudits).forEach(a => { if (a.score !== null) { total += a.score; count++; } });
+const getFullAnalysis = async (url: string): Promise<AnalysisResult> => {
+    const fastResult = await getFastAnalysis(url);
+    if ('error' in fastResult) {
+        throw new Error(fastResult.error);
     }
-    return count > 0 ? Math.round((total / count) * 100) : 0;
-}
 
-const fetchAnalysisForUrl = async (url: string): Promise<AnalysisResult | null> => {
-    try {
-        const fastResult = await getFastAnalysis(url);
-        if ('error' in fastResult) {
-            console.error(`Fast analysis failed for ${url}: ${fastResult.error}`);
-            // Return a partial error result to show on the UI
-             return {
-                id: crypto.randomUUID(),
-                overview: { url, domain: new URL(url).hostname, favicon: `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`},
-                error: fastResult.error,
-                createdAt: new Date().toISOString(),
-                partial: true
-            };
+    const aiSummaryInput: WebsiteAnalysisInput = {
+        overview: fastResult.overview!,
+        security: fastResult.security!,
+        hosting: fastResult.hosting!,
+        headers: fastResult.headers,
+    };
+
+    const [perfResult, additionalResult, summaryResult, trafficResult, techStackResult] = await Promise.allSettled([
+        getPerformanceAnalysis(url),
+        getAdditionalAnalysis(url),
+        summarizeWebsite(aiSummaryInput),
+        estimateTraffic({ url, description: fastResult.overview?.description || '' }),
+        detectTechStack({ url, htmlContent: fastResult.overview?.htmlContent || '', headers: fastResult.headers || {} }),
+    ]);
+
+    const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
+    const additionalValue = additionalResult.status === 'fulfilled' ? additionalResult.value : { status: undefined };
+    const summaryValue = summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.' };
+    const trafficValue = trafficResult.status === 'fulfilled' ? trafficResult.value : undefined;
+    const techStackValue = techStackResult.status === 'fulfilled' ? techStackResult.value : undefined;
+
+    const getSecurityScore = (data: Partial<AnalysisResult>) => {
+        if (!data.security) return 0;
+        let total = 0, count = 0;
+        if(data.security.isSecure) { total++; count++; }
+        Object.values(data.security.securityHeaders || {}).forEach(v => { if(v) total++; count++; });
+        if(data.securityAudits) {
+            Object.values(data.securityAudits).forEach(a => { if (a.score !== null) { total += a.score; count++; } });
         }
-
-        const aiSummaryInput: WebsiteAnalysisInput = {
-            overview: fastResult.overview!,
-            security: fastResult.security!,
-            hosting: fastResult.hosting!,
-            headers: fastResult.headers,
-        };
-
-        const [perfResult, additionalResult, summaryResult, trafficResult, techStackResult] = await Promise.allSettled([
-            getPerformanceAnalysis(url),
-            getAdditionalAnalysis(url),
-            summarizeWebsite(aiSummaryInput),
-            estimateTraffic({ url, description: fastResult.overview?.description || '' }),
-            detectTechStack({ url, htmlContent: fastResult.overview?.htmlContent || '', headers: fastResult.headers || {} }),
-        ]);
-
-        const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
-        const additionalValue = additionalResult.status === 'fulfilled' ? additionalResult.value : { status: undefined };
-        const summaryValue = summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.' };
-        const trafficValue = trafficResult.status === 'fulfilled' ? trafficResult.value : undefined;
-        const techStackValue = techStackResult.status === 'fulfilled' ? techStackResult.value : undefined;
-
-        
-        const finalResult: AnalysisResult = {
-            ...(fastResult as AnalysisResult),
-            ...fullPerfData,
-            overview: {
-                ...fastResult.overview!,
-                ...('overview' in fullPerfData ? fullPerfData.overview : {}),
-                title: ('overview' in fullPerfData && fullPerfData.overview?.title) || fastResult.overview?.title,
-                description: ('overview' in fullPerfData && fullPerfData.overview?.description) || fastResult.overview?.description,
-            },
-            metadata: {
-                ...fastResult.metadata!,
-                hasRobotsTxt: 'metadata' in fullPerfData && fullPerfData.metadata ? fullPerfData.metadata.hasRobotsTxt : false,
-                hasSitemapXml: 'metadata' in fullPerfData && fullPerfData.metadata ? fullPerfData.metadata.hasSitemapXml : false,
-            },
-            security: {
-                ...fastResult.security!,
-                securityScore: getSecurityScore({ ...fastResult, ...fullPerfData }),
-            },
-            aiSummary: summaryValue,
-            traffic: trafficValue,
-            techStack: techStackValue,
-            status: additionalValue.status,
-        };
-        return finalResult;
-    } catch (e: any) {
-        console.error(`Unhandled error in fetchAnalysisForUrl for ${url}:`, e);
-        try {
-            return {
-                id: crypto.randomUUID(),
-                overview: { url, domain: new URL(url).hostname, favicon: `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`},
-                error: e.message || 'An unknown error occurred during analysis.',
-                createdAt: new Date().toISOString(),
-                partial: true
-            };
-        } catch {
-            return null; // Return null if URL is invalid
-        }
+        return count > 0 ? Math.round((total / count) * 100) : 0;
     }
+    
+    const finalResult: AnalysisResult = {
+        ...(fastResult as AnalysisResult),
+        ...fullPerfData,
+        overview: {
+            ...fastResult.overview!,
+            ...('overview' in fullPerfData ? fullPerfData.overview : {}),
+            title: ('overview' in fullPerfData && fullPerfData.overview?.title) || fastResult.overview?.title,
+            description: ('overview' in fullPerfData && fullPerfData.overview?.description) || fastResult.overview?.description,
+        },
+        metadata: {
+            ...fastResult.metadata!,
+            hasRobotsTxt: 'metadata' in fullPerfData && fullPerfData.metadata ? fullPerfData.metadata.hasRobotsTxt : false,
+            hasSitemapXml: 'metadata' in fullPerfData && fullPerfData.metadata ? fullPerfData.metadata.hasSitemapXml : false,
+        },
+        security: {
+            ...fastResult.security!,
+            securityScore: getSecurityScore({ ...fastResult, ...fullPerfData }),
+        },
+        aiSummary: summaryValue,
+        traffic: trafficValue,
+        techStack: techStackValue,
+        status: additionalValue.status,
+    };
+    return finalResult;
 };
 
 
 export default async function CompareResultPage({ params }: { params: { url1: string, url2: string } }) {
     let decodedUrl1 = '', decodedUrl2 = '';
-
+    
     try {
         decodedUrl1 = decodeURIComponent(params.url1);
         decodedUrl2 = decodeURIComponent(params.url2);
-        const urlObject1 = new URL(decodedUrl1);
-        const urlObject2 = new URL(decodedUrl2);
-        if ((urlObject1.protocol !== 'http:' && urlObject1.protocol !== 'https:') || (urlObject2.protocol !== 'http:' && urlObject2.protocol !== 'https:')) {
-            throw new Error('Invalid protocol');
-        }
+        new URL(decodedUrl1);
+        new URL(decodedUrl2);
     } catch(e) {
-        return <ErrorAlert title="Invalid URL" description="One or both of the provided URLs are not valid. Please go back and try again." />;
+        return <NotFoundCard url={decodedUrl1 || decodedUrl2} message="One or both of the provided URLs are not valid. Please go back and try again." />;
     }
     
-    const [res1, res2] = await Promise.all([
-        fetchAnalysisForUrl(decodedUrl1),
-        fetchAnalysisForUrl(decodedUrl2)
+    // Server-side fast analysis
+    const [fastRes1, fastRes2] = await Promise.all([
+        getFastAnalysis(decodedUrl1),
+        getFastAnalysis(decodedUrl2)
     ]);
     
-    let summary: ComparisonOutput | { error: string } | null = null;
-    if (res1 && res2 && !res1.error && !res2.error) {
-        try {
-            const aiInput: ComparisonInput = {
-                site1: {
-                    url: res1.overview.url,
-                    performanceScore: res1.performance?.mobile.performanceScore,
-                    securityScore: res1.security?.securityScore,
-                    techStack: res1.techStack?.map(t => t.name),
-                    hostingCountry: res1.hosting?.country,
-                },
-                site2: {
-                    url: res2.overview.url,
-                    performanceScore: res2.performance?.mobile.performanceScore,
-                    securityScore: res2.security?.securityScore,
-                    techStack: res2.techStack?.map(t => t.name),
-                    hostingCountry: res2.hosting?.country,
-                }
-            };
-            summary = await compareWebsites(aiInput);
-        } catch (e: any) {
-            console.error("AI comparison generation failed:", e);
-            summary = { error: e.message || "Failed to generate AI comparison." };
-        }
-    } else if (res1?.error || res2?.error) {
-        summary = { error: "AI comparison could not be generated because one or both sites failed to analyze completely." };
-    }
+    // We will now pass the initial data to the client and let it fetch the full report.
+    // This makes the initial page load much faster.
 
     return (
         <ComparisonPageContent
             urls={{ url1: decodedUrl1, url2: decodedUrl2 }}
-            data1={res1}
-            data2={res2}
-            summary={summary}
+            initialData1={!('error' in fastRes1) ? fastRes1 : { error: fastRes1.error, overview: {url: decodedUrl1, domain: new URL(decodedUrl1).hostname}}}
+            initialData2={!('error' in fastRes2) ? fastRes2 : { error: fastRes2.error, overview: {url: decodedUrl2, domain: new URL(decodedUrl2).hostname}}}
+            getFullAnalysis={getFullAnalysis}
         />
     )
 }

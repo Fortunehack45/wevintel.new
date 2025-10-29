@@ -38,7 +38,7 @@ const AuditList = ({ audits }: { audits: AuditItem[] }) => {
                             <span className="flex-1 font-medium">{audit.title}</span>
                             {audit.displayValue && <Badge variant="outline">{audit.displayValue}</Badge>}
                              {audit.score !== null && (
-                                <div className={`text-sm font-bold ml-4 ${getScoreColor(audit.score)}`}>
+                                <div className={`text-sm font-bold ml-auto ${getScoreColor(audit.score)}`}>
                                     {Math.round(audit.score * 100)}
                                 </div>
                             )}
@@ -68,7 +68,6 @@ export function AuditsCard({ data }: { data?: AuditInfo }) {
         </CardHeader>
         <CardContent>
           <div className="space-y-4 py-4">
-              <Skeleton className="h-8 w-full" />
               <Skeleton className="h-[300px] w-full mt-4" />
           </div>
         </CardContent>

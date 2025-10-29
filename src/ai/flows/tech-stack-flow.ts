@@ -76,7 +76,7 @@ const detectTechStackFlow = ai.defineFlow(
   async (input) => {
     try {
         const { output } = await prompt(input);
-        return output!;
+        return output;
     } catch (e) {
         console.error("Tech stack detection flow failed:", e);
         return null;

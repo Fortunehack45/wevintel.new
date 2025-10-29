@@ -92,7 +92,7 @@ export function SummaryCard({ data, summary: initialSummary, isLoading: initialI
 
     return (
         <Card className="glass-card h-full min-h-[300px]">
-             <Accordion type="single" collapsible defaultValue={isMobile ? undefined : "item-1"} className="h-full">
+             <Accordion type="single" collapsible defaultValue={"item-1"} className="h-full">
                 <AccordionItem value="item-1" className='border-none h-full flex flex-col'>
                     <AccordionTrigger className='p-6 hover:no-underline'>
                          <div className='flex flex-col space-y-1.5 text-left'>

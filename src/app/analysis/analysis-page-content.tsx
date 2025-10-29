@@ -16,6 +16,7 @@ import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
 import { detectTechStack } from '@/ai/flows/tech-stack-flow';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
+import { LoadingOverlay } from '@/components/loading-overlay';
 
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
@@ -31,6 +32,7 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
 export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: string, initialData: Partial<AnalysisResult> }) {
     const [isDownloading, setIsDownloading] = useState(false);
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(initialData as AnalysisResult);
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
     const isFetching = useRef(false);
@@ -54,6 +56,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         }
         
         isFetching.current = true;
+        setIsLoading(true);
         
         try {
             const aiSummaryInput: WebsiteAnalysisInput = {
@@ -72,6 +75,12 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             ]);
 
             const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
+            const summaryValue = summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.' };
+            const trafficValue = trafficResult.status === 'fulfilled' ? trafficResult.value : undefined;
+            const techStackValue = techStackResult.status === 'fulfilled' ? techStackResult.value : undefined;
+            const additionalValue = additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined;
+
+
             const securityAudits = 'securityAudits' in fullPerfData ? fullPerfData.securityAudits : {};
             
             let securityScoreTotal = 0;
@@ -113,10 +122,10 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                     ...initialData!.security,
                     securityScore: calculatedSecurityScore,
                 } as SecurityData,
-                aiSummary: summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.'},
-                traffic: trafficResult.status === 'fulfilled' ? trafficResult.value : undefined,
-                techStack: techStackResult.status === 'fulfilled' ? techStackResult.value : undefined,
-                status: additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined,
+                aiSummary: summaryValue,
+                traffic: trafficValue,
+                techStack: techStackValue,
+                status: additionalValue,
             };
 
             setAnalysisResult(finalResult);
@@ -131,6 +140,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             setError(e.message || "An unexpected error occurred.");
         } finally {
             isFetching.current = false;
+            setIsLoading(false);
         }
     // We only want to run this on mount, and not when cache/setCache changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -449,31 +459,35 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
     };
 
     const handleReanalyze = () => {
-        // Clear cache for this specific URL
+        // Clear cache for this specific URL and re-fetch
         setCache(prev => {
             const newCache = { ...prev };
             delete newCache[decodedUrl];
             return newCache;
         });
-        // Reset state and fetch again
         setAnalysisResult(initialData as AnalysisResult);
         setError(null);
-        fetchFullAnalysis(true); // Pass true to ignore cache
+        fetchFullAnalysis(true);
     };
 
     const renderContent = () => {
         if (error) {
             return <ErrorAlert title="Analysis Failed" description={error} />;
         }
-        if (analysisResult) {
-            // If we have full performance data, show the dashboard.
-            // Otherwise, show skeleton with initial data.
-            return analysisResult.performance ? 
-                <AnalysisDashboard initialData={analysisResult} /> : 
-                <DashboardSkeleton initialData={initialData} />;
+        if (!analysisResult) {
+            return <DashboardSkeleton />;
         }
-        // Fallback to basic skeleton if no result at all
-        return <DashboardSkeleton />;
+        // If we don't have the full report yet, show skeleton with initial data.
+        if (isLoading || !analysisResult.performance) {
+            return (
+                <>
+                    <LoadingOverlay isVisible={isLoading} />
+                    <DashboardSkeleton initialData={initialData} />
+                </>
+            );
+        }
+        // Otherwise, show the full dashboard.
+        return <AnalysisDashboard initialData={analysisResult} />;
     }
     
     return (
@@ -490,8 +504,8 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                         <Home className="mr-2 h-4 w-4" />
                         Back to Home
                     </Button>
-                    <Button variant="outline" onClick={handleReanalyze} disabled={isFetching.current || isDownloading}>
-                        <RefreshCw className={`mr-2 h-4 w-4 ${isFetching.current ? 'animate-spin' : ''}`} />
+                    <Button variant="outline" onClick={handleReanalyze} disabled={isLoading || isDownloading}>
+                        <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                         Re-analyse
                     </Button>
                     <Button onClick={handleDownloadPdf} disabled={isDownloading || !analysisResult?.performance}>

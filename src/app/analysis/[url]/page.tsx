@@ -72,7 +72,7 @@ export default async function AnalysisPage({ params }: { params: { url: string }
     }
   } catch (e) {
     return (
-        <ErrorAlert title="Invalid URL" description="The provided URL is not valid. Please go back and try again with a valid URL (e.g., https://example.com)." />
+        <NotFoundCard url={decodedUrl} message="The provided URL is not valid. Please go back and try again with a valid URL (e.g., https://example.com)." />
     )
   }
 

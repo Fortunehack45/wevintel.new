@@ -76,7 +76,7 @@ export type TrafficData = {
         avgSessionDuration: string; // e.g., "5m 30s"
         bounceRate: number; // percentage
     };
-}
+} | null
 
 export type Metadata = {
   openGraphTags: Record<string, string>;
@@ -129,7 +129,7 @@ export type TechStackItem = {
   description?: string;
 };
 
-export type TechStackData = TechStackItem[];
+export type TechStackData = TechStackItem[] | null;
 
 export type StatusData = {
   isOnline: boolean;
