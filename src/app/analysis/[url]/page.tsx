@@ -88,7 +88,7 @@ export default async function AnalysisPage({ params, searchParams }: Props) {
 
   if ('error' in fastResult) {
       if (fastResult.error === 'Domain not found. The website is not reachable.' || fastResult.error === 'Could not fetch the main page of the website. It might be down or blocking requests.') {
-          return <NotFoundCard url={decodedUrl} />;
+          return <NotFoundCard url={decodedUrl} message={fastResult.error} />;
       }
       return <ErrorAlert title="Analysis Failed" description={fastResult.error} />;
   }
@@ -96,3 +96,5 @@ export default async function AnalysisPage({ params, searchParams }: Props) {
   // Pass the initial data to the client component to handle the rest.
   return <AnalysisPageContent decodedUrl={decodedUrl} initialData={fastResult} />;
 }
+
+    

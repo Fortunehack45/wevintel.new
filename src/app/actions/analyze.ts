@@ -85,11 +85,9 @@ const processAudits = (audits: any, auditIds: string[]): AuditInfo => {
 const getPerformanceAudits = (pageSpeedData: any): AuditInfo => {
     const audits = pageSpeedData?.lighthouseResult?.audits;
     const desiredAudits = [
-        'server-response-time', 'network-requests', 'render-blocking-resources',
-        'uses-responsive-images', 'uses-webp-images', 'offscreen-images', 
+        'server-response-time', 'network-requests',
         'unminified-css', 'unminified-javascript', 'unused-css-rules', 'unused-javascript', 
-        'uses-optimised-images', 'uses-long-cache-ttl', 'total-byte-weight', 'dom-size',
-        'mainthread-work-breakdown', 'efficient-animated-content', 'lcp-lazy-loaded',
+        'total-byte-weight', 'mainthread-work-breakdown',
         'max-potential-fid', 'interactive',
     ];
     return processAudits(audits, desiredAudits);
@@ -98,8 +96,7 @@ const getPerformanceAudits = (pageSpeedData: any): AuditInfo => {
 const getSecurityAudits = (pageSpeedData: any): AuditInfo => {
     const audits = pageSpeedData?.lighthouseResult?.audits;
     const desiredAudits = [
-        'cross-origin-opener-policy', 'strict-transport-security', 'csp-xss',
-        'no-vulnerable-libraries'
+        'csp-xss',
     ];
     return processAudits(audits, desiredAudits);
 }
@@ -107,15 +104,12 @@ const getSecurityAudits = (pageSpeedData: any): AuditInfo => {
 const getDiagnosticsAudits = (pageSpeedData: any): AuditInfo => {
     const audits = pageSpeedData?.lighthouseResult?.audits;
     const desiredAudits = [
-        'legacy-javascript', 'duplicated-javascript', 'deprecations', 'errors-in-console',
-        'third-party-summary', 'third-party-facades', 'user-timings',
-        'layout-shift-elements', 'long-tasks', 'non-composited-animations',
-        'font-display', 'font-size', 'tap-targets', 'viewport',
+        'deprecations', 'errors-in-console',
+        'user-timings',
+        'long-tasks', 'non-composited-animations',
         'document-title', 'meta-description', 'http-status-code',
         'link-text', 'crawlable-anchors', 'is-crawlable', 'robots-txt',
         'image-alt', 'html-has-lang', 'hreflang', 'canonical',
-        'installable-manifest', 'service-worker', 'splash-screen',
-        'themed-omnibox', 'content-width',
     ];
     return processAudits(audits, desiredAudits);
 }
@@ -246,3 +240,5 @@ export async function getPerformanceAnalysis(url: string): Promise<Pick<Analysis
     await setCache(cacheKey, result);
     return result;
 }
+
+    
