@@ -180,7 +180,7 @@ export function HistoryClient({ limit, type = 'website' }: { limit?: number, typ
         )}
         
         <Tabs defaultValue="websites" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto">
                 <TabsTrigger value="websites">Website Analyses</TabsTrigger>
                 <TabsTrigger value="comparisons">Comparisons</TabsTrigger>
             </TabsList>

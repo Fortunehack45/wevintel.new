@@ -137,7 +137,7 @@ export function LeaderboardClient() {
             </div>
         </div>
 
-        <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+        <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-x-auto">
           <Table>
               <TableHeader>
                 <TableRow>
