@@ -96,9 +96,9 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
   const isLoadingFullReport = !performance;
 
   return (
-    <div id="analysis-dashboard-content" className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+    <div id="analysis-dashboard-content" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {overview && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="col-span-2 lg:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={0} className="col-span-1 md:col-span-2 lg:col-span-4">
           <OverviewCard 
             data={overview}
             isLoading={isLoadingFullReport}
@@ -106,7 +106,7 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
         </motion.div>
       }
       
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="col-span-2 lg:col-span-2">
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={1} className="col-span-1 md:col-span-2">
         <SummaryCard 
           data={initialData}
           summary={aiSummary}
@@ -115,32 +115,32 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
       </motion.div>
 
       {isLoadingFullReport || !traffic ? (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-2 lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-1 md:col-span-2">
            <DashboardSkeleton.TrafficPlaceholder />
         </motion.div>
       ) : (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-2 lg:col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-1 md:col-span-2">
           <TrafficCard data={traffic} />
         </motion.div>
       )}
 
       {isLoadingFullReport ? (
-         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="col-span-2 lg:col-span-4">
+         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="col-span-1 md:col-span-2 lg:col-span-4">
           <DashboardSkeleton.PerformancePlaceholder />
         </motion.div>
       ) : (
         performance &&
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="col-span-2 lg:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={4} className="col-span-1 md:col-span-2 lg:col-span-4">
           <PerformanceCard data={performance} />
         </motion.div>
       )}
 
       {isLoadingFullReport || !techStack ? (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="col-span-2 lg:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="col-span-1 md:col-span-2 lg:col-span-4">
           <DashboardSkeleton.TechStackPlaceholder />
         </motion.div>
       ) : (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="col-span-2 lg:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="col-span-1 md:col-span-2 lg:col-span-4">
           <TechStackCarousel data={techStack} />
         </motion.div>
       )}
@@ -172,30 +172,30 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
       )}
 
       {metadata &&
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={10} className="col-span-2">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={10} className="col-span-1 md:col-span-2">
           <MetadataCard data={metadata} />
         </motion.div>
       }
 
       {isLoadingFullReport ? (
         <>
-            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={11} className="col-span-2">
+            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={11} className="col-span-1 md:col-span-2">
                 <DashboardSkeleton.AuditPlaceholder />
             </motion.div>
-            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-2 lg:col-span-2">
+            <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-1 md:col-span-2 lg:col-span-2">
                 <DashboardSkeleton.AuditPlaceholder />
             </motion.div>
         </>
       ) : (
         <>
             {performanceAudits && 
-                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={11} className="col-span-2">
+                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={11} className="col-span-1 md:col-span-2">
                 <AuditsCard data={performanceAudits} />
                 </motion.div>
             }
             
             {diagnosticsAudits &&
-                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-2 lg:col-span-2">
+                <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={12} className="col-span-1 md:col-span-2 lg:col-span-2">
                 <DiagnosticsCard data={diagnosticsAudits} />
                 </motion.div>
             }
@@ -204,7 +204,7 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
 
 
       {headers && 
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={13} className="col-span-2 lg:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={13} className="col-span-1 md:col-span-2 lg:col-span-4">
           <HeadersCard data={headers} />
         </motion.div>
       }
