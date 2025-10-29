@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { RefreshCw, ArrowLeft, Download, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult, type ComparisonInput, type ComparisonOutput, type ComparisonHistoryItem } from '@/lib/types';
