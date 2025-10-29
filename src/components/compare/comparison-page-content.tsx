@@ -169,7 +169,7 @@ export function ComparisonPageContent({ urls, initialData1, initialData2 }: Comp
         <div className="flex-1">
              <LoadingOverlay isVisible={isLoading} isComparison />
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-                <div className="space-y-2 flex-1 min-w-[200px]">
+                <div className="space-y-2 flex-1 min-w-0">
                     <h1 className="text-3xl font-bold">Comparison Report</h1>
                     <div className="text-muted-foreground flex items-center gap-3 flex-wrap bg-muted p-2 rounded-lg">
                         <div className='flex items-center gap-2'>

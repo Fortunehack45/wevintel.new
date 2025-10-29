@@ -56,7 +56,7 @@ export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: Comp
                 )}
                 {summary && 'summary' in summary && (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center bg-muted/30 p-4 rounded-lg">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center bg-muted/30 p-4 rounded-lg">
                             <div className={`text-center p-4 rounded-lg transition-all ${isWinner1 ? 'bg-primary/20 ring-2 ring-primary' : ''}`}>
                                 <h3 className='font-bold text-lg'>{data1?.overview.domain}</h3>
                                 <div className='flex justify-center gap-4 mt-2'>
