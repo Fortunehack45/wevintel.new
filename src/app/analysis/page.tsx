@@ -406,7 +406,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
     }
     
     return (
-        <div className="flex-1 container mx-auto px-4 py-8 pb-24 md:pb-16 pt-12">
+        <div className="flex-1 px-4 py-8 pb-24 md:pb-16 pt-12">
             <LoadingOverlay isVisible={isLoading} />
             <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
