@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Info, Database, Shield, Home, Settings, Layers, Code, User, Send } from "lucide-react";
+import { Info, Database, Shield, Home, Settings, Layers, Code, User, Send, Compass, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,12 +12,13 @@ export default function AboutPage() {
         <Button asChild variant="outline">
           <Link href="/">
             <Home className="mr-2 h-4 w-4" />
-            Back to Dashboard
+            Back to Home
           </Link>
         </Button>
       </div>
 
       <div className="text-center space-y-4">
+        <Compass className="h-16 w-16 text-primary mx-auto" />
         <h1 className="text-5xl font-bold tracking-tight text-foreground">About WebIntel</h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           Uncovering the technology and performance behind any website with powerful, open-source intelligence.
@@ -29,15 +30,15 @@ export default function AboutPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
               <Info className="text-primary" />
-              What is WebIntel?
+              Our Mission
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
             <p>
-              WebIntel is a powerful, privacy-focused tool designed to give developers, marketers, and curious minds a comprehensive analysis of any website. 
+              In an increasingly complex digital landscape, understanding the mechanics behind a website is more important than ever. WebIntel was born from a simple idea: to democratize web intelligence. We provide developers, marketers, and the perpetually curious with a powerful lens to see what makes a website tick.
             </p>
             <p>
-              It aggregates public data from various open APIs and uses AI to provide deep insights into a site's performance, security, SEO, and hosting infrastructure, all presented in a beautiful and easy-to-understand dashboard.
+              We aggregate public data, run comprehensive analyses, and leverage AI to transform raw information into clear, actionable insights. Whether you're benchmarking against a competitor, debugging performance issues, or simply exploring the web, WebIntel is your trusted guide.
             </p>
           </CardContent>
         </Card>
@@ -46,16 +47,16 @@ export default function AboutPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
               <Shield className="text-primary" />
-              Privacy First
+              Our Commitment to Privacy
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
             <p>
-              Your privacy is paramount. WebIntel operates entirely on your client-side (your browser) for history storage.
+              Your curiosity should be your own. WebIntel is architected with a "privacy-first" philosophy. All analysis history is stored exclusively in your browser's local storage.
             </p>
             <ul className="list-disc pl-5 space-y-2">
-              <li><span className="font-semibold text-foreground">No Backend Tracking:</span> We do not have a traditional backend server that logs your activity or the URLs you analyse.</li>
-              <li><span className="font-semibold text-foreground">Local Storage:</span> Your analysis history is stored exclusively in your browser's local storage, which you can clear at any time.</li>
+              <li><span className="font-semibold text-foreground">No Server-Side Tracking:</span> We do not have a traditional backend server that logs your activity or the URLs you analyze.</li>
+              <li><span className="font-semibold text-foreground">Client-Side History:</span> Your analysis history is yours alone. You can view, manage, and clear it at any time directly from the History page.</li>
             </ul>
           </CardContent>
         </Card>
@@ -73,42 +74,63 @@ export default function AboutPage() {
                 <Code className="h-5 w-5 mt-1 text-primary shrink-0"/>
                 <div>
                     <h4 className="font-semibold text-foreground">Performance Analysis</h4>
-                    <p>Core Web Vitals for mobile and desktop using Google PageSpeed Insights.</p>
+                    <p>Detailed Core Web Vitals for both mobile and desktop, powered by Google PageSpeed Insights.</p>
                 </div>
             </div>
             <div className="flex items-start gap-3">
                 <Shield className="h-5 w-5 mt-1 text-primary shrink-0"/>
                 <div>
-                    <h4 className="font-semibold text-foreground">Security Scanning</h4>
-                    <p>Checks for SSL, security headers, and other potential vulnerabilities.</p>
+                    <h4 className="font-semibold text-foreground">In-Depth Security Scanning</h4>
+                    <p>Checks for SSL/TLS, essential security headers like CSP and HSTS, and other potential vulnerabilities.</p>
                 </div>
             </div>
              <div className="flex items-start gap-3">
                 <Send className="h-5 w-5 mt-1 text-primary shrink-0"/>
                 <div>
                     <h4 className="font-semibold text-foreground">AI-Powered Insights</h4>
-                    <p>Get AI-generated summaries, recommendations, and traffic estimations.</p>
+                    <p>Receive AI-generated summaries, actionable recommendations, and traffic estimations to quickly understand a site's profile.</p>
+                </div>
+            </div>
+             <div className="flex items-start gap-3">
+                <Layers className="h-5 w-5 mt-1 text-primary shrink-0"/>
+                <div>
+                    <h4 className="font-semibold text-foreground">Technology Stack Detection</h4>
+                    <p>Uncover the frameworks, libraries, CMS, and other services a website is built with.</p>
                 </div>
             </div>
             <div className="flex items-start gap-3">
                 <Info className="h-5 w-5 mt-1 text-primary shrink-0"/>
                 <div>
-                    <h4 className="font-semibold text-foreground">Hosting Information</h4>
+                    <h4 className="font-semibold text-foreground">Hosting & Domain Information</h4>
                     <p>Discover the IP address, ISP, and geographic location of the hosting server.</p>
                 </div>
             </div>
             <div className="flex items-start gap-3">
                 <Database className="h-5 w-5 mt-1 text-primary shrink-0"/>
                 <div>
-                    <h4 className="font-semibold text-foreground">Metadata & SEO</h4>
-                    <p>Inspects Open Graph tags, robots.txt, and sitemap.xml for SEO health.</p>
+                    <h4 className="font-semibold text-foreground">Metadata & SEO Health</h4>
+                    <p>Inspects Open Graph tags, robots.txt, and sitemap.xml to evaluate SEO readiness.</p>
                 </div>
             </div>
             <div className="flex items-start gap-3">
                 <Code className="h-5 w-5 mt-1 text-primary shrink-0"/>
                 <div>
-                    <h4 className="font-semibold text-foreground">In-Depth Audits</h4>
-                    <p>Detailed technical audits from Lighthouse for performance and best practices.</p>
+                    <h4 className="font-semibold text-foreground">Detailed Lighthouse Audits</h4>
+                    <p>Access detailed reports on performance, accessibility, best practices, and SEO from Lighthouse.</p>
+                </div>
+            </div>
+             <div className="flex items-start gap-3">
+                <ArrowRight className="h-5 w-5 mt-1 text-primary shrink-0"/>
+                <div>
+                    <h4 className="font-semibold text-foreground">Side-by-Side Comparison</h4>
+                    <p>Analyze two websites simultaneously to benchmark against competitors and see who comes out on top.</p>
+                </div>
+            </div>
+             <div className="flex items-start gap-3">
+                <Home className="h-5 w-5 mt-1 text-primary shrink-0"/>
+                <div>
+                    <h4 className="font-semibold text-foreground">Responsive & Modern UI</h4>
+                    <p>A clean, beautiful, and fully responsive interface built for an optimal experience on any device.</p>
                 </div>
             </div>
         </CardContent>
@@ -127,10 +149,10 @@ export default function AboutPage() {
               WebIntel is built with a modern, powerful, and scalable technology stack to ensure a fast and reliable experience.
             </p>
             <ul className="list-disc pl-5 space-y-2 text-sm">
-                <li><span className="font-semibold text-foreground">Next.js:</span> For a fast, server-rendered React application.</li>
-                <li><span className="font-semibold text-foreground">Tailwind CSS & ShadCN/UI:</span> For a beautiful and responsive user interface.</li>
-                <li><span className="font-semibold text-foreground">Genkit:</span> For integrating powerful AI features seamlessly.</li>
-                <li><span className="font-semibold text-foreground">Vercel:</span> For serverless deployment and hosting.</li>
+                <li><span className="font-semibold text-foreground">Next.js:</span> For a fast, server-rendered React application with robust features and optimizations.</li>
+                <li><span className="font-semibold text-foreground">Tailwind CSS & ShadCN/UI:</span> For a beautiful, responsive, and highly customizable user interface built with utility-first principles.</li>
+                <li><span className="font-semibold text-foreground">Google Gemini & Genkit:</span> For integrating powerful generative AI features like analysis summaries and traffic estimations.</li>
+                <li><span className="font-semibold text-foreground">Vercel:</span> For serverless deployment, continuous integration, and global hosting performance.</li>
             </ul>
           </CardContent>
         </Card>
@@ -144,15 +166,15 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
             <p>
-              WebIntel gathers data from a variety of trusted public APIs. We are grateful for these services that make this tool possible:
+              To provide a comprehensive analysis, WebIntel gathers data from a variety of trusted, public APIs. We are grateful for these services that make this tool possible:
             </p>
             <ul className="list-disc pl-5 space-y-2 font-mono text-xs">
               <li>Google PageSpeed Insights</li>
               <li>ip-api.com</li>
-              <li>Google Gemini (for AI features)</li>
+              <li>Google Gemini (for all AI features)</li>
             </ul>
             <p className="text-xs">
-              Please note that all data is fetched on-demand and represents a public snapshot of the target website at the time of analysis.
+              Please note that all data is fetched on-demand and represents a public snapshot of the target website at the time of analysis. For sensitive or private data, always refer to the website's official sources.
             </p>
           </CardContent>
         </Card>
@@ -176,7 +198,7 @@ export default function AboutPage() {
                     Fortune is a passionate software and web developer with a love for building creative and impactful solutions. With a keen eye for detail and a drive for excellence, he specialises in turning complex problems into elegant, user-friendly applications.
                 </p>
                 <p className="text-muted-foreground mt-4">
-                    If you are interested in collaborating on a project or exploring partnership opportunities, feel free to get in touch.
+                    This project is a demonstration of modern web development techniques, including AI integration, responsive design, and performance optimization. If you are interested in collaborating on a project or exploring partnership opportunities, feel free to get in touch.
                 </p>
             </div>
              <Button asChild>
