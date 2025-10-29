@@ -117,7 +117,7 @@ export function ComparisonDashboard({ initialData1, initialData2, data1, data2, 
             <ComparisonSummaryCard summary={summary} data1={data1} data2={data2} />
         </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+        <div className="grid grid-cols-2 gap-4 items-start">
             {isLoading ? <LoadingColumn initialData={initialData1} customDelay={0} /> : <SiteColumn data={data1!} customDelay={0} />}
             {isLoading ? <LoadingColumn initialData={initialData2} customDelay={0.1} /> : <SiteColumn data={data2!} customDelay={0.1} />}
         </div>
