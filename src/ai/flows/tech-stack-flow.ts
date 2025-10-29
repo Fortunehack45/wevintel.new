@@ -11,6 +11,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { TechStackData } from '@/lib/types';
+import { getCache, setCache } from '@/lib/cache';
 
 const TechStackInputSchema = z.object({
   url: z.string().describe('The URL of the website.'),
@@ -30,12 +31,21 @@ const TechStackOutputSchema = z.array(z.object({
 export type TechStackOutput = z.infer<typeof TechStackOutputSchema>;
 
 export async function detectTechStack(input: TechStackInput): Promise<TechStackOutput | null> {
+  const cacheKey = `tech-stack:${input.url}`;
+  const cached = await getCache<TechStackOutput>(cacheKey);
+  if (cached) return cached;
+  
   // Truncate HTML content to avoid exceeding token limits
   if (input.htmlContent) {
     input.htmlContent = input.htmlContent.substring(0, 5000);
   }
+
   try {
-    return await detectTechStackFlow(input);
+    const result = await detectTechStackFlow(input);
+    if (result) {
+        await setCache(cacheKey, result);
+    }
+    return result;
   } catch (e: any) {
     console.error("Tech stack detection failed:", e);
     return null; // Return null on failure

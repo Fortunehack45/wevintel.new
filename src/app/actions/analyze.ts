@@ -3,6 +3,7 @@
 
 import type { AnalysisResult, PerformanceData, SecurityData, AuditInfo, AuditItem, WebsiteOverview } from '@/lib/types';
 import 'dotenv/config';
+import { getCache, setCache } from '@/lib/cache';
 
 // Helper function to parse Open Graph tags from HTML
 const getOgTags = (html: string): Record<string, string> => {
@@ -190,6 +191,10 @@ export async function getFastAnalysis(url: string): Promise<Partial<AnalysisResu
 }
 
 export async function getPerformanceAnalysis(url: string): Promise<Pick<AnalysisResult, 'performance' | 'performanceAudits' | 'securityAudits' | 'diagnosticsAudits' | 'overview' | 'metadata'>> {
+    const cacheKey = `performance:${url}`;
+    const cached = await getCache(cacheKey);
+    if (cached) return cached;
+
     const pageSpeedApiKey = process.env.PAGESPEED_API_KEY;
     const pageSpeedBaseUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO${pageSpeedApiKey ? `&key=${pageSpeedApiKey}` : ''}`;
     const pageSpeedMobileUrl = `${pageSpeedBaseUrl}&strategy=mobile`;
@@ -216,7 +221,7 @@ export async function getPerformanceAnalysis(url: string): Promise<Pick<Analysis
     const perfDesc = lighthouse?.audits?.['meta-description']?.details?.items[0]?.description;
 
 
-    return {
+    const result = {
         performance: {
             mobile: getPerformanceData(pageSpeedMobileData),
             desktop: getPerformanceData(pageSpeedDesktopData)
@@ -237,4 +242,7 @@ export async function getPerformanceAnalysis(url: string): Promise<Pick<Analysis
             hasSitemapXml: sitemapRes.status === 'fulfilled' && sitemapRes.value.ok,
         }
     };
+    
+    await setCache(cacheKey, result);
+    return result;
 }

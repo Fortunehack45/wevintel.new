@@ -1,28 +1,15 @@
+
 'use server';
 
 import type { DomainData, StatusData, DomainContact } from '@/lib/types';
-
-interface WhoisResponse {
-    WhoisRecord: {
-        createdDate?: string;
-        expiresDate?: string;
-        updatedDate?: string;
-        registrarName?: string;
-        status?: string;
-        nameServers?: {
-            rawText: string;
-        };
-        registrant?: any;
-        administrativeContact?: any;
-        technicalContact?: any;
-    },
-    ErrorMessage?: {
-        msg: string;
-    }
-}
+import { getCache, setCache } from '@/lib/cache';
 
 
 export async function getAdditionalAnalysis(url: string): Promise<{ status: StatusData }> {
+  const cacheKey = `additional-analysis:${url}`;
+  const cached = await getCache(cacheKey);
+  if (cached) return cached;
+
   const startTime = Date.now();
   const statusPromise = fetch(url, { method: 'HEAD', redirect: 'follow', headers: { 'User-Agent': 'WebIntel-Status-Checker/1.0' } })
     .then(response => {
@@ -44,5 +31,7 @@ export async function getAdditionalAnalysis(url: string): Promise<{ status: Stat
 
   const status = await statusPromise;
   
-  return { status };
+  const result = { status };
+  await setCache(cacheKey, result);
+  return result;
 }

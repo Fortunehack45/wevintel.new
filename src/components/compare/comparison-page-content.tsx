@@ -37,8 +37,8 @@ export function ComparisonPageContent({ urls, initialData1, initialData2 }: Comp
     const [editOpen, setEditOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     
-    const [data1, setData1] = useState<AnalysisResult | { error: string } | null>(null);
-    const [data2, setData2] = useState<AnalysisResult | { error: string } | null>(null);
+    const [data1, setData1] = useState<AnalysisResult | { error: string, overview: Partial<AnalysisResult['overview']> } | null>(null);
+    const [data2, setData2] = useState<AnalysisResult | { error: string, overview: Partial<AnalysisResult['overview']> } | null>(null);
     const [summary, setSummary] = useState<ComparisonOutput | { error: string } | null>(null);
     
     const stableInitialValue = useMemo(() => [], []);
@@ -48,8 +48,8 @@ export function ComparisonPageContent({ urls, initialData1, initialData2 }: Comp
         setIsLoading(true);
 
         const results = await Promise.allSettled([
-            'error' in initialData1 ? Promise.resolve({ ...initialData1, overview: { url: urls.url1, domain: new URL(urls.url1).hostname, ...initialData1.overview } }) : getFullAnalysis(urls.url1),
-            'error' in initialData2 ? Promise.resolve({ ...initialData2, overview: { url: urls.url2, domain: new URL(urls.url2).hostname, ...initialData2.overview } }) : getFullAnalysis(urls.url2)
+            getFullAnalysis(urls.url1),
+            getFullAnalysis(urls.url2)
         ]);
         
         const res1 = results[0].status === 'fulfilled' ? results[0].value : { error: results[0].reason?.message || 'Unknown error', overview: { url: urls.url1, domain: new URL(urls.url1).hostname } };

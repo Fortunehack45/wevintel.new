@@ -6,17 +6,13 @@ import { RefreshCw, Download, Home } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult, type AuditInfo, type Metadata, type SecurityData } from '@/lib/types';
-import { getPerformanceAnalysis } from '@/app/actions/analyze';
-import { getAdditionalAnalysis } from '@/app/actions/get-additional-analysis';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { DashboardSkeleton } from '@/components/analysis/dashboard-skeleton';
-import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
-import { detectTechStack } from '@/ai/flows/tech-stack-flow';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
 import { LoadingOverlay } from '@/components/loading-overlay';
+import { getFullAnalysis } from '@/app/actions/get-full-analysis';
 
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
@@ -35,108 +31,43 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
+    const searchParams = useSearchParams();
     const isFetching = useRef(false);
     const stableInitialValue = useMemo(() => ({}), []);
     const [cache, setCache] = useLocalStorage<Record<string, { data: AnalysisResult, timestamp: string }>>('webintel_analysis_cache', stableInitialValue);
 
 
-    const fetchFullAnalysis = useCallback(async (ignoreCache = false) => {
-        if (!initialData || isFetching.current) return;
-        
-        // Check cache first
-        if (!ignoreCache) {
-            const cachedItem = cache[decodedUrl];
-            if (cachedItem) {
-                const oneDay = 24 * 60 * 60 * 1000;
-                if (new Date().getTime() - new Date(cachedItem.timestamp).getTime() < oneDay) {
-                    setAnalysisResult(cachedItem.data);
-                    setIsLoading(false);
-                    return;
-                }
-            }
-        }
+    const fetchFullAnalysis = useCallback(async () => {
+        if (isFetching.current) return;
         
         isFetching.current = true;
         setIsLoading(true);
         setError(null);
         
+        const cachedItem = cache[decodedUrl];
+        const oneDay = 24 * 60 * 60 * 1000;
+        const isCacheValid = cachedItem && (new Date().getTime() - new Date(cachedItem.timestamp).getTime() < oneDay);
+
+        if (isCacheValid && searchParams.get('refresh') !== 'true') {
+            setAnalysisResult(cachedItem.data);
+            setIsLoading(false);
+            isFetching.current = false;
+            return;
+        }
+        
         try {
-            const aiSummaryInput: WebsiteAnalysisInput = {
-                overview: initialData.overview!,
-                security: initialData.security!,
-                hosting: initialData.hosting!,
-                headers: initialData.headers,
-            };
-            
-            const [perfResult, summaryResult, trafficResult, techStackResult, additionalResult] = await Promise.allSettled([
-                getPerformanceAnalysis(decodedUrl),
-                summarizeWebsite(aiSummaryInput),
-                estimateTraffic({ url: decodedUrl, description: initialData.overview?.description || '' }),
-                detectTechStack({ url: decodedUrl, htmlContent: initialData.overview?.htmlContent || '', headers: initialData.headers || {} }),
-                getAdditionalAnalysis(decodedUrl),
-            ]);
+            const result = await getFullAnalysis(decodedUrl);
 
-            const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
-            const summaryValue = summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.' };
-            const trafficValue = trafficResult.status === 'fulfilled' ? trafficResult.value : null;
-            const techStackValue = techStackResult.status === 'fulfilled' ? techStackResult.value : null;
-            const additionalValue = additionalResult.status === 'fulfilled' ? additionalResult.value.status : undefined;
-
-
-            const securityAudits = 'securityAudits' in fullPerfData ? fullPerfData.securityAudits : {};
-            
-            let securityScoreTotal = 0;
-            let securityItemsScored = 0;
-            
-            if (initialData.security?.isSecure) securityScoreTotal += 1;
-            securityItemsScored++;
-
-            Object.values(initialData.security?.securityHeaders || {}).forEach(present => {
-                if (present) securityScoreTotal++;
-                securityItemsScored++;
-            });
-
-            if (securityAudits) {
-                Object.values(securityAudits).forEach(audit => {
-                    if (audit.score !== null) {
-                        securityScoreTotal += audit.score;
-                        securityItemsScored++;
-                    }
-                });
+            if ('error' in result) {
+                setError(result.error);
+                setAnalysisResult(null);
+            } else {
+                setAnalysisResult(result);
+                setCache(prev => ({
+                    ...prev,
+                    [decodedUrl]: { data: result, timestamp: new Date().toISOString() }
+                }));
             }
-            const calculatedSecurityScore = securityItemsScored > 0 ? Math.round((securityScoreTotal / securityItemsScored) * 100) : 0;
-
-            const finalResult: AnalysisResult = {
-                ...(initialData as AnalysisResult),
-                ...fullPerfData,
-                overview: {
-                    ...initialData!.overview,
-                    ...('overview' in fullPerfData ? fullPerfData.overview : {}),
-                    title: ('overview' in fullPerfData && fullPerfData.overview?.title) || initialData!.overview?.title,
-                    description: ('overview' in fullPerfData && fullPerfData.overview?.description) || initialData!.overview?.description,
-                },
-                metadata: {
-                    ...initialData!.metadata,
-                    hasRobotsTxt: 'metadata' in fullPerfData && fullPerfData.metadata ? fullPerfData.metadata.hasRobotsTxt : false,
-                    hasSitemapXml: 'metadata' in fullPerfData && fullPerfData.metadata ? fullPerfData.metadata.hasSitemapXml : false,
-                } as Metadata,
-                security: {
-                    ...initialData!.security,
-                    securityScore: calculatedSecurityScore,
-                } as SecurityData,
-                aiSummary: summaryValue,
-                traffic: trafficValue,
-                techStack: techStackValue,
-                status: additionalValue,
-            };
-
-            setAnalysisResult(finalResult);
-            // Update cache
-            setCache(prev => ({
-                ...prev,
-                [decodedUrl]: { data: finalResult, timestamp: new Date().toISOString() }
-            }));
-
         } catch (e: any) {
             console.error("An error occurred during analysis:", e);
             setError(e.message || "An unexpected error occurred.");
@@ -146,7 +77,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         }
     // We only want to run this on mount, and not when cache/setCache changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [decodedUrl, initialData]);
+    }, [decodedUrl, searchParams]);
 
 
     useEffect(() => {
@@ -461,15 +392,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
     };
 
     const handleReanalyze = () => {
-        // Clear cache for this specific URL and re-fetch
-        setCache(prev => {
-            const newCache = { ...prev };
-            delete newCache[decodedUrl];
-            return newCache;
-        });
-        setAnalysisResult(initialData as AnalysisResult);
-        setError(null);
-        fetchFullAnalysis(true);
+        router.push(`/analysis/${encodeURIComponent(decodedUrl)}?refresh=true`);
     };
 
     const renderContent = () => {

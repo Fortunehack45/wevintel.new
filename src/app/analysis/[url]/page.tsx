@@ -7,6 +7,7 @@ import { type Metadata } from 'next';
 import { getFastAnalysis } from '@/app/actions/analyze';
 import { DashboardSkeleton } from '@/components/analysis/dashboard-skeleton';
 import { NotFoundCard } from '@/components/analysis/not-found-card';
+import { clearCacheForUrl } from '@/lib/cache';
 
 
 function ErrorAlert({title, description}: {title: string, description: string}) {
@@ -20,7 +21,8 @@ function ErrorAlert({title, description}: {title: string, description: string}) 
 }
 
 type Props = {
-  params: { url: string }
+  params: { url: string },
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -62,7 +64,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 
-export default async function AnalysisPage({ params }: { params: { url: string } }) {
+export default async function AnalysisPage({ params, searchParams }: Props) {
   let decodedUrl = '';
   try {
     decodedUrl = decodeURIComponent(params.url);
@@ -74,6 +76,11 @@ export default async function AnalysisPage({ params }: { params: { url: string }
     return (
         <NotFoundCard url={decodedUrl} message="The provided URL is not valid. Please go back and try again with a valid URL (e.g., https://example.com)." />
     )
+  }
+
+  const forceRefresh = searchParams.refresh === 'true';
+  if (forceRefresh) {
+    await clearCacheForUrl(decodedUrl);
   }
 
   // Perform the initial, fast analysis on the server.

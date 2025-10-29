@@ -3,13 +3,14 @@
 /**
  * @fileOverview A flow to estimate website traffic.
  *
- * - estimateTraffic - A function that takes a URL and returns an AI-generated traffic estimate.
+- * - estimateTraffic - A function that takes a URL and returns an AI-generated traffic estimate.
  * - TrafficEstimateInput - The input type for the estimateTraffic function.
  * - TrafficEstimateOutput - The return type for the estimateTraffic function.
  */
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
+import { getCache, setCache } from '@/lib/cache';
 
 const TrafficEstimateInputSchema = z.object({
   url: z.string().describe('The URL of the website to estimate traffic for.'),
@@ -40,8 +41,16 @@ const TrafficEstimateOutputSchema = z.object({
 export type TrafficEstimateOutput = z.infer<typeof TrafficEstimateOutputSchema>;
 
 export async function estimateTraffic(input: TrafficEstimateInput): Promise<TrafficEstimateOutput | null> {
+    const cacheKey = `traffic-estimate:${input.url}`;
+    const cached = await getCache<TrafficEstimateOutput>(cacheKey);
+    if (cached) return cached;
+
     try {
-        return await estimateTrafficFlow(input);
+        const result = await estimateTrafficFlow(input);
+        if (result) {
+            await setCache(cacheKey, result);
+        }
+        return result;
     } catch (e: any) {
         console.error("Traffic estimation flow failed:", e);
         return null; // Return null on any error

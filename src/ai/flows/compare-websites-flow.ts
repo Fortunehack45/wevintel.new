@@ -7,11 +7,24 @@
  */
 
 import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
 import { ComparisonInput, ComparisonInputSchema, ComparisonOutput, ComparisonOutputSchema } from '@/lib/types';
+import { getCache, setCache } from '@/lib/cache';
 
-
-export async function compareWebsites(input: ComparisonInput): Promise<ComparisonOutput> {
-  return compareWebsitesFlow(input);
+export async function compareWebsites(input: ComparisonInput): Promise<ComparisonOutput | { error: string }> {
+  const cacheKey = `comparison:${input.site1.url}:${input.site2.url}`;
+  const cached = await getCache<ComparisonOutput>(cacheKey);
+  if (cached) return cached;
+  
+  try {
+    const result = await compareWebsitesFlow(input);
+    if (!('error' in result)) {
+        await setCache(cacheKey, result);
+    }
+    return result;
+  } catch (e: any) {
+    return { error: e.message || "An unexpected error occurred in the comparison flow." };
+  }
 }
 
 const prompt = ai.definePrompt({
@@ -47,10 +60,18 @@ const compareWebsitesFlow = ai.defineFlow(
   {
     name: 'compareWebsitesFlow',
     inputSchema: ComparisonInputSchema,
-    outputSchema: ComparisonOutputSchema,
+    outputSchema: z.union([ComparisonOutputSchema, z.object({error: z.string()})]),
   },
   async (input) => {
-    const { output } = await prompt(input);
-    return output!;
+    try {
+        const { output } = await prompt(input);
+        if (!output) {
+            return { error: "The AI model did not return a comparison." };
+        }
+        return output;
+    } catch(e: any) {
+        console.error("Error in compareWebsitesFlow:", e);
+        return { error: e.message || "Failed to generate AI comparison." };
+    }
   }
 );

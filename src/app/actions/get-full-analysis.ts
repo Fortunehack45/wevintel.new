@@ -19,11 +19,17 @@ const getSecurityScore = (data: Partial<AnalysisResult>) => {
     return count > 0 ? Math.round((total / count) * 100) : 0;
 }
 
-export const getFullAnalysis = async (url: string): Promise<AnalysisResult> => {
-    const fastResult = await getFastAnalysis(url);
-    if ('error' in fastResult) {
-        throw new Error(fastResult.error);
+export const getFullAnalysis = async (url: string): Promise<AnalysisResult | { error: string, overview: Partial<AnalysisResult['overview']> }> => {
+    let fastResult;
+    try {
+        fastResult = await getFastAnalysis(url);
+        if ('error' in fastResult) {
+            return { error: fastResult.error, overview: { url, domain: new URL(url).hostname }};
+        }
+    } catch (e: any) {
+        return { error: e.message || "Failed to fetch initial data", overview: { url }};
     }
+
 
     const aiSummaryInput: WebsiteAnalysisInput = {
         overview: fastResult.overview!,

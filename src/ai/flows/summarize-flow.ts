@@ -11,6 +11,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { AnalysisResult, WebsiteOverview, SecurityData, HostingInfo, HeaderInfo } from '@/lib/types';
+import { getCache, setCache } from '@/lib/cache';
 
 // We only need a subset of the full analysis for the summary
 const WebsiteAnalysisInputSchema = z.object({
@@ -49,9 +50,18 @@ const FlowOutputSchema = z.union([
     z.object({ summary: AISummarySchema, error: z.undefined() }),
     z.object({ summary: z.undefined(), error: z.string() })
 ]);
+type FlowOutput = z.infer<typeof FlowOutputSchema>;
 
-export async function summarizeWebsite(input: WebsiteAnalysisInput): Promise<z.infer<typeof FlowOutputSchema>> {
-  return summarizeWebsiteFlow(input);
+export async function summarizeWebsite(input: WebsiteAnalysisInput): Promise<FlowOutput> {
+  const cacheKey = `summary:${input.overview.url}`;
+  const cached = await getCache<FlowOutput>(cacheKey);
+  if (cached) return cached;
+
+  const result = await summarizeWebsiteFlow(input);
+  if (!result.error) {
+    await setCache(cacheKey, result);
+  }
+  return result;
 }
 
 const prompt = ai.definePrompt({
