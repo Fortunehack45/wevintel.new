@@ -462,5 +462,1197 @@
         "description": "A security mechanism to prevent Cross-Site Request Forgery attacks, indicated by the 'csrftoken' cookie."
       }
     ]
+  },
+  "additional-analysis:https://xvideos.com": {
+    "timestamp": 1761740982698,
+    "data": {
+      "status": {
+        "isOnline": true,
+        "httpStatus": 200,
+        "responseTime": 846,
+        "finalUrl": "https://www.xvideos.com/"
+      }
+    }
+  },
+  "traffic-estimate:https://xvideos.com": {
+    "timestamp": 1761740989360,
+    "data": {
+      "estimatedMonthlyVisits": 3000000000,
+      "estimationConfidence": "high",
+      "trafficSources": {
+        "direct": 50,
+        "search": 30,
+        "social": 10,
+        "referral": 10
+      },
+      "topCountries": [
+        {
+          "country": "US",
+          "percentage": 20
+        },
+        {
+          "country": "IN",
+          "percentage": 15
+        },
+        {
+          "country": "GB",
+          "percentage": 7
+        }
+      ],
+      "engagement": {
+        "avgSessionDuration": "9m 45s",
+        "bounceRate": 25
+      }
+    }
+  },
+  "summary:https://xvideos.com": {
+    "timestamp": 1761740991177,
+    "data": {
+      "summary": {
+        "summary": "The website xvideos.com utilizes a secure HTTPS connection and is hosted by DigitalOcean, LLC. It demonstrates a foundational commitment to security by implementing a Content Security Policy (CSP) and X-Frame-Options, which are crucial for mitigating common web vulnerabilities. However, there are further opportunities to enhance its overall security profile.",
+        "recommendations": [
+          "Implement HTTP Strict Transport Security (HSTS) to ensure that browsers always connect to the site using HTTPS, thereby preventing protocol downgrade attacks and enhancing user data protection.",
+          "Enable the X-Content-Type-Options header with the 'nosniff' directive to prevent browsers from misinterpreting file types, which helps mitigate certain cross-site scripting (XSS) vulnerabilities and improves overall content security."
+        ]
+      }
+    }
+  },
+  "performance:https://xvideos.com": {
+    "timestamp": 1761741011017,
+    "data": {
+      "performance": {
+        "mobile": {
+          "performanceScore": 65,
+          "accessibilityScore": 59,
+          "seoScore": 92,
+          "bestPracticesScore": 77,
+          "speedIndex": "3.3 s",
+          "totalBlockingTime": "310 ms",
+          "firstContentfulPaint": "3.2 s",
+          "largestContentfulPaint": "6.0 s",
+          "cumulativeLayoutShift": "0"
+        },
+        "desktop": {
+          "performanceScore": 64,
+          "accessibilityScore": 77,
+          "seoScore": 92,
+          "bestPracticesScore": 81,
+          "speedIndex": "1.3 s",
+          "totalBlockingTime": "170 ms",
+          "firstContentfulPaint": "0.9 s",
+          "largestContentfulPaint": "1.5 s",
+          "cumulativeLayoutShift": "0.949"
+        }
+      },
+      "performanceAudits": {
+        "server-response-time": {
+          "id": "server-response-time",
+          "title": "Initial server response time was short",
+          "description": "Keep the server response time for the main document short because all other requests depend on it. [Learn more about the Time to First Byte metric](https://developer.chrome.com/docs/lighthouse/performance/time-to-first-byte/).",
+          "score": 1,
+          "displayValue": "Root document took 10 ms"
+        },
+        "network-requests": {
+          "id": "network-requests",
+          "title": "Network Requests",
+          "description": "Lists the network requests that were made during page load.",
+          "score": 1
+        },
+        "unminified-css": {
+          "id": "unminified-css",
+          "title": "Minify CSS",
+          "description": "Minifying CSS files can reduce network payload sizes. [Learn how to minify CSS](https://developer.chrome.com/docs/lighthouse/performance/unminified-css/).",
+          "score": 1
+        },
+        "unminified-javascript": {
+          "id": "unminified-javascript",
+          "title": "Minify JavaScript",
+          "description": "Minifying JavaScript files can reduce payload sizes and script parse time. [Learn how to minify JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unminified-javascript/).",
+          "score": 1
+        },
+        "unused-css-rules": {
+          "id": "unused-css-rules",
+          "title": "Reduce unused CSS",
+          "description": "Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. [Learn how to reduce unused CSS](https://developer.chrome.com/docs/lighthouse/performance/unused-css-rules/).",
+          "score": 0.5,
+          "displayValue": "Est savings of 368 KiB"
+        },
+        "unused-javascript": {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "score": 0,
+          "displayValue": "Est savings of 585 KiB"
+        },
+        "total-byte-weight": {
+          "id": "total-byte-weight",
+          "title": "Avoids enormous network payloads",
+          "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
+          "score": 1,
+          "displayValue": "Total size was 1,592 KiB"
+        },
+        "mainthread-work-breakdown": {
+          "id": "mainthread-work-breakdown",
+          "title": "Minimizes main-thread work",
+          "description": "Consider reducing the time spent parsing, compiling and executing JS. You may find delivering smaller JS payloads helps with this. [Learn how to minimize main-thread work](https://developer.chrome.com/docs/lighthouse/performance/mainthread-work-breakdown/)",
+          "score": 1,
+          "displayValue": "2.0 s"
+        },
+        "max-potential-fid": {
+          "id": "max-potential-fid",
+          "title": "Max Potential First Input Delay",
+          "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
+          "score": 0.7,
+          "displayValue": "190 ms"
+        },
+        "interactive": {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "score": 0.19,
+          "displayValue": "11.4 s"
+        }
+      },
+      "securityAudits": {
+        "csp-xss": {
+          "id": "csp-xss",
+          "title": "Ensure CSP is effective against XSS attacks",
+          "description": "A strong Content Security Policy (CSP) significantly reduces the risk of cross-site scripting (XSS) attacks. [Learn how to use a CSP to prevent XSS](https://developer.chrome.com/docs/lighthouse/best-practices/csp-xss/)",
+          "score": 1
+        }
+      },
+      "diagnosticsAudits": {
+        "deprecations": {
+          "id": "deprecations",
+          "title": "Uses deprecated APIs",
+          "description": "Deprecated APIs will eventually be removed from the browser. [Learn more about deprecated APIs](https://developer.chrome.com/docs/lighthouse/best-practices/deprecations/).",
+          "score": 0,
+          "displayValue": "1 warning found"
+        },
+        "errors-in-console": {
+          "id": "errors-in-console",
+          "title": "No browser errors logged to the console",
+          "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+          "score": 1
+        },
+        "user-timings": {
+          "id": "user-timings",
+          "title": "User Timing marks and measures",
+          "description": "Consider instrumenting your app with the User Timing API to measure your app's real-world performance during key user experiences. [Learn more about User Timing marks](https://developer.chrome.com/docs/lighthouse/performance/user-timings/).",
+          "score": null
+        },
+        "long-tasks": {
+          "id": "long-tasks",
+          "title": "Avoid long main-thread tasks",
+          "description": "Lists the longest tasks on the main thread, useful for identifying worst contributors to input delay. [Learn how to avoid long main-thread tasks](https://web.dev/articles/optimize-long-tasks)",
+          "score": 1,
+          "displayValue": "7 long tasks found"
+        },
+        "non-composited-animations": {
+          "id": "non-composited-animations",
+          "title": "Avoid non-composited animations",
+          "description": "Animations which are not composited can be janky and increase CLS. [Learn how to avoid non-composited animations](https://developer.chrome.com/docs/lighthouse/performance/non-composited-animations/)",
+          "score": 1,
+          "displayValue": "15 animated elements found"
+        },
+        "document-title": {
+          "id": "document-title",
+          "title": "Document has a `<title>` element",
+          "description": "The title gives screen reader users an overview of the page, and search engine users rely on it heavily to determine if a page is relevant to their search. [Learn more about document titles](https://dequeuniversity.com/rules/axe/4.11/document-title).",
+          "score": 1
+        },
+        "meta-description": {
+          "id": "meta-description",
+          "title": "Document has a meta description",
+          "description": "Meta descriptions may be included in search results to concisely summarize page content. [Learn more about the meta description](https://developer.chrome.com/docs/lighthouse/seo/meta-description/).",
+          "score": 1
+        },
+        "http-status-code": {
+          "id": "http-status-code",
+          "title": "Page has successful HTTP status code",
+          "description": "Pages with unsuccessful HTTP status codes may not be indexed properly. [Learn more about HTTP status codes](https://developer.chrome.com/docs/lighthouse/seo/http-status-code/).",
+          "score": 1
+        },
+        "link-text": {
+          "id": "link-text",
+          "title": "Links have descriptive text",
+          "description": "Descriptive link text helps search engines understand your content. [Learn how to make links more accessible](https://developer.chrome.com/docs/lighthouse/seo/link-text/).",
+          "score": 1
+        },
+        "crawlable-anchors": {
+          "id": "crawlable-anchors",
+          "title": "Links are crawlable",
+          "description": "Search engines may use `href` attributes on links to crawl websites. Ensure that the `href` attribute of anchor elements links to an appropriate destination, so more pages of the site can be discovered. [Learn how to make links crawlable](https://support.google.com/webmasters/answer/9112205)",
+          "score": 1
+        },
+        "is-crawlable": {
+          "id": "is-crawlable",
+          "title": "Page isn’t blocked from indexing",
+          "description": "Search engines are unable to include your pages in search results if they don't have permission to crawl them. [Learn more about crawler directives](https://developer.chrome.com/docs/lighthouse/seo/is-crawlable/).",
+          "score": 1
+        },
+        "robots-txt": {
+          "id": "robots-txt",
+          "title": "robots.txt is valid",
+          "description": "If your robots.txt file is malformed, crawlers may not be able to understand how you want your website to be crawled or indexed. [Learn more about robots.txt](https://developer.chrome.com/docs/lighthouse/seo/invalid-robots-txt/).",
+          "score": 1
+        },
+        "image-alt": {
+          "id": "image-alt",
+          "title": "Image elements do not have `[alt]` attributes",
+          "description": "Informative elements should aim for short, descriptive alternate text. Decorative elements can be ignored with an empty alt attribute. [Learn more about the `alt` attribute](https://dequeuniversity.com/rules/axe/4.11/image-alt).",
+          "score": 0
+        },
+        "html-has-lang": {
+          "id": "html-has-lang",
+          "title": "`<html>` element has a `[lang]` attribute",
+          "description": "If a page doesn't specify a `lang` attribute, a screen reader assumes that the page is in the default language that the user chose when setting up the screen reader. If the page isn't actually in the default language, then the screen reader might not announce the page's text correctly. [Learn more about the `lang` attribute](https://dequeuniversity.com/rules/axe/4.11/html-has-lang).",
+          "score": 1
+        },
+        "hreflang": {
+          "id": "hreflang",
+          "title": "Document has a valid `hreflang`",
+          "description": "hreflang links tell search engines what version of a page they should list in search results for a given language or region. [Learn more about `hreflang`](https://developer.chrome.com/docs/lighthouse/seo/hreflang/).",
+          "score": 1
+        },
+        "canonical": {
+          "id": "canonical",
+          "title": "Document has a valid `rel=canonical`",
+          "description": "Canonical links suggest which URL to show in search results. [Learn more about canonical links](https://developer.chrome.com/docs/lighthouse/seo/canonical/).",
+          "score": null
+        }
+      },
+      "overview": {
+        "url": "https://xvideos.com",
+        "domain": "xvideos.com"
+      },
+      "metadata": {
+        "openGraphTags": {},
+        "hasRobotsTxt": true,
+        "hasSitemapXml": true
+      }
+    }
+  },
+  "additional-analysis:https://pornhub.com": {
+    "timestamp": 1761741012396,
+    "data": {
+      "status": {
+        "isOnline": true,
+        "httpStatus": 200,
+        "responseTime": 454,
+        "finalUrl": "https://www.pornhub.com/"
+      }
+    }
+  },
+  "summary:https://pornhub.com": {
+    "timestamp": 1761741020676,
+    "data": {
+      "summary": {
+        "summary": "Pornhub.com maintains a secure connection via HTTPS and has implemented important security headers like HSTS and X-Frame-Options, which are positive steps towards protecting user data and preventing certain types of web attacks. The site's title and description clearly articulate its content. However, there are opportunities to strengthen its security profile by adopting additional best practices for modern web security headers.",
+        "recommendations": [
+          "Implement a robust Content Security Policy (CSP) to mitigate risks such as cross-site scripting (XSS) and data injection by controlling the resources the user agent is allowed to load.",
+          "Enable the X-Content-Type-Options header with the 'nosniff' directive to prevent browsers from MIME-sniffing content, which can help avert certain types of attacks.",
+          "Continuously monitor and update all security configurations, including server software and website dependencies, to protect against newly emerging threats and ensure long-term site integrity and user safety."
+        ]
+      }
+    }
+  },
+  "traffic-estimate:https://pornhub.com": {
+    "timestamp": 1761741021965,
+    "data": {
+      "estimatedMonthlyVisits": 3500000000,
+      "estimationConfidence": "high",
+      "trafficSources": {
+        "direct": 65,
+        "search": 18,
+        "social": 5,
+        "referral": 12
+      },
+      "topCountries": [
+        {
+          "country": "US",
+          "percentage": 30
+        },
+        {
+          "country": "GB",
+          "percentage": 7
+        },
+        {
+          "country": "DE",
+          "percentage": 5
+        }
+      ],
+      "engagement": {
+        "avgSessionDuration": "8m 15s",
+        "bounceRate": 35
+      }
+    }
+  },
+  "tech-stack:https://pornhub.com": {
+    "timestamp": 1761741029813,
+    "data": [
+      {
+        "name": "OpenResty",
+        "category": "Web Server",
+        "confidence": 100,
+        "description": "A high-performance web platform integrating Nginx and LuaJIT, detected from the 'server' HTTP header."
+      },
+      {
+        "name": "Brotli",
+        "category": "Compression",
+        "confidence": 100,
+        "description": "A generic-purpose lossless compression algorithm, indicated by the 'content-encoding: br' HTTP header."
+      },
+      {
+        "name": "Strict-Transport-Security (HSTS)",
+        "category": "Security",
+        "confidence": 100,
+        "description": "A security policy mechanism helping to protect websites against downgrade attacks and cookie hijacking, specified in the HTTP headers."
+      },
+      {
+        "name": "HTML5",
+        "category": "Markup Language",
+        "confidence": 100,
+        "description": "The latest revision of the Hypertext Markup Language, offering enhanced semantic elements and multimedia support."
+      },
+      {
+        "name": "JavaScript",
+        "category": "Programming Language",
+        "confidence": 100,
+        "description": "A high-level, interpreted programming language widely used for client-side web development, evident from multiple script tags and global variables."
+      },
+      {
+        "name": "Internationalization (i18n)",
+        "category": "Feature",
+        "confidence": 90,
+        "description": "The site supports multiple languages and regions, indicated by numerous 'hreflang' links in the head section."
+      },
+      {
+        "name": "Custom CDN",
+        "category": "Content Delivery Network",
+        "confidence": 90,
+        "description": "The website uses a custom Content Delivery Network, indicated by script sources pointing to 'phncdn.com'."
+      },
+      {
+        "name": "Responsive Web Design",
+        "category": "Design Principle",
+        "confidence": 100,
+        "description": "An approach to web design that makes web pages render well on a variety of devices and screen sizes, evident from the 'viewport' meta tag."
+      },
+      {
+        "name": "UTF-8",
+        "category": "Character Encoding",
+        "confidence": 100,
+        "description": "A variable-width character encoding that can represent every character in the Unicode character set, specified in meta tags and HTTP headers."
+      }
+    ]
+  },
+  "performance:https://pornhub.com": {
+    "timestamp": 1761741039534,
+    "data": {
+      "performance": {
+        "mobile": {
+          "performanceScore": 59,
+          "accessibilityScore": 78,
+          "seoScore": 92,
+          "bestPracticesScore": 81,
+          "speedIndex": "4.6 s",
+          "totalBlockingTime": "150 ms",
+          "firstContentfulPaint": "3.1 s",
+          "largestContentfulPaint": "6.4 s",
+          "cumulativeLayoutShift": "0.176"
+        },
+        "desktop": {
+          "performanceScore": 84,
+          "accessibilityScore": 85,
+          "seoScore": 92,
+          "bestPracticesScore": 81,
+          "speedIndex": "1.3 s",
+          "totalBlockingTime": "50 ms",
+          "firstContentfulPaint": "1.0 s",
+          "largestContentfulPaint": "2.6 s",
+          "cumulativeLayoutShift": "0.011"
+        }
+      },
+      "performanceAudits": {
+        "server-response-time": {
+          "id": "server-response-time",
+          "title": "Initial server response time was short",
+          "description": "Keep the server response time for the main document short because all other requests depend on it. [Learn more about the Time to First Byte metric](https://developer.chrome.com/docs/lighthouse/performance/time-to-first-byte/).",
+          "score": 1,
+          "displayValue": "Root document took 100 ms"
+        },
+        "network-requests": {
+          "id": "network-requests",
+          "title": "Network Requests",
+          "description": "Lists the network requests that were made during page load.",
+          "score": 1
+        },
+        "unminified-css": {
+          "id": "unminified-css",
+          "title": "Minify CSS",
+          "description": "Minifying CSS files can reduce network payload sizes. [Learn how to minify CSS](https://developer.chrome.com/docs/lighthouse/performance/unminified-css/).",
+          "score": 1
+        },
+        "unminified-javascript": {
+          "id": "unminified-javascript",
+          "title": "Minify JavaScript",
+          "description": "Minifying JavaScript files can reduce payload sizes and script parse time. [Learn how to minify JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unminified-javascript/).",
+          "score": 1
+        },
+        "unused-css-rules": {
+          "id": "unused-css-rules",
+          "title": "Reduce unused CSS",
+          "description": "Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. [Learn how to reduce unused CSS](https://developer.chrome.com/docs/lighthouse/performance/unused-css-rules/).",
+          "score": 0,
+          "displayValue": "Est savings of 61 KiB"
+        },
+        "unused-javascript": {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "score": 0,
+          "displayValue": "Est savings of 198 KiB"
+        },
+        "total-byte-weight": {
+          "id": "total-byte-weight",
+          "title": "Avoids enormous network payloads",
+          "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
+          "score": 1,
+          "displayValue": "Total size was 1,845 KiB"
+        },
+        "mainthread-work-breakdown": {
+          "id": "mainthread-work-breakdown",
+          "title": "Minimize main-thread work",
+          "description": "Consider reducing the time spent parsing, compiling and executing JS. You may find delivering smaller JS payloads helps with this. [Learn how to minimize main-thread work](https://developer.chrome.com/docs/lighthouse/performance/mainthread-work-breakdown/)",
+          "score": 0,
+          "displayValue": "2.3 s"
+        },
+        "max-potential-fid": {
+          "id": "max-potential-fid",
+          "title": "Max Potential First Input Delay",
+          "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
+          "score": 0.86,
+          "displayValue": "140 ms"
+        },
+        "interactive": {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "score": 0.4,
+          "displayValue": "8.2 s"
+        }
+      },
+      "securityAudits": {
+        "csp-xss": {
+          "id": "csp-xss",
+          "title": "Ensure CSP is effective against XSS attacks",
+          "description": "A strong Content Security Policy (CSP) significantly reduces the risk of cross-site scripting (XSS) attacks. [Learn how to use a CSP to prevent XSS](https://developer.chrome.com/docs/lighthouse/best-practices/csp-xss/)",
+          "score": 1
+        }
+      },
+      "diagnosticsAudits": {
+        "deprecations": {
+          "id": "deprecations",
+          "title": "Uses deprecated APIs",
+          "description": "Deprecated APIs will eventually be removed from the browser. [Learn more about deprecated APIs](https://developer.chrome.com/docs/lighthouse/best-practices/deprecations/).",
+          "score": 0,
+          "displayValue": "1 warning found"
+        },
+        "errors-in-console": {
+          "id": "errors-in-console",
+          "title": "No browser errors logged to the console",
+          "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+          "score": 1
+        },
+        "user-timings": {
+          "id": "user-timings",
+          "title": "User Timing marks and measures",
+          "description": "Consider instrumenting your app with the User Timing API to measure your app's real-world performance during key user experiences. [Learn more about User Timing marks](https://developer.chrome.com/docs/lighthouse/performance/user-timings/).",
+          "score": null
+        },
+        "long-tasks": {
+          "id": "long-tasks",
+          "title": "Avoid long main-thread tasks",
+          "description": "Lists the longest tasks on the main thread, useful for identifying worst contributors to input delay. [Learn how to avoid long main-thread tasks](https://web.dev/articles/optimize-long-tasks)",
+          "score": 1,
+          "displayValue": "9 long tasks found"
+        },
+        "non-composited-animations": {
+          "id": "non-composited-animations",
+          "title": "Avoid non-composited animations",
+          "description": "Animations which are not composited can be janky and increase CLS. [Learn how to avoid non-composited animations](https://developer.chrome.com/docs/lighthouse/performance/non-composited-animations/)",
+          "score": 1,
+          "displayValue": "2 animated elements found"
+        },
+        "document-title": {
+          "id": "document-title",
+          "title": "Document has a `<title>` element",
+          "description": "The title gives screen reader users an overview of the page, and search engine users rely on it heavily to determine if a page is relevant to their search. [Learn more about document titles](https://dequeuniversity.com/rules/axe/4.11/document-title).",
+          "score": 1
+        },
+        "meta-description": {
+          "id": "meta-description",
+          "title": "Document has a meta description",
+          "description": "Meta descriptions may be included in search results to concisely summarize page content. [Learn more about the meta description](https://developer.chrome.com/docs/lighthouse/seo/meta-description/).",
+          "score": 1
+        },
+        "http-status-code": {
+          "id": "http-status-code",
+          "title": "Page has successful HTTP status code",
+          "description": "Pages with unsuccessful HTTP status codes may not be indexed properly. [Learn more about HTTP status codes](https://developer.chrome.com/docs/lighthouse/seo/http-status-code/).",
+          "score": 1
+        },
+        "link-text": {
+          "id": "link-text",
+          "title": "Links have descriptive text",
+          "description": "Descriptive link text helps search engines understand your content. [Learn how to make links more accessible](https://developer.chrome.com/docs/lighthouse/seo/link-text/).",
+          "score": 1
+        },
+        "crawlable-anchors": {
+          "id": "crawlable-anchors",
+          "title": "Links are not crawlable",
+          "description": "Search engines may use `href` attributes on links to crawl websites. Ensure that the `href` attribute of anchor elements links to an appropriate destination, so more pages of the site can be discovered. [Learn how to make links crawlable](https://support.google.com/webmasters/answer/9112205)",
+          "score": 0
+        },
+        "is-crawlable": {
+          "id": "is-crawlable",
+          "title": "Page isn’t blocked from indexing",
+          "description": "Search engines are unable to include your pages in search results if they don't have permission to crawl them. [Learn more about crawler directives](https://developer.chrome.com/docs/lighthouse/seo/is-crawlable/).",
+          "score": 1
+        },
+        "robots-txt": {
+          "id": "robots-txt",
+          "title": "robots.txt is valid",
+          "description": "If your robots.txt file is malformed, crawlers may not be able to understand how you want your website to be crawled or indexed. [Learn more about robots.txt](https://developer.chrome.com/docs/lighthouse/seo/invalid-robots-txt/).",
+          "score": 1
+        },
+        "image-alt": {
+          "id": "image-alt",
+          "title": "Image elements have `[alt]` attributes",
+          "description": "Informative elements should aim for short, descriptive alternate text. Decorative elements can be ignored with an empty alt attribute. [Learn more about the `alt` attribute](https://dequeuniversity.com/rules/axe/4.11/image-alt).",
+          "score": 1
+        },
+        "html-has-lang": {
+          "id": "html-has-lang",
+          "title": "`<html>` element has a `[lang]` attribute",
+          "description": "If a page doesn't specify a `lang` attribute, a screen reader assumes that the page is in the default language that the user chose when setting up the screen reader. If the page isn't actually in the default language, then the screen reader might not announce the page's text correctly. [Learn more about the `lang` attribute](https://dequeuniversity.com/rules/axe/4.11/html-has-lang).",
+          "score": 1
+        },
+        "hreflang": {
+          "id": "hreflang",
+          "title": "Document has a valid `hreflang`",
+          "description": "hreflang links tell search engines what version of a page they should list in search results for a given language or region. [Learn more about `hreflang`](https://developer.chrome.com/docs/lighthouse/seo/hreflang/).",
+          "score": 1
+        },
+        "canonical": {
+          "id": "canonical",
+          "title": "Document has a valid `rel=canonical`",
+          "description": "Canonical links suggest which URL to show in search results. [Learn more about canonical links](https://developer.chrome.com/docs/lighthouse/seo/canonical/).",
+          "score": 1
+        }
+      },
+      "overview": {
+        "url": "https://pornhub.com",
+        "domain": "pornhub.com"
+      },
+      "metadata": {
+        "openGraphTags": {},
+        "hasRobotsTxt": true,
+        "hasSitemapXml": false
+      }
+    }
+  },
+  "comparison:https://xvideos.com:https://pornhub.com": {
+    "timestamp": 1761741049639,
+    "data": {
+      "title": "Web Performance & Security Showdown: xvideos.com vs. pornhub.com",
+      "summary": "In a direct comparison of key metrics, xvideos.com exhibits a marginal advantage in performance with a score of 65, slightly surpassing pornhub.com's score of 59. This suggests xvideos.com might offer a marginally quicker loading experience. Both websites demonstrate exceptional commitment to user safety and data integrity, achieving perfect security scores of 100, indicating robust security protocols are in place for both.\n\nRegarding technology stacks, pornhub.com presents a detailed and modern setup, utilizing OpenResty as its web server, Brotli for efficient data compression, and a Custom CDN for optimized content delivery, alongside essential web standards like HTML5 and JavaScript. The technology stack for xvideos.com is not defined in the provided data, preventing a direct comparison of underlying infrastructure. In terms of hosting, xvideos.com operates from the Netherlands, while pornhub.com is hosted in the United States. These differing geographical locations could impact latency and content delivery for various global user bases, depending on their respective content delivery network implementations.",
+      "winner": "xvideos.com"
+    }
+  },
+  "additional-analysis:https://Google.com": {
+    "timestamp": 1761741166282,
+    "data": {
+      "status": {
+        "isOnline": true,
+        "httpStatus": 200,
+        "responseTime": 217,
+        "finalUrl": "https://www.google.com/"
+      }
+    }
+  },
+  "traffic-estimate:https://Google.com": {
+    "timestamp": 1761741176856,
+    "data": {
+      "estimatedMonthlyVisits": 85000000000,
+      "estimationConfidence": "high",
+      "trafficSources": {
+        "direct": 65,
+        "search": 5,
+        "social": 5,
+        "referral": 25
+      },
+      "topCountries": [
+        {
+          "country": "US",
+          "percentage": 20
+        },
+        {
+          "country": "IN",
+          "percentage": 15
+        },
+        {
+          "country": "DE",
+          "percentage": 5
+        }
+      ],
+      "engagement": {
+        "avgSessionDuration": "1m 35s",
+        "bounceRate": 70
+      }
+    }
+  },
+  "summary:https://Google.com": {
+    "timestamp": 1761741178506,
+    "data": {
+      "summary": {
+        "summary": "Google.com currently utilizes a secure HTTPS connection and has the X-Frame-Options header enabled, which helps protect against certain types of framing attacks. The website is hosted by Google LLC. However, based on the provided scan data, several other crucial security headers, including Content Security Policy (CSP), HTTP Strict Transport Security (HSTS), and X-Content-Type-Options, were not detected, which are important for a comprehensive security posture.",
+        "recommendations": [
+          "Implement a robust Content Security Policy (CSP) to prevent various forms of code injection attacks, such as cross-site scripting (XSS), by controlling which resources the browser is allowed to load.",
+          "Configure HTTP Strict Transport Security (HSTS) to ensure that browsers always connect to your site using HTTPS, which enhances protection against protocol downgrade attacks and cookie hijacking.",
+          "Add the X-Content-Type-Options header with the 'nosniff' directive to prevent browsers from MIME-sniffing a response away from the declared content-type, which can mitigate certain types of attacks."
+        ]
+      }
+    }
+  },
+  "tech-stack:https://Google.com": {
+    "timestamp": 1761741182344,
+    "data": [
+      {
+        "name": "Google Web Server",
+        "category": "Web Server",
+        "confidence": 100,
+        "description": "A proprietary web server developed by Google, used to serve Google's web properties."
+      },
+      {
+        "name": "HTML5",
+        "category": "Markup Language",
+        "confidence": 100,
+        "description": "The fifth and current major version of the HTML standard, defining the structure and content of web pages."
+      },
+      {
+        "name": "Custom Google JavaScript",
+        "category": "JavaScript Library",
+        "confidence": 100,
+        "description": "A proprietary JavaScript library developed by Google for managing front-end functionality and interactions on its websites."
+      },
+      {
+        "name": "Schema.org",
+        "category": "Structured Data",
+        "confidence": 100,
+        "description": "A collaborative effort to create, maintain, and promote schemas for structured data on the Internet."
+      },
+      {
+        "name": "Google Fonts",
+        "category": "Font Service",
+        "confidence": 100,
+        "description": "A library of free licensed fonts and an interactive web directory for use on websites."
+      },
+      {
+        "name": "Brotli",
+        "category": "Compression Algorithm",
+        "confidence": 100,
+        "description": "A generic-purpose lossless compression algorithm developed by Google, often used for web content compression."
+      }
+    ]
+  },
+  "performance:https://Google.com": {
+    "timestamp": 1761741185092,
+    "data": {
+      "performance": {
+        "mobile": {
+          "performanceScore": 57,
+          "accessibilityScore": 87,
+          "seoScore": 91,
+          "bestPracticesScore": 100,
+          "speedIndex": "3.6 s",
+          "totalBlockingTime": "570 ms",
+          "firstContentfulPaint": "2.8 s",
+          "largestContentfulPaint": "6.9 s",
+          "cumulativeLayoutShift": "0"
+        },
+        "desktop": {
+          "performanceScore": 94,
+          "accessibilityScore": 98,
+          "seoScore": 91,
+          "bestPracticesScore": 100,
+          "speedIndex": "0.8 s",
+          "totalBlockingTime": "180 ms",
+          "firstContentfulPaint": "0.8 s",
+          "largestContentfulPaint": "0.9 s",
+          "cumulativeLayoutShift": "0"
+        }
+      },
+      "performanceAudits": {
+        "server-response-time": {
+          "id": "server-response-time",
+          "title": "Initial server response time was short",
+          "description": "Keep the server response time for the main document short because all other requests depend on it. [Learn more about the Time to First Byte metric](https://developer.chrome.com/docs/lighthouse/performance/time-to-first-byte/).",
+          "score": 1,
+          "displayValue": "Root document took 50 ms"
+        },
+        "network-requests": {
+          "id": "network-requests",
+          "title": "Network Requests",
+          "description": "Lists the network requests that were made during page load.",
+          "score": 1
+        },
+        "unminified-css": {
+          "id": "unminified-css",
+          "title": "Minify CSS",
+          "description": "Minifying CSS files can reduce network payload sizes. [Learn how to minify CSS](https://developer.chrome.com/docs/lighthouse/performance/unminified-css/).",
+          "score": 1
+        },
+        "unminified-javascript": {
+          "id": "unminified-javascript",
+          "title": "Minify JavaScript",
+          "description": "Minifying JavaScript files can reduce payload sizes and script parse time. [Learn how to minify JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unminified-javascript/).",
+          "score": 1
+        },
+        "unused-css-rules": {
+          "id": "unused-css-rules",
+          "title": "Reduce unused CSS",
+          "description": "Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. [Learn how to reduce unused CSS](https://developer.chrome.com/docs/lighthouse/performance/unused-css-rules/).",
+          "score": 0.5,
+          "displayValue": "Est savings of 11 KiB"
+        },
+        "unused-javascript": {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "score": 0,
+          "displayValue": "Est savings of 329 KiB"
+        },
+        "total-byte-weight": {
+          "id": "total-byte-weight",
+          "title": "Avoids enormous network payloads",
+          "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
+          "score": 1,
+          "displayValue": "Total size was 711 KiB"
+        },
+        "mainthread-work-breakdown": {
+          "id": "mainthread-work-breakdown",
+          "title": "Minimize main-thread work",
+          "description": "Consider reducing the time spent parsing, compiling and executing JS. You may find delivering smaller JS payloads helps with this. [Learn how to minimize main-thread work](https://developer.chrome.com/docs/lighthouse/performance/mainthread-work-breakdown/)",
+          "score": 0,
+          "displayValue": "2.1 s"
+        },
+        "max-potential-fid": {
+          "id": "max-potential-fid",
+          "title": "Max Potential First Input Delay",
+          "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
+          "score": 0.42,
+          "displayValue": "280 ms"
+        },
+        "interactive": {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "score": 0.5,
+          "displayValue": "7.2 s"
+        }
+      },
+      "securityAudits": {
+        "csp-xss": {
+          "id": "csp-xss",
+          "title": "Ensure CSP is effective against XSS attacks",
+          "description": "A strong Content Security Policy (CSP) significantly reduces the risk of cross-site scripting (XSS) attacks. [Learn how to use a CSP to prevent XSS](https://developer.chrome.com/docs/lighthouse/best-practices/csp-xss/)",
+          "score": 1
+        }
+      },
+      "diagnosticsAudits": {
+        "deprecations": {
+          "id": "deprecations",
+          "title": "Avoids deprecated APIs",
+          "description": "Deprecated APIs will eventually be removed from the browser. [Learn more about deprecated APIs](https://developer.chrome.com/docs/lighthouse/best-practices/deprecations/).",
+          "score": 1
+        },
+        "errors-in-console": {
+          "id": "errors-in-console",
+          "title": "No browser errors logged to the console",
+          "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+          "score": 1
+        },
+        "user-timings": {
+          "id": "user-timings",
+          "title": "User Timing marks and measures",
+          "description": "Consider instrumenting your app with the User Timing API to measure your app's real-world performance during key user experiences. [Learn more about User Timing marks](https://developer.chrome.com/docs/lighthouse/performance/user-timings/).",
+          "score": 1,
+          "displayValue": "20 user timings"
+        },
+        "long-tasks": {
+          "id": "long-tasks",
+          "title": "Avoid long main-thread tasks",
+          "description": "Lists the longest tasks on the main thread, useful for identifying worst contributors to input delay. [Learn how to avoid long main-thread tasks](https://web.dev/articles/optimize-long-tasks)",
+          "score": 1,
+          "displayValue": "8 long tasks found"
+        },
+        "non-composited-animations": {
+          "id": "non-composited-animations",
+          "title": "Avoid non-composited animations",
+          "description": "Animations which are not composited can be janky and increase CLS. [Learn how to avoid non-composited animations](https://developer.chrome.com/docs/lighthouse/performance/non-composited-animations/)",
+          "score": null
+        },
+        "document-title": {
+          "id": "document-title",
+          "title": "Document has a `<title>` element",
+          "description": "The title gives screen reader users an overview of the page, and search engine users rely on it heavily to determine if a page is relevant to their search. [Learn more about document titles](https://dequeuniversity.com/rules/axe/4.11/document-title).",
+          "score": 1
+        },
+        "meta-description": {
+          "id": "meta-description",
+          "title": "Document does not have a meta description",
+          "description": "Meta descriptions may be included in search results to concisely summarize page content. [Learn more about the meta description](https://developer.chrome.com/docs/lighthouse/seo/meta-description/).",
+          "score": 0
+        },
+        "http-status-code": {
+          "id": "http-status-code",
+          "title": "Page has successful HTTP status code",
+          "description": "Pages with unsuccessful HTTP status codes may not be indexed properly. [Learn more about HTTP status codes](https://developer.chrome.com/docs/lighthouse/seo/http-status-code/).",
+          "score": 1
+        },
+        "link-text": {
+          "id": "link-text",
+          "title": "Links have descriptive text",
+          "description": "Descriptive link text helps search engines understand your content. [Learn how to make links more accessible](https://developer.chrome.com/docs/lighthouse/seo/link-text/).",
+          "score": 1
+        },
+        "crawlable-anchors": {
+          "id": "crawlable-anchors",
+          "title": "Links are crawlable",
+          "description": "Search engines may use `href` attributes on links to crawl websites. Ensure that the `href` attribute of anchor elements links to an appropriate destination, so more pages of the site can be discovered. [Learn how to make links crawlable](https://support.google.com/webmasters/answer/9112205)",
+          "score": 1
+        },
+        "is-crawlable": {
+          "id": "is-crawlable",
+          "title": "Page isn’t blocked from indexing",
+          "description": "Search engines are unable to include your pages in search results if they don't have permission to crawl them. [Learn more about crawler directives](https://developer.chrome.com/docs/lighthouse/seo/is-crawlable/).",
+          "score": 1
+        },
+        "robots-txt": {
+          "id": "robots-txt",
+          "title": "robots.txt is valid",
+          "description": "If your robots.txt file is malformed, crawlers may not be able to understand how you want your website to be crawled or indexed. [Learn more about robots.txt](https://developer.chrome.com/docs/lighthouse/seo/invalid-robots-txt/).",
+          "score": 1
+        },
+        "image-alt": {
+          "id": "image-alt",
+          "title": "Image elements have `[alt]` attributes",
+          "description": "Informative elements should aim for short, descriptive alternate text. Decorative elements can be ignored with an empty alt attribute. [Learn more about the `alt` attribute](https://dequeuniversity.com/rules/axe/4.11/image-alt).",
+          "score": null
+        },
+        "html-has-lang": {
+          "id": "html-has-lang",
+          "title": "`<html>` element has a `[lang]` attribute",
+          "description": "If a page doesn't specify a `lang` attribute, a screen reader assumes that the page is in the default language that the user chose when setting up the screen reader. If the page isn't actually in the default language, then the screen reader might not announce the page's text correctly. [Learn more about the `lang` attribute](https://dequeuniversity.com/rules/axe/4.11/html-has-lang).",
+          "score": 1
+        },
+        "hreflang": {
+          "id": "hreflang",
+          "title": "Document has a valid `hreflang`",
+          "description": "hreflang links tell search engines what version of a page they should list in search results for a given language or region. [Learn more about `hreflang`](https://developer.chrome.com/docs/lighthouse/seo/hreflang/).",
+          "score": 1
+        },
+        "canonical": {
+          "id": "canonical",
+          "title": "Document has a valid `rel=canonical`",
+          "description": "Canonical links suggest which URL to show in search results. [Learn more about canonical links](https://developer.chrome.com/docs/lighthouse/seo/canonical/).",
+          "score": null
+        }
+      },
+      "overview": {
+        "url": "https://Google.com",
+        "domain": "google.com"
+      },
+      "metadata": {
+        "openGraphTags": {},
+        "hasRobotsTxt": true,
+        "hasSitemapXml": true
+      }
+    }
+  },
+  "additional-analysis:https://Fzmovies.host": {
+    "timestamp": 1761741189921,
+    "data": {
+      "status": {
+        "isOnline": true,
+        "httpStatus": 200,
+        "responseTime": 3510,
+        "finalUrl": "https://fzmovies.host/"
+      }
+    }
+  },
+  "summary:https://Fzmovies.host": {
+    "timestamp": 1761741192169,
+    "data": {
+      "summary": {
+        "summary": "The website Fzmovies.host currently utilizes a secure HTTPS connection and benefits from Cloudflare's hosting infrastructure, indicating a foundational level of security and performance. It has also implemented HSTS (HTTP Strict Transport Security) and X-Content-Type-Options, which are good practices for protecting against certain types of attacks. However, there are clear opportunities to enhance its security posture further by adding more protective headers and to improve its discoverability by addressing a missing meta description.",
+        "recommendations": [
+          "Implement a Content Security Policy (CSP) header to mitigate various forms of cross-site scripting (XSS) and data injection attacks, significantly enhancing user security.",
+          "Add the X-Frame-Options header to prevent clickjacking by controlling whether your site can be embedded in an iframe, thereby protecting users from malicious UI redressing attacks.",
+          "Create and include a descriptive meta description for your website. This will improve your site's appearance in search engine results and can increase click-through rates by providing a clear summary of your content."
+        ]
+      }
+    }
+  },
+  "traffic-estimate:https://Fzmovies.host": {
+    "timestamp": 1761741197745,
+    "data": {
+      "estimatedMonthlyVisits": 8500000,
+      "estimationConfidence": "medium",
+      "trafficSources": {
+        "direct": 40,
+        "search": 45,
+        "social": 5,
+        "referral": 10
+      },
+      "topCountries": [
+        {
+          "country": "IN",
+          "percentage": 25
+        },
+        {
+          "country": "US",
+          "percentage": 18
+        },
+        {
+          "country": "UK",
+          "percentage": 10
+        }
+      ],
+      "engagement": {
+        "avgSessionDuration": "20m 30s",
+        "bounceRate": 48
+      }
+    }
+  },
+  "performance:https://Fzmovies.host": {
+    "timestamp": 1761741201772,
+    "data": {
+      "performance": {
+        "mobile": {
+          "performanceScore": 87,
+          "accessibilityScore": 51,
+          "seoScore": 75,
+          "bestPracticesScore": 69,
+          "speedIndex": "2.6 s",
+          "totalBlockingTime": "50 ms",
+          "firstContentfulPaint": "1.5 s",
+          "largestContentfulPaint": "2.4 s",
+          "cumulativeLayoutShift": "0.203"
+        },
+        "desktop": {
+          "performanceScore": 94,
+          "accessibilityScore": 51,
+          "seoScore": 75,
+          "bestPracticesScore": 69,
+          "speedIndex": "0.9 s",
+          "totalBlockingTime": "0 ms",
+          "firstContentfulPaint": "0.4 s",
+          "largestContentfulPaint": "0.8 s",
+          "cumulativeLayoutShift": "0.144"
+        }
+      },
+      "performanceAudits": {
+        "server-response-time": {
+          "id": "server-response-time",
+          "title": "Initial server response time was short",
+          "description": "Keep the server response time for the main document short because all other requests depend on it. [Learn more about the Time to First Byte metric](https://developer.chrome.com/docs/lighthouse/performance/time-to-first-byte/).",
+          "score": 1,
+          "displayValue": "Root document took 60 ms"
+        },
+        "network-requests": {
+          "id": "network-requests",
+          "title": "Network Requests",
+          "description": "Lists the network requests that were made during page load.",
+          "score": 1
+        },
+        "unminified-css": {
+          "id": "unminified-css",
+          "title": "Minify CSS",
+          "description": "Minifying CSS files can reduce network payload sizes. [Learn how to minify CSS](https://developer.chrome.com/docs/lighthouse/performance/unminified-css/).",
+          "score": 0.5,
+          "displayValue": "Est savings of 2 KiB"
+        },
+        "unminified-javascript": {
+          "id": "unminified-javascript",
+          "title": "Minify JavaScript",
+          "description": "Minifying JavaScript files can reduce payload sizes and script parse time. [Learn how to minify JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unminified-javascript/).",
+          "score": 0.5,
+          "displayValue": "Est savings of 8 KiB"
+        },
+        "unused-css-rules": {
+          "id": "unused-css-rules",
+          "title": "Reduce unused CSS",
+          "description": "Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. [Learn how to reduce unused CSS](https://developer.chrome.com/docs/lighthouse/performance/unused-css-rules/).",
+          "score": 0.5,
+          "displayValue": "Est savings of 19 KiB"
+        },
+        "unused-javascript": {
+          "id": "unused-javascript",
+          "title": "Reduce unused JavaScript",
+          "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+          "score": 0,
+          "displayValue": "Est savings of 380 KiB"
+        },
+        "total-byte-weight": {
+          "id": "total-byte-weight",
+          "title": "Avoids enormous network payloads",
+          "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
+          "score": 1,
+          "displayValue": "Total size was 954 KiB"
+        },
+        "mainthread-work-breakdown": {
+          "id": "mainthread-work-breakdown",
+          "title": "Minimizes main-thread work",
+          "description": "Consider reducing the time spent parsing, compiling and executing JS. You may find delivering smaller JS payloads helps with this. [Learn how to minimize main-thread work](https://developer.chrome.com/docs/lighthouse/performance/mainthread-work-breakdown/)",
+          "score": 1,
+          "displayValue": "1.0 s"
+        },
+        "max-potential-fid": {
+          "id": "max-potential-fid",
+          "title": "Max Potential First Input Delay",
+          "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
+          "score": 0.99,
+          "displayValue": "80 ms"
+        },
+        "interactive": {
+          "id": "interactive",
+          "title": "Time to Interactive",
+          "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+          "score": 0.47,
+          "displayValue": "7.6 s"
+        }
+      },
+      "securityAudits": {
+        "csp-xss": {
+          "id": "csp-xss",
+          "title": "Ensure CSP is effective against XSS attacks",
+          "description": "A strong Content Security Policy (CSP) significantly reduces the risk of cross-site scripting (XSS) attacks. [Learn how to use a CSP to prevent XSS](https://developer.chrome.com/docs/lighthouse/best-practices/csp-xss/)",
+          "score": 1
+        }
+      },
+      "diagnosticsAudits": {
+        "deprecations": {
+          "id": "deprecations",
+          "title": "Avoids deprecated APIs",
+          "description": "Deprecated APIs will eventually be removed from the browser. [Learn more about deprecated APIs](https://developer.chrome.com/docs/lighthouse/best-practices/deprecations/).",
+          "score": 1
+        },
+        "errors-in-console": {
+          "id": "errors-in-console",
+          "title": "Browser errors were logged to the console",
+          "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
+          "score": 0
+        },
+        "user-timings": {
+          "id": "user-timings",
+          "title": "User Timing marks and measures",
+          "description": "Consider instrumenting your app with the User Timing API to measure your app's real-world performance during key user experiences. [Learn more about User Timing marks](https://developer.chrome.com/docs/lighthouse/performance/user-timings/).",
+          "score": null
+        },
+        "long-tasks": {
+          "id": "long-tasks",
+          "title": "Avoid long main-thread tasks",
+          "description": "Lists the longest tasks on the main thread, useful for identifying worst contributors to input delay. [Learn how to avoid long main-thread tasks](https://web.dev/articles/optimize-long-tasks)",
+          "score": 1,
+          "displayValue": "5 long tasks found"
+        },
+        "non-composited-animations": {
+          "id": "non-composited-animations",
+          "title": "Avoid non-composited animations",
+          "description": "Animations which are not composited can be janky and increase CLS. [Learn how to avoid non-composited animations](https://developer.chrome.com/docs/lighthouse/performance/non-composited-animations/)",
+          "score": 1,
+          "displayValue": "1 animated element found"
+        },
+        "document-title": {
+          "id": "document-title",
+          "title": "Document has a `<title>` element",
+          "description": "The title gives screen reader users an overview of the page, and search engine users rely on it heavily to determine if a page is relevant to their search. [Learn more about document titles](https://dequeuniversity.com/rules/axe/4.11/document-title).",
+          "score": 1
+        },
+        "meta-description": {
+          "id": "meta-description",
+          "title": "Document does not have a meta description",
+          "description": "Meta descriptions may be included in search results to concisely summarize page content. [Learn more about the meta description](https://developer.chrome.com/docs/lighthouse/seo/meta-description/).",
+          "score": 0
+        },
+        "http-status-code": {
+          "id": "http-status-code",
+          "title": "Page has successful HTTP status code",
+          "description": "Pages with unsuccessful HTTP status codes may not be indexed properly. [Learn more about HTTP status codes](https://developer.chrome.com/docs/lighthouse/seo/http-status-code/).",
+          "score": 1
+        },
+        "link-text": {
+          "id": "link-text",
+          "title": "Links have descriptive text",
+          "description": "Descriptive link text helps search engines understand your content. [Learn how to make links more accessible](https://developer.chrome.com/docs/lighthouse/seo/link-text/).",
+          "score": 1
+        },
+        "crawlable-anchors": {
+          "id": "crawlable-anchors",
+          "title": "Links are crawlable",
+          "description": "Search engines may use `href` attributes on links to crawl websites. Ensure that the `href` attribute of anchor elements links to an appropriate destination, so more pages of the site can be discovered. [Learn how to make links crawlable](https://support.google.com/webmasters/answer/9112205)",
+          "score": 1
+        },
+        "is-crawlable": {
+          "id": "is-crawlable",
+          "title": "Page isn’t blocked from indexing",
+          "description": "Search engines are unable to include your pages in search results if they don't have permission to crawl them. [Learn more about crawler directives](https://developer.chrome.com/docs/lighthouse/seo/is-crawlable/).",
+          "score": 1
+        },
+        "robots-txt": {
+          "id": "robots-txt",
+          "title": "robots.txt is not valid",
+          "description": "If your robots.txt file is malformed, crawlers may not be able to understand how you want your website to be crawled or indexed. [Learn more about robots.txt](https://developer.chrome.com/docs/lighthouse/seo/invalid-robots-txt/).",
+          "score": 0,
+          "displayValue": "1 error found"
+        },
+        "image-alt": {
+          "id": "image-alt",
+          "title": "Image elements do not have `[alt]` attributes",
+          "description": "Informative elements should aim for short, descriptive alternate text. Decorative elements can be ignored with an empty alt attribute. [Learn more about the `alt` attribute](https://dequeuniversity.com/rules/axe/4.11/image-alt).",
+          "score": 0
+        },
+        "html-has-lang": {
+          "id": "html-has-lang",
+          "title": "`<html>` element does not have a `[lang]` attribute",
+          "description": "If a page doesn't specify a `lang` attribute, a screen reader assumes that the page is in the default language that the user chose when setting up the screen reader. If the page isn't actually in the default language, then the screen reader might not announce the page's text correctly. [Learn more about the `lang` attribute](https://dequeuniversity.com/rules/axe/4.11/html-has-lang).",
+          "score": 0
+        },
+        "hreflang": {
+          "id": "hreflang",
+          "title": "Document has a valid `hreflang`",
+          "description": "hreflang links tell search engines what version of a page they should list in search results for a given language or region. [Learn more about `hreflang`](https://developer.chrome.com/docs/lighthouse/seo/hreflang/).",
+          "score": 1
+        },
+        "canonical": {
+          "id": "canonical",
+          "title": "Document has a valid `rel=canonical`",
+          "description": "Canonical links suggest which URL to show in search results. [Learn more about canonical links](https://developer.chrome.com/docs/lighthouse/seo/canonical/).",
+          "score": null
+        }
+      },
+      "overview": {
+        "url": "https://Fzmovies.host",
+        "domain": "fzmovies.host"
+      },
+      "metadata": {
+        "openGraphTags": {},
+        "hasRobotsTxt": false,
+        "hasSitemapXml": false
+      }
+    }
   }
 }
