@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function LeaderboardPage() {
     return (
-        <div className="container mx-auto px-4 py-8 pb-24 md:pb-16 pt-12">
+        <div>
             <div className="flex flex-wrap justify-between items-center mb-8 gap-4">
                 <div className="space-y-1">
                     <h1 className="text-4xl font-bold flex items-center gap-3"><Trophy className="text-primary h-8 w-8" /> Leaderboard</h1>

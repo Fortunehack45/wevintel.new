@@ -36,9 +36,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-GB" suppressHydrationWarning>
+    <html lang="en-GB" suppressHydrationWarning className="h-full">
       <body className={cn(
-          `${poppins.variable} font-body antialiased`,
+          `${poppins.variable} font-body antialiased h-full`,
         )}>
         <ThemeProvider
             attribute="class"
@@ -51,7 +51,11 @@ export default function RootLayout({
           </div>
           <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-1 w-full">{children}</main>
+            <main className="flex-1">
+              <div className="container mx-auto px-4 py-8 pb-24 md:pb-16 pt-12 h-full">
+                {children}
+              </div>
+            </main>
             <Footer />
           </div>
           <BottomNav />
