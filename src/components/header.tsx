@@ -82,7 +82,6 @@ export function Header() {
 
       <div className="flex items-center gap-2">
         <NavContent />
-        <ThemeToggle />
         {user ? (
             <Button asChild variant="outline">
                 <Link href="/settings">
