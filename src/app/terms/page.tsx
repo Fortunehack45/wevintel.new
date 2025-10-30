@@ -66,14 +66,14 @@ export default function TermsPage() {
           </div>
           <p className="text-sm text-muted-foreground pt-2">Last Updated: October 31, 2025</p>
         </CardHeader>
-        <CardContent className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none text-muted-foreground">
+        <CardContent className="prose prose-sm sm:prose-base dark:prose-invert max-w-none prose-h3:font-bold prose-h3:text-lg prose-p:leading-relaxed prose-ul:list-disc prose-ul:pl-6 prose-li:my-2 text-foreground/90">
           <Progress value={progressValue} className="w-full mb-6" />
           
           <div
             dangerouslySetInnerHTML={{ __html: currentArticle.content }}
           />
 
-          <div className="flex justify-between items-center mt-12">
+          <div className="flex justify-between items-center mt-12 not-prose">
             <Button onClick={handlePrev} disabled={currentPage === 0} variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" /> Previous
             </Button>
