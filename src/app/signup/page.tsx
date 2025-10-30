@@ -186,9 +186,9 @@ export default function SignUpPage() {
                     <div className="space-y-1 leading-none">
                       <FormLabel className="text-sm font-normal">
                         I agree to the{' '}
-                        <Link href="#" className="text-primary hover:underline font-semibold">Terms of Service</Link>
+                        <Link href="/terms" className="text-primary hover:underline font-semibold">Terms of Service</Link>
                         {' '}and{' '}
-                        <Link href="#" className="text-primary hover:underline font-semibold">Privacy Policy</Link>.
+                        <Link href="/privacy" className="text-primary hover:underline font-semibold">Privacy Policy</Link>.
                       </FormLabel>
                        <FormMessage />
                     </div>
