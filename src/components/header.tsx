@@ -2,12 +2,14 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Compass, Menu, Bot, Moon, Sun, Scale } from 'lucide-react';
+import { Compass, Menu, Bot, Moon, Sun, Scale, Settings, LogIn } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
+import { getAuth, onAuthStateChanged, type User } from 'firebase/auth';
+import { app } from '@/firebase/config';
 
 const navLinks = [
     { href: '/', label: 'Home' },
@@ -37,6 +39,15 @@ export function Header() {
   const isMobile = useIsMobile();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const auth = getAuth(app);
+  
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, [auth]);
 
 
   useEffect(() => {
@@ -72,6 +83,21 @@ export function Header() {
       <div className="flex items-center gap-2">
         <NavContent />
         <ThemeToggle />
+        {user ? (
+            <Button asChild variant="outline">
+                <Link href="/settings">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                </Link>
+            </Button>
+        ) : (
+             <Button asChild>
+                <Link href="/login">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Login
+                </Link>
+            </Button>
+        )}
       </div>
     </header>
   );
