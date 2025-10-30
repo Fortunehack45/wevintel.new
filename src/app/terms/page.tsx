@@ -629,9 +629,13 @@ export default function TermsPage() {
           <p>
             END OF TERMS AND CONDITIONS
           </p>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-The text you provided was truncated, please try again.
+          
+          
+
+I see that the terms and conditions is very long, so I'm splitting it into two.
+Document Information:
+Title: Terms and Conditions of Service - WebIntel Website Analysis and Intelligence Tool
+Total Word Count: Approximately 11,500 words
+Last Updated: October 31, 2025
+Governing Law: Laws of the Federal Republic of Nigeria
+Version: 1.0
