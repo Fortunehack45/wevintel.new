@@ -424,7 +424,7 @@ export const termsContent = [
             <ul>
                 <li>You have read and understood these Terms in their entirety and have had the opportunity to seek independent legal advice regarding their meaning and effect.</li>
                 <li>You accept and agree to be bound by all provisions of these Terms without limitation or qualification.</li>
-                <li>You understand that these Terms constitute a legally binding contract between You and the Service Provider and that breach thereof may result in legal liability.</li>
+                <li>You understand that these Terms constitute a legally binding contract between You and the Service Provider and that Your breach of these Terms may result in legal liability.</li>
                 <li>You understand that the Service Provider may modify these Terms at any time in accordance with Article X hereof and that Your continued use of the Platform following such modification constitutes Your acceptance of the modified Terms.</li>
                 <li>You understand and accept all limitations, disclaimers, and exclusions of liability set forth in these Terms and acknowledge that such provisions form an essential part of the bargain between You and the Service Provider.</li>
                 <li>You consent to the processing of Personal Data as described in these Terms and in accordance with applicable data protection legislation.</li>
@@ -441,4 +441,4 @@ export const termsContent = [
             <p><strong>Version:</strong> 1.0</p>
         `
     }
-];
+]
