@@ -498,1220 +498,140 @@ export default function TermsPage() {
           </p>
           <h3>12.7 Force and Effect of Headings</h3>
           <p>
-            The article and section headings contained in these Terms are for reference purposes only and shall not affect in any way the meaning or-
-            
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
-LATER THIS IS WHAT I WANT YOU TO ADD IN THE SUBSEQUENT CHATS
--
--
--
--
--
---
---
---
--
--
---
--
--
---
--
--
--
--
---
--
--
---
--
--
--
--
---
--
--
--
---
--
---
--
--
--
--
---
--
--
--
--
---
---
--
--
---
---
--
--
---
---
--
--
--
---
--
---
--
--
---
--
---
--
--
---
--
---
--
--
---
---
--
---
--
--
---
--
--
---
--
--
---
--
--
--
---
--
---
--
--
---
--
---
--
--
---
--
--
--
---
--
--
--
---
--
---
--
---
--
--
---
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
---
--
--
--
--
--
---
--
--
--
---
--
--
--
---
--
--
---
--
--
--
---
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
--
---
--
--
--
--
---
--
--
--
--
---
--
--
--
---
--
--
--
--
---
--
--
--
--
---
--
--
--
---
--
--
--
---
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
--
--
--
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
---
--
--
--
--
--
--
--
--
--
--
--
--
--
--
---
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
---
--
--
--
--
--
--
--
---
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
---
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--T-
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--T-
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--r
--
--
--
--
--
--
---
--H-
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--T-
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--ai-
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
-t is the interpretation of these Terms. The use of the terms “including,” “such as,” “for example,” or similar terms shall be deemed to be followed by the phrase “without limitation” whether or not such phrase actually appears.
-12.8 Language and Translation
-These Terms have been prepared in the English language, and the English language version shall be the governing and controlling version in all respects. Any translation of these Terms into any other language is provided solely for convenience. In the event of any conflict, ambiguity, or inconsistency between the English language version and any translation, the English language version shall prevail and govern.
-12.9 Electronic Communications and Signatures
-You consent to receive communications from the Service Provider electronically, including via email to the address associated with Your Account or through notices posted on the Platform.My love, I understand. It seems there was another issue with the text you provided. It appears to be cut off and contains a large number of hyphens at the end.
-
-Please provide me with the complete text you'd like me to add to the Terms and Conditions page, and I will update it for you right away. I'll be extra careful this time to ensure everything is formatted correctly.
+            The article and section headings contained in these Terms are for reference purposes only and shall not affect in any way the meaning or interpretation of these Terms. The use of the terms “including,” “such as,” “for example,” or similar terms shall be deemed to be followed by the phrase “without limitation” whether or not such phrase actually appears.
+          </p>
+          <h3>12.8 Language and Translation</h3>
+          <p>
+            These Terms have been prepared in the English language, and the English language version shall be the governing and controlling version in all respects. Any translation of these Terms into any other language is provided solely for convenience. In the event of any conflict, ambiguity, or inconsistency between the English language version and any translation, the English language version shall prevail and govern.
+          </p>
+          <h3>12.9 Electronic Communications and Signatures</h3>
+          <p>
+            You consent to receive communications from the Service Provider electronically, including via email to the address associated with Your Account or through notices posted on the Platform. You agree that all agreements, notices, disclosures, and other communications that the Service Provider provides to You electronically satisfy any legal requirement that such communications be in writing.
+          </p>
+          <p>
+            You agree that Your electronic acceptance of these Terms, whether by clicking an “I Agree” button, checking a checkbox, or otherwise indicating Your acceptance through the user interface, constitutes Your signature and legally binding acceptance of these Terms, with the same force and effect as if You had signed these Terms manually. You hereby waive any rights or requirements under any statutes, regulations, rules, ordinances, or other laws in any jurisdiction that require an original signature or delivery or retention of non-electronic records.
+          </p>
+          <h3>12.10 Contact Information</h3>
+          <p>
+            If You have any questions, concerns, or complaints regarding these Terms and Conditions, the Platform, or the Service Provider’s privacy practices, or if You wish to exercise any of Your rights under applicable data protection legislation, You may contact the Service Provider through the following means:
+          </p>
+          <ul>
+            <li>By electronic mail at the contact email address provided on the Platform’s website.</li>
+            <li>Through the contact form or support system available on the Platform, if any.</li>
+            <li>By postal mail to the Service Provider’s registered office address, as may be updated from time to time and as published on the Platform.</li>
+          </ul>
+          <p>
+            The Service Provider shall make reasonable efforts to respond to Your inquiry or request within a reasonable timeframe, and in any event within the timeframes required by applicable data protection legislation for requests concerning Personal Data.
+          </p>
+          <h3>12.11 Acknowledgment of Understanding</h3>
+          <p>
+            By accessing or using the Platform, You acknowledge that You have read, understood, and agree to be bound by these Terms and Conditions in their entirety. You represent and warrant that You have the legal capacity to enter into this binding agreement and that You have carefully reviewed these Terms before accepting them.
+          </p>
+          <p>
+            You further acknowledge that these Terms constitute a legally binding agreement between You and the Service Provider and that Your breach of these Terms may result in legal liability. You agree to review these Terms periodically to remain informed of any modifications and to ensure Your continued compliance with all provisions hereof.
+          </p>
+          <h3>12.12 Survival of Terms</h3>
+          <p>
+            All provisions of these Terms that by their nature should survive termination shall survive termination of Your access to the Platform or termination of these Terms, including but not limited to ownership provisions, warranty disclaimers, indemnification obligations, limitations of liability, dispute resolution provisions, and all general provisions set forth in this Article XII.
+          </p>
+          <p>
+            The termination of Your access to the Platform or the termination of these Terms for any reason shall not relieve either party of any obligation or liability that accrued prior to such termination, nor shall it affect any provision of these Terms that is expressly or by implication intended to survive such termination.
+          </p>
+          <h2>ARTICLE XIII: SPECIAL PROVISIONS FOR SPECIFIC JURISDICTIONS</h2>
+          <h3>13.1 Application to Users in Nigeria</h3>
+          <p>
+            For Users accessing the Platform from within the Federal Republic of Nigeria, the following additional provisions apply:
+          </p>
+          <ul>
+            <li>These Terms are subject to and shall be construed in accordance with the provisions of the Constitution of the Federal Republic of Nigeria 1999 (as amended), particularly the fundamental rights provisions contained in Chapter IV thereof. In the event of any conflict between these Terms and the constitutional rights guaranteed to Nigerian citizens and residents, the constitutional provisions shall prevail to the extent of such conflict.</li>
+            <li>The Service Provider acknowledges its obligations under the Nigeria Data Protection Act 2023 and confirms that all processing of Personal Data of Nigerian Users complies with the requirements of such Act, including the lawfulness, fairness, and transparency principles set forth therein. Nigerian Users may lodge complaints concerning data protection matters with the Nigeria Data Protection Commission in accordance with the provisions of the Nigeria Data Protection Act 2023.</li>
+            <li>Any disputes arising out of or relating to these Terms that cannot be resolved through the alternative dispute resolution mechanisms set forth in Article XI hereof may be submitted to the courts of Nigeria having competent jurisdiction. Nigerian Users retain all rights under Nigerian consumer protection legislation, including the Federal Competition and Consumer Protection Act 2018, to the extent such rights cannot be lawfully waived by agreement.</li>
+          </ul>
+          <h3>13.2 Application to Users in the European Union</h3>
+          <p>
+            For Users accessing the Platform from within the European Union or the European Economic Area, where the General Data Protection Regulation (EU) 2016/679 applies, the following additional provisions shall govern:
+          </p>
+          <ul>
+            <li>Where the Service Provider processes Personal Data of European Union residents, such processing shall comply with all requirements of the general Data Protection Regulation, including but not limited to the principles relating to processing of Personal Data set forth in Article 5 thereof, the lawful bases for processing set forth in Article 6 thereof, and the rights of data subjects set forth in Articles 12 through 23 thereof.</li>
+            <li>European Union Users have the right to lodge a complaint with a supervisory authority, in particular in the Member State of their habitual residence, place of work, or place of the alleged infringement, if they consider that the processing of Personal Data relating to them infringes the General Data Protection Regulation.</li>
+            <li>Where these Terms provide for resolution of disputes through arbitration, European Union Users retain the right to bring proceedings before the courts of the Member State in which they are domiciled, in accordance with applicable European Union consumer protection legislation. The arbitration provisions set forth in Article XI shall not deprive European Union Users of the protection afforded by mandatory provisions of consumer protection law in their country of residence.</li>
+          </ul>
+          <h3>13.3 Application to Users in Other Jurisdictions</h3>
+          <p>
+            Users accessing the Platform from jurisdictions other than Nigeria and the European Union acknowledge that the Platform is operated from and controlled in Nigeria, and that Nigerian law governs these Terms. However, the Service Provider recognizes that Users in certain jurisdictions may have rights under local consumer protection, privacy, or other legislation that cannot be lawfully waived by contractual agreement.
+          </p>
+          <p>
+            To the extent that any provision of these Terms conflicts with mandatory provisions of applicable local law that cannot be waived by agreement, such local law provisions shall prevail to the extent of such conflict, and all other provisions of these Terms shall remain in full force and effect. Users are responsible for complying with all applicable local laws and regulations in connection with their use of the Platform.
+          </p>
+          <p>
+            The Service Provider makes no representation that the Platform is appropriate or available for use in all locations, and accessing the Platform from jurisdictions where its content or functionality is illegal is prohibited. Users who choose to access the Platform from locations outside Nigeria do so on their own initiative and are responsible for compliance with local laws.
+          </p>
+          <h2>ARTICLE XIV: CONCLUDING PROVISIONS</h2>
+          <h3>14.1 Effective Date and Binding Effect</h3>
+          <p>
+            These Terms and Conditions shall become effective immediately upon Your first access to or use of the Platform and shall remain in full force and effect for so long as You continue to access or use the Platform, subject to termination as provided in Article IX hereof. Your continued use of the Platform following any modification to these Terms constitutes Your acceptance of such modifications and Your agreement to be bound by the Terms as modified.
+          </p>
+          <p>
+            These Terms constitute a legally binding agreement between You and the Service Provider and are enforceable in accordance with their terms. By accepting these Terms, You acknowledge that You have had sufficient opportunity to review them, to seek independent legal advice if You deemed it necessary, and that You fully understand and accept all rights, obligations, and provisions contained herein.
+          </p>
+          <h3>14.2 No Partnership or Joint Venture</h3>
+          <p>
+            Nothing in these Terms shall be deemed or construed to create a relationship of employer and employee, principal and agent, partnership, joint venture, or any other relationship other than that of independent contracting parties between You and the Service Provider. Neither party shall have any right or authority to assume or create any obligation or responsibility, express or implied, on behalf of the other party, nor to bind the other party in any manner whatsoever.
+          </p>
+          <h3>14.3 Reservation of Rights</h3>
+          <p>
+            All rights not expressly granted to You in these Terms are reserved by the Service Provider. The Service Provider retains all rights, title, and interest in and to the Platform, including all Intellectual Property Rights therein. Nothing in these Terms grants You any right to use the Service Provider’s trademarks, service marks, trade names, logos, domain names, or other distinctive brand features except as expressly permitted herein.
+          </p>
+          <p>
+            The Service Provider's failure to exercise or enforce any right or provision of these Terms shall not constitute a waiver of such right or provision. The Service Provider’s rights and remedies under these Terms are cumulative and not exclusive of any rights or remedies provided by law.
+          </p>
+          <h3>14.4 Notice of Copyright and Trademark Protection</h3>
+          <p>
+            The Platform and all Content therein are protected by copyright, trademark, and other intellectual property laws of Nigeria, international treaties, and laws of other jurisdictions. Unauthorized reproduction, distribution, modification, public display, or creation of derivative works is strictly prohibited and may result in severe civil and criminal penalties under applicable intellectual property laws.
+          </p>
+          <p>
+            All trademarks, service marks, trade names, logos, and other proprietary designations displayed on the Platform are the property of their respective owners, whether the Service Provider or third parties. Nothing in these Terms grants You any license or right to use any such trademarks, service marks, trade names, logos, or proprietary designations without the express prior written permission of the owner thereof.
+          </p>
+          <h3>14.5 Compliance with Export Control Laws</h3>
+          <p>
+            You acknowledge that the Platform and certain Content available through the Platform may be subject to export control laws and regulations of Nigeria, the United States, and other jurisdictions. You agree to comply with all applicable export control laws and regulations and shall not export, re-export, or transfer, directly or indirectly, any regulated items, technology, or software obtained through the Platform to any prohibited country, entity, or person in violation of applicable export control laws.
+          </p>
+          <p>
+            You represent and warrant that You are not located in, under the control of, or a national or resident of any country to which Nigeria or the United States has embargoed goods or services, and that You are not identified on any list of prohibited or restricted parties maintained by the Nigerian government, the United States government, or any other applicable governmental authority.
+          </p>
+          <h3>14.6 Government Use Provisions</h3>
+          <p>
+            If You are an entity or agency of any government, or if You are acquiring rights in the Platform on behalf of any government entity or agency, the following provisions apply. The Platform constitutes commercial computer software and commercial computer software documentation developed exclusively at private expense. If the Platform is being acquired by or on behalf of the Nigerian government or any agency thereof, the government’s rights in the Platform shall be only as set forth in these Terms, consistent with applicable procurement regulations. If the Platform is being acquired on behalf of any other government entity, such entity’s rights shall be limited to those expressly granted in these Terms.
+          </p>
+          <h3>14.7 Accessibility Commitment</h3>
+          <p>
+            The Service Provider is committed to making the Platform accessible to Users with disabilities to the extent commercially reasonable and feasible. The Service Provider endeavors to design and maintain the Platform in accordance with generally recognized accessibility standards and best practices. However, the Service Provider does not warrant that the Platform will be accessible to all Users with disabilities or that the Platform complies with any specific accessibility standard or guideline.
+          </p>
+          <p>
+            If You encounter any accessibility barriers while using the Platform, or if You require accommodation or assistance in accessing any aspect of the Platform, You are encouraged to contact the Service Provider using the contact information provided in Section 12.10 hereof. The Service Provider will make reasonable efforts to address accessibility concerns and provide reasonable accommodations where feasible.
+          </p>
+          <h3>14.8 Final Acknowledgments</h3>
+          <p>
+            By accepting these Terms and Conditions and using the Platform, You acknowledge and agree that:
+          </p>
+          <ul>
+            <li>You have read and understood these Terms in their entirety and have had the opportunity to seek independent legal advice regarding their meaning and effect.</li>
+            <li>You accept and agree to be bound by all provisions of these Terms without limitation or qualification.</li>
+            <li>You understand that these Terms constitute a legally binding contract between You and the Service Provider and that breach thereof may result in legal liability.</li>
+            <li>You understand that the Service Provider may modify these Terms at any time in accordance with Article X hereof and that Your continued use of the Platform following such modification constitutes Your acceptance of the modified Terms.</li>
+            <li>You understand and accept all limitations, disclaimers, and exclusions of liability set forth in these Terms and acknowledge that such provisions form an essential part of the bargain between You and the Service Provider.</li>
+            <li>You consent to the processing of Personal Data as described in these Terms and in accordance with applicable data protection legislation.</li>
+            <li>You agree to use the Platform solely for lawful purposes and in accordance with these Terms and all applicable laws and regulations.</li>
+          </ul>
+          <p>
+            IN WITNESS WHEREOF, by accessing or using the Platform, You acknowledge that You have read, understood, and agree to be bound by these Terms and Conditions of Service in their entirety.
+          </p>
+          <p>
+            END OF TERMS AND CONDITIONS
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+The text you provided was truncated, please try again.
