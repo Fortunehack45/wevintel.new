@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTheme } from 'next-themes';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, { message: 'Current password is required.' }),
@@ -261,5 +262,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
-    
