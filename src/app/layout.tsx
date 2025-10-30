@@ -2,12 +2,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { Header } from '@/components/header';
-import { Footer } from '@/components/footer';
 import { Poppins } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
-import { BottomNav } from '@/components/bottom-nav';
 import { cn } from '@/lib/utils';
+import { AppLayout } from '@/components/app-layout';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -46,15 +44,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-          <div className="wave-container">
-            <div className="wave-light"></div>
-          </div>
-          <Header />
-          <main className="flex-1">
+          <AppLayout>
             {children}
-          </main>
-          <Footer />
-          <BottomNav />
+          </AppLayout>
           <Toaster />
         </ThemeProvider>
       </body>
