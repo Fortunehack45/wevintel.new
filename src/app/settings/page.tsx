@@ -8,12 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Eye, EyeOff, Lock, LogOut } from 'lucide-react';
+import { Eye, EyeOff, Lock, LogOut, Sun, Moon, Laptop } from 'lucide-react';
 import { getAuth, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider, signOut, type User } from 'firebase/auth';
 import { app } from '@/firebase/config';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useTheme } from 'next-themes';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, { message: 'Current password is required.' }),
@@ -22,6 +24,17 @@ const passwordSchema = z.object({
 
 const SettingsSkeleton = () => (
     <div className="space-y-8">
+        <Card>
+            <CardHeader>
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-4 w-48" />
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+            </CardContent>
+        </Card>
         <Card>
             <CardHeader>
                 <Skeleton className="h-6 w-48" />
@@ -59,6 +72,7 @@ export default function SettingsPage() {
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const { toast } = useToast();
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
   const auth = getAuth(app);
 
   useEffect(() => {
@@ -127,6 +141,36 @@ export default function SettingsPage() {
     <div className="container mx-auto px-4 py-8 max-w-2xl">
       <h1 className="text-3xl font-bold mb-8">Account Settings</h1>
       <div className="space-y-8">
+        <Card className="glass-card">
+            <CardHeader>
+                <CardTitle>Appearance</CardTitle>
+                <CardDescription>Customise the look and feel of the application.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <RadioGroup
+                    value={theme}
+                    onValueChange={setTheme}
+                    className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+                >
+                    <Label className="p-4 border rounded-lg flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                        <RadioGroupItem value="light" id="light" className="sr-only" />
+                        <Sun className="h-8 w-8" />
+                        <span>Light</span>
+                    </Label>
+                    <Label className="p-4 border rounded-lg flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                        <RadioGroupItem value="dark" id="dark" className="sr-only" />
+                        <Moon className="h-8 w-8" />
+                        <span>Dark</span>
+                    </Label>
+                    <Label className="p-4 border rounded-lg flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                        <RadioGroupItem value="system" id="system" className="sr-only" />
+                        <Laptop className="h-8 w-8" />
+                        <span>System</span>
+                    </Label>
+                </RadioGroup>
+            </CardContent>
+        </Card>
+        
         <Card className="glass-card">
           <CardHeader>
             <CardTitle>Change Password</CardTitle>
@@ -217,3 +261,5 @@ export default function SettingsPage() {
     </div>
   );
 }
+
+    
