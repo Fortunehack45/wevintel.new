@@ -85,7 +85,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md glass-card">
         <CardHeader className="text-center">
           <CardTitle>Welcome Back</CardTitle>
-          <CardDescription>Sign in to access your account</CardDescription>
+          <CardDescription>Sign in to access your WebIntel account</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -137,7 +137,7 @@ export default function LoginPage() {
                 )}
               />
               <div className="flex items-center justify-end">
-                <Button type="button" variant="link" size="sm" onClick={handlePasswordReset}>
+                <Button type="button" variant="link" size="sm" onClick={handlePasswordReset} className="p-0 h-auto">
                   Forgot Password?
                 </Button>
               </div>
@@ -148,7 +148,7 @@ export default function LoginPage() {
           </Form>
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Don't have an account?{' '}
-            <Link href="/signup" className="text-primary hover:underline">
+            <Link href="/signup" className="text-primary hover:underline font-semibold">
               Sign up
             </Link>
           </p>

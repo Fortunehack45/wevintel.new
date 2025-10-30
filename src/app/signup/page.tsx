@@ -14,15 +14,25 @@ import { app } from '@/firebase/config';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email address.' }),
   password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+  confirmPassword: z.string(),
+  terms: z.boolean().refine(val => val === true, {
+    message: 'You must accept the terms and conditions.',
+  }),
+}).refine(data => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
 });
+
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
@@ -34,6 +44,8 @@ export default function SignUpPage() {
       name: '',
       email: '',
       password: '',
+      confirmPassword: '',
+      terms: false,
     },
   });
 
@@ -63,7 +75,7 @@ export default function SignUpPage() {
       <Card className="w-full max-w-md glass-card">
         <CardHeader className="text-center">
           <CardTitle>Create an Account</CardTitle>
-          <CardDescription>Join us and start your journey</CardDescription>
+          <CardDescription>Join WebIntel to unlock your full potential</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -130,6 +142,60 @@ export default function SignUpPage() {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                      <FormControl>
+                        <Input
+                          type={showConfirmPassword ? 'text' : 'password'}
+                          placeholder="••••••••"
+                          {...field}
+                          className="pl-10"
+                        />
+                      </FormControl>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      >
+                        {showConfirmPassword ? <EyeOff /> : <Eye />}
+                      </Button>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={form.control}
+                name="terms"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel className="text-sm font-normal">
+                        I agree to the{' '}
+                        <Link href="#" className="text-primary hover:underline font-semibold">Terms of Service</Link>
+                        {' '}and{' '}
+                        <Link href="#" className="text-primary hover:underline font-semibold">Privacy Policy</Link>.
+                      </FormLabel>
+                       <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? 'Creating Account...' : 'Create Account'}
               </Button>
@@ -137,7 +203,7 @@ export default function SignUpPage() {
           </Form>
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Already have an account?{' '}
-            <Link href="/login" className="text-primary hover:underline">
+            <Link href="/login" className="text-primary hover:underline font-semibold">
               Log in
             </Link>
           </p>
