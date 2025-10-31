@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info, Home } from 'lucide-react';
 =======
 import { Compass, Menu, Bot, Moon, Sun, Scale, Settings, LogIn, User as UserIcon, LogOut, Laptop } from 'lucide-react';
@@ -31,6 +32,9 @@ import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Home, Scale, Troph
 =======
 import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info } from 'lucide-react';
 >>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
+=======
+import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info, Home } from 'lucide-react';
+>>>>>>> 6508b3f (The about and contact for users that are not logged in should be in the)
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -352,6 +356,7 @@ export function Header() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   const UserMenu = () => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -397,6 +402,9 @@ export function Header() {
 =======
   const displayedNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard' || link.href === '/about' || link.href === '/contact');
   const desktopNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard');
+=======
+  const desktopNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard' || link.href === '/about' || link.href === '/contact');
+>>>>>>> 6508b3f (The about and contact for users that are not logged in should be in the)
   
 >>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
   // Mobile Header
@@ -701,19 +709,11 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
             ) : (
-              <div className="flex items-center gap-2">
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/about">About</Link>
-                </Button>
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/contact">Contact</Link>
-                </Button>
                 <Button asChild>
                   <Link href="/login">
                     Get Started
                   </Link>
                 </Button>
-              </div>
             )
 >>>>>>> 68b907f (Let the about and contact be in that centered navigation of the the desk)
         )}
