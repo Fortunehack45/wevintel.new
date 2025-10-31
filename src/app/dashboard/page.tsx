@@ -9,10 +9,14 @@ import { HistoryClient } from '@/components/history-client';
 import { motion } from 'framer-motion';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8e6b5af (Users that are not logged in should not have access at all to the home p)
 import { useAuth, useAuthContext } from '@/firebase/provider';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { User } from 'firebase/auth';
+<<<<<<< HEAD
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Scale, Trophy } from 'lucide-react';
 import Link from 'next/link';
@@ -150,8 +154,43 @@ const featureCards = [
 ];
 =======
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
+=======
+import { LoadingOverlay } from '@/components/loading-overlay';
+>>>>>>> 8e6b5af (Users that are not logged in should not have access at all to the home p)
 
 export default function DashboardPage() {
+  const auth = useAuthContext();
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (auth) {
+      const unsubscribe = useAuth((user) => {
+        if (user) {
+          setUser(user);
+          setIsLoading(false);
+        } else {
+          router.push('/login');
+        }
+      });
+      return () => unsubscribe();
+    } else {
+        // If auth isn't ready, maybe it's still loading, but if it's null, we should redirect.
+        // A brief delay to see if auth context loads.
+        const timer = setTimeout(() => {
+            if (!auth) {
+                router.push('/login');
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }
+  }, [auth, router]);
+
+  if (isLoading || !user) {
+    return <LoadingOverlay isVisible={true} />;
+  }
+  
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center text-center pb-24 md:pb-8">
       <div className="max-w-3xl w-full">
