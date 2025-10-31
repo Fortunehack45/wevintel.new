@@ -8,6 +8,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 <<<<<<< HEAD
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+<<<<<<< HEAD
 import { useAuthContext } from '@/firebase/provider';
 import { useAuth } from '@/firebase/auth';
 import type { User as FirebaseUser } from 'firebase/auth';
@@ -16,6 +17,8 @@ import type { User as FirebaseUser } from 'firebase/auth';
 =======
 import { useState, useEffect } from 'react';
 >>>>>>> 768a281 (When the stuff is loading in the mobile view is showing the footer which)
+=======
+>>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -46,13 +49,21 @@ export function Footer() {
 >>>>>>> 4e7a013 (Remove the love emoji. Also don't let the footer show in the mobile mode)
 =======
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+<<<<<<< HEAD
   if (!mounted || isMobile) {
 >>>>>>> 768a281 (When the stuff is loading in the mobile view is showing the footer which)
+=======
+  // Do not render footer on auth pages on desktop
+  const isAuthPage = pathname === '/login' || pathname === '/signup';
+
+  if (!mounted || isMobile || isAuthPage) {
+>>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
     return null;
   }
   

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info, Home } from 'lucide-react';
 =======
 import { Compass, Menu, Bot, Moon, Sun, Scale, Settings, LogIn, User as UserIcon, LogOut, Laptop } from 'lucide-react';
@@ -27,10 +28,14 @@ import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Info, Send } from 
 =======
 import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Home, Scale, Trophy, History } from 'lucide-react';
 >>>>>>> 68b907f (Let the about and contact be in that centered navigation of the the desk)
+=======
+import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info } from 'lucide-react';
+>>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -42,6 +47,8 @@ import { useAuth, useAuthContext } from '@/firebase/provider';
 =======
 import { useAuth } from '@/firebase/auth';
 >>>>>>> 68b907f (Let the about and contact be in that centered navigation of the the desk)
+=======
+>>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
 import { useAuthContext } from '@/firebase/provider';
 import { useAuth } from '@/firebase/auth';
 >>>>>>> 2cc806b (Also introduced the header for the mobile view back)
@@ -66,6 +73,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 <<<<<<< HEAD
 <<<<<<< HEAD
 import { motion } from 'framer-motion';
+<<<<<<< HEAD
 =======
 =======
 import { useAuth } from '@/firebase/auth';
@@ -73,6 +81,9 @@ import { useAuth } from '@/firebase/auth';
 >>>>>>> 68b907f (Let the about and contact be in that centered navigation of the the desk)
 import { motion } from 'framer-motion';
 >>>>>>> 546cc0d (The header(desktop view only) is not professional enough the wey it look)
+=======
+import { useAuth } from '@/firebase/auth';
+>>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
 
 
 const navLinks = [
@@ -84,6 +95,7 @@ const navLinks = [
   { href: '/contact', label: 'Contact' },
 ];
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 2cc806b (Also introduced the header for the mobile view back)
@@ -155,6 +167,8 @@ const navLinks = [
 >>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
 
 >>>>>>> 804648f (Okay wait it should be in the header but in a professional way and posit)
+=======
+>>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
 export function Header() {
   const isMobile = useIsMobile();
   const pathname = usePathname();
@@ -337,6 +351,7 @@ export function Header() {
   
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   const UserMenu = () => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -379,6 +394,11 @@ export function Header() {
 
 >>>>>>> b26aced (Let the mobile mode have a header not like the header of desktop view bu)
 =======
+=======
+  const displayedNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard' || link.href === '/about' || link.href === '/contact');
+  const desktopNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard');
+  
+>>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
   // Mobile Header
   if(isMobile) {
       return (
@@ -471,7 +491,7 @@ export function Header() {
       {!isWelcomePage && (
           <nav className="absolute left-1/2 -translate-x-1/2">
              <ul className="flex items-center gap-2 rounded-full border bg-card/50 p-1">
-                {navLinks.map(link => (
+                {desktopNavLinks.map(link => (
                     <li key={link.href}>
                         <Link href={link.href} className={cn(
                             "relative text-sm font-medium transition-colors text-muted-foreground hover:text-primary px-4 py-2 rounded-full",
@@ -681,11 +701,19 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
             ) : (
-              <Button asChild variant="secondary">
-                <Link href="/login">
-                  Login
-                </Link>
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/about">About</Link>
+                </Button>
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/contact">Contact</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/login">
+                    Get Started
+                  </Link>
+                </Button>
+              </div>
             )
 >>>>>>> 68b907f (Let the about and contact be in that centered navigation of the the desk)
         )}
