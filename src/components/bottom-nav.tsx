@@ -7,6 +7,7 @@ import { Home, Scale, Trophy, History } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 const navLinks = [
   { href: '/dashboard', label: 'Home', icon: Home },
