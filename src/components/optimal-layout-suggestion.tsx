@@ -9,6 +9,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 
+const SEEN_PATHS_KEY = 'webintel_layout_suggestion_seen_paths';
+
 export function OptimalLayoutSuggestion() {
     const [isOpen, setIsOpen] = useState(false);
     const { width, height } = useWindowSize();
@@ -18,11 +20,18 @@ export function OptimalLayoutSuggestion() {
     useEffect(() => {
         if (typeof window !== 'undefined' && isMobile) {
             const isPortrait = height > width;
-            const lastDismissedPath = sessionStorage.getItem('layout_suggestion_dismissed_path');
+            
+            // Get the list of seen paths from sessionStorage
+            const seenPathsRaw = sessionStorage.getItem(SEEN_PATHS_KEY);
+            const seenPaths: string[] = seenPathsRaw ? JSON.parse(seenPathsRaw) : [];
 
-            if (isPortrait && lastDismissedPath !== pathname) {
+            // Check if it should be shown
+            if (isPortrait && !seenPaths.includes(pathname)) {
                 const timer = setTimeout(() => {
                     setIsOpen(true);
+                    // Add the current path to the seen list
+                    const updatedSeenPaths = [...seenPaths, pathname];
+                    sessionStorage.setItem(SEEN_PATHS_KEY, JSON.stringify(updatedSeenPaths));
                 }, 1500); // Delay before showing
                 return () => clearTimeout(timer);
             } else {
@@ -34,7 +43,6 @@ export function OptimalLayoutSuggestion() {
     }, [width, height, isMobile, pathname]);
 
     const handleDismiss = () => {
-        sessionStorage.setItem('layout_suggestion_dismissed_path', pathname);
         setIsOpen(false);
     };
 
@@ -55,7 +63,7 @@ export function OptimalLayoutSuggestion() {
                         <div className="flex-1">
                             <h3 className="font-semibold text-foreground">Optimal Viewing Experience</h3>
                             <p className="text-sm text-muted-foreground mt-1">
-                                WebIntel is optimized for larger screens. For the best experience, view on a desktop or switch your mobile browser to landscape and 'Desktop Site' mode.
+                                For the best experience, view on a desktop or switch your browser to landscape and 'Desktop Site' mode.
                             </p>
                         </div>
                         <Button
