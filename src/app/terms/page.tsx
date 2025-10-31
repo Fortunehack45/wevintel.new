@@ -81,4 +81,10 @@ export default function TermsPage() {
             </p>
             <Button onClick={handleNext} disabled={currentPage === totalPages - 1} variant="outline">
               Next <ArrowRight className="ml-2 h-4 w-4" />
-            </
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
