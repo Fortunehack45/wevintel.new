@@ -36,8 +36,8 @@ const sponsors = [
     { name: 'Firebase', icon: SiFirebase },
     { name: 'Google', icon: SiGoogle },
     { name: 'Next.js', icon: SiNextdotjs },
-    { name: 'ShadCN', icon: () => <span className="text-xl font-bold">shadcn</span> },
-    { name: 'Genkit', icon: () => <span className="text-xl font-bold">Genkit</span> },
+    { name: 'ShadCN', icon: () => <span className="text-4xl font-bold">shadcn</span>, isText: true },
+    { name: 'Genkit', icon: () => <span className="text-4xl font-bold">Genkit</span>, isText: true },
     { name: 'Tailwind CSS', icon: SiTailwindcss },
 ];
 
@@ -130,9 +130,13 @@ export default function WelcomePage() {
                     <div className="tech-stack-scroller" data-animated="true">
                         <div className="tech-stack-scroller-inner flex items-center gap-16">
                             {[...sponsors, ...sponsors].map((sponsor, index) => (
-                                <div key={`${sponsor.name}-${index}`} className="flex items-center gap-4 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all text-4xl">
-                                    <sponsor.icon />
-                                    <p className="font-bold text-2xl">{sponsor.name}</p>
+                                <div key={`${sponsor.name}-${index}`} className="flex items-center gap-4 text-4xl grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all">
+                                    {sponsor.isText ? <sponsor.icon /> : (
+                                        <>
+                                            <sponsor.icon />
+                                            <p className="font-bold text-2xl">{sponsor.name}</p>
+                                        </>
+                                    )}
                                 </div>
                             ))}
                         </div>
