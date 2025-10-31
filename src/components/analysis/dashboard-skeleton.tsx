@@ -131,6 +131,7 @@ function DashboardSkeleton() {
                 <Skeleton className="h-6 w-3/4 mt-2" />
             </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <Skeleton className="h-16 w-full max-w-xl" />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
@@ -146,6 +147,9 @@ function DashboardSkeleton() {
             </div>
 =======
             <Skeleton className="h-16 w-full max-w-xl mx-auto" />
+=======
+            <Skeleton className="h-16 w-full max-w-xl" />
+>>>>>>> 5a305cc (Add sponsor section and user review section to the dashboard page. For t)
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
             <Skeleton className="h-40 w-full" />
