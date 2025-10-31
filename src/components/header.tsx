@@ -2,12 +2,11 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Home, Scale, Trophy, History } from 'lucide-react';
+import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/firebase/auth';
 import { useAuthContext } from '@/firebase/provider';
 import { signOut, type User as FirebaseUser } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
@@ -21,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/firebase/auth';
 
 
 const navLinks = [
@@ -30,14 +30,6 @@ const navLinks = [
   { href: '/history', label: 'History' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
-];
-
-const mobileNavLinks = [
-  { href: '/dashboard', label: 'Home', icon: Home },
-  { href: '/compare', label: 'Compare', icon: Scale },
-  { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
-  { href: '/history', label: 'History', icon: History },
-  { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
 export function Header() {
@@ -74,6 +66,9 @@ export function Header() {
   }
 
   const isWelcomePage = pathname === '/';
+  
+  const displayedNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard' || link.href === '/about' || link.href === '/contact');
+  const desktopNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard');
   
   // Mobile Header
   if(isMobile) {
@@ -136,7 +131,7 @@ export function Header() {
       {!isWelcomePage && (
           <nav className="absolute left-1/2 -translate-x-1/2">
              <ul className="flex items-center gap-2 rounded-full border bg-card/50 p-1">
-                {navLinks.map(link => (
+                {desktopNavLinks.map(link => (
                     <li key={link.href}>
                         <Link href={link.href} className={cn(
                             "relative text-sm font-medium transition-colors text-muted-foreground hover:text-primary px-4 py-2 rounded-full",
@@ -187,11 +182,19 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
             ) : (
-              <Button asChild variant="secondary">
-                <Link href="/login">
-                  Login
-                </Link>
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/about">About</Link>
+                </Button>
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/contact">Contact</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/login">
+                    Get Started
+                  </Link>
+                </Button>
+              </div>
             )
         )}
       </div>

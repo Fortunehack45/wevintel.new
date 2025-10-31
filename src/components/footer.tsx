@@ -5,17 +5,22 @@ import Link from 'next/link';
 import { Compass } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const isMobile = useIsMobile();
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  if (!mounted || isMobile) {
+  // Do not render footer on auth pages on desktop
+  const isAuthPage = pathname === '/login' || pathname === '/signup';
+
+  if (!mounted || isMobile || isAuthPage) {
     return null;
   }
   
@@ -50,6 +55,7 @@ export function Footer() {
             <h4 className="font-semibold text-foreground mb-4">Legal</h4>
             <ul className="space-y-3 text-sm">
               <li><Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link></li>
+              <li><Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">Contact</Link></li>
               <li><Link href="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</Link></li>
             </ul>
