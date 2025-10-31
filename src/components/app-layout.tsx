@@ -46,7 +46,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     }
     
     return (
-        <>
+        <div className="flex flex-col h-full">
             <div className="wave-container">
                 <div className="wave-light"></div>
             </div>
@@ -56,6 +56,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </main>
             <Footer />
             {isMobile && !isWelcomePage && <BottomNav />}
-        </>
+        </div>
     )
 }
