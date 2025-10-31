@@ -16,8 +16,11 @@ import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import { useAuth, useAuthContext } from '@/firebase/provider';
 import type { User } from 'firebase/auth';
+=======
+>>>>>>> 70f81c5 (Try fixing this error: `Runtime Error: Error: useState is not defined. E)
 
 const navLinks = [
 <<<<<<< HEAD
