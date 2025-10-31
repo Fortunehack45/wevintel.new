@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 376e771 (No... The welcome page is the page before the home page)
+=======
+>>>>>>> a2cab34 (The review and sponsor I said you should put it in the welcome page page)
 'use client';
 
 import { UrlForm } from '@/components/url-form';
@@ -166,10 +169,11 @@ import Link from 'next/link';
 >>>>>>> 1ee8e8e (Make the dashboard page more detailed and informative and fully sophisti)
 =======
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Scale, Trophy, Sparkles, Star, Building, Heart } from 'lucide-react';
+import { ArrowRight, Scale, Trophy, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { DashboardSkeleton } from '@/components/analysis/dashboard-skeleton';
 
+<<<<<<< HEAD
 const sponsors = [
     { name: 'Vercel' },
     { name: 'Firebase' },
@@ -208,6 +212,8 @@ const reviews = [
 ];
 
 >>>>>>> c3587a0 (Remove "warming up engine" loading animation from the dashboard, sing up)
+=======
+>>>>>>> a2cab34 (The review and sponsor I said you should put it in the welcome page page)
 
 export default function DashboardPage() {
   const auth = useAuthContext();
@@ -333,6 +339,7 @@ export default function DashboardPage() {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       <div className="w-full max-w-5xl mt-24">
         <h2 className="text-3xl font-bold mb-6 text-left">Recent Analyses</h2>
         <HistoryClient limit={6} />
@@ -393,6 +400,8 @@ export default function DashboardPage() {
         </Card>
       </motion.div>
 
+=======
+>>>>>>> a2cab34 (The review and sponsor I said you should put it in the welcome page page)
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
