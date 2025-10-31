@@ -2,7 +2,7 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info, Home } from 'lucide-react';
+import { Compass, LogIn, User, Settings, LogOut, History, Scale, Trophy, Contact, Info } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -23,7 +23,7 @@ import { motion } from 'framer-motion';
 
 
 const navLinks = [
-  { href: '/dashboard', authHref: '/dashboard', publicHref: '/', label: 'Dashboard' },
+  { href: '/', label: 'Dashboard' },
   { href: '/compare', label: 'Compare' },
   { href: '/leaderboard', label: 'Leaderboard' },
   { href: '/history', label: 'History' },
@@ -67,7 +67,7 @@ export function Header() {
   
   const desktopNavLinks = user 
     ? navLinks 
-    : navLinks.filter(link => ['/dashboard', '/leaderboard', '/about', '/contact'].includes(link.href));
+    : navLinks.filter(link => ['/', '/leaderboard', '/about', '/contact'].includes(link.href));
   
   // Mobile Header
   if(isMobile) {
@@ -75,7 +75,7 @@ export function Header() {
         <header className={cn(
             "p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-40 h-16",
         )}>
-          <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2 font-bold text-lg">
+          <Link href="/" className="flex items-center gap-2 font-bold text-lg">
               <Compass className="h-7 w-7 text-primary" />
               <span className="text-foreground text-xl">WebIntel</span>
           </Link>
@@ -120,7 +120,7 @@ export function Header() {
     )}>
       {/* Left Section */}
       <div className="flex items-center gap-6">
-        <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2 font-bold text-lg">
+        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
           <Compass className="h-7 w-7 text-primary" />
           <span className="text-foreground text-xl">WebIntel</span>
         </Link>
@@ -130,11 +130,10 @@ export function Header() {
       <nav className="absolute left-1/2 -translate-x-1/2">
          <ul className="flex items-center gap-2 rounded-full border bg-card/50 p-1">
             {desktopNavLinks.map(link => {
-                const href = user ? (link.authHref || link.href) : (link.publicHref || link.href);
-                const isActive = pathname.startsWith(link.href) || (link.href === '/dashboard' && pathname === '/');
+                const isActive = pathname === link.href;
                 return (
                     <li key={link.href}>
-                        <Link href={href} className={cn(
+                        <Link href={link.href} className={cn(
                             "relative text-sm font-medium transition-colors text-muted-foreground hover:text-primary px-4 py-2 rounded-full",
                              isActive && "text-primary"
                         )}>

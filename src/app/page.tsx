@@ -7,6 +7,11 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { SiVercel, SiFirebase, SiGoogle, SiNextdotjs, SiTailwindcss } from 'react-icons/si';
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { useAuth, useAuthContext } from "@/firebase/provider";
+import type { User } from 'firebase/auth';
+import { LoadingOverlay } from "@/components/loading-overlay";
+import DashboardPage from "./dashboard/page";
 
 const featureCards = [
     {
@@ -92,7 +97,7 @@ const reviews = [
 ];
 
 
-export default function WelcomePage() {
+function WelcomePage() {
     return (
         <div className="flex flex-col min-h-screen">
             <main className="flex-1">
@@ -110,7 +115,7 @@ export default function WelcomePage() {
                         </p>
                         <div className="mt-8 flex justify-center">
                             <Button asChild size="lg" className="h-12 text-lg">
-                                <Link href="/dashboard">
+                                <Link href="/login">
                                     Get Started <ArrowRight className="ml-2" />
                                 </Link>
                             </Button>
@@ -225,4 +230,32 @@ export default function WelcomePage() {
     )
 }
 
-    
+export default function RootPage() {
+    const auth = useAuthContext();
+    const [user, setUser] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (auth) {
+            const unsubscribe = useAuth((user) => {
+                setUser(user);
+                setIsLoading(false);
+            });
+            return () => unsubscribe();
+        } else {
+            // If auth is not ready, wait a bit then assume logged out
+            const timer = setTimeout(() => setIsLoading(false), 300);
+            return () => clearTimeout(timer);
+        }
+    }, [auth]);
+
+    if (isLoading) {
+        return <LoadingOverlay isVisible={true} />;
+    }
+
+    if (user) {
+        return <DashboardPage />;
+    }
+
+    return <WelcomePage />;
+}

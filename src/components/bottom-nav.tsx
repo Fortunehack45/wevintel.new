@@ -12,7 +12,7 @@ import { useAuth, useAuthContext } from '@/firebase/provider';
 import type { User } from 'firebase/auth';
 
 const navLinks = [
-  { href: '/dashboard', label: 'Home', icon: Home },
+  { href: '/', label: 'Home', icon: Home },
   { href: '/compare', label: 'Compare', icon: Scale },
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { href: '/history', label: 'History', icon: History },

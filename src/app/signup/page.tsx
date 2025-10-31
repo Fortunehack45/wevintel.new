@@ -81,7 +81,7 @@ export default function SignUpPage() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        router.push('/dashboard');
+        router.push('/');
       } else {
         setIsAuthLoading(false);
       }
@@ -109,7 +109,7 @@ export default function SignUpPage() {
         title: 'Account Created',
         description: "You've been successfully signed up!",
       });
-      router.push('/dashboard');
+      router.push('/');
     } catch (error: any) {
       toast({
         title: 'Sign Up Failed',

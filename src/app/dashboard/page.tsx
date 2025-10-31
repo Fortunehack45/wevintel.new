@@ -1,50 +1,31 @@
 
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { LoadingOverlay } from '@/components/loading-overlay';
 import { UrlForm } from '@/components/url-form';
 import { HistoryClient } from '@/components/history-client';
 import { motion } from 'framer-motion';
-import { useAuth, useAuthContext } from '@/firebase/provider';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import type { User } from 'firebase/auth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Scale, Trophy } from 'lucide-react';
 import Link from 'next/link';
-import { DashboardSkeleton } from '@/components/analysis/dashboard-skeleton';
-
 
 export default function DashboardPage() {
-  const auth = useAuthContext();
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
+  // This page is now a conditional view inside `src/app/page.tsx`.
+  // If a user somehow lands on /dashboard directly, we redirect them to the root.
   useEffect(() => {
-    if (auth) {
-      const unsubscribe = useAuth((user) => {
-        if (user) {
-          setUser(user);
-          setIsLoading(false);
-        } else {
-          router.push('/login');
-        }
-      });
-      return () => unsubscribe();
-    } else {
-        const timer = setTimeout(() => {
-            if (!auth) {
-                router.push('/login');
-            }
-        }, 500);
-        return () => clearTimeout(timer);
-    }
-  }, [auth, router]);
+      router.replace('/');
+  }, [router]);
 
-  if (isLoading || !user) {
-    return <DashboardSkeleton />;
-  }
-  
+  // Render a loading state while redirecting to prevent flashing content.
+  return <LoadingOverlay isVisible={true} />;
+}
+
+// The actual dashboard content is now here, to be imported by `src/app/page.tsx`.
+export function DashboardContent({ user }: { user: any }) {
   const welcomeName = user.displayName || user.email;
 
   return (
