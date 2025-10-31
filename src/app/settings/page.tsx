@@ -32,13 +32,14 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 import { type AnalysisResult, type ComparisonHistoryItem } from '@/lib/types';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, { message: 'Current password is required.' }),
   newPassword: z.string().min(6, { message: 'New password must be at least 6 characters.' }),
 });
 
-const SettingsItem = ({ icon: Icon, label, href, onClick }: { icon: React.ElementType, label: string, href?: string, onClick?: () => void }) => {
+const SettingsItem = ({ icon: Icon, label, href, onClick, className }: { icon: React.ElementType, label: string, href?: string, onClick?: () => void, className?: string }) => {
     const content = (
         <div className="flex items-center justify-between p-4 rounded-lg bg-background hover:bg-muted transition-colors cursor-pointer w-full">
             <div className="flex items-center gap-4">
@@ -50,10 +51,10 @@ const SettingsItem = ({ icon: Icon, label, href, onClick }: { icon: React.Elemen
     );
 
     if (href) {
-        return <Link href={href}>{content}</Link>;
+        return <Link href={href} className={className}>{content}</Link>;
     }
     
-    return <button onClick={onClick} className="w-full text-left">{content}</button>;
+    return <button onClick={onClick} className={cn("w-full text-left", className)}>{content}</button>;
 };
 
 export default function SettingsPage() {
@@ -288,8 +289,8 @@ export default function SettingsPage() {
             <div className="space-y-4">
                  <h3 className="text-lg font-semibold text-muted-foreground px-4">Support & Legal</h3>
                  <div className="space-y-1">
-                    <SettingsItem icon={Info} label="About WebIntel" href="/about" />
-                    <SettingsItem icon={Send} label="Contact Us" href="/contact" />
+                    <SettingsItem icon={Info} label="About WebIntel" href="/about" className="md:hidden"/>
+                    <SettingsItem icon={Send} label="Contact Us" href="/contact" className="md:hidden"/>
                     <SettingsItem icon={Shield} label="Privacy Policy" href="/privacy" />
                     <SettingsItem icon={FileText} label="Terms & Conditions" href="/terms" />
                  </div>
