@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { OptimalLayoutSuggestion } from './optimal-layout-suggestion';
+import { RatingPrompt } from './rating-prompt';
 
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
@@ -53,6 +54,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <Footer />
             <BottomNav />
             {showSuggestion && <OptimalLayoutSuggestion />}
+            <RatingPrompt />
         </div>
     )
 }
