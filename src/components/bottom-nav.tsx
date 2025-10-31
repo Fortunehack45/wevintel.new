@@ -39,12 +39,12 @@ export function BottomNav() {
               key={link.href}
               href={link.href}
               className={cn(
-                'flex flex-col items-center justify-center text-xs w-full h-full transition-colors',
+                'flex items-center justify-center w-full h-full transition-colors',
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               )}
+              aria-label={link.label}
             >
-              <link.icon className="h-5 w-5 mb-1" />
-              <span>{link.label}</span>
+              <link.icon className="h-6 w-6" />
             </Link>
           );
         })}
