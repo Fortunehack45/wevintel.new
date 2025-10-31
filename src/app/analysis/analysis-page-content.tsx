@@ -5,7 +5,7 @@ import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { RefreshCw, Download, Home } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { type AnalysisResult, type AuditInfo, type Metadata, type SecurityData } from '@/lib/types';
+import { type AnalysisResult } from '@/lib/types';
 import { AnalysisDashboard } from '@/components/analysis/analysis-dashboard';
 import jsPDF from 'jspdf';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -46,7 +46,12 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
         
         const cachedItem = cache[decodedUrl];
         const oneDay = 24 * 60 * 60 * 1000;
-        const isCacheValid = cachedItem && (new Date().getTime() - new Date(cachedItem.timestamp).getTime() < oneDay);
+        
+        // The cache is valid if it exists, is not expired, AND contains performance data.
+        const isCacheValid = cachedItem && 
+                             (new Date().getTime() - new Date(cachedItem.timestamp).getTime() < oneDay) &&
+                             !!cachedItem.data.performance;
+
 
         if (isCacheValid && searchParams.get('refresh') !== 'true') {
             setAnalysisResult(cachedItem.data);
@@ -336,13 +341,13 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
             }
 
             // --- Audit Sections ---
-            const addAuditList = (title: string, audits: AuditInfo | undefined) => {
+            const addAuditList = (title: string, audits: any) => {
                 const auditItems = audits ? Object.values(audits) : [];
                 if (auditItems.length === 0) return;
                 
                 addSectionTitle(title);
                 
-                auditItems.forEach(audit => {
+                auditItems.forEach((audit: any) => {
                     if (audit.score === null || audit.score < 1) { // Only show items that need attention or are informational
                         const scoreText = audit.score !== null ? `(Score: ${Math.round(audit.score * 100)})` : '(Info)';
                         const statusColor = audit.score === null ? textColor : audit.score >= 0.9 ? '#10B981' : '#EF4444';
