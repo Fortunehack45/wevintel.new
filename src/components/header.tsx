@@ -18,6 +18,7 @@ const navLinks = [
     { href: '/leaderboard', label: 'Leaderboard' },
     { href: '/history', label: 'History' },
     { href: '/about', label: 'About' },
+    { href: '/contact', label: 'Contact' },
 ];
 
 function ThemeToggle() {
@@ -56,7 +57,7 @@ export function Header() {
     setMounted(true);
   }, []);
 
-  if (!mounted) {
+  if (!mounted || isMobile) {
     return <header className="p-4 flex justify-between items-center border-b h-[69px]" />;
   }
 
