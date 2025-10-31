@@ -4,7 +4,7 @@
 
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { type AnalysisResult, type ComparisonHistoryItem } from '@/lib/types';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { formatDistanceToNow } from 'date-fns';
@@ -128,69 +128,4 @@ function WebsiteHistoryList({ limit }: { limit?: number }) {
     })}
     </div>
   )
-}
-
-export function HistoryClient({ limit, type = 'website' }: { limit?: number, type?: 'website' | 'domain' | 'comparison' }) {
-  const stableInitialAnalysis = useMemo(() => [], []);
-  const stableInitialComparison = useMemo(() => [], []);
-  const [analysisHistory, setAnalysisHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', stableInitialAnalysis);
-  const [comparisonHistory, setComparisonHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', stableInitialComparison);
-
-  const clearAllHistory = () => {
-    setAnalysisHistory([]);
-    setComparisonHistory([]);
-  };
-
-  const hasHistory = analysisHistory.length > 0 || comparisonHistory.length > 0;
-
-  if (limit) {
-    return <WebsiteHistoryList limit={limit} />;
-  }
-
-  return (
-    <div>
-        {hasHistory && (
-            <div className="flex justify-end mb-4">
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button 
-                        size="sm" 
-                        variant="destructive"
-                        className="group"
-                    >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Clear All History
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your
-                        entire analysis and comparison history from this device.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={clearAllHistory} className={buttonVariants({ variant: "destructive" })}>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-            </div>
-        )}
-        
-        <Tabs defaultValue="websites" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto">
-                <TabsTrigger value="websites">Website Analyses</TabsTrigger>
-                <TabsTrigger value="comparisons">Comparisons</TabsTrigger>
-            </TabsList>
-            <TabsContent value="websites" className="mt-6">
-                <WebsiteHistoryList />
-            </TabsContent>
-            <TabsContent value="comparisons" className="mt-6">
-                <ComparisonHistoryList />
-            </TabsContent>
-        </Tabs>
-    </div>
-  );
 }
