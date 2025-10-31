@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { Compass, Home, Scale, Trophy, History, Settings, LogOut, Info, Send, FileText, Shield, User as UserIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuthContext } from "@/firebase/provider";
 import { signOut } from "firebase/auth";
 import { useToast } from "@/hooks/use-toast";
@@ -18,19 +17,13 @@ import {
 import { useAuth } from "@/firebase/auth";
 import { type User } from "firebase/auth";
 import { useState, useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const mainNavLinks = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
   { href: '/compare', label: 'Compare', icon: Scale },
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { href: '/history', label: 'History', icon: History },
-];
-
-const supportNavLinks = [
-    { href: '/about', label: 'About', icon: Info },
-    { href: '/contact', label: 'Contact', icon: Send },
-    { href: '/privacy', label: 'Privacy', icon: Shield },
-    { href: '/terms', label: 'Terms', icon: FileText },
 ];
 
 const NavLink = ({ href, label, icon: Icon }: { href: string, label: string, icon: React.ElementType }) => {
@@ -43,11 +36,11 @@ const NavLink = ({ href, label, icon: Icon }: { href: string, label: string, ico
                 <TooltipTrigger asChild>
                     <Link href={href}>
                         <span className={cn(
-                            "flex items-center justify-center md:justify-start gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                            "flex items-center justify-start gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
                             isActive && "bg-muted text-primary"
                         )}>
                             <Icon className="h-5 w-5" />
-                            <span className="hidden md:inline">{label}</span>
+                            <span>{label}</span>
                         </span>
                     </Link>
                 </TooltipTrigger>
@@ -64,6 +57,7 @@ export function Sidebar() {
     const { toast } = useToast();
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
+    const isMobile = useIsMobile();
 
     useEffect(() => {
         if (!auth) return;
@@ -81,14 +75,18 @@ export function Sidebar() {
             toast({ title: "Logout Failed", description: error.message, variant: "destructive" });
         }
     }
+    
+    if (isMobile) {
+        return null;
+    }
 
     return (
-        <div className="fixed top-0 left-0 h-full border-r bg-muted/40 z-50 w-16 md:w-64 transition-all duration-300 ease-in-out">
+        <div className="fixed top-0 left-0 h-full border-r bg-muted/40 z-50 w-64 transition-all duration-300 ease-in-out">
           <div className="flex h-full max-h-screen flex-col gap-2">
-            <div className="flex h-14 items-center justify-center md:justify-start border-b px-4 lg:h-[60px] lg:px-6">
+            <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
               <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
                 <Compass className="h-6 w-6 text-primary" />
-                <span className="hidden md:inline">WebIntel</span>
+                <span>WebIntel</span>
               </Link>
             </div>
             <div className="flex-1 overflow-y-auto">
@@ -103,9 +101,9 @@ export function Sidebar() {
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                                <Button variant="ghost" className="w-full justify-center md:justify-start" size="icon" onClick={handleLogout}>
+                                <Button variant="ghost" className="w-full justify-start" onClick={handleLogout}>
                                     <LogOut className="h-5 w-5" />
-                                    <span className="hidden md:inline ml-3">Logout</span>
+                                    <span className="ml-3">Logout</span>
                                 </Button>
                             </TooltipTrigger>
                              <TooltipContent side="right">

@@ -24,16 +24,14 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     const isWelcomePage = pathname === '/';
     
     const appRoutes = ['/dashboard', '/compare', '/leaderboard', '/history', '/settings'];
-    const isAppPage = appRoutes.some(route => pathname.startsWith(route));
-
-    const analysisRoutes = ['/analysis', '/compare/'];
-    const isAnalysisPage = analysisRoutes.some(route => pathname.startsWith(route) && route !== '/compare');
+    const isAppPage = appRoutes.some(route => pathname.startsWith(route)) || pathname.startsWith('/analysis');
 
 
     if (!mounted) {
-        return null;
+        return null; // Render nothing until client-side hydration is complete to prevent layout flash
     }
-
+    
+    // Auth pages have their own simple layout
     if (isAuthPage) {
         return (
             <>
@@ -47,59 +45,28 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         )
     }
     
-    if (isWelcomePage) {
+    // Desktop view for app pages uses the sidebar
+    if (!isMobile && isAppPage) {
         return (
-             <>
-                <div className="wave-container">
-                    <div className="wave-light"></div>
+             <div className="flex h-full">
+                <Sidebar />
+                <div className="flex-1 md:pl-64">
+                     <main className="flex-1 min-h-screen">
+                        {children}
+                    </main>
                 </div>
-                <Header />
-                <main className="flex-1 min-h-[calc(100vh-69px)]">
-                    {children}
-                </main>
-                <Footer />
-            </>
+            </div>
         )
     }
-
-    if (isAppPage || isAnalysisPage) {
-        // Desktop view always gets the sidebar for app pages
-        if (!isMobile) {
-            return (
-                <div className="flex h-full">
-                    <Sidebar />
-                    <div className="flex-1 md:pl-64">
-                         <main className="flex-1 min-h-screen">
-                            {children}
-                        </main>
-                    </div>
-                </div>
-            )
-        }
-        
-        // Mobile view: only dashboard gets the special sidebar layout
-        if (pathname.startsWith('/dashboard')) {
-             return (
-                <div className="flex h-full">
-                    <Sidebar />
-                    <div className="flex-1 pl-16">
-                        <main className="flex-1 pb-16 min-h-screen">
-                            {children}
-                        </main>
-                    </div>
-                </div>
-            )
-        }
-    }
     
-    // Fallback for all other pages (including app pages on mobile that aren't dashboard)
+    // All other pages (including mobile app pages and all welcome/info pages) use Header + Footer + BottomNav
     return (
         <>
             <div className="wave-container">
                 <div className="wave-light"></div>
             </div>
             <Header />
-            <main className="flex-1 min-h-[calc(100vh-69px)]">
+            <main className="flex-1 min-h-[calc(100vh-60px)] pb-16">
                 {children}
             </main>
             <Footer />

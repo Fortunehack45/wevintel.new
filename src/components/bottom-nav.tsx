@@ -3,22 +3,31 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Compass, Info, Send } from 'lucide-react';
+import { Home, Scale, Trophy, History } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
 
 const navLinks = [
   { href: '/dashboard', label: 'Home', icon: Home },
-  { href: '/about', label: 'About', icon: Info },
-  { href: '/contact', label: 'Contact', icon: Send },
+  { href: '/compare', label: 'Compare', icon: Scale },
+  { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
+  { href: '/history', label: 'History', icon: History },
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
   const isMobile = useIsMobile();
+  const [mounted, setMounted] = useState(false);
 
-  if (!isMobile) {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const shouldShow = mounted && isMobile && navLinks.some(link => pathname.startsWith(link.href) || pathname.startsWith('/analysis'));
+
+
+  if (!shouldShow) {
     return null;
   }
 
@@ -43,7 +52,6 @@ export function BottomNav() {
               aria-label={link.label}
             >
               <link.icon className="h-6 w-6" />
-              <span className="text-xs">{link.label}</span>
             </Link>
           );
         })}
