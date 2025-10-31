@@ -2,11 +2,12 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Info, Send } from 'lucide-react';
+import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Home, Scale, Trophy, History } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/firebase/auth';
 import { useAuthContext } from '@/firebase/provider';
 import { signOut, type User as FirebaseUser } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
@@ -19,7 +20,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { useAuth } from '@/firebase/auth';
 import { motion } from 'framer-motion';
 
 
@@ -28,13 +28,17 @@ const navLinks = [
   { href: '/compare', label: 'Compare' },
   { href: '/leaderboard', label: 'Leaderboard' },
   { href: '/history', label: 'History' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
 ];
 
-const secondaryNavLinks = [
-    { href: '/about', label: 'About' },
-    { href: '/contact', label: 'Contact' },
-]
-
+const mobileNavLinks = [
+  { href: '/dashboard', label: 'Home', icon: Home },
+  { href: '/compare', label: 'Compare', icon: Scale },
+  { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
+  { href: '/history', label: 'History', icon: History },
+  { href: '/settings', label: 'Settings', icon: Settings },
+];
 
 export function Header() {
   const isMobile = useIsMobile();
@@ -131,7 +135,7 @@ export function Header() {
       {/* Center Section - Main Navigation */}
       {!isWelcomePage && (
           <nav className="absolute left-1/2 -translate-x-1/2">
-             <ul className="flex items-center gap-2 rounded-full border bg-card p-1">
+             <ul className="flex items-center gap-2 rounded-full border bg-card/50 p-1">
                 {navLinks.map(link => (
                     <li key={link.href}>
                         <Link href={link.href} className={cn(
@@ -160,46 +164,35 @@ export function Header() {
                 <Link href="/dashboard">Enter Dashboard</Link>
             </Button>
         ) : (
-             <div className='flex items-center gap-4'>
-                {secondaryNavLinks.map(link => (
-                     <Link key={link.href} href={link.href} className={cn(
-                        "text-sm font-medium transition-colors hover:text-primary",
-                        pathname.startsWith(link.href) ? "text-primary" : "text-muted-foreground"
-                    )}>
-                        {link.label}
-                    </Link>
-                ))}
-            </div>
-        )}
-        
-        {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2 p-1 h-auto rounded-full">
-                    <Avatar className="h-9 w-9">
-                        <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
-                        <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>{user.displayName || user.email}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-        ) : (
-          <Button asChild variant="secondary" className={isWelcomePage ? 'hidden' : ''}>
-            <Link href="/login">
-              Login
-            </Link>
-          </Button>
+            user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="flex items-center gap-2 p-1 h-auto rounded-full">
+                        <Avatar className="h-9 w-9">
+                            <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
+                            <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>{user.displayName || user.email}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+            ) : (
+              <Button asChild variant="secondary">
+                <Link href="/login">
+                  Login
+                </Link>
+              </Button>
+            )
         )}
       </div>
     </header>
