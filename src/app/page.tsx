@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -156,20 +157,16 @@ export default function WelcomePage() {
                     className="mb-16 container mx-auto px-4"
                 >
                     <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Building className="text-primary"/> Sponsored By</h2>
-                    <Card className="glass-card">
-                        <CardContent className="p-6">
-                            <div className="tech-stack-scroller" data-animated="true">
-                                <div className="tech-stack-scroller-inner flex items-center gap-16">
-                                    {[...sponsors, ...sponsors].map((sponsor, index) => (
-                                        <div key={`${sponsor.name}-${index}`} className="flex items-center gap-3 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all text-2xl">
-                                            <sponsor.icon />
-                                            <p className="font-bold text-lg">{sponsor.name}</p>
-                                        </div>
-                                    ))}
+                    <div className="tech-stack-scroller" data-animated="true">
+                        <div className="tech-stack-scroller-inner flex items-center gap-16">
+                            {[...sponsors, ...sponsors].map((sponsor, index) => (
+                                <div key={`${sponsor.name}-${index}`} className="flex items-center gap-3 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all text-2xl">
+                                    <sponsor.icon />
+                                    <p className="font-bold text-lg">{sponsor.name}</p>
                                 </div>
-                            </div>
-                        </CardContent>
-                    </Card>
+                            ))}
+                        </div>
+                    </div>
                 </motion.div>
             </main>
         </div>
