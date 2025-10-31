@@ -59,6 +59,7 @@ export function Header() {
   }, [auth]);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   const handleLogout = async () => {
     if (!auth) return;
     try {
@@ -122,11 +123,44 @@ export function Header() {
       )
 =======
   if (!mounted || isMobile) {
+=======
+  if (!mounted) {
+>>>>>>> b26aced (Let the mobile mode have a header not like the header of desktop view bu)
     return <header className="p-4 flex justify-between items-center border-b h-[69px]" />;
 >>>>>>> 512e4b0 (Please creat a contact page with like a features that allow users to inp)
   }
 
+<<<<<<< HEAD
   // Desktop Header
+=======
+  if (isMobile) {
+      return (
+        <header className="p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-50">
+            <Link href="/" className="flex items-center gap-2 font-bold text-lg">
+                <Compass className="h-6 w-6 text-primary" />
+                <span className="text-foreground">WebIntel</span>
+            </Link>
+            <ThemeToggle />
+        </header>
+      )
+  }
+
+  const NavContent = () => (
+    <nav className="hidden md:flex items-center gap-2">
+        {navLinks.map(link => (
+            <Button
+                key={link.href}
+                variant={pathname.startsWith(link.href) && (link.href !== '/' || pathname === '/') ? "secondary" : "ghost"}
+                asChild
+            >
+                <Link href={link.href}>{link.label}</Link>
+            </Button>
+        ))}
+    </nav>
+  );
+
+
+>>>>>>> b26aced (Let the mobile mode have a header not like the header of desktop view bu)
   return (
     <header className={cn(
         "px-6 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-40 h-16",
