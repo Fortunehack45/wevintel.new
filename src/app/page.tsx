@@ -160,9 +160,9 @@ export default function WelcomePage() {
                     <div className="tech-stack-scroller" data-animated="true">
                         <div className="tech-stack-scroller-inner flex items-center gap-16">
                             {[...sponsors, ...sponsors].map((sponsor, index) => (
-                                <div key={`${sponsor.name}-${index}`} className="flex items-center gap-3 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all text-2xl">
+                                <div key={`${sponsor.name}-${index}`} className="flex items-center gap-4 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all text-4xl">
                                     <sponsor.icon />
-                                    <p className="font-bold text-lg">{sponsor.name}</p>
+                                    <p className="font-bold text-xl">{sponsor.name}</p>
                                 </div>
                             ))}
                         </div>
