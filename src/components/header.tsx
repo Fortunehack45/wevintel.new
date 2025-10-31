@@ -9,7 +9,6 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
 import { getAuth, onAuthStateChanged, type User } from 'firebase/auth';
-import { app } from '@/firebase/config';
 import { useAuthContext } from '@/firebase/provider';
 
 const navLinks = [
@@ -97,6 +96,7 @@ export function Header() {
 
       <div className="flex items-center gap-2">
         <NavContent />
+        <ThemeToggle />
         {user ? (
             <Button asChild variant="outline">
                 <Link href="/settings">

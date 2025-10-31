@@ -4,12 +4,18 @@
 import Link from 'next/link';
 import { Compass } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useState, useEffect } from 'react';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const isMobile = useIsMobile();
+  const [mounted, setMounted] = useState(false);
 
-  if (isMobile) {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || isMobile) {
     return null;
   }
   
