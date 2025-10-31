@@ -2,44 +2,119 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Compass, LogIn } from 'lucide-react';
+import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Home, Scale, Trophy, History as HistoryIcon } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useAuthContext } from '@/firebase/provider';
+import { useAuth } from '@/firebase/auth';
+import { signOut, type User as FirebaseUser } from 'firebase/auth';
+import { useToast } from '@/hooks/use-toast';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+
+
+const navLinks = [
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/compare', label: 'Compare' },
+  { href: '/leaderboard', label: 'Leaderboard' },
+  { href: '/history', label: 'History' },
+];
+
 
 export function Header() {
   const isMobile = useIsMobile();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const auth = useAuthContext();
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (auth) {
+      const unsubscribe = useAuth(setUser);
+      return () => unsubscribe();
+    }
+  }, [auth]);
 
-  const isWelcomePage = pathname === '/';
-  const isAppPage = ['/dashboard', '/compare', '/leaderboard', '/history', '/settings'].some(route => pathname.startsWith(route));
-
+  const handleLogout = async () => {
+    if (!auth) return;
+    try {
+        await signOut(auth);
+        toast({ title: "Logged Out", description: "You have been successfully logged out." });
+        router.push('/login');
+    } catch (error: any) {
+        toast({ title: "Logout Failed", description: error.message, variant: "destructive" });
+    }
+  }
+  
   if (!mounted) {
     return <header className="p-4 flex justify-between items-center border-b h-[60px]" />;
   }
 
-  if (isMobile && isAppPage) {
-    return null; // The sidebar is present on mobile for app pages, no header needed.
-  }
+  const isWelcomePage = pathname === '/';
   
   return (
     <header className={cn("p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-40 h-[60px]")}>
-      <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-        <Compass className="h-6 w-6 text-primary" />
-        <span className="text-foreground">WebIntel</span>
-      </Link>
+      <div className="flex items-center gap-6">
+        <Link href={isWelcomePage ? "/" : "/dashboard"} className="flex items-center gap-2 font-bold text-lg">
+          <Compass className="h-6 w-6 text-primary" />
+          <span className="text-foreground">WebIntel</span>
+        </Link>
+        {!isMobile && !isWelcomePage && (
+          <nav className="flex items-center gap-4">
+             {navLinks.map(link => (
+                <Link key={link.href} href={link.href} className={cn(
+                    "text-sm font-medium transition-colors hover:text-primary",
+                    pathname.startsWith(link.href) ? "text-primary" : "text-muted-foreground"
+                )}>
+                    {link.label}
+                </Link>
+             ))}
+          </nav>
+        )}
+      </div>
       
       <div className="flex items-center gap-2">
-        {isWelcomePage && (
+        {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="flex items-center gap-2">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
+                        <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <span className="hidden md:inline">{user.displayName || user.email}</span>
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+        ) : (
           <Button asChild>
-            <Link href="/dashboard">
-              Get Started
+            <Link href="/login">
+              <LogIn className='mr-2' /> Login
             </Link>
           </Button>
         )}

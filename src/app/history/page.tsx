@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function HistoryPage() {
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-4xl font-bold">Analysis History</h1>
             </div>
@@ -16,3 +16,4 @@ export default function HistoryPage() {
         </div>
     )
 }
+
