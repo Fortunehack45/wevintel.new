@@ -28,11 +28,10 @@ export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: Comp
     
     const winnerHostname = summary && 'winner' in summary ? summary.winner : null;
     const isTie = winnerHostname === 'Tie';
-    const isWinner1 = winnerHostname === data1?.overview.domain;
-    const isWinner2 = winnerHostname === data2?.overview.domain;
-    
+    const isWinner1 = data1 && 'overview' in data1 && winnerHostname === data1.overview.domain;
+    const isWinner2 = data2 && 'overview' in data2 && winnerHostname === data2.overview.domain;
+
     const title = summary && 'title' in summary ? summary.title : "Comparison Summary";
-    const summaryText = summary && 'summary' in summary ? summary.summary : "";
 
     return (
         <Card className="glass-card w-full">
@@ -91,12 +90,14 @@ export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: Comp
                             ))}
                         </div>
 
-                        <div className='flex items-center justify-center flex-col gap-2 pt-4 border-t'>
-                            <h4 className='font-semibold flex items-center gap-2'><Trophy className="h-5 w-5 text-yellow-400"/> Overall Winner</h4>
-                            {isTie && <Badge size="lg" variant="secondary">It's a Tie!</Badge>}
-                            {isWinner1 && <Badge size="lg" className="bg-primary/80">{data1?.overview.domain}</Badge>}
-                            {isWinner2 && <Badge size="lg" className="bg-primary/80">{data2?.overview.domain}</Badge>}
-                        </div>
+                        {winnerHostname && (
+                           <div className='flex items-center justify-center flex-col gap-2 pt-4 border-t'>
+                                <h4 className='font-semibold flex items-center gap-2'><Trophy className="h-5 w-5 text-yellow-400"/> Overall Winner</h4>
+                                {isTie && <Badge size="lg" variant="secondary">It's a Tie!</Badge>}
+                                {isWinner1 && <Badge size="lg" className="bg-primary/80">{data1?.overview.domain}</Badge>}
+                                {isWinner2 && <Badge size="lg" className="bg-primary/80">{data2?.overview.domain}</Badge>}
+                            </div>
+                        )}
                     </>
                 )}
             </CardContent>

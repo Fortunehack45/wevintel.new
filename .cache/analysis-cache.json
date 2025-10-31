@@ -1078,126 +1078,132 @@
     }
   },
   "additional-analysis:https://Google.com": {
-    "timestamp": 1761741166282,
+    "timestamp": 1761940595474,
     "data": {
       "status": {
         "isOnline": true,
         "httpStatus": 200,
-        "responseTime": 217,
+        "responseTime": 659,
         "finalUrl": "https://www.google.com/"
       }
     }
   },
   "traffic-estimate:https://Google.com": {
-    "timestamp": 1761741176856,
+    "timestamp": 1761940605952,
     "data": {
       "estimatedMonthlyVisits": 85000000000,
       "estimationConfidence": "high",
       "trafficSources": {
-        "direct": 65,
+        "direct": 85,
         "search": 5,
         "social": 5,
-        "referral": 25
+        "referral": 5
       },
       "topCountries": [
         {
           "country": "US",
-          "percentage": 20
+          "percentage": 25
         },
         {
           "country": "IN",
           "percentage": 15
         },
         {
-          "country": "DE",
-          "percentage": 5
+          "country": "JP",
+          "percentage": 8
         }
       ],
       "engagement": {
-        "avgSessionDuration": "1m 35s",
-        "bounceRate": 70
+        "avgSessionDuration": "1m 30s",
+        "bounceRate": 65
       }
     }
   },
   "summary:https://Google.com": {
-    "timestamp": 1761741178506,
+    "timestamp": 1761940602578,
     "data": {
       "summary": {
-        "summary": "Google.com currently utilizes a secure HTTPS connection and has the X-Frame-Options header enabled, which helps protect against certain types of framing attacks. The website is hosted by Google LLC. However, based on the provided scan data, several other crucial security headers, including Content Security Policy (CSP), HTTP Strict Transport Security (HSTS), and X-Content-Type-Options, were not detected, which are important for a comprehensive security posture.",
+        "summary": "The Google.com website currently utilizes a secure HTTPS connection, ensuring encrypted communication for its users, and benefits from being hosted by Google LLC, indicating a robust infrastructure. It also implements the X-Frame-Options header, which provides a level of protection against clickjacking attacks. However, based on the provided data, there are opportunities to further enhance its security profile by adopting additional modern security headers.",
         "recommendations": [
-          "Implement a robust Content Security Policy (CSP) to prevent various forms of code injection attacks, such as cross-site scripting (XSS), by controlling which resources the browser is allowed to load.",
-          "Configure HTTP Strict Transport Security (HSTS) to ensure that browsers always connect to your site using HTTPS, which enhances protection against protocol downgrade attacks and cookie hijacking.",
-          "Add the X-Content-Type-Options header with the 'nosniff' directive to prevent browsers from MIME-sniffing a response away from the declared content-type, which can mitigate certain types of attacks."
+          "Implement HTTP Strict Transport Security (HSTS) to enforce the use of HTTPS for all future connections, thereby protecting against protocol downgrade attacks and cookie hijacking.",
+          "Introduce a comprehensive Content Security Policy (CSP) to mitigate risks from cross-site scripting (XSS) and other data injection attacks by defining trusted sources of content.",
+          "Add the X-Content-Type-Options header with the 'nosniff' directive to prevent browsers from interpreting files as a different MIME type than declared, which can guard against certain vulnerabilities."
         ]
       }
     }
   },
   "tech-stack:https://Google.com": {
-    "timestamp": 1761741182344,
+    "timestamp": 1761940609076,
     "data": [
       {
-        "name": "Google Web Server",
+        "name": "Google Web Server (GWS)",
         "category": "Web Server",
         "confidence": 100,
-        "description": "A proprietary web server developed by Google, used to serve Google's web properties."
+        "description": "A proprietary web server developed by Google for its services, indicated by the 'server' HTTP header."
       },
       {
-        "name": "HTML5",
-        "category": "Markup Language",
-        "confidence": 100,
-        "description": "The fifth and current major version of the HTML standard, defining the structure and content of web pages."
-      },
-      {
-        "name": "Custom Google JavaScript",
-        "category": "JavaScript Library",
-        "confidence": 100,
-        "description": "A proprietary JavaScript library developed by Google for managing front-end functionality and interactions on its websites."
+        "name": "Proprietary Google JavaScript Framework",
+        "category": "JavaScript Framework",
+        "confidence": 95,
+        "description": "An extensive, in-house developed JavaScript framework identified by the widespread use of the 'window.google' object and custom functions within the HTML."
       },
       {
         "name": "Schema.org",
         "category": "Structured Data",
         "confidence": 100,
-        "description": "A collaborative effort to create, maintain, and promote schemas for structured data on the Internet."
+        "description": "Used for structured data markup, indicated by 'itemscope' and 'itemtype' attributes in the HTML."
       },
       {
-        "name": "Google Fonts",
-        "category": "Font Service",
-        "confidence": 100,
-        "description": "A library of free licensed fonts and an interactive web directory for use on websites."
+        "name": "Google's Internal Analytics & Monitoring",
+        "category": "Analytics",
+        "confidence": 90,
+        "description": "Custom JavaScript functions like 'google.log' and performance timing implementations suggest an internal system for analytics and performance monitoring."
       },
       {
-        "name": "Brotli",
-        "category": "Compression Algorithm",
+        "name": "Google Sans",
+        "category": "Font",
         "confidence": 100,
-        "description": "A generic-purpose lossless compression algorithm developed by Google, often used for web content compression."
+        "description": "A custom humanist sans-serif typeface designed by Google, explicitly loaded via '@font-face' and JavaScript."
+      },
+      {
+        "name": "HTML5",
+        "category": "Document Type",
+        "confidence": 100,
+        "description": "The website uses the latest revision of HTML, as indicated by the '<!doctype html>' declaration."
+      },
+      {
+        "name": "UTF-8",
+        "category": "Character Encoding",
+        "confidence": 100,
+        "description": "The character encoding for the page is set to UTF-8, ensuring broad character support."
       }
     ]
   },
   "performance:https://Google.com": {
-    "timestamp": 1761741185092,
+    "timestamp": 1761940610833,
     "data": {
       "performance": {
         "mobile": {
-          "performanceScore": 57,
-          "accessibilityScore": 87,
-          "seoScore": 91,
-          "bestPracticesScore": 100,
-          "speedIndex": "3.6 s",
-          "totalBlockingTime": "570 ms",
-          "firstContentfulPaint": "2.8 s",
-          "largestContentfulPaint": "6.9 s",
-          "cumulativeLayoutShift": "0"
+          "performanceScore": 79,
+          "accessibilityScore": 88,
+          "seoScore": 73,
+          "bestPracticesScore": 92,
+          "speedIndex": "1.6 s",
+          "totalBlockingTime": "840 ms",
+          "firstContentfulPaint": "1.5 s",
+          "largestContentfulPaint": "1.7 s",
+          "cumulativeLayoutShift": "0.021"
         },
         "desktop": {
-          "performanceScore": 94,
-          "accessibilityScore": 98,
-          "seoScore": 91,
-          "bestPracticesScore": 100,
-          "speedIndex": "0.8 s",
-          "totalBlockingTime": "180 ms",
-          "firstContentfulPaint": "0.8 s",
-          "largestContentfulPaint": "0.9 s",
-          "cumulativeLayoutShift": "0"
+          "performanceScore": 76,
+          "accessibilityScore": 88,
+          "seoScore": 73,
+          "bestPracticesScore": 92,
+          "speedIndex": "0.7 s",
+          "totalBlockingTime": "620 ms",
+          "firstContentfulPaint": "0.4 s",
+          "largestContentfulPaint": "0.5 s",
+          "cumulativeLayoutShift": "0.004"
         }
       },
       "performanceAudits": {
@@ -1206,7 +1212,7 @@
           "title": "Initial server response time was short",
           "description": "Keep the server response time for the main document short because all other requests depend on it. [Learn more about the Time to First Byte metric](https://developer.chrome.com/docs/lighthouse/performance/time-to-first-byte/).",
           "score": 1,
-          "displayValue": "Root document took 50 ms"
+          "displayValue": "Root document took 0 ms"
         },
         "network-requests": {
           "id": "network-requests",
@@ -1230,43 +1236,42 @@
           "id": "unused-css-rules",
           "title": "Reduce unused CSS",
           "description": "Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. [Learn how to reduce unused CSS](https://developer.chrome.com/docs/lighthouse/performance/unused-css-rules/).",
-          "score": 0.5,
-          "displayValue": "Est savings of 11 KiB"
+          "score": 1
         },
         "unused-javascript": {
           "id": "unused-javascript",
           "title": "Reduce unused JavaScript",
           "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
-          "score": 0,
-          "displayValue": "Est savings of 329 KiB"
+          "score": 0.5,
+          "displayValue": "Est savings of 548 KiB"
         },
         "total-byte-weight": {
           "id": "total-byte-weight",
           "title": "Avoids enormous network payloads",
           "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
           "score": 1,
-          "displayValue": "Total size was 711 KiB"
+          "displayValue": "Total size was 1,551 KiB"
         },
         "mainthread-work-breakdown": {
           "id": "mainthread-work-breakdown",
-          "title": "Minimize main-thread work",
+          "title": "Minimizes main-thread work",
           "description": "Consider reducing the time spent parsing, compiling and executing JS. You may find delivering smaller JS payloads helps with this. [Learn how to minimize main-thread work](https://developer.chrome.com/docs/lighthouse/performance/mainthread-work-breakdown/)",
-          "score": 0,
-          "displayValue": "2.1 s"
+          "score": 1,
+          "displayValue": "1.8 s"
         },
         "max-potential-fid": {
           "id": "max-potential-fid",
           "title": "Max Potential First Input Delay",
           "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
-          "score": 0.42,
-          "displayValue": "280 ms"
+          "score": 0.44,
+          "displayValue": "270 ms"
         },
         "interactive": {
           "id": "interactive",
           "title": "Time to Interactive",
           "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
-          "score": 0.5,
-          "displayValue": "7.2 s"
+          "score": 0.54,
+          "displayValue": "6.9 s"
         }
       },
       "securityAudits": {
@@ -1286,23 +1291,22 @@
         },
         "errors-in-console": {
           "id": "errors-in-console",
-          "title": "No browser errors logged to the console",
+          "title": "Browser errors were logged to the console",
           "description": "Errors logged to the console indicate unresolved problems. They can come from network request failures and other browser concerns. [Learn more about this errors in console diagnostic audit](https://developer.chrome.com/docs/lighthouse/best-practices/errors-in-console/)",
-          "score": 1
+          "score": 0
         },
         "user-timings": {
           "id": "user-timings",
           "title": "User Timing marks and measures",
           "description": "Consider instrumenting your app with the User Timing API to measure your app's real-world performance during key user experiences. [Learn more about User Timing marks](https://developer.chrome.com/docs/lighthouse/performance/user-timings/).",
-          "score": 1,
-          "displayValue": "20 user timings"
+          "score": null
         },
         "long-tasks": {
           "id": "long-tasks",
           "title": "Avoid long main-thread tasks",
           "description": "Lists the longest tasks on the main thread, useful for identifying worst contributors to input delay. [Learn how to avoid long main-thread tasks](https://web.dev/articles/optimize-long-tasks)",
           "score": 1,
-          "displayValue": "8 long tasks found"
+          "displayValue": "7 long tasks found"
         },
         "non-composited-animations": {
           "id": "non-composited-animations",
@@ -1324,15 +1328,17 @@
         },
         "http-status-code": {
           "id": "http-status-code",
-          "title": "Page has successful HTTP status code",
+          "title": "Page has unsuccessful HTTP status code",
           "description": "Pages with unsuccessful HTTP status codes may not be indexed properly. [Learn more about HTTP status codes](https://developer.chrome.com/docs/lighthouse/seo/http-status-code/).",
-          "score": 1
+          "score": 0,
+          "displayValue": "429"
         },
         "link-text": {
           "id": "link-text",
-          "title": "Links have descriptive text",
+          "title": "Links do not have descriptive text",
           "description": "Descriptive link text helps search engines understand your content. [Learn how to make links more accessible](https://developer.chrome.com/docs/lighthouse/seo/link-text/).",
-          "score": 1
+          "score": 0,
+          "displayValue": "1 link found"
         },
         "crawlable-anchors": {
           "id": "crawlable-anchors",
@@ -1360,9 +1366,9 @@
         },
         "html-has-lang": {
           "id": "html-has-lang",
-          "title": "`<html>` element has a `[lang]` attribute",
+          "title": "`<html>` element does not have a `[lang]` attribute",
           "description": "If a page doesn't specify a `lang` attribute, a screen reader assumes that the page is in the default language that the user chose when setting up the screen reader. If the page isn't actually in the default language, then the screen reader might not announce the page's text correctly. [Learn more about the `lang` attribute](https://dequeuniversity.com/rules/axe/4.11/html-has-lang).",
-          "score": 1
+          "score": 0
         },
         "hreflang": {
           "id": "hreflang",
@@ -1389,85 +1395,85 @@
     }
   },
   "additional-analysis:https://Fzmovies.host": {
-    "timestamp": 1761741189921,
+    "timestamp": 1761940612393,
     "data": {
       "status": {
         "isOnline": true,
         "httpStatus": 200,
-        "responseTime": 3510,
+        "responseTime": 461,
         "finalUrl": "https://fzmovies.host/"
       }
     }
   },
   "summary:https://Fzmovies.host": {
-    "timestamp": 1761741192169,
+    "timestamp": 1761940618115,
     "data": {
       "summary": {
-        "summary": "The website Fzmovies.host currently utilizes a secure HTTPS connection and benefits from Cloudflare's hosting infrastructure, indicating a foundational level of security and performance. It has also implemented HSTS (HTTP Strict Transport Security) and X-Content-Type-Options, which are good practices for protecting against certain types of attacks. However, there are clear opportunities to enhance its security posture further by adding more protective headers and to improve its discoverability by addressing a missing meta description.",
+        "summary": "Fzmovies.host demonstrates a foundational level of security by utilizing a secure HTTPS connection and benefiting from Cloudflare's infrastructure, which contributes to both performance and basic security. The site has correctly implemented HTTP Strict Transport Security (HSTS) and X-Content-Type-Options headers, which are positive steps towards protecting against certain web vulnerabilities. However, there are clear opportunities to enhance the site's overall security posture by implementing additional, critical security headers.",
         "recommendations": [
-          "Implement a Content Security Policy (CSP) header to mitigate various forms of cross-site scripting (XSS) and data injection attacks, significantly enhancing user security.",
-          "Add the X-Frame-Options header to prevent clickjacking by controlling whether your site can be embedded in an iframe, thereby protecting users from malicious UI redressing attacks.",
-          "Create and include a descriptive meta description for your website. This will improve your site's appearance in search engine results and can increase click-through rates by providing a clear summary of your content."
+          "**Implement a Content Security Policy (CSP):** Configure a robust Content Security Policy to significantly reduce the risk of cross-site scripting (XSS) and other data injection attacks by defining trusted sources for content.",
+          "**Add X-Frame-Options Header:** Implement the `X-Frame-Options` header (e.g., set to `DENY` or `SAMEORIGIN`) to protect your website from clickjacking attacks by preventing your content from being embedded in iframes on other sites.",
+          "**Conduct Regular Security Reviews:** Continuously monitor server logs for suspicious activity and consider periodic security audits to identify and address any new vulnerabilities or misconfigurations that may arise."
         ]
       }
     }
   },
   "traffic-estimate:https://Fzmovies.host": {
-    "timestamp": 1761741197745,
+    "timestamp": 1761940621135,
     "data": {
-      "estimatedMonthlyVisits": 8500000,
+      "estimatedMonthlyVisits": 7500000,
       "estimationConfidence": "medium",
       "trafficSources": {
-        "direct": 40,
-        "search": 45,
+        "direct": 30,
+        "search": 55,
         "social": 5,
         "referral": 10
       },
       "topCountries": [
         {
-          "country": "IN",
-          "percentage": 25
+          "country": "US",
+          "percentage": 20
         },
         {
-          "country": "US",
+          "country": "IN",
           "percentage": 18
         },
         {
-          "country": "UK",
-          "percentage": 10
+          "country": "GB",
+          "percentage": 7
         }
       ],
       "engagement": {
-        "avgSessionDuration": "20m 30s",
-        "bounceRate": 48
+        "avgSessionDuration": "7m 45s",
+        "bounceRate": 38
       }
     }
   },
   "performance:https://Fzmovies.host": {
-    "timestamp": 1761741201772,
+    "timestamp": 1761940628696,
     "data": {
       "performance": {
         "mobile": {
-          "performanceScore": 87,
+          "performanceScore": 89,
           "accessibilityScore": 51,
           "seoScore": 75,
           "bestPracticesScore": 69,
-          "speedIndex": "2.6 s",
-          "totalBlockingTime": "50 ms",
+          "speedIndex": "2.7 s",
+          "totalBlockingTime": "20 ms",
           "firstContentfulPaint": "1.5 s",
-          "largestContentfulPaint": "2.4 s",
-          "cumulativeLayoutShift": "0.203"
+          "largestContentfulPaint": "3.1 s",
+          "cumulativeLayoutShift": "0.123"
         },
         "desktop": {
-          "performanceScore": 94,
+          "performanceScore": 95,
           "accessibilityScore": 51,
           "seoScore": 75,
           "bestPracticesScore": 69,
           "speedIndex": "0.9 s",
-          "totalBlockingTime": "0 ms",
+          "totalBlockingTime": "30 ms",
           "firstContentfulPaint": "0.4 s",
           "largestContentfulPaint": "0.8 s",
-          "cumulativeLayoutShift": "0.144"
+          "cumulativeLayoutShift": "0.123"
         }
       },
       "performanceAudits": {
@@ -1510,35 +1516,35 @@
           "title": "Reduce unused JavaScript",
           "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
           "score": 0,
-          "displayValue": "Est savings of 380 KiB"
+          "displayValue": "Est savings of 281 KiB"
         },
         "total-byte-weight": {
           "id": "total-byte-weight",
           "title": "Avoids enormous network payloads",
           "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
           "score": 1,
-          "displayValue": "Total size was 954 KiB"
+          "displayValue": "Total size was 818 KiB"
         },
         "mainthread-work-breakdown": {
           "id": "mainthread-work-breakdown",
           "title": "Minimizes main-thread work",
           "description": "Consider reducing the time spent parsing, compiling and executing JS. You may find delivering smaller JS payloads helps with this. [Learn how to minimize main-thread work](https://developer.chrome.com/docs/lighthouse/performance/mainthread-work-breakdown/)",
           "score": 1,
-          "displayValue": "1.0 s"
+          "displayValue": "0.9 s"
         },
         "max-potential-fid": {
           "id": "max-potential-fid",
           "title": "Max Potential First Input Delay",
           "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
           "score": 0.99,
-          "displayValue": "80 ms"
+          "displayValue": "70 ms"
         },
         "interactive": {
           "id": "interactive",
           "title": "Time to Interactive",
           "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
-          "score": 0.47,
-          "displayValue": "7.6 s"
+          "score": 0.57,
+          "displayValue": "6.6 s"
         }
       },
       "securityAudits": {
@@ -1573,7 +1579,7 @@
           "title": "Avoid long main-thread tasks",
           "description": "Lists the longest tasks on the main thread, useful for identifying worst contributors to input delay. [Learn how to avoid long main-thread tasks](https://web.dev/articles/optimize-long-tasks)",
           "score": 1,
-          "displayValue": "5 long tasks found"
+          "displayValue": "2 long tasks found"
         },
         "non-composited-animations": {
           "id": "non-composited-animations",
@@ -1662,7 +1668,7 @@
     }
   },
   "tech-stack:https://Fzmovies.host": {
-    "timestamp": 1761742373668,
+    "timestamp": 1761940621089,
     "data": [
       {
         "name": "PHP",
@@ -1685,34 +1691,40 @@
       {
         "name": "Google Identity Services",
         "category": "Authentication",
-        "confidence": 95,
-        "description": "Google Identity Services provides a secure and easy way for users to sign in to websites with their Google Account."
-      },
-      {
-        "name": "Google Fonts",
-        "category": "Font Hosting",
         "confidence": 90,
-        "description": "Google Fonts is a library of free licensed font families and an interactive web directory for browsing the library."
+        "description": "Google Identity Services provides a secure and easy way for users to sign in to websites and apps using their Google Account."
       },
       {
         "name": "HTML5",
         "category": "Markup Language",
         "confidence": 100,
-        "description": "HTML5 is the latest revision of the Hypertext Markup Language, offering enhanced features for web content structuring."
+        "description": "HTML5 is the fifth and current major version of the HTML standard, used for structuring and presenting content on the World Wide Web."
       },
       {
         "name": "CSS3",
-        "category": "Stylesheet Language",
+        "category": "Styling",
         "confidence": 100,
-        "description": "CSS3 is the latest evolution of the Cascading Style Sheets language, used for describing the presentation of web pages."
+        "description": "CSS3 is the latest evolution of the Cascading Style Sheets language, used for describing the presentation of a document written in HTML."
+      },
+      {
+        "name": "JavaScript",
+        "category": "Programming Language",
+        "confidence": 100,
+        "description": "JavaScript is a lightweight, interpreted, or just-in-time compiled programming language with first-class functions, primarily used for client-side scripting."
+      },
+      {
+        "name": "Google Fonts",
+        "category": "Font Script",
+        "confidence": 80,
+        "description": "Google Fonts is a library of free licensed font families and an interactive web directory for browsing the library."
       }
     ]
   },
   "comparison:https://Google.com:https://Fzmovies.host": {
-    "timestamp": 1761742383013,
+    "timestamp": 1761940639531,
     "data": {
-      "title": "Web Performance and Security Comparison: Google.com vs. Fzmovies.host",
-      "summary": "Both Google.com and Fzmovies.host demonstrate exemplary security, each achieving a perfect score of 100. However, Fzmovies.host significantly outperforms Google.com in the realm of web performance, registering an impressive score of 87 compared to Google.com's 57, suggesting a more optimized user experience in loading times and responsiveness for Fzmovies.host. Despite Google's global presence, its primary domain shows room for performance improvement relative to the other site.The technology stacks reveal distinct approaches. Google.com employs a highly proprietary architecture, featuring a 'Google Web Server' and 'Custom Google JavaScript,' alongside 'Schema.org,' 'Google Fonts,' and 'Brotli' for content delivery, all hosted in the Czech Republic (CZ). In contrast, Fzmovies.host utilizes a more standard, yet effective, combination of 'PHP,' 'Cloudflare' for content delivery and security, 'Google Analytics,' 'Google Identity Services,' 'Google Fonts,' 'HTML5,' and 'CSS3,' hosted in Great Britain (GB). The integration of Cloudflare by Fzmovies.host likely plays a pivotal role in its superior performance metrics.",
+      "title": "Digital Duel: Google.com vs. Fzmovies.host",
+      "summary": "In a direct comparison of key metrics, Fzmovies.host demonstrates superior performance with a score of 89, notably surpassing Google.com's score of 79. Both websites, however, exhibit exemplary security postures, each achieving a perfect score of 100, indicating strong defensive measures against potential vulnerabilities.Regarding their technology stacks, Google.com leverages a highly proprietary ecosystem, including Google Web Server (GWS) and an internal JavaScript framework, reflecting its unique scale and in-house development. In contrast, Fzmovies.host employs a more standard stack, built on PHP and enhanced by Cloudflare for content delivery and security, alongside common web technologies. Hosting locations also differ, with Google.com operating from the Netherlands and Fzmovies.host from Canada, which may influence latency for specific user bases and reflects their respective global infrastructure strategies.",
       "winner": "Fzmovies.host"
     }
   }
