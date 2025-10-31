@@ -20,7 +20,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     }, []);
     
     const isAuthPage = pathname === '/login' || pathname === '/signup';
-    const isWelcomePage = pathname === '/';
     
     if (!mounted) {
         return (
@@ -30,21 +29,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         );
     }
     
-    if (isAuthPage && !isMobile) {
-        return (
-            <>
-                <div className="wave-container">
-                    <div className="wave-light"></div>
-                </div>
-                 <main className="flex-1">
-                    {children}
-                </main>
-            </>
-        )
-    }
-    
     return (
-        <>
+        <div className="flex flex-col min-h-screen">
             <div className="wave-container">
                 <div className="wave-light"></div>
             </div>
@@ -54,6 +40,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </main>
             <Footer />
             <BottomNav />
-        </>
+        </div>
     )
 }
