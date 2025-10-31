@@ -17,21 +17,19 @@ export function OptimalLayoutSuggestion() {
     useEffect(() => {
         if (typeof window !== 'undefined' && isMobile) {
             const isPortrait = height > width;
-            const hasBeenDismissed = sessionStorage.getItem('dismissedOptimalLayoutSuggestion');
             
-            if (isPortrait && !hasBeenDismissed) {
+            if (isPortrait) {
                 const timer = setTimeout(() => {
                     setIsOpen(true);
                 }, 1500); // Delay before showing
                 return () => clearTimeout(timer);
-            } else if (!isPortrait) {
+            } else {
                 setIsOpen(false);
             }
         }
     }, [width, height, isMobile]);
 
     const handleDismiss = () => {
-        sessionStorage.setItem('dismissedOptimalLayoutSuggestion', 'true');
         setIsOpen(false);
     };
 
