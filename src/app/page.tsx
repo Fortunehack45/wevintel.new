@@ -73,7 +73,7 @@ export default function WelcomePage() {
     return (
         <div className="flex flex-col min-h-screen">
             <main className="flex-1">
-                <section className="container mx-auto px-4 py-20 md:py-32 text-center">
+                <section className="container mx-auto px-4 pt-20 pb-16 md:pt-32 md:pb-24 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -95,7 +95,7 @@ export default function WelcomePage() {
                     </motion.div>
                 </section>
                 
-                 <section className="container mx-auto px-4 pb-20">
+                 <section className="container mx-auto px-4 py-16 md:py-24">
                      <motion.div 
                          initial={{ opacity: 0, y: 20 }}
                          animate={{ opacity: 1, y: 0 }}
@@ -120,57 +120,59 @@ export default function WelcomePage() {
                       </motion.div>
                 </section>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.6 }}
-                    className="mb-16"
-                >
-                    <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Building className="text-primary"/> Sponsored By</h2>
-                    <div className="tech-stack-scroller" data-animated="true">
-                        <div className="tech-stack-scroller-inner flex items-center gap-16">
-                            {[...sponsors, ...sponsors].map((sponsor, index) => (
-                                <div key={`${sponsor.name}-${index}`} className="flex items-center gap-4 text-4xl grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all">
-                                    {sponsor.isText ? <sponsor.icon /> : (
-                                        <>
-                                            <sponsor.icon />
-                                            <p className="font-bold text-2xl">{sponsor.name}</p>
-                                        </>
-                                    )}
-                                </div>
-                            ))}
+                <section className="py-16 md:py-24">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.6 }}
+                    >
+                        <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Building className="text-primary"/> Sponsored By</h2>
+                        <div className="tech-stack-scroller" data-animated="true">
+                            <div className="tech-stack-scroller-inner flex items-center gap-16">
+                                {[...sponsors, ...sponsors].map((sponsor, index) => (
+                                    <div key={`${sponsor.name}-${index}`} className="flex items-center gap-4 text-4xl grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all">
+                                        {sponsor.isText ? <sponsor.icon /> : (
+                                            <>
+                                                <sponsor.icon />
+                                                <p className="font-bold text-2xl">{sponsor.name}</p>
+                                            </>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </motion.div>
+                    </motion.div>
+                </section>
 
-                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 }}
-                    className="mb-16 container mx-auto px-4"
-                >
-                    <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Heart className="text-primary"/> From Our Users</h2>
-                    <div className="w-full overflow-hidden tech-stack-scroller" data-animated="true">
-                        <div className="tech-stack-scroller-inner flex gap-6">
-                            {[...reviews, ...reviews].map((review, index) => (
-                                <Card key={index} className="glass-card w-80 flex-shrink-0">
-                                    <CardContent className="p-6">
-                                        <div className="flex mb-2">
-                                            {[...Array(review.rating)].map((_, i) => (
-                                                <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-                                            ))}
-                                        </div>
-                                        <p className="text-muted-foreground italic">"{review.quote}"</p>
-                                        <div className="mt-4 text-right">
-                                            <p className="font-bold text-sm">{review.name}</p>
-                                            <p className="text-xs text-muted-foreground">{review.role}</p>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
+                 <section className="container mx-auto px-4 py-16 md:py-24">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                    >
+                        <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Heart className="text-primary"/> From Our Users</h2>
+                        <div className="w-full overflow-hidden tech-stack-scroller" data-animated="true">
+                            <div className="tech-stack-scroller-inner flex gap-6">
+                                {[...reviews, ...reviews].map((review, index) => (
+                                    <Card key={index} className="glass-card w-80 flex-shrink-0">
+                                        <CardContent className="p-6">
+                                            <div className="flex mb-2">
+                                                {[...Array(review.rating)].map((_, i) => (
+                                                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                                                ))}
+                                            </div>
+                                            <p className="text-muted-foreground italic">"{review.quote}"</p>
+                                            <div className="mt-4 text-right">
+                                                <p className="font-bold text-sm">{review.name}</p>
+                                                <p className="text-xs text-muted-foreground">{review.role}</p>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </motion.div>
+                    </motion.div>
+                </section>
 
             </main>
         </div>
