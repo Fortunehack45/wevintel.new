@@ -2,12 +2,11 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Home, Scale, Trophy, History as HistoryIcon, Info, Send } from 'lucide-react';
+import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Info, Send } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/firebase/auth';
 import { useAuthContext } from '@/firebase/provider';
 import { signOut, type User as FirebaseUser } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
@@ -20,6 +19,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { useAuth } from '@/firebase/auth';
+import { motion } from 'framer-motion';
 
 
 const navLinks = [
@@ -30,8 +31,8 @@ const navLinks = [
 ];
 
 const secondaryNavLinks = [
-    { href: '/about', label: 'About', icon: Info },
-    { href: '/contact', label: 'Contact', icon: Send },
+    { href: '/about', label: 'About' },
+    { href: '/contact', label: 'Contact' },
 ]
 
 
@@ -65,38 +66,101 @@ export function Header() {
   }
   
   if (!mounted) {
-    return <header className="p-4 flex justify-between items-center border-b h-[60px]" />;
+    return <header className="p-4 flex justify-between items-center border-b h-16" />;
   }
 
   const isWelcomePage = pathname === '/';
   
+  // Mobile Header
+  if(isMobile) {
+      return (
+        <header className={cn(
+            "p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-40 h-16",
+        )}>
+          <Link href={isWelcomePage ? "/" : "/dashboard"} className="flex items-center gap-2 font-bold text-lg">
+              <Compass className="h-7 w-7 text-primary" />
+              <span className="text-foreground text-xl sr-only">WebIntel</span>
+          </Link>
+          
+          {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="p-0 h-10 w-10 rounded-full">
+                        <Avatar className="h-9 w-9">
+                            <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
+                            <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>{user.displayName || user.email}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+            ) : (
+              <Button asChild>
+                <Link href="/login">
+                  <LogIn className='mr-2' /> Login
+                </Link>
+              </Button>
+            )}
+        </header>
+      )
+  }
+
+  // Desktop Header
   return (
     <header className={cn(
-        "p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-40 h-16",
-        isWelcomePage && !isMobile && "px-8 py-5"
+        "px-6 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-40 h-16",
     )}>
+      {/* Left Section */}
       <div className="flex items-center gap-6">
         <Link href={isWelcomePage ? "/" : "/dashboard"} className="flex items-center gap-2 font-bold text-lg">
           <Compass className="h-7 w-7 text-primary" />
           <span className="text-foreground text-xl">WebIntel</span>
         </Link>
-        {!isMobile && !isWelcomePage && (
-          <nav className="flex items-center gap-5">
-             {navLinks.map(link => (
-                <Link key={link.href} href={link.href} className={cn(
-                    "text-sm font-medium transition-colors hover:text-primary",
-                    pathname.startsWith(link.href) ? "text-primary" : "text-muted-foreground"
-                )}>
-                    {link.label}
-                </Link>
-             ))}
+      </div>
+
+      {/* Center Section - Main Navigation */}
+      {!isWelcomePage && (
+          <nav className="absolute left-1/2 -translate-x-1/2">
+             <ul className="flex items-center gap-2 rounded-full border bg-card p-1">
+                {navLinks.map(link => (
+                    <li key={link.href}>
+                        <Link href={link.href} className={cn(
+                            "relative text-sm font-medium transition-colors text-muted-foreground hover:text-primary px-4 py-2 rounded-full",
+                             pathname.startsWith(link.href) && "text-primary"
+                        )}>
+                            {link.label}
+                            {pathname.startsWith(link.href) && (
+                                <motion.div
+                                    layoutId="desktop-active-nav"
+                                    className="absolute inset-0 bg-primary/10 rounded-full mix-blend-lighten dark:mix-blend-plus-lighter"
+                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                />
+                            )}
+                        </Link>
+                    </li>
+                ))}
+             </ul>
           </nav>
         )}
-      </div>
       
+      {/* Right Section */}
       <div className="flex items-center gap-4">
-        {!isMobile && (
-            <div className='flex items-center gap-5'>
+        {isWelcomePage ? (
+            <Button asChild>
+                <Link href="/dashboard">Enter Dashboard</Link>
+            </Button>
+        ) : (
+             <div className='flex items-center gap-4'>
                 {secondaryNavLinks.map(link => (
                      <Link key={link.href} href={link.href} className={cn(
                         "text-sm font-medium transition-colors hover:text-primary",
@@ -116,12 +180,10 @@ export function Header() {
                         <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
                         <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
                     </Avatar>
-                    <span className="hidden md:inline font-semibold">{user.displayName || user.email}</span>
-                    <ChevronDown className="h-4 w-4 text-muted-foreground hidden md:inline" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{user.displayName || user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
@@ -133,9 +195,9 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
         ) : (
-          <Button asChild>
+          <Button asChild variant="secondary" className={isWelcomePage ? 'hidden' : ''}>
             <Link href="/login">
-              <LogIn className='mr-2' /> Login
+              Login
             </Link>
           </Button>
         )}
