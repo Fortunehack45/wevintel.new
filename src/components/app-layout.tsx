@@ -43,6 +43,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> f640191 (When it's loading it's showing the old UI which is not right)
     const isAuthPage = pathname === '/login' || pathname === '/signup';
 <<<<<<< HEAD
@@ -65,6 +66,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 >>>>>>> 878e142 (For layout suggestions features let it be able to display on the welcome)
 =======
     // Determine which pages should NOT show the layout suggestion
+=======
+>>>>>>> 4296bed (“Open the web app on a desktop, or rotate your phone to landscape mode a)
     const pagesWithoutSuggestion = [
         '/login',
         '/signup',
@@ -167,6 +170,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             <main className="flex-1 pb-20 md:pb-0">
 =======
             <main className="flex-1 pb-16 md:pb-0">
@@ -212,6 +216,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 =======
 =======
             <main className="flex-1">
+=======
+            <main className="flex-1 pb-20 md:pb-0">
+>>>>>>> 4296bed (“Open the web app on a desktop, or rotate your phone to landscape mode a)
                 {children}
             </main>
             <Footer />
