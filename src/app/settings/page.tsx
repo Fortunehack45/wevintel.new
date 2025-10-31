@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Eye, EyeOff, Lock, LogOut, Sun, Moon, Laptop, Palette, User, Trash2 } from 'lucide-react';
-import { getAuth, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider, signOut, type User } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider, signOut, type User as FirebaseUser } from 'firebase/auth';
 import { app } from '@/firebase/config';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
@@ -41,7 +41,7 @@ export default function SettingsPage() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const { toast } = useToast();
   const router = useRouter();
@@ -50,6 +50,9 @@ export default function SettingsPage() {
   
   const [, setAnalysisHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
   const [, setComparisonHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', []);
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const clearAllHistory = () => {
     setAnalysisHistory([]);
@@ -123,6 +126,9 @@ export default function SettingsPage() {
                 <CardDescription>Customise the look and feel of the application.</CardDescription>
             </CardHeader>
             <CardContent>
+              {!mounted ? (
+                  <Skeleton className="h-24 w-full" />
+              ) : (
                 <RadioGroup
                     value={theme}
                     onValueChange={setTheme}
@@ -144,6 +150,7 @@ export default function SettingsPage() {
                         <span className="font-semibold">System</span>
                     </Label>
                 </RadioGroup>
+              )}
             </CardContent>
         </Card>
         
@@ -268,3 +275,5 @@ export default function SettingsPage() {
     </div>
   );
 }
+
+    
