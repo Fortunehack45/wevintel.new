@@ -85,21 +85,12 @@ export function Header() {
       <div className="flex items-center gap-2">
         <NavContent />
         {user ? (
-           user.isAnonymous ? (
-                 <Button asChild>
-                    <Link href="/login">
-                        <LogIn className="mr-2 h-4 w-4" />
-                        Login
-                    </Link>
-                </Button>
-           ) : (
-                <Button asChild variant="outline">
-                    <Link href="/settings">
-                        <Settings className="mr-2 h-4 w-4" />
-                        Settings
-                    </Link>
-                </Button>
-           )
+            <Button asChild variant="outline">
+                <Link href="/settings">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                </Link>
+            </Button>
         ) : (
              <Button asChild>
                 <Link href="/login">
