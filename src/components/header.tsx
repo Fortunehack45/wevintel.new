@@ -7,7 +7,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { useAuthContext } from '@/firebase/provider';
+import { useAuth, useAuthContext } from '@/firebase/provider';
 import { signOut, type User as FirebaseUser } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/firebase/auth';
 
 
 const navLinks = [
@@ -64,10 +63,10 @@ export function Header() {
   if (!mounted) {
     return <header className="p-4 flex justify-between items-center border-b h-16" />;
   }
-
-  const isWelcomePage = pathname === '/';
   
-  const desktopNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard' || link.href === '/about' || link.href === '/contact');
+  const desktopNavLinks = user 
+    ? navLinks 
+    : navLinks.filter(link => ['/dashboard', '/about', '/contact'].includes(link.href));
   
   // Mobile Header
   if(isMobile) {
@@ -75,7 +74,7 @@ export function Header() {
         <header className={cn(
             "p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-40 h-16",
         )}>
-          <Link href={isWelcomePage ? "/" : "/dashboard"} className="flex items-center gap-2 font-bold text-lg">
+          <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2 font-bold text-lg">
               <Compass className="h-7 w-7 text-primary" />
               <span className="text-foreground text-xl sr-only">WebIntel</span>
           </Link>
@@ -120,73 +119,65 @@ export function Header() {
     )}>
       {/* Left Section */}
       <div className="flex items-center gap-6">
-        <Link href={isWelcomePage ? "/" : "/dashboard"} className="flex items-center gap-2 font-bold text-lg">
+        <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2 font-bold text-lg">
           <Compass className="h-7 w-7 text-primary" />
           <span className="text-foreground text-xl">WebIntel</span>
         </Link>
       </div>
 
       {/* Center Section - Main Navigation */}
-      {!isWelcomePage && (
-          <nav className="absolute left-1/2 -translate-x-1/2">
-             <ul className="flex items-center gap-2 rounded-full border bg-card/50 p-1">
-                {desktopNavLinks.map(link => (
-                    <li key={link.href}>
-                        <Link href={link.href} className={cn(
-                            "relative text-sm font-medium transition-colors text-muted-foreground hover:text-primary px-4 py-2 rounded-full",
-                             pathname.startsWith(link.href) && "text-primary"
-                        )}>
-                            {link.label}
-                            {pathname.startsWith(link.href) && (
-                                <motion.div
-                                    layoutId="desktop-active-nav"
-                                    className="absolute inset-0 bg-primary/10 rounded-full mix-blend-lighten dark:mix-blend-plus-lighter"
-                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                />
-                            )}
-                        </Link>
-                    </li>
-                ))}
-             </ul>
-          </nav>
-        )}
+      <nav className="absolute left-1/2 -translate-x-1/2">
+         <ul className="flex items-center gap-2 rounded-full border bg-card/50 p-1">
+            {desktopNavLinks.map(link => (
+                <li key={link.href}>
+                    <Link href={link.href} className={cn(
+                        "relative text-sm font-medium transition-colors text-muted-foreground hover:text-primary px-4 py-2 rounded-full",
+                         pathname.startsWith(link.href) && "text-primary"
+                    )}>
+                        {link.label}
+                        {pathname.startsWith(link.href) && (
+                            <motion.div
+                                layoutId="desktop-active-nav"
+                                className="absolute inset-0 bg-primary/10 rounded-full mix-blend-lighten dark:mix-blend-plus-lighter"
+                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                            />
+                        )}
+                    </Link>
+                </li>
+            ))}
+         </ul>
+      </nav>
       
       {/* Right Section */}
       <div className="flex items-center gap-4">
-        {isWelcomePage ? (
-            <Button asChild>
-                <Link href="/dashboard">Enter Dashboard</Link>
-            </Button>
-        ) : (
-            user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="flex items-center gap-2 p-1 h-auto rounded-full">
-                        <Avatar className="h-9 w-9">
-                            <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
-                            <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel>{user.displayName || user.email}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogout}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-            ) : (
-                <Button asChild>
-                  <Link href="/login">
-                    Get Started
-                  </Link>
+        {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="flex items-center gap-2 p-1 h-auto rounded-full">
+                    <Avatar className="h-9 w-9">
+                        <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
+                        <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
+                    </Avatar>
                 </Button>
-            )
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>{user.displayName || user.email}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+        ) : (
+            <Button asChild>
+              <Link href="/login">
+                Get Started
+              </Link>
+            </Button>
         )}
       </div>
     </header>
