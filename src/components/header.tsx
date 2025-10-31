@@ -23,12 +23,21 @@ import { motion } from 'framer-motion';
 
 
 const navLinks = [
+<<<<<<< HEAD
   { href: '/dashboard', authHref: '/dashboard', publicHref: '/', label: 'Dashboard' },
   { href: '/compare', label: 'Compare' },
   { href: '/leaderboard', label: 'Leaderboard' },
   { href: '/history', label: 'History' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
+=======
+    { href: '/', label: 'Home' },
+    { href: '/compare', label: 'Compare' },
+    { href: '/leaderboard', label: 'Leaderboard' },
+    { href: '/history', label: 'History' },
+    { href: '/about', label: 'About' },
+    { href: '/contact', label: 'Contact' },
+>>>>>>> 512e4b0 (Please creat a contact page with like a features that allow users to inp)
 ];
 
 export function Header() {
@@ -49,6 +58,7 @@ export function Header() {
     }
   }, [auth]);
 
+<<<<<<< HEAD
   const handleLogout = async () => {
     if (!auth) return;
     try {
@@ -110,6 +120,10 @@ export function Header() {
             )}
         </header>
       )
+=======
+  if (!mounted || isMobile) {
+    return <header className="p-4 flex justify-between items-center border-b h-[69px]" />;
+>>>>>>> 512e4b0 (Please creat a contact page with like a features that allow users to inp)
   }
 
   // Desktop Header

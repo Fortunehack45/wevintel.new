@@ -59,6 +59,7 @@ export function Footer() {
           </div>
 
           {/* Navigation Column */}
+<<<<<<< HEAD
           {user && (
             <div>
               <h4 className="font-semibold text-foreground mb-4">Navigate</h4>
@@ -69,6 +70,16 @@ export function Footer() {
               </ul>
             </div>
           )}
+=======
+          <div>
+            <h4 className="font-semibold text-foreground mb-4">Navigate</h4>
+            <ul className="space-y-3 text-sm">
+              <li><Link href="/compare" className="text-muted-foreground hover:text-primary transition-colors">Compare</Link></li>
+              <li><Link href="/leaderboard" className="text-muted-foreground hover:text-primary transition-colors">Leaderboard</Link></li>
+              <li><Link href="/history" className="text-muted-foreground hover:text-primary transition-colors">History</Link></li>
+            </ul>
+          </div>
+>>>>>>> 512e4b0 (Please creat a contact page with like a features that allow users to inp)
 
           {/* Legal Column */}
           <div>
