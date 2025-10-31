@@ -42,6 +42,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     }, []);
     
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> f640191 (When it's loading it's showing the old UI which is not right)
     const isAuthPage = pathname === '/login' || pathname === '/signup';
 <<<<<<< HEAD
@@ -62,6 +63,20 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
     const showSuggestion = mounted && pagesWithSuggestion.some(p => pathname.startsWith(p));
 >>>>>>> 878e142 (For layout suggestions features let it be able to display on the welcome)
+=======
+    // Determine which pages should NOT show the layout suggestion
+    const pagesWithoutSuggestion = [
+        '/login',
+        '/signup',
+        '/settings',
+        '/privacy',
+        '/terms',
+        '/about',
+        '/contact'
+    ];
+
+    const showSuggestion = mounted && !pagesWithoutSuggestion.some(p => pathname.startsWith(p));
+>>>>>>> b2c5788 (The layout suggestions features is not working the way I expected it to)
     
 <<<<<<< HEAD
     const appRoutes = ['/dashboard', '/compare', '/leaderboard', '/history', '/settings'];
