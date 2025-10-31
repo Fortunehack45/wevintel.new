@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info, Home } from 'lucide-react';
 =======
 import { Compass, Menu, Bot, Moon, Sun, Scale, Settings, LogIn, User as UserIcon, LogOut, Laptop } from 'lucide-react';
@@ -11,13 +12,21 @@ import { Compass, Menu, Bot, Moon, Sun, Scale, Settings, LogIn, User as UserIcon
 =======
 import { Compass, LogIn } from 'lucide-react';
 >>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
+=======
+import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Home, Scale, Trophy, History as HistoryIcon } from 'lucide-react';
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useAuth, useAuthContext } from '@/firebase/provider';
+=======
+import { useAuthContext } from '@/firebase/provider';
+import { useAuth } from '@/firebase/auth';
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
 import { signOut, type User as FirebaseUser } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -29,7 +38,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+<<<<<<< HEAD
 import { motion } from 'framer-motion';
+=======
+
+
+const navLinks = [
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/compare', label: 'Compare' },
+  { href: '/leaderboard', label: 'Leaderboard' },
+  { href: '/history', label: 'History' },
+];
+
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
 
 =======
 import { useTheme } from 'next-themes';
@@ -88,6 +109,7 @@ export function Header() {
   const [mounted, setMounted] = useState(false);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   const { toast } = useToast();
   const router = useRouter();
 =======
@@ -114,12 +136,22 @@ export function Header() {
   
   useEffect(() => {
 >>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
+=======
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const auth = useAuthContext();
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+
+  useEffect(() => {
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
     setMounted(true);
     if (auth) {
       const unsubscribe = useAuth(setUser);
       return () => unsubscribe();
     }
   }, [auth]);
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -226,15 +258,26 @@ export function Header() {
 >>>>>>> 804648f (Okay wait it should be in the header but in a professional way and posit)
 =======
   const isAppPage = ['/dashboard', '/compare', '/leaderboard', '/history', '/settings'].some(route => pathname.startsWith(route));
+=======
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
 
+  const handleLogout = async () => {
+    if (!auth) return;
+    try {
+        await signOut(auth);
+        toast({ title: "Logged Out", description: "You have been successfully logged out." });
+        router.push('/login');
+    } catch (error: any) {
+        toast({ title: "Logout Failed", description: error.message, variant: "destructive" });
+    }
+  }
+  
   if (!mounted) {
     return <header className="p-4 flex justify-between items-center border-b h-[60px]" />;
 >>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
   }
 
-  if (isMobile && isAppPage) {
-    return null; // The sidebar is present on mobile for app pages, no header needed.
-  }
+  const isWelcomePage = pathname === '/';
   
 <<<<<<< HEAD
   const UserMenu = () => (
@@ -296,11 +339,32 @@ export function Header() {
 =======
   return (
     <header className={cn("p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-40 h-[60px]")}>
+<<<<<<< HEAD
       <Link href="/" className="flex items-center gap-2 font-bold text-lg">
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
         <Compass className="h-6 w-6 text-primary" />
         <span className="text-foreground">WebIntel</span>
       </Link>
+=======
+      <div className="flex items-center gap-6">
+        <Link href={isWelcomePage ? "/" : "/dashboard"} className="flex items-center gap-2 font-bold text-lg">
+          <Compass className="h-6 w-6 text-primary" />
+          <span className="text-foreground">WebIntel</span>
+        </Link>
+        {!isMobile && !isWelcomePage && (
+          <nav className="flex items-center gap-4">
+             {navLinks.map(link => (
+                <Link key={link.href} href={link.href} className={cn(
+                    "text-sm font-medium transition-colors hover:text-primary",
+                    pathname.startsWith(link.href) ? "text-primary" : "text-muted-foreground"
+                )}>
+                    {link.label}
+                </Link>
+             ))}
+          </nav>
+        )}
+      </div>
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
       
 <<<<<<< HEAD
       {!isMobile && <NavContent />}
@@ -339,6 +403,7 @@ export function Header() {
 =======
       <div className="flex items-center gap-2">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <NavContent />
 <<<<<<< HEAD
         <ThemeToggle />
@@ -357,6 +422,22 @@ export function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>{user.displayName || user.email}</DropdownMenuLabel>
+=======
+        {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="flex items-center gap-2">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
+                        <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <span className="hidden md:inline">{user.displayName || user.email}</span>
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
@@ -368,6 +449,7 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
         ) : (
+<<<<<<< HEAD
             <Button asChild>
               <Link href="/login">
                 Get Started
@@ -407,9 +489,11 @@ export function Header() {
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
 =======
         {isWelcomePage && (
+=======
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
           <Button asChild>
-            <Link href="/dashboard">
-              Get Started
+            <Link href="/login">
+              <LogIn className='mr-2' /> Login
             </Link>
           </Button>
         )}

@@ -6,6 +6,9 @@ import { Header } from './header';
 import { Footer } from './footer';
 import { BottomNav } from './bottom-nav';
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
@@ -42,6 +45,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
 =======
     
+<<<<<<< HEAD
     const appRoutes = ['/dashboard', '/compare', '/leaderboard', '/history', '/settings'];
 <<<<<<< HEAD
     const isAppPage = appRoutes.some(route => pathname.startsWith(route));
@@ -76,11 +80,19 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     
     if (!mounted) {
 =======
+=======
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
     if (!mounted) {
-        return null; // Render nothing until client-side hydration is complete to prevent layout flash
+        return (
+             <div className="flex flex-col h-full">
+                <Header />
+                <main className="flex-1">
+                    {children}
+                </main>
+            </div>
+        );
     }
     
-    // Auth pages have their own simple layout
     if (isAuthPage) {
 >>>>>>> f640191 (When it's loading it's showing the old UI which is not right)
         return (
@@ -90,27 +102,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         );
     }
     
-    // Desktop view for app pages uses the sidebar
-    if (!isMobile && isAppPage) {
-        return (
-             <div className="flex h-full">
-                <Sidebar />
-                <div className="flex-1 md:pl-64">
-                     <main className="flex-1 min-h-screen">
-                        {children}
-                    </main>
-                </div>
-            </div>
-        )
-    }
-    
-    // All other pages (including mobile app pages and all welcome/info pages) use Header + Footer + BottomNav
     return (
         <div className="flex flex-col min-h-screen">
             <div className="wave-container">
                 <div className="wave-light"></div>
             </div>
             <Header />
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -146,5 +144,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <BottomNav />
             {showSuggestion && <OptimalLayoutSuggestion />}
         </div>
+=======
+            <main className="flex-1">
+                {children}
+            </main>
+            <Footer />
+            {isMobile && !isWelcomePage && <BottomNav />}
+        </>
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
     )
 }

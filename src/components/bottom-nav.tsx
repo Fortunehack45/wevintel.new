@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Home, Scale, Trophy, History, Settings } from 'lucide-react';
 =======
 import { Home, Compass, Info, Send } from 'lucide-react';
@@ -12,6 +13,9 @@ import { Home, Compass, Info, Send } from 'lucide-react';
 =======
 import { Home, Scale, Trophy, History } from 'lucide-react';
 >>>>>>> 5813a0a (Use button navigation bar for mobile view please)
+=======
+import { Home, Scale, Trophy, History, Settings } from 'lucide-react';
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
@@ -33,6 +37,7 @@ const navLinks = [
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { href: '/history', label: 'History', icon: History },
   { href: '/settings', label: 'Settings', icon: Settings },
+<<<<<<< HEAD
 =======
   { href: '/dashboard', label: 'Home', icon: Home },
 <<<<<<< HEAD
@@ -44,6 +49,8 @@ const navLinks = [
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { href: '/history', label: 'History', icon: History },
 >>>>>>> 5813a0a (Use button navigation bar for mobile view please)
+=======
+>>>>>>> 2cc806b (Also introduced the header for the mobile view back)
 ];
 
 export function BottomNav() {
