@@ -1,10 +1,7 @@
 
 'use client';
 import { Skeleton } from "@/components/ui/skeleton";
-import type { AnalysisResult } from "@/lib/types";
 import { Card, CardContent, CardHeader } from "../ui/card";
-import { OverviewCard } from "./overview-card";
-import { SummaryCard } from "./summary-card";
 
 function PerformancePlaceholder() {
     return (
@@ -70,7 +67,6 @@ function AuditPlaceholder() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4 py-4">
-              <Skeleton className="h-10 w-full" />
               <Skeleton className="h-[300px] w-full mt-4" />
           </div>
         </CardContent>
@@ -130,7 +126,7 @@ function DashboardSkeleton() {
                 <Skeleton className="h-10 w-1/2" />
                 <Skeleton className="h-6 w-3/4 mt-2" />
             </div>
-            <Skeleton className="h-16 w-full max-w-xl mx-auto" />
+            <Skeleton className="h-16 w-full max-w-xl" />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
             <Skeleton className="h-40 w-full" />

@@ -11,8 +11,7 @@ import type { User } from 'firebase/auth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Scale, Trophy, Star, Building, Sparkles, Heart } from 'lucide-react';
 import Link from 'next/link';
-import { DashboardSkeleton } from '@/components/analysis/dashboard-skeleton';
-import { AIRedesignCard } from '@/components/analysis/ai-redesign-card';
+import { LoadingOverlay } from '@/components/loading-overlay';
 
 const sponsors = [
     { name: 'Vercel', logo: '/sponsors/vercel.svg' },
@@ -78,7 +77,7 @@ export default function DashboardPage() {
   }, [auth, router]);
 
   if (isLoading || !user) {
-    return <DashboardSkeleton />;
+    return <LoadingOverlay isVisible={true} />;
   }
   
   const welcomeName = user.displayName || user.email;
@@ -211,12 +210,14 @@ export default function DashboardPage() {
         <h2 className="text-3xl font-bold mb-6 text-left flex items-center gap-3"><Building className="text-primary"/> Sponsored By</h2>
         <Card className="glass-card">
             <CardContent className="p-6">
-                <div className="flex flex-wrap items-center justify-center gap-8">
-                    {sponsors.map(sponsor => (
-                         <div key={sponsor.name} className="flex items-center gap-3 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all">
-                             <p className="font-bold text-lg">{sponsor.name}</p>
-                         </div>
-                    ))}
+                <div className="tech-stack-scroller" data-animated="true">
+                    <div className="tech-stack-scroller-inner flex items-center gap-16">
+                        {[...sponsors, ...sponsors].map((sponsor, index) => (
+                             <div key={`${sponsor.name}-${index}`} className="flex items-center gap-3 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all">
+                                 <p className="font-bold text-lg">{sponsor.name}</p>
+                             </div>
+                        ))}
+                    </div>
                 </div>
             </CardContent>
         </Card>
