@@ -24,7 +24,7 @@ const formSchema = z.object({
 const AuthSkeleton = () => (
     <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[80vh]">
         <Card className="w-full max-w-md">
-            <CardHeader>
+            <CardHeader className="text-center">
                 <Skeleton className="h-8 w-48 mx-auto" />
                 <Skeleton className="h-4 w-64 mx-auto mt-2" />
             </CardHeader>
@@ -36,6 +36,9 @@ const AuthSkeleton = () => (
                 <div className="space-y-2">
                     <Skeleton className="h-4 w-24" />
                     <Skeleton className="h-10 w-full" />
+                </div>
+                 <div className="flex items-center justify-end">
+                    <Skeleton className="h-4 w-28" />
                 </div>
                 <Skeleton className="h-10 w-full" />
                 <Skeleton className="h-4 w-48 mx-auto" />
@@ -199,3 +202,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    

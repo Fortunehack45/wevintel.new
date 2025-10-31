@@ -128,14 +128,17 @@ export function DashboardSkeleton() {
             </div>
             <Skeleton className="h-16 w-full max-w-xl" />
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
             <Skeleton className="h-40 w-full" />
-             <Skeleton className="h-40 w-full" />
-            <Skeleton className="h-40 w-full lg:col-span-1" />
+            <Skeleton className="h-40 w-full" />
         </div>
          <div>
             <Skeleton className="h-8 w-48 mb-6" />
-            <Skeleton className="h-64 w-full" />
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <Skeleton className="h-64 w-full" />
+                <Skeleton className="h-64 w-full" />
+                <Skeleton className="h-64 w-full" />
+            </div>
         </div>
     </div>
   );
@@ -147,3 +150,5 @@ DashboardSkeleton.TrafficPlaceholder = TrafficPlaceholder;
 DashboardSkeleton.AuditPlaceholder = AuditPlaceholder;
 DashboardSkeleton.SummaryPlaceholder = SummaryPlaceholder;
 DashboardSkeleton.TechStackPlaceholder = TechStackPlaceholder;
+
+    
