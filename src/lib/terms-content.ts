@@ -3,10 +3,10 @@ export const termsContent = [
     {
         title: "ARTICLE I: PRELIMINARY PROVISIONS AND DEFINITIONS",
         content: `
-            <h3>Introduction and Scope of Agreement</h3>
+            <h3>1.1 Introduction and Scope of Agreement</h3>
             <p>These Terms and Conditions of Service (hereinafter referred to as “the Terms”, “this Agreement”, or “these Terms and Conditions”) constitute a legally binding contract between WebIntel, its operators, administrators, and affiliated entities (hereinafter collectively referred to as “the Service Provider”, “We”, “Us”, or “Our”) and any individual or entity accessing, browsing, or utilizing the WebIntel website analysis and intelligence tool platform (hereinafter referred to as “the User”, “You”, “Your”, or “the Client”).</p>
             <p>By accessing, registering for, or utilizing any feature, function, or service provided through the WebIntel platform (hereinafter referred to as “the Platform”, “the Service”, or “the Application”), You hereby acknowledge that You have read, understood, and unconditionally agree to be bound by all terms, conditions, obligations, representations, and warranties set forth herein. This Agreement shall govern Your use of the Service in its entirety and supersedes all prior agreements, understandings, negotiations, or communications, whether written or oral, relating to the subject matter hereof.</p>
-            <h3>Definitions and Interpretation</h3>
+            <h3>1.2 Definitions and Interpretation</h3>
             <p>For the purposes of this Agreement, unless the context otherwise requires, the following terms shall have the meanings ascribed to them below:</p>
             <ul>
                 <li><strong>“Account”</strong> means the registered user profile created by the User through the Firebase authentication system, which enables access to the Platform’s features and functionalities.</li>
@@ -17,42 +17,42 @@ export const termsContent = [
                 <li><strong>“Personal Data”</strong> means any information relating to an identified or identifiable natural person, as defined under applicable data protection legislation, including but not limited to the Nigeria Data Protection Act 2023 and the General Data Protection Regulation (GDPR) where applicable.</li>
                 <li><strong>“Third-Party Services”</strong> means external application programming interfaces, data sources, and services utilized by the Platform, including but not limited to Google PageSpeed Insights, Google Gemini artificial intelligence services, ip-api.com, and Firebase authentication services.</li>
             </ul>
-            <h3>Legal Capacity and Authority</h3>
+            <h3>1.3 Legal Capacity and Authority</h3>
             <p>By accepting these Terms, You represent and warrant that You possess the legal capacity and authority to enter into this binding Agreement. If You are accepting these Terms on behalf of a company, organization, or other legal entity, You represent and warrant that You have the requisite authority to bind such entity to these Terms, and in such case, “You” and “Your” shall refer to such entity. You further represent that You are at least eighteen years of age or have reached the age of majority in Your jurisdiction, whichever is greater, and are fully able and competent to enter into, abide by, and comply with the terms, conditions, obligations, affirmations, representations, and warranties set forth in these Terms.</p>
         `
     },
     {
         title: "ARTICLE II: CONSTITUTIONAL AND LEGAL FRAMEWORK",
         content: `
-            <h3>Compliance with Nigerian Constitutional Provisions</h3>
+            <h3>2.1 Compliance with Nigerian Constitutional Provisions</h3>
             <p>The Service Provider acknowledges and commits to operating in full compliance with the Constitution of the Federal Republic of Nigeria 1999 (as amended), particularly with respect to the fundamental rights guaranteed under Chapter IV thereof. The Platform’s operations are conducted with due regard to:</p>
             <ul>
                 <li>Section 37 of the Constitution, which guarantees the privacy of citizens, their homes, correspondence, telephone conversations, and telegraphic communications. The Service Provider’s implementation of local storage mechanisms and privacy-first architecture is designed to uphold and protect these constitutional guarantees.</li>
                 <li>Section 39 of the Constitution, which guarantees freedom of expression and the press, including the freedom to hold opinions and to receive and impart ideas and information without interference. The Platform facilitates the free flow of information regarding publicly available website data while respecting legitimate restrictions necessary in a democratic society.</li>
                 <li>Section 40 of the Constitution, which guarantees the right to peaceful assembly and association. The Platform’s user authentication and account management systems are designed to facilitate legitimate user association while preventing unlawful activities.</li>
             </ul>
-            <h3>Adherence to United Nations Human Rights Instruments</h3>
+            <h3>2.2 Adherence to United Nations Human Rights Instruments</h3>
             <p>The Service Provider recognizes and undertakes to respect the principles enshrined in various United Nations instruments concerning human rights in the digital sphere, including:</p>
             <ul>
                 <li>The Universal Declaration of Human Rights (UDHR), particularly Article 12, which provides that no one shall be subjected to arbitrary interference with his privacy, family, home, or correspondence, nor to attacks upon his honour and reputation, and that everyone has the right to the protection of the law against such interference or attacks. The Platform’s privacy-first design philosophy directly implements these principles through client-side data storage and minimal data collection practices.</li>
                 <li>Article 19 of the International Covenant on Civil and Political Rights (ICCPR), to which Nigeria is a State Party, which guarantees the right to freedom of expression, including the freedom to seek, receive, and impart information and ideas of all kinds. The Platform serves as a tool to facilitate the legitimate seeking and receiving of publicly available information concerning website infrastructure and performance.</li>
                 <li>The United Nations Guiding Principles on Business and Human Rights, which establish the corporate responsibility to respect human rights. The Service Provider commits to conducting human rights due diligence throughout its operations and to addressing any adverse human rights impacts arising from its activities.</li>
             </ul>
-            <h3>Compliance with Data Protection Legislation</h3>
+            <h3>2.3 Compliance with Data Protection Legislation</h3>
             <p>The Service Provider operates in strict compliance with the Nigeria Data Protection Act 2023 (NDPA), which establishes the legal framework for data protection in Nigeria. The Service Provider’s practices align with the NDPA’s principles of lawfulness, fairness, transparency, purpose limitation, data minimization, accuracy, storage limitation, integrity, and confidentiality. Where the Platform processes Personal Data of individuals located in the European Union, the Service Provider also ensures compliance with the General Data Protection Regulation (EU) 2016/679 (GDPR).</p>
         `
     },
     {
         title: "ARTICLE III: USER REGISTRATION AND ACCOUNT MANAGEMENT",
         content: `
-            <h3>Account Creation and Authentication</h3>
+            <h3>3.1 Account Creation and Authentication</h3>
             <p>To access certain features of the Platform, including but not limited to the ability to save analysis history and utilize comparison functionalities, You must create an Account through the Firebase authentication system integrated into the Platform. During the registration process, You agree to:</p>
             <ul>
                 <li>Provide accurate, current, and complete information as prompted by the registration form. You undertake to maintain and promptly update Your registration information to keep it accurate, current, and complete at all times during the term of this Agreement.</li>
                 <li>Create a secure password and maintain the confidentiality of Your Account credentials. You acknowledge that You are entirely responsible for maintaining the security and confidentiality of Your Account and password, and You agree to notify the Service Provider immediately of any unauthorized use of Your Account or any other breach of security.</li>
                 <li>Accept full responsibility for all activities that occur under Your Account, whether or not You have authorized such activities. You agree that the Service Provider shall not be liable for any loss or damage arising from Your failure to comply with these security obligations.</li>
             </ul>
-            <h3>Account Restrictions and Prohibitions</h3>
+            <h3>3.2 Account Restrictions and Prohibitions</h3>
             <p>You agree that You shall not, and shall not permit any third party to:</p>
             <ul>
                 <li>Create multiple Accounts for fraudulent purposes or to circumvent any restrictions, suspensions, or terminations imposed by the Service Provider.</li>
@@ -61,7 +61,7 @@ export const termsContent = [
                 <li>Create an Account using false, misleading, or inaccurate information, or create an Account on behalf of someone other than yourself without proper authorization.</li>
                 <li>Create an Account or use the Service if You have been previously banned, suspended, or otherwise prohibited from using the Service, unless You have received express written permission from the Service Provider to create a new Account.</li>
             </ul>
-            <h3>Account Suspension and Termination</h3>
+            <h3>3.3 Account Suspension and Termination</h3>
             <p>The Service Provider reserves the right, in its sole and absolute discretion, to suspend, terminate, or restrict access to Your Account, with or without notice, for any reason whatsoever, including but not limited to:</p>
             <ul>
                 <li>Violation of any provision of these Terms and Conditions.</li>
@@ -76,18 +76,18 @@ export const termsContent = [
     {
         title: "ARTICLE IV: SCOPE OF SERVICES AND FUNCTIONALITY",
         content: `
-            <h3>Description of Services Provided</h3>
+            <h3>4.1 Description of Services Provided</h3>
             <p>The Platform provides Users with a comprehensive suite of website analysis and intelligence gathering tools, which include but are not limited to:</p>
             <ul>
-                <li><strong>Performance Analysis Services:</strong> The Platform utilizes the Google PageSpeed Insights application programming interface to generate detailed reports concerning Core Web Vitals metrics, performance scores, accessibility assessments, and best practices evaluations for both mobile and desktop versions of target websites. These analyses are conducted using the Lighthouse auditing framework and provide Users with quantitative and qualitative data regarding website performance optimization opportunities.</li>
-                <li><strong>Security Assessment Services:</strong> The Platform performs automated security scanning of target websites to identify the presence or absence of critical security headers, including but not limited to Content Security Policy (CSP), HTTP Strict Transport Security (HSTS), X-Frame-Options, X-Content-Type-Options, and Referrer-Policy headers. The Platform also verifies SSL/TLS certificate validity and configuration. Users are advised that these security assessments are preliminary in nature and should not be considered a substitute for comprehensive professional security audits.</li>
-                <li><strong>Artificial Intelligence-Enhanced Analysis:</strong> Through integration with Google Gemini artificial intelligence services, the Platform provides Users with AI-generated summaries of website characteristics, actionable recommendations for improvement, estimated traffic patterns, and comprehensive technology stack identification. These AI-generated insights are provided on a best-efforts basis and may contain inaccuracies or errors inherent in machine learning systems.</li>
-                <li><strong>Technology Stack Detection:</strong> The Platform employs various detection methodologies to identify the frameworks, libraries, content management systems, analytics services, advertising platforms, and other technological components utilized by target websites. This information is compiled from publicly available indicators and may not represent a complete or entirely accurate inventory of all technologies employed.</li>
-                <li><strong>Hosting and Domain Intelligence:</strong> The Platform provides information concerning the Internet Protocol (IP) address, Internet Service Provider (ISP), autonomous system number (ASN), and geographic location of the hosting infrastructure supporting target websites. This data is obtained from third-party geolocation services and is subject to the accuracy limitations inherent in such services.</li>
-                <li><strong>Metadata and Search Engine Optimization Analysis:</strong> The Platform inspects and reports on Open Graph protocol metadata, robots.txt directives, sitemap.xml files, and other structured data implementations to assess search engine optimization readiness and social media integration preparedness.</li>
-                <li><strong>Comparative Analysis Functionality:</strong> The Platform enables Users to conduct side-by-side comparative analyses of two different websites simultaneously, facilitating competitive benchmarking and performance comparison activities.</li>
+                <li>Performance Analysis Services: The Platform utilizes the Google PageSpeed Insights application programming interface to generate detailed reports concerning Core Web Vitals metrics, performance scores, accessibility assessments, and best practices evaluations for both mobile and desktop versions of target websites. These analyses are conducted using the Lighthouse auditing framework and provide Users with quantitative and qualitative data regarding website performance optimization opportunities.</li>
+                <li>Security Assessment Services: The Platform performs automated security scanning of target websites to identify the presence or absence of critical security headers, including but not limited to Content Security Policy (CSP), HTTP Strict Transport Security (HSTS), X-Frame-Options, X-Content-Type-Options, and Referrer-Policy headers. The Platform also verifies SSL/TLS certificate validity and configuration. Users are advised that these security assessments are preliminary in nature and should not be considered a substitute for comprehensive professional security audits.</li>
+                <li>Artificial Intelligence-Enhanced Analysis: Through integration with Google Gemini artificial intelligence services, the Platform provides Users with AI-generated summaries of website characteristics, actionable recommendations for improvement, estimated traffic patterns, and comprehensive technology stack identification. These AI-generated insights are provided on a best-efforts basis and may contain inaccuracies or errors inherent in machine learning systems.</li>
+                <li>Technology Stack Detection: The Platform employs various detection methodologies to identify the frameworks, libraries, content management systems, analytics services, advertising platforms, and other technological components utilized by target websites. This information is compiled from publicly available indicators and may not represent a complete or entirely accurate inventory of all technologies employed.</li>
+                <li>Hosting and Domain Intelligence: The Platform provides information concerning the Internet Protocol (IP) address, Internet Service Provider (ISP), autonomous system number (ASN), and geographic location of the hosting infrastructure supporting target websites. This data is obtained from third-party geolocation services and is subject to the accuracy limitations inherent in such services.</li>
+                <li>Metadata and Search Engine Optimization Analysis: The Platform inspects and reports on Open Graph protocol metadata, robots.txt directives, sitemap.xml files, and other structured data implementations to assess search engine optimization readiness and social media integration preparedness.</li>
+                <li>Comparative Analysis Functionality: The Platform enables Users to conduct side-by-side comparative analyses of two different websites simultaneously, facilitating competitive benchmarking and performance comparison activities.</li>
             </ul>
-            <h3>Service Limitations and Disclaimers</h3>
+            <h3>4.2 Service Limitations and Disclaimers</h3>
             <p>You acknowledge and agree that:</p>
             <ul>
                 <li>The Platform provides analysis based on publicly available information and data obtained from Third-Party Services. The accuracy, completeness, reliability, and timeliness of such information cannot be guaranteed by the Service Provider.</li>
@@ -96,7 +96,7 @@ export const termsContent = [
                 <li>Artificial intelligence-generated content, including traffic estimations, technology identifications, and recommendations, is produced by machine learning models that may generate inaccurate, incomplete, or misleading information. Such content should be independently verified before being relied upon for any material decision-making purposes.</li>
                 <li>The Platform's functionality is dependent upon the continued availability and proper operation of Third-Party Services. The Service Provider does not control these Third-Party Services and cannot guarantee their continuous availability, accuracy, or performance.</li>
             </ul>
-            <h3>Acceptable Use Policy</h3>
+            <h3>4.3 Acceptable Use Policy</h3>
             <p>You agree to use the Platform solely for lawful purposes and in accordance with these Terms. Specifically, You agree not to use the Platform:</p>
             <ul>
                 <li>To analyze websites for which You do not have authorization to conduct such analysis, where such analysis would violate applicable laws, regulations, or the target website’s terms of service.</li>
@@ -113,10 +113,10 @@ export const termsContent = [
     {
         title: "ARTICLE V: INTELLECTUAL PROPERTY RIGHTS AND LICENSES",
         content: `
-            <h3>Ownership of Platform and Service Provider Content</h3>
+            <h3>5.1 Ownership of Platform and Service Provider Content</h3>
             <p>All Intellectual Property Rights subsisting in the Platform, including but not limited to the software code, algorithms, user interface designs, graphics, logos, trademarks, service marks, trade names, and all Content created by or on behalf of the Service Provider, are and shall remain the exclusive property of the Service Provider and its licensors. Nothing in these Terms shall be construed as transferring any ownership rights in such Intellectual Property Rights to You.</p>
             <p>The Platform is protected by copyright, trademark, patent, trade secret, and other intellectual property laws of Nigeria, international treaties, and laws of other jurisdictions where the Service Provider operates. Unauthorized copying, modification, distribution, public display, or creation of derivative works from any part of the Platform is strictly prohibited and may result in severe civil and criminal penalties.</p>
-            <h3>Limited License Grant to Users</h3>
+            <h3>5.2 Limited License Grant to Users</h3>
             <p>Subject to Your strict compliance with these Terms and Conditions, the Service Provider grants You a limited, non-exclusive, non-transferable, non-sublicensable, revocable license to access and use the Platform solely for Your personal or internal business purposes in accordance with these Terms. This license does not include any right to:</p>
             <ul>
                 <li>Resell, redistribute, or commercialize the Service or any Content obtained through the Service.</li>
@@ -125,14 +125,14 @@ export const termsContent = [
                 <li>Use the Platform to develop, operate, or distribute any competing product or service.</li>
                 <li>Frame, mirror, or create the appearance that the Platform is operated by or associated with any third party without the Service Provider’s express prior written consent.</li>
             </ul>
-            <h3>User-Generated Content and Analysis Data</h3>
+            <h3>5.3 User-Generated Content and Analysis Data</h3>
             <p>You retain all ownership rights in any data that You input into the Platform, including website URLs submitted for analysis and any custom notes or annotations You may create. However, You acknowledge and agree that:</p>
             <ul>
                 <li>Analysis reports, AI-generated insights, and other Content produced by the Platform through processing of Your inputs are considered derivative works that incorporate the Service Provider’s proprietary algorithms, methodologies, and Third-Party Service data. Such derivative works are subject to the Service Provider’s Intellectual Property Rights.</li>
                 <li>Any feedback, suggestions, ideas, or other information You provide to the Service Provider regarding the Platform (“Feedback”) shall become the exclusive property of the Service Provider. You hereby irrevocably assign to the Service Provider all rights, title, and interest in and to such Feedback, including all Intellectual Property Rights therein, and waive any moral rights You may have in such Feedback.</li>
                 <li>The Service Provider may use aggregated, anonymized, and de-identified data derived from User interactions with the Platform for statistical analysis, service improvement, and research purposes, provided that such use does not identify individual Users or violate applicable data protection laws.</li>
             </ul>
-            <h3>Third-Party Intellectual Property</h3>
+            <h3>5.4 Third-Party Intellectual Property</h3>
             <p>The Platform incorporates certain Third-Party Services and may display trademarks, service marks, and logos belonging to third parties. All such marks are the property of their respective owners. The display of third-party marks does not imply any endorsement, sponsorship, or affiliation between the Service Provider and such third parties, except as may be expressly disclosed.</p>
             <p>You acknowledge that Your use of the Platform may be subject to the terms of service, privacy policies, and intellectual property rights of Third-Party Services, including but not limited to Google’s Terms of Service and API Services User Data Policy. You agree to comply with all such third-party terms and acknowledge that the Service Provider is not responsible for any third party’s enforcement of their rights.</p>
         `
@@ -140,14 +140,14 @@ export const termsContent = [
     {
         title: "ARTICLE VI: DATA PROTECTION AND PRIVACY PROVISIONS",
         content: `
-            <h3>Privacy-First Architecture and Local Storage</h3>
+            <h3>6.1 Privacy-First Architecture and Local Storage</h3>
             <p>The Platform has been intentionally designed and architected to minimize the collection, processing, and storage of Personal Data. In furtherance of the constitutional right to privacy guaranteed under Section 37 of the Constitution of the Federal Republic of Nigeria and in compliance with the Nigeria Data Protection Act 2023, the Service Provider employs a privacy-first approach characterized by:</p>
             <ul>
                 <li><strong>Client-Side Data Storage:</strong> All analysis history, comparison data, User preferences, and related information generated through Your use of the Platform are stored exclusively within Your browser’s Local Storage mechanism. This data remains on Your local computing device and is not transmitted to, stored on, or accessible by the Service Provider’s servers, except as may be necessary for the provision of specific services requested by You.</li>
                 <li><strong>No Server-Side Activity Logging:</strong> The Service Provider does not maintain server-side logs of User activities, including the specific URLs analyzed, the timing of such analyses, or the results obtained, except for minimal technical logs necessary to maintain system security and integrity.</li>
                 <li><strong>User Control and Data Portability:</strong> You maintain complete control over all data stored in Your browser’s Local Storage. You may export, delete, or otherwise manage this data at any time through the Platform's history management interface or through Your browser’s native data management tools.</li>
             </ul>
-            <h3>Authentication Data Processing</h3>
+            <h3>6.2 Authentication Data Processing</h3>
             <p>For the purpose of providing Account registration and authentication services, the Platform utilizes Firebase Authentication, a service provided by Google LLC. In connection with this authentication process, the following Personal Data may be collected and processed:</p>
             <ul>
                 <li>Email address provided during Account registration.</li>
@@ -156,14 +156,14 @@ export const termsContent = [
                 <li>Device and browser information necessary for security purposes, including IP address, user agent string, and device identifiers.</li>
             </ul>
             <p>This authentication data is processed by Google LLC acting as a data processor on behalf of the Service Provider and is subject to Google's Privacy Policy and security practices. The legal basis for processing this authentication data is the necessity of such processing for the performance of the contract between You and the Service Provider as contemplated under Section 2.2 of the Nigeria Data Protection Act 2023.</p>
-            <h3>Third-Party Data Processing</h3>
+            <h3>6.3 Third-Party Data Processing</h3>
             <p>When You utilize the Platform’s analysis features, certain data is transmitted to Third-Party Services for the purpose of generating analysis reports. Specifically:</p>
             <ul>
                 <li><strong>Google PageSpeed Insights:</strong> The URL of the website You wish to analyze is transmitted to Google’s PageSpeed Insights API. Google may process this data in accordance with its own privacy policies and data protection practices. The Service Provider does not control Google’s data processing practices and is not responsible for Google’s compliance with applicable data protection laws.</li>
                 <li><strong>IP Geolocation Services:</strong> The IP address of the target website being analyzed may be transmitted to ip-api.com for the purpose of obtaining geographic location and hosting provider information. This transmission occurs solely for the purpose of providing the requested analysis service and does not involve any Personal Data concerning You as the User.</li>
                 <li><strong>Google Gemini AI Services:</strong> Website metadata and technical characteristics are transmitted to Google Gemini for the purpose of generating AI-enhanced insights and recommendations. These transmissions do not include Personal Data concerning You as the User but may include publicly available information concerning the target website.</li>
             </ul>
-            <h3>User Rights Under Data Protection Law</h3>
+            <h3>6.4 User Rights Under Data Protection Law</h3>
             <p>Pursuant to the Nigeria Data Protection Act 2023 and other applicable data protection legislation, You have the following rights with respect to Your Personal Data:</p>
             <ul>
                 <li><strong>Right of Access:</strong> You have the right to request confirmation of whether the Service Provider processes Your Personal Data and, where applicable, to obtain access to such Personal Data along with information concerning the purposes of processing, categories of data processed, and recipients or categories of recipients to whom the data has been disclosed.</li>
@@ -175,7 +175,7 @@ export const termsContent = [
                 <li><strong>Right to Withdraw Consent:</strong> Where processing is based on Your consent, You have the right to withdraw such consent at any time, without affecting the lawfulness of processing based on consent before its withdrawal.</li>
             </ul>
             <p>To exercise any of these rights, You may contact the Service Provider using the contact information provided in Article XII hereof. The Service Provider shall respond to Your request within one month of receipt, or within such other timeframe as may be required by applicable data protection legislation.</p>
-            <h3>Data Security Measures</h3>
+            <h3>6.5 Data Security Measures</h3>
             <p>The Service Provider implements appropriate technical and organizational measures to ensure a level of security appropriate to the risk of processing, taking into account the state of the art, the costs of implementation, and the nature, scope, context, and purposes of processing, as well as the risk of varying likelihood and severity for the rights and freedoms of natural persons. Such measures include:</p>
             <ul>
                 <li>Encryption of data in transit using Transport Layer Security (TLS) protocols.</li>
@@ -185,7 +185,7 @@ export const termsContent = [
                 <li>Pseudonymization and anonymization of data where feasible and appropriate.</li>
             </ul>
             <p>Notwithstanding these security measures, You acknowledge that no method of electronic transmission or storage is completely secure, and the Service Provider cannot guarantee absolute security of data transmitted to or stored by the Platform.</p>
-            <h3>Data Breach Notification</h3>
+            <h3>6.6 Data Breach Notification</h3>
             <p>In the event of a data breach that is likely to result in a risk to Your rights and freedoms, the Service Provider shall notify You of such breach without undue delay and, where feasible, within seventy-two hours of becoming aware of the breach, in accordance with the requirements of the Nigeria Data Protection Act 2023. Such notification shall include, to the extent feasible:</p>
             <ul>
                 <li>The nature of the Personal Data breach, including the categories and approximate number of data subjects concerned and the categories and approximate number of Personal Data records concerned.</li>
@@ -198,7 +198,7 @@ export const termsContent = [
     {
         title: "ARTICLE VII: DISCLAIMERS AND WARRANTIES",
         content: `
-            <h3>Service Availability Disclaimer</h3>
+            <h3>7.1 Service Availability Disclaimer</h3>
             <p>The Platform is provided on an “as is” and “as available” basis without warranties of any kind, either express or implied, to the fullest extent permissible under applicable law. The Service Provider does not warrant that:</p>
             <ul>
                 <li>The Service will be uninterrupted, timely, secure, or error-free.</li>
@@ -207,17 +207,17 @@ export const termsContent = [
                 <li>Any errors in the software or Content will be corrected.</li>
             </ul>
             <p>The Service Provider expressly disclaims all warranties, whether express, implied, or statutory, including but not limited to implied warranties of merchantability, fitness for a particular purpose, title, and non-infringement. No advice or information, whether oral or written, obtained by You from the Service Provider or through the Service shall create any warranty not expressly stated in these Terms.</p>
-            <h3>Accuracy of Information Disclaimer</h3>
+            <h3>7.2 Accuracy of Information Disclaimer</h3>
             <p>You acknowledge and agree that all information, data, analyses, reports, and recommendations provided through the Platform are derived from publicly available sources and Third-Party Services and are provided for informational purposes only. The Service Provider makes no representation or warranty concerning the accuracy, reliability, completeness, or timeliness of such information.</p>
             <p>Website performance metrics, security assessments, technology identifications, traffic estimations, and other analytical outputs are subject to inherent limitations, measurement errors, and methodological constraints. Such outputs should not be relied upon as the sole basis for any material business, technical, legal, or financial decision without independent verification and professional consultation.</p>
             <p>The Service Provider expressly disclaims any liability for decisions made or actions taken in reliance upon information provided through the Platform.</p>
-            <h3>Artificial Intelligence Content Disclaimer</h3>
+            <h3>7.3 Artificial Intelligence Content Disclaimer</h3>
             <p>Content generated through artificial intelligence services, including but not limited to summaries, recommendations, traffic estimations, and technology identifications, is produced by machine learning models that may generate inaccurate, incomplete, biased, or misleading information. Such AI-generated content represents probabilistic outputs based on pattern recognition and statistical inference and should not be treated as factual statements or expert opinions.</p>
             <p>You acknowledge that AI-generated content may contain errors, hallucinations, or fabrications and agree that You shall independently verify any AI-generated information before relying upon it for any purpose. The Service Provider expressly disclaims all liability for any loss, damage, or injury arising from reliance upon AI-generated content.</p>
-            <h3>Third-Party Services Disclaimer</h3>
+            <h3>7.4 Third-Party Services Disclaimer</h3>
             <p>The Platform’s functionality depends upon the availability, performance, and accuracy of Third-Party Services over which the Service Provider exercises no control. The Service Provider makes no representation or warranty concerning the reliability, availability, accuracy, or fitness for purpose of any Third-Party Service. Your use of Third-Party Services through the Platform is governed by the respective terms of service and privacy policies of such Third-Party Services, and You acknowledge that the Service Provider is not responsible for any aspect of such Third-Party Services.</p>
             <p>The Service Provider may, in its sole discretion, discontinue integration with any Third-Party Service at any time, which may result in the unavailability of certain features or functionalities of the Platform. The Service Provider shall not be liable for any consequences arising from such discontinuation.</p>
-            <h3>Legal and Professional Advice Disclaimer</h3>
+            <h3>7.5 Legal and Professional Advice Disclaimer</h3>
             <p>Nothing contained in the Platform, including analyses, reports, recommendations, or AI-generated content, constitutes legal, financial, investment, cybersecurity, or other professional advice. The Platform is designed solely for informational and educational purposes. You should consult with appropriate licensed professionals before making any decisions or taking any actions based upon information obtained through the Platform.</p>
             <p>The Service Provider expressly disclaims any liability for consequences arising from Your failure to obtain appropriate professional advice or from Your reliance upon information provided through the Platform as a substitute for professional consultation.</p>
         `
@@ -225,7 +225,7 @@ export const termsContent = [
     {
         title: "ARTICLE VIII: LIMITATION OF LIABILITY AND INDEMNIFICATION",
         content: `
-            <h3>Exclusion of Consequential Damages</h3>
+            <h3>8.1 Exclusion of Consequential Damages</h3>
             <p>To the maximum extent permitted by applicable law, in no event shall the Service Provider, its affiliates, officers, directors, employees, agents, suppliers, or licensors be liable to You or any third party for any indirect, incidental, special, consequential, or punitive damages whatsoever, including but not limited to damages for loss of profits, loss of revenue, loss of data, loss of business opportunities, business interruption, loss of goodwill, or any other intangible losses, arising out of or relating to:</p>
             <ul>
                 <li>You’re access to, use of, or inability to access or use the Platform.</li>
@@ -234,11 +234,11 @@ export const termsContent = [
                 <li>Unauthorized access, use, or alteration of Your transmissions or content.</li>
             </ul>
             <p>Whether based on warranty, contract, tort (including negligence), product liability, or any other legal theory, and whether or not the Service Provider has been informed of the possibility of such damage, even if a limited remedy set forth herein is found to have failed of its essential purpose.</p>
-            <h3>Limitation of Aggregate Liability</h3>
+            <h3>8.2 Limitation of Aggregate Liability</h3>
             <p>To the maximum extent permitted by applicable law, the Service Provider’s total aggregate liability to You for all claims arising out of or relating to these Terms or Your use of the Platform, whether in contract, tort (including negligence), or otherwise, shall not exceed the amount of fees, if any, that You have paid to the Service Provider in the twelve months preceding the event giving rise to liability. Where You have not paid any fees to the Service Provider, the Service Provider’s total aggregate liability shall not exceed the sum of One Hundred United States Dollars (USD $100.00) or the equivalent in Nigerian Naira.</p>
-            <h3>Basis of the Bargain</h3>
+            <h3>8.3 Basis of the Bargain</h3>
             <p>You acknowledge and agree that the disclaimers, exclusions, and limitations of liability set forth in these Terms form an essential basis of the bargain between You and the Service Provider. The Service Provider would not be able to provide the Platform to You on an economically reasonable basis without these limitations. These limitations shall apply notwithstanding the failure of essential purpose of any limited remedy provided herein.</p>
-            <h3>User Indemnification Obligations</h3>
+            <h3>8.4 User Indemnification Obligations</h3>
             <p>You agree to indemnify, defend, and hold harmless the Service Provider, its affiliates, and their respective officers, directors, employees, agents, suppliers, and licensors from and against any and all claims, liabilities, damages, losses, costs, expenses, or fees (including reasonable attorneys’ fees and court costs) arising out of or relating to:</p>
             <ul>
                 <li>Your violation of these Terms and Conditions or any applicable law or regulation.</li>
@@ -248,7 +248,7 @@ export const termsContent = [
                 <li>Any false, misleading, or inaccurate information provided by You to the Service Provider.</li>
             </ul>
             <p>The Service Provider reserves the right to assume the exclusive defense and control of any matter subject to indemnification by You, in which event You shall cooperate fully with the Service Provider in asserting any available defenses. You shall not settle any claim subject to this indemnification provision without the Service Provider’s prior written consent.</p>
-            <h3>Force Majeure</h3>
+            <h3>8.5 Force Majeure</h3>
             <p>The Service Provider shall not be liable for any failure or delay in performing its obligations under these Terms where such failure or delay results from any cause beyond the Service Provider’s reasonable control, including but not limited to acts of God, war, terrorism, civil unrest, labor disputes, epidemics, pandemics, government actions, embargoes, fires, floods, earthquakes, accidents, strikes, shortages of transportation, facilities, fuel, energy, labor, or materials, failure of Third-Party Services, denial of service attacks or other malicious cyber activities, or failure of the internet or other communications infrastructure (each, a "Force Majeure Event").</p>
             <p>In the event of a Force Majeure Event, the Service Provider’s obligations shall be suspended for the duration of such event, and the Service Provider shall be entitled to a reasonable extension of time for performance. If a Force Majeure Event continues for a period exceeding ninety days, either party may terminate this Agreement upon written notice to the other party without liability.</p>
         `
@@ -256,10 +256,10 @@ export const termsContent = [
     {
         title: "ARTICLE IX: TERMINATION AND SUSPENSION",
         content: `
-            <h3>Termination by User</h3>
+            <h3>9.1 Termination by User</h3>
             <p>You may terminate Your relationship with the Service Provider at any time by discontinuing Your use of the Platform and, if You have created an Account, by deleting Your Account through the Platform’s account management interface or by contacting the Service Provider to request Account deletion. Upon such termination, Your license to use the Platform shall immediately terminate.</p>
             <p>You acknowledge that data stored in Your browser’s Local Storage will persist until You manually delete it through the Platform’s history management interface or Your browser’s data management tools. The Service Provider recommends that You delete all Local Storage data before ceasing use of the Platform if You wish to remove all traces of Your Platform usage from Your device.</p>
-            <h3>Termination by Service Provider</h3>
+            <h3>9.2 Termination by Service Provider</h3>
             <p>The Service Provider may, in its sole and absolute discretion, terminate or suspend Your access to all or part of the Platform, with or without cause, with or without notice, effective immediately. Without limiting the foregoing, the Service Provider may terminate or suspend Your access for:</p>
             <ul>
                 <li>Violation of any provision of these Terms and Conditions.</li>
@@ -271,7 +271,7 @@ export const termsContent = [
                 <li>Non-payment of fees, if applicable.</li>
             </ul>
             <p>Upon termination of Your access by the Service Provider, Your right to use the Platform shall immediately cease, and You shall immediately discontinue all use thereof.</p>
-            <h3>Effect of Termination</h3>
+            <h3>9.3 Effect of Termination</h3>
             <p>Upon termination of Your access to the Platform for any reason:</p>
             <ul>
                 <li>All licenses and rights granted to You in these Terms shall immediately terminate.</li>
@@ -281,7 +281,7 @@ export const termsContent = [
                 <li>Data stored in Your browser’s Local Storage shall remain on Your device until You manually delete it or until Your browser’s data retention policies cause it to be deleted.</li>
             </ul>
             <p>The Service Provider shall not be liable to You or any third party for any modification, suspension, or discontinuation of the Service or termination of Your access to the Service.</p>
-            <h3>Data Retrieval Upon Termination</h3>
+            <h3>9.4 Data Retrieval Upon Termination</h3>
             <p>Given the architecture of the Platform, whereby User data is stored exclusively in browser Local Storage rather than on the Service Provider’s servers, the Service Provider cannot retrieve or provide copies of Your analysis history, comparison data, or other locally stored information following termination of Your access to the Platform. You are solely responsible for exporting, backing up, or otherwise preserving any data You wish to retain prior to terminating Your use of the Platform or prior to any termination by the Service Provider.</p>
             <p>The Service Provider strongly recommends that You regularly export important analysis data and maintain Your own backup copies of any information You consider valuable. The Service Provider shall have no liability for any loss of data resulting from termination, whether such termination is initiated by You or by the Service Provider.</p>
         `
@@ -289,16 +289,16 @@ export const termsContent = [
     {
         title: "ARTICLE X: MODIFICATIONS TO TERMS AND SERVICE",
         content: `
-            <h3>Right to Modify Terms and Conditions</h3>
+            <h3>10.1 Right to Modify Terms and Conditions</h3>
             <p>The Service Provider reserves the right, in its sole and absolute discretion, to modify, amend, supplement, or replace these Terms and Conditions at any time, with or without prior notice to You. When material changes are made to these Terms, the Service Provider will update the “Last Updated” date at the beginning of these Terms and may, in its discretion, notify You of such changes by posting a notice on the Platform, sending an email to the address associated with Your Account, or through other reasonable means.</p>
             <p>Your continued use of the Platform following the posting of modified Terms constitutes Your acceptance of such modified Terms. If You do not agree to the modified Terms, You must immediately discontinue Your use of the Platform and, if You have an Account, delete You’re account. It is Your responsibility to review these Terms periodically to remain informed of any changes. The Service Provider shall not be liable for Your failure to review modified Terms or for any consequences arising from such failure.</p>
-            <h3>Material Changes and User Consent</h3>
+            <h3>10.2 Material Changes and User Consent</h3>
             <p>Notwithstanding the foregoing, where modifications to these Terms materially affect Your rights or obligations in a manner that would require Your express consent under applicable data protection legislation, the Service Provider shall obtain Your affirmative consent to such modifications before they become effective as to You. In such circumstances, You will be presented with the modified Terms upon Your next access to the Platform and will be required to accept such Terms before continuing to use the Platform.</p>
             <p>Your refusal to accept material modifications that require Your consent will result in the termination of Your access to the Platform, effective upon such refusal. The Service Provider shall not be liable for any consequences arising from Your decision to refuse to accept modified Terms.</p>
-            <h3>Modifications to Service Features</h3>
+            <h3>10.3 Modifications to Service Features</h3>
             <p>The Service Provider reserves the right to modify, suspend, or discontinue any aspect of the Platform, including any features, functionality, or content, temporarily or permanently, with or without notice to You. The Service Provider may undertake such modifications for any reason, including but not limited to technical requirements, business considerations, changes to Third-Party Services, legal or regulatory requirements, or security concerns.</p>
             <p>You acknowledge and agree that the Service Provider shall not be liable to You or any third party for any modification, suspension, or discontinuance of any aspect of the Platform. The Service Provider does not guarantee that any particular feature or functionality will continue to be available through the Platform and may remove or alter any such feature or functionality at any time without liability.</p>
-            <h3>Notification Methods</h3>
+            <h3>10.4 Notification Methods</h3>
             <p>Where the Service Provider determines that notice of modifications to these Terms or the Platform is appropriate, such notice may be provided through any of the following methods, at the service Provider's discretion:</p>
             <ul>
                 <li>Posting a prominent notice on the Platform’s homepage or within the user interface.</li>
@@ -312,53 +312,53 @@ export const termsContent = [
     {
         title: "ARTICLE XI: DISPUTE RESOLUTION AND GOVERNING LAW",
         content: `
-            <h3>Governing Law and Jurisdiction</h3>
+            <h3>11.1 Governing Law and Jurisdiction</h3>
             <p>These Terms and Conditions, and any dispute or claim arising out of or in connection with them or their subject matter or formation, including non-contractual disputes or claims, shall be governed by and construed in accordance with the laws of the Federal Republic of Nigeria. The United Nations Convention on Contracts for the International Sale of Goods shall not apply to these Terms.</p>
             <p>Subject to the alternative dispute resolution provisions set forth in Section 11.2 below, the parties hereby submit to the exclusive jurisdiction of the courts of the Federal Republic of Nigeria for the resolution of any disputes arising out of or relating to these Terms, the Platform, or the relationship between You and the Service Provider. You hereby irrevocably waive any objection to venue in such courts and any claim that such courts constitute an inconvenient forum.</p>
-            <h3>Mandatory Pre-Litigation Negotiation</h3>
+            <h3>11.2 Mandatory Pre-Litigation Negotiation</h3>
             <p>In recognition of the principles of alternative dispute resolution encouraged under Nigerian law and in the interest of resolving disputes efficiently and cost-effectively, the parties agree that, prior to initiating any formal legal proceedings concerning any dispute, controversy, or claim arising out of or relating to these Terms or the breach, termination, enforcement, interpretation, or validity thereof, including the determination of the scope or applicability of this agreement to arbitrate or negotiate, the parties shall engage in good faith negotiations for a period of not less than sixty days following written notice by one party to the other party describing the nature of the dispute.</p>
             <p>During this sixty-day negotiation period, the parties shall make reasonable efforts to resolve the dispute through direct communication and shall designate representatives with authority to settle the dispute to participate in such negotiations. If the parties are unable to resolve the dispute through negotiation within such sixty-day period, either party may thereafter pursue any legal remedies available under these Terms or applicable law.</p>
-            <h3>Arbitration Agreement</h3>
+            <h3>11.3 Arbitration Agreement</h3>
             <p>If the parties are unable to resolve any dispute through the mandatory pre-litigation negotiation process described in Section 11.2 above, the parties agree that any dispute, controversy, or claim arising out of or relating to these Terms or the breach, termination, enforcement, interpretation, or validity thereof shall be finally resolved by arbitration administered by the Lagos Court of Arbitration (International) or such other arbitration institution as the parties may mutually agree in writing, in accordance with the Arbitration and Conciliation Act (Cap A18) Laws of the Federation of Nigeria 2004 or any successor legislation.</p>
             <p>The arbitration shall be conducted by a single arbitrator appointed in accordance with the rules of the chosen arbitration institution. The seat of arbitration shall be Lagos, Nigeria, and the language of the arbitration shall be English. The arbitrator shall have the power to grant any legal or equitable remedy or relief that a court of the jurisdiction could order or grant, including but not limited to injunctive relief.</p>
             <p>The award rendered by the arbitrator shall be final and binding upon the parties and may be entered and enforced in any court of competent jurisdiction. Each party shall bear its own costs and expenses in connection with the arbitration, and the parties shall share equally the fees and expenses of the arbitrator and the arbitration institution, unless the arbitrator determines that a different allocation is appropriate based on the circumstances.</p>
-            <h3>Exceptions to Arbitration</h3>
+            <h3>11.4 Exceptions to Arbitration</h3>
             <p>Notwithstanding the arbitration agreement set forth in Section 11.3 above, either party may seek injunctive relief or other equitable remedies in any court of competent jurisdiction to prevent the actual or threatened infringement, misappropriation, or violation of a party’s Intellectual Property Rights, trade secrets, or confidential information, or to enforce the provisions of these Terms relating to acceptable use, without first engaging in negotiation or arbitration.</p>
             <p>Additionally, either party may bring an action in small claims court or a court of similar jurisdiction for disputes falling within the jurisdiction of such court, provided that such action is brought in an individual capacity and not as part of a class action or representative proceeding.</p>
-            <h3>Class Action Waiver</h3>
+            <h3>11.5 Class Action Waiver</h3>
             <p>To the maximum extent permitted by applicable law, You agree that any dispute resolution proceeding, whether in arbitration or in court, shall be conducted solely on an individual basis and not as part of a class, consolidated, or representative action. Neither You nor the Service Provider shall participate in or be represented in any class, consolidated, or representative action concerning any dispute covered by these Terms. You and the Service Provider expressly waive any right to pursue claims on a class, consolidated, or representative basis.</p>
             <p>If any court or arbitrator determines that the class action waiver set forth in this section is void or unenforceable for any reason, or that an arbitration can proceed on a class basis, then the arbitration provision set forth in Section 11.3 above shall be deemed null and void in its entirety, and the parties shall be deemed to have not agreed to arbitrate disputes.</p>
-            <h3>Limitation Period for Claims</h3>
+            <h3>11.6 Limitation Period for Claims</h3>
             <p>To the maximum extent permitted by applicable law, any claim or cause of action arising out of or relating to these Terms or Your use of the Platform must be filed within one year after such claim or cause of action arose, failing which such claim or cause of action shall be permanently barred. This limitation period applies notwithstanding any statute of limitations or other law to the contrary. Where applicable law prohibits such a limitation period, the claim or cause of action must be filed within the shortest time period permitted by law.</p>
         `
     },
     {
         title: "ARTICLE XII: GENERAL PROVISIONS",
         content: `
-            <h3>Entire Agreement</h3>
+            <h3>12.1 Entire Agreement</h3>
             <p>These Terms and Conditions, together with any privacy policy, acceptable use policy, or other supplemental terms or policies expressly incorporated by reference herein, constitute the entire agreement between You and the Service Provider concerning Your use of the Platform and supersede all prior or contemporaneous agreements, understandings, negotiations, representations, and warranties, both written and oral, between You and the Service Provider regarding such subject matter.</p>
             <p>You acknowledge and agree that You have not relied upon any statement, representation, warranty, or understanding that is not expressly set forth in these Terms, and You waive all rights and remedies that might otherwise be available to You under any legal theory based upon any such statement, representation, warranty, or understanding. No amendment to or modification of these Terms shall be binding unless made in writing and signed by an authorized representative of the Service Provider, except as provided in Article X concerning the Service Provider’s right to modify these Terms unilaterally.</p>
-            <h3>Severability</h3>
+            <h3>12.2 Severability</h3>
             <p>If any provision of these Terms is held by a court of competent jurisdiction or arbitrator to be invalid, illegal, void, or unenforceable for any reason, such provision shall be eliminated or limited to the minimum extent necessary, and the remaining provisions of these Terms shall continue in full force and effect. The parties intend that each provision of these Terms shall be enforceable to the fullest extent permitted by applicable law.</p>
             <p>In the event that any provision is held to be invalid, illegal, void, or unenforceable, the parties agree to negotiate in good faith to replace such provision with a valid and enforceable provision that most closely approximates the intent and economic effect of the invalid, illegal, void, or unenforceable provision.</p>
-            <h3>Waiver</h3>
+            <h3>12.3 Waiver</h3>
             <p>No waiver by the Service Provider of any term or condition set forth in these Terms shall be deemed a further or continuing waiver of such term or condition or a waiver of any other term or condition. Any failure by the Service Provider to assert a right or provision under these Terms shall not constitute a waiver of such right or provision.</p>
             <p>For any waiver to be effective, it must be in writing and signed by an authorized representative of the Service Provider. No course of dealing or trade usage shall operate to modify, amend, or waive any provision of these Terms. The Service Provider’s rights and remedies under these Terms are cumulative, and the exercise of any right or remedy shall not preclude the exercise of any other right or remedy.</p>
-            <h3>Assignment and Transfer</h3>
+            <h3>12.4 Assignment and Transfer</h3>
             <p>You may not assign, transfer, delegate, or sublicense any of Your rights or obligations under these Terms, whether by operation of law or otherwise, without the prior written consent of the Service Provider. Any purported assignment, transfer, delegation, or sublicense in violation of this provision shall be null and void and of no force or effect.</p>
             <p>The Service Provider may freely assign, transfer, or delegate its rights and obligations under these Terms, in whole or in part, without restriction and without notice to You. This may occur in connection with a merger, acquisition, corporate reorganization, sale of assets, or by operation of law or otherwise. These Terms shall be binding upon and inure to the benefit of the parties and their respective permitted successors and assigns.</p>
-            <h3>Independent Contractors</h3>
+            <h3>12.5 Independent Contractors</h3>
             <p>The relationship between You and the Service Provider is that of independent contractors. Nothing in these Terms shall be construed to create a partnership, joint venture, agency, franchise, sales representative, or employment relationship between the parties. Neither party has any authority to make any statements, representations, or commitments of any kind on behalf of the other party or to bind the other party in any manner whatsoever, except as may be expressly provided in these Terms.</p>
-            <h3>Third-Party Beneficiaries</h3>
+            <h3>12.6 Third-Party Beneficiaries</h3>
             <p>These Terms are intended solely for the benefit of the parties hereto and their respective permitted successors and assigns. Except as expressly provided herein with respect to the Service Provider’s affiliates, officers, directors, employees, agents, suppliers, and licensors who are entitled to the protections of the limitation of liability and indemnification provisions, nothing in these Terms, express or implied, is intended to or shall confer upon any other person or entity any legal or equitable right, benefit, or remedy of any nature whatsoever.</p>
-            <h3>Force and Effect of Headings</h3>
+            <h3>12.7 Force and Effect of Headings</h3>
             <p>The article and section headings contained in these Terms are for reference purposes only and shall not affect in any way the meaning or interpretation of these Terms. The use of the terms “including,” “such as,” “for example,” or similar terms shall be deemed to be followed by the phrase “without limitation” whether or not such phrase actually appears.</p>
-            <h3>Language and Translation</h3>
+            <h3>12.8 Language and Translation</h3>
             <p>These Terms have been prepared in the English language, and the English language version shall be the governing and controlling version in all respects. Any translation of these Terms into any other language is provided solely for convenience. In the event of any conflict, ambiguity, or inconsistency between the English language version and any translation, the English language version shall prevail and govern.</p>
-            <h3>Electronic Communications and Signatures</h3>
+            <h3>12.9 Electronic Communications and Signatures</h3>
             <p>You consent to receive communications from the Service Provider electronically, including via email to the address associated with Your Account or through notices posted on the Platform. You agree that all agreements, notices, disclosures, and other communications that the Service Provider provides to You electronically satisfy any legal requirement that such communications be in writing.</p>
             <p>You agree that Your electronic acceptance of these Terms, whether by clicking an “I Agree” button, checking a checkbox, or otherwise indicating Your acceptance through the user interface, constitutes Your signature and legally binding acceptance of these Terms, with the same force and effect as if You had signed these Terms manually. You hereby waive any rights or requirements under any statutes, regulations, rules, ordinances, or other laws in any jurisdiction that require an original signature or delivery or retention of non-electronic records.</p>
-            <h3>Contact Information</h3>
+            <h3>12.10 Contact Information</h3>
             <p>If You have any questions, concerns, or complaints regarding these Terms and Conditions, the Platform, or the Service Provider’s privacy practices, or if You wish to exercise any of Your rights under applicable data protection legislation, You may contact the Service Provider through the following means:</p>
             <ul>
                 <li>By electronic mail at the contact email address provided on the Platform’s website.</li>
@@ -366,10 +366,10 @@ export const termsContent = [
                 <li>By postal mail to the Service Provider’s registered office address, as may be updated from time to time and as published on the Platform.</li>
             </ul>
             <p>The Service Provider shall make reasonable efforts to respond to Your inquiry or request within a reasonable timeframe, and in any event within the timeframes required by applicable data protection legislation for requests concerning Personal Data.</p>
-            <h3>Acknowledgment of Understanding</h3>
+            <h3>12.11 Acknowledgment of Understanding</h3>
             <p>By accessing or using the Platform, You acknowledge that You have read, understood, and agree to be bound by these Terms and Conditions in their entirety. You represent and warrant that You have the legal capacity to enter into this binding agreement and that You have carefully reviewed these Terms before accepting them.</p>
             <p>You further acknowledge that these Terms constitute a legally binding agreement between You and the Service Provider and that Your breach of these Terms may result in legal liability. You agree to review these Terms periodically to remain informed of any modifications and to ensure Your continued compliance with all provisions hereof.</p>
-            <h3>Survival of Terms</h3>
+            <h3>12.12 Survival of Terms</h3>
             <p>All provisions of these Terms that by their nature should survive termination shall survive termination of Your access to the Platform or termination of these Terms, including but not limited to ownership provisions, warranty disclaimers, indemnification obligations, limitations of liability, dispute resolution provisions, and all general provisions set forth in this Article XII.</p>
             <p>The termination of Your access to the Platform or the termination of these Terms for any reason shall not relieve either party of any obligation or liability that accrued prior to such termination, nor shall it affect any provision of these Terms that is expressly or by implication intended to survive such termination.</p>
         `
@@ -377,21 +377,21 @@ export const termsContent = [
     {
         title: "ARTICLE XIII: SPECIAL PROVISIONS FOR SPECIFIC JURISDICTIONS",
         content: `
-            <h3>Application to Users in Nigeria</h3>
+            <h3>13.1 Application to Users in Nigeria</h3>
             <p>For Users accessing the Platform from within the Federal Republic of Nigeria, the following additional provisions apply:</p>
             <ul>
                 <li>These Terms are subject to and shall be construed in accordance with the provisions of the Constitution of the Federal Republic of Nigeria 1999 (as amended), particularly the fundamental rights provisions contained in Chapter IV thereof. In the event of any conflict between these Terms and the constitutional rights guaranteed to Nigerian citizens and residents, the constitutional provisions shall prevail to the extent of such conflict.</li>
                 <li>The Service Provider acknowledges its obligations under the Nigeria Data Protection Act 2023 and confirms that all processing of Personal Data of Nigerian Users complies with the requirements of such Act, including the lawfulness, fairness, and transparency principles set forth therein. Nigerian Users may lodge complaints concerning data protection matters with the Nigeria Data Protection Commission in accordance with the provisions of the Nigeria Data Protection Act 2023.</li>
                 <li>Any disputes arising out of or relating to these Terms that cannot be resolved through the alternative dispute resolution mechanisms set forth in Article XI hereof may be submitted to the courts of Nigeria having competent jurisdiction. Nigerian Users retain all rights under Nigerian consumer protection legislation, including the Federal Competition and Consumer Protection Act 2018, to the extent such rights cannot be lawfully waived by agreement.</li>
             </ul>
-            <h3>Application to Users in the European Union</h3>
+            <h3>13.2 Application to Users in the European Union</h3>
             <p>For Users accessing the Platform from within the European Union or the European Economic Area, where the General Data Protection Regulation (EU) 2016/679 applies, the following additional provisions shall govern:</p>
             <ul>
                 <li>Where the Service Provider processes Personal Data of European Union residents, such processing shall comply with all requirements of the general Data Protection Regulation, including but not limited to the principles relating to processing of Personal Data set forth in Article 5 thereof, the lawful bases for processing set forth in Article 6 thereof, and the rights of data subjects set forth in Articles 12 through 23 thereof.</li>
                 <li>European Union Users have the right to lodge a complaint with a supervisory authority, in particular in the Member State of their habitual residence, place of work, or place of the alleged infringement, if they consider that the processing of Personal Data relating to them infringes the General Data Protection Regulation.</li>
                 <li>Where these Terms provide for resolution of disputes through arbitration, European Union Users retain the right to bring proceedings before the courts of the Member State in which they are domiciled, in accordance with applicable European Union consumer protection legislation. The arbitration provisions set forth in Article XI shall not deprive European Union Users of the protection afforded by mandatory provisions of consumer protection law in their country of residence.</li>
             </ul>
-            <h3>Application to Users in Other Jurisdictions</h3>
+            <h3>13.3 Application to Users in Other Jurisdictions</h3>
             <p>Users accessing the Platform from jurisdictions other than Nigeria and the European Union acknowledge that the Platform is operated from and controlled in Nigeria, and that Nigerian law governs these Terms. However, the Service Provider recognizes that Users in certain jurisdictions may have rights under local consumer protection, privacy, or other legislation that cannot be lawfully waived by contractual agreement.</p>
             <p>To the extent that any provision of these Terms conflicts with mandatory provisions of applicable local law that cannot be waived by agreement, such local law provisions shall prevail to the extent of such conflict, and all other provisions of these Terms shall remain in full force and effect. Users are responsible for complying with all applicable local laws and regulations in connection with their use of the Platform.</p>
             <p>The Service Provider makes no representation that the Platform is appropriate or available for use in all locations, and accessing the Platform from jurisdictions where its content or functionality is illegal is prohibited. Users who choose to access the Platform from locations outside Nigeria do so on their own initiative and are responsible for compliance with local laws.</p>
@@ -400,26 +400,26 @@ export const termsContent = [
     {
         title: "ARTICLE XIV: CONCLUDING PROVISIONS",
         content: `
-            <h3>Effective Date and Binding Effect</h3>
+            <h3>14.1 Effective Date and Binding Effect</h3>
             <p>These Terms and Conditions shall become effective immediately upon Your first access to or use of the Platform and shall remain in full force and effect for so long as You continue to access or use the Platform, subject to termination as provided in Article IX hereof. Your continued use of the Platform following any modification to these Terms constitutes Your acceptance of such modifications and Your agreement to be bound by the Terms as modified.</p>
             <p>These Terms constitute a legally binding agreement between You and the Service Provider and are enforceable in accordance with their terms. By accepting these Terms, You acknowledge that You have had sufficient opportunity to review them, to seek independent legal advice if You deemed it necessary, and that You fully understand and accept all rights, obligations, and provisions contained herein.</p>
-            <h3>No Partnership or Joint Venture</h3>
+            <h3>14.2 No Partnership or Joint Venture</h3>
             <p>Nothing in these Terms shall be deemed or construed to create a relationship of employer and employee, principal and agent, partnership, joint venture, or any other relationship other than that of independent contracting parties between You and the Service Provider. Neither party shall have any right or authority to assume or create any obligation or responsibility, express or implied, on behalf of the other party, nor to bind the other party in any manner whatsoever.</p>
-            <h3>Reservation of Rights</h3>
+            <h3>14.3 Reservation of Rights</h3>
             <p>All rights not expressly granted to You in these Terms are reserved by the Service Provider. The Service Provider retains all rights, title, and interest in and to the Platform, including all Intellectual Property Rights therein. Nothing in these Terms grants You any right to use the Service Provider’s trademarks, service marks, trade names, logos, domain names, or other distinctive brand features except as expressly permitted herein.</p>
             <p>The Service Provider's failure to exercise or enforce any right or provision of these Terms shall not constitute a waiver of such right or provision. The Service Provider’s rights and remedies under these Terms are cumulative and not exclusive of any rights or remedies provided by law.</p>
-            <h3>Notice of Copyright and Trademark Protection</h3>
+            <h3>14.4 Notice of Copyright and Trademark Protection</h3>
             <p>The Platform and all Content therein are protected by copyright, trademark, and other intellectual property laws of Nigeria, international treaties, and laws of other jurisdictions. Unauthorized reproduction, distribution, modification, public display, or creation of derivative works is strictly prohibited and may result in severe civil and criminal penalties under applicable intellectual property laws.</p>
             <p>All trademarks, service marks, trade names, logos, and other proprietary designations displayed on the Platform are the property of their respective owners, whether the Service Provider or third parties. Nothing in these Terms grants You any license or right to use any such trademarks, service marks, trade names, logos, or proprietary designations without the express prior written permission of the owner thereof.</p>
-            <h3>Compliance with Export Control Laws</h3>
+            <h3>14.5 Compliance with Export Control Laws</h3>
             <p>You acknowledge that the Platform and certain Content available through the Platform may be subject to export control laws and regulations of Nigeria, the United States, and other jurisdictions. You agree to comply with all applicable export control laws and regulations and shall not export, re-export, or transfer, directly or indirectly, any regulated items, technology, or software obtained through the Platform to any prohibited country, entity, or person in violation of applicable export control laws.</p>
             <p>You represent and warrant that You are not located in, under the control of, or a national or resident of any country to which Nigeria or the United States has embargoed goods or services, and that You are not identified on any list of prohibited or restricted parties maintained by the Nigerian government, the United States government, or any other applicable governmental authority.</p>
-            <h3>Government Use Provisions</h3>
+            <h3>14.6 Government Use Provisions</h3>
             <p>If You are an entity or agency of any government, or if You are acquiring rights in the Platform on behalf of any government entity or agency, the following provisions apply. The Platform constitutes commercial computer software and commercial computer software documentation developed exclusively at private expense. If the Platform is being acquired by or on behalf of the Nigerian government or any agency thereof, the government’s rights in the Platform shall be only as set forth in these Terms, consistent with applicable procurement regulations. If the Platform is being acquired on behalf of any other government entity, such entity’s rights shall be limited to those expressly granted in these Terms.</p>
-            <h3>Accessibility Commitment</h3>
+            <h3>14.7 Accessibility Commitment</h3>
             <p>The Service Provider is committed to making the Platform accessible to Users with disabilities to the extent commercially reasonable and feasible. The Service Provider endeavors to design and maintain the Platform in accordance with generally recognized accessibility standards and best practices. However, the Service Provider does not warrant that the Platform will be accessible to all Users with disabilities or that the Platform complies with any specific accessibility standard or guideline.</p>
             <p>If You encounter any accessibility barriers while using the Platform, or if You require accommodation or assistance in accessing any aspect of the Platform, You are encouraged to contact the Service Provider using the contact information provided in Section 12.10 hereof. The Service Provider will make reasonable efforts to address accessibility concerns and provide reasonable accommodations where feasible.</p>
-            <h3>Final Acknowledgments</h3>
+            <h3>14.8 Final Acknowledgments</h3>
             <p>By accepting these Terms and Conditions and using the Platform, You acknowledge and agree that:</p>
             <ul>
                 <li>You have read and understood these Terms in their entirety and have had the opportunity to seek independent legal advice regarding their meaning and effect.</li>
