@@ -33,11 +33,22 @@ const formSchema = z.object({
 const AuthSkeleton = () => (
     <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[80vh]">
         <Card className="w-full max-w-md">
+<<<<<<< HEAD
             <CardHeader className="text-center">
+=======
+            <CardHeader>
+>>>>>>> 16edf83 (When the login or sing up page is loading on the mobile view it's showin)
                 <Skeleton className="h-8 w-48 mx-auto" />
                 <Skeleton className="h-4 w-64 mx-auto mt-2" />
             </CardHeader>
             <CardContent className="space-y-6">
+<<<<<<< HEAD
+=======
+                <div className="space-y-2">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-10 w-full" />
+                </div>
+>>>>>>> 16edf83 (When the login or sing up page is loading on the mobile view it's showin)
                  <div className="space-y-2">
                     <Skeleton className="h-4 w-24" />
                     <Skeleton className="h-10 w-full" />
@@ -46,6 +57,7 @@ const AuthSkeleton = () => (
                     <Skeleton className="h-4 w-24" />
                     <Skeleton className="h-10 w-full" />
                 </div>
+<<<<<<< HEAD
                 <div className="space-y-2">
                     <Skeleton className="h-4 w-24" />
                     <Skeleton className="h-10 w-full" />
@@ -61,6 +73,8 @@ const AuthSkeleton = () => (
                        <Skeleton className="h-3 w-48" />
                     </div>
                   </div>
+=======
+>>>>>>> 16edf83 (When the login or sing up page is loading on the mobile view it's showin)
                 <Skeleton className="h-10 w-full" />
                 <Skeleton className="h-4 w-48 mx-auto" />
             </CardContent>

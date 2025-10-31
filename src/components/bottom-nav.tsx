@@ -21,10 +21,15 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useAuth, useAuthContext } from '@/firebase/provider';
 import type { User } from 'firebase/auth';
 =======
 >>>>>>> 70f81c5 (Try fixing this error: `Runtime Error: Error: useState is not defined. E)
+=======
+import { useAuth, useAuthContext } from '@/firebase/provider';
+import type { User } from 'firebase/auth';
+>>>>>>> 16edf83 (When the login or sing up page is loading on the mobile view it's showin)
 
 const navLinks = [
 <<<<<<< HEAD
@@ -58,6 +63,7 @@ export function BottomNav() {
   const isMobile = useIsMobile();
   const [mounted, setMounted] = useState(false);
 <<<<<<< HEAD
+<<<<<<< HEAD
   const auth = useAuthContext();
   const [user, setUser] = useState<User | null>(null);
 
@@ -72,13 +78,26 @@ export function BottomNav() {
   const isAuthPage = pathname === '/login' || pathname === '/signup';
   const shouldShow = mounted && isMobile && user && !isAuthPage;
 =======
+=======
+  const auth = useAuthContext();
+  const [user, setUser] = useState<User | null>(null);
+>>>>>>> 16edf83 (When the login or sing up page is loading on the mobile view it's showin)
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (auth) {
+        const unsubscribe = useAuth(setUser);
+        return () => unsubscribe();
+    }
+  }, [auth]);
 
+<<<<<<< HEAD
   const shouldShow = mounted && isMobile && navLinks.some(link => pathname.startsWith(link.href) || pathname.startsWith('/analysis'));
 >>>>>>> 5813a0a (Use button navigation bar for mobile view please)
+=======
+  const isAuthPage = pathname === '/login' || pathname === '/signup';
+  const shouldShow = mounted && isMobile && user && !isAuthPage;
+>>>>>>> 16edf83 (When the login or sing up page is loading on the mobile view it's showin)
 
 
   if (!shouldShow) {
