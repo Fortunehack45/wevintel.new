@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useLocalStorage } from '@/hooks/use-local-storage';
@@ -23,7 +22,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { buttonVariants } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMemo } from 'react';
 import { ComparisonHistoryList } from './compare/comparison-history-list';
@@ -127,5 +125,26 @@ function WebsiteHistoryList({ limit }: { limit?: number }) {
         )
     })}
     </div>
+  )
+}
+
+export function HistoryClient({ limit }: { limit?: number }) {
+  return (
+    <Tabs defaultValue="analysis" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 max-w-sm mx-auto mb-6">
+            <TabsTrigger value="analysis">
+                <FileSearch className="mr-2" /> Single Analysis
+            </TabsTrigger>
+            <TabsTrigger value="comparison">
+                <Scale className="mr-2" /> Comparisons
+            </TabsTrigger>
+        </TabsList>
+        <TabsContent value="analysis">
+            <WebsiteHistoryList limit={limit} />
+        </TabsContent>
+        <TabsContent value="comparison">
+            <ComparisonHistoryList limit={limit} />
+        </TabsContent>
+    </Tabs>
   )
 }

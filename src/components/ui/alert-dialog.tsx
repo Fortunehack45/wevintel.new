@@ -139,7 +139,4 @@ export {
   AlertDialogDescription,
   AlertDialogAction,
   AlertDialogCancel,
-  buttonVariants
 }
-
-    

@@ -15,6 +15,9 @@ export function useWindowSize(): WindowSize {
   });
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+        return;
+    }
     // Handler to call on window resize
     function handleResize() {
       setWindowSize({

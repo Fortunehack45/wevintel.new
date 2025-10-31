@@ -32,36 +32,14 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 import { type AnalysisResult, type ComparisonHistoryItem } from '@/lib/types';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { cn } from '@/lib/utils';
-=======
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
-import { Sidebar } from '@/components/sidebar';
-
->>>>>>> 309dde7 (Under the settings page I want the contact features to be there, legal e)
-=======
->>>>>>> 5813a0a (Use button navigation bar for mobile view please)
-=======
-import { cn } from '@/lib/utils';
->>>>>>> 822423a (For desktop view remove the contact button and about button for the sett)
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, { message: 'Current password is required.' }),
   newPassword: z.string().min(6, { message: 'New password must be at least 6 characters.' }),
 });
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 const SettingsItem = ({ icon: Icon, label, href, onClick, className }: { icon: React.ElementType, label: string, href?: string, onClick?: () => void, className?: string }) => {
-=======
-const SettingsItem = ({ icon: Icon, label, href, onClick }: { icon: React.ElementType, label: string, href?: string, onClick?: () => void }) => {
->>>>>>> 309dde7 (Under the settings page I want the contact features to be there, legal e)
-=======
-const SettingsItem = ({ icon: Icon, label, href, onClick, className }: { icon: React.ElementType, label: string, href?: string, onClick?: () => void, className?: string }) => {
->>>>>>> 822423a (For desktop view remove the contact button and about button for the sett)
     const content = (
         <div className="flex items-center justify-between p-4 rounded-lg bg-background hover:bg-muted transition-colors cursor-pointer w-full">
             <div className="flex items-center gap-4">
@@ -73,24 +51,10 @@ const SettingsItem = ({ icon: Icon, label, href, onClick, className }: { icon: R
     );
 
     if (href) {
-<<<<<<< HEAD
-<<<<<<< HEAD
         return <Link href={href} className={className}>{content}</Link>;
     }
     
     return <button onClick={onClick} className={cn("w-full text-left", className)}>{content}</button>;
-=======
-        return <Link href={href}>{content}</Link>;
-    }
-    
-    return <button onClick={onClick} className="w-full text-left">{content}</button>;
->>>>>>> 309dde7 (Under the settings page I want the contact features to be there, legal e)
-=======
-        return <Link href={href} className={className}>{content}</Link>;
-    }
-    
-    return <button onClick={onClick} className={cn("w-full text-left", className)}>{content}</button>;
->>>>>>> 822423a (For desktop view remove the contact button and about button for the sett)
 };
 
 export default function SettingsPage() {
@@ -170,8 +134,6 @@ export default function SettingsPage() {
         toast({ title: "Logout Failed", description: error.message, variant: "destructive" });
     }
   }
-<<<<<<< HEAD
-<<<<<<< HEAD
 
   if (!mounted) {
       return (
@@ -329,183 +291,10 @@ export default function SettingsPage() {
                  <div className="space-y-1">
                     <SettingsItem icon={Info} label="About WebIntel" href="/about" className="md:hidden"/>
                     <SettingsItem icon={Send} label="Contact Us" href="/contact" className="md:hidden"/>
-<<<<<<< HEAD
                     <SettingsItem icon={Shield} label="Privacy Policy" href="/privacy" />
                     <SettingsItem icon={FileText} label="Terms & Conditions" href="/terms" />
                  </div>
             </div>
-=======
-  
-  const MobileSettings = () => {
-=======
-
-  if (!mounted) {
->>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
-      return (
-          <div className="container mx-auto px-4 py-8 max-w-3xl space-y-10">
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-64 w-full" />
-            <Skeleton className="h-80 w-full" />
-            <Skeleton className="h-40 w-full" />
-          </div>
-      )
-  }
-  
-  return (
-        <div className="container mx-auto px-4 py-8 max-w-3xl pb-24 md:pb-8">
-          <div className="mb-10 text-center">
-            <h1 className="text-5xl font-bold tracking-tight">Settings</h1>
-            <p className="text-muted-foreground mt-2">Manage your account and application preferences.</p>
-          </div>
-          <div className="space-y-10">
-            <Card className="glass-card">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-3"><Palette /> Appearance</CardTitle>
-                    <CardDescription>Customise the look and feel of the application.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {!mounted ? (
-                      <Skeleton className="h-24 w-full" />
-                  ) : (
-                    <RadioGroup
-                        value={theme}
-                        onValueChange={setTheme}
-                        className="grid grid-cols-1 sm:grid-cols-3 gap-4"
-                    >
-                        <Label className="p-4 border rounded-lg flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
-                            <RadioGroupItem value="light" id="light" className="sr-only" />
-                            <Sun className="h-10 w-10" />
-                            <span className="font-semibold">Light</span>
-                        </Label>
-                        <Label className="p-4 border rounded-lg flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
-                            <RadioGroupItem value="dark" id="dark" className="sr-only" />
-                            <Moon className="h-10 w-10" />
-                            <span className="font-semibold">Dark</span>
-                        </Label>
-                        <Label className="p-4 border rounded-lg flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
-                            <RadioGroupItem value="system" id="system" className="sr-only" />
-                            <Laptop className="h-10 w-10" />
-                            <span className="font-semibold">System</span>
-                        </Label>
-                    </RadioGroup>
-                  )}
-                </CardContent>
-            </Card>
-            
-            {isAuthLoading ? (
-                <Skeleton className="h-64 w-full" />
-            ) : user ? (
-                <>
-                    <Card className="glass-card">
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-3"><User /> Account</CardTitle>
-                        <CardDescription>Manage your account details. You are currently logged in as {user.email}.</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <Form {...form}>
-                          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                            <FormField
-                              control={form.control}
-                              name="currentPassword"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Current Password</FormLabel>
-                                  <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                                    <FormControl>
-                                      <Input
-                                        type={showCurrentPassword ? 'text' : 'password'}
-                                        {...field}
-                                        className="pl-10"
-                                        placeholder="Enter your current password"
-                                      />
-                                    </FormControl>
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="icon"
-                                      className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-                                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                                    >
-                                      {showCurrentPassword ? <EyeOff /> : <Eye />}
-                                    </Button>
-                                  </div>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name="newPassword"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>New Password</FormLabel>
-                                  <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                                    <FormControl>
-                                      <Input
-                                        type={showNewPassword ? 'text' : 'password'}
-                                        {...field}
-                                        className="pl-10"
-                                        placeholder="Enter your new password"
-                                      />
-                                    </FormControl>
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="icon"
-                                      className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-                                      onClick={() => setShowNewPassword(!showNewPassword)}
-                                    >
-                                      {showNewPassword ? <EyeOff /> : <Eye />}
-                                    </Button>
-                                  </div>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <div className="flex items-center justify-between">
-                                <Button type="submit" disabled={isLoading}>
-                                  {isLoading ? 'Updating...' : 'Update Password'}
-                                </Button>
-                                 <Button variant="ghost" onClick={handleLogout} className="text-destructive hover:text-destructive hover:bg-destructive/10">
-                                    <LogOut className="mr-2" /> Logout
-                                </Button>
-                            </div>
-                          </form>
-                        </Form>
-                      </CardContent>
-                    </Card>
-                </>
-            ) : (
-                <Card className="glass-card text-center">
-                    <CardHeader>
-                        <CardTitle>Account</CardTitle>
-                        <CardDescription>Log in or sign up to manage your account.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Button asChild>
-                            <Link href="/login">Log In / Sign Up</Link>
-                        </Button>
-                    </CardContent>
-                </Card>
-            )}
-<<<<<<< HEAD
->>>>>>> 309dde7 (Under the settings page I want the contact features to be there, legal e)
-=======
-
-            <div className="space-y-4">
-                 <h3 className="text-lg font-semibold text-muted-foreground px-4">Support & Legal</h3>
-                 <div className="space-y-1">
-                    <SettingsItem icon={Info} label="About WebIntel" href="/about" />
-                    <SettingsItem icon={Send} label="Contact Us" href="/contact" />
-=======
->>>>>>> 822423a (For desktop view remove the contact button and about button for the sett)
-                    <SettingsItem icon={Shield} label="Privacy Policy" href="/privacy" />
-                    <SettingsItem icon={FileText} label="Terms & Conditions" href="/terms" />
-                 </div>
-            </div>
->>>>>>> 5813a0a (Use button navigation bar for mobile view please)
             
             <Card className="glass-card border-destructive/50">
                 <CardHeader>
@@ -539,24 +328,4 @@ export default function SettingsPage() {
           </div>
         </div>
       );
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  }
-
-  if (!mounted) {
-      return (
-          <div className="container mx-auto px-4 py-8 max-w-3xl space-y-10">
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-64 w-full" />
-            <Skeleton className="h-80 w-full" />
-            <Skeleton className="h-40 w-full" />
-          </div>
-      )
-  }
-  
-  return isMobile ? <MobileSettings /> : <DesktopSettings />;
->>>>>>> 309dde7 (Under the settings page I want the contact features to be there, legal e)
-=======
->>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
 }
