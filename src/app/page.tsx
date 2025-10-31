@@ -120,6 +120,25 @@ export default function WelcomePage() {
                       </motion.div>
                 </section>
 
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.6 }}
+                    className="mb-16 container mx-auto px-4"
+                >
+                    <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Building className="text-primary"/> Sponsored By</h2>
+                    <div className="tech-stack-scroller" data-animated="true">
+                        <div className="tech-stack-scroller-inner flex items-center gap-16">
+                            {[...sponsors, ...sponsors].map((sponsor, index) => (
+                                <div key={`${sponsor.name}-${index}`} className="flex items-center gap-4 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all text-4xl">
+                                    <sponsor.icon />
+                                    <p className="font-bold text-2xl">{sponsor.name}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </motion.div>
+
                  <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -149,25 +168,6 @@ export default function WelcomePage() {
                     </div>
                 </motion.div>
 
-
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.6 }}
-                    className="mb-16 container mx-auto px-4"
-                >
-                    <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Building className="text-primary"/> Sponsored By</h2>
-                    <div className="tech-stack-scroller" data-animated="true">
-                        <div className="tech-stack-scroller-inner flex items-center gap-16">
-                            {[...sponsors, ...sponsors].map((sponsor, index) => (
-                                <div key={`${sponsor.name}-${index}`} className="flex items-center gap-4 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all text-4xl">
-                                    <sponsor.icon />
-                                    <p className="font-bold text-xl">{sponsor.name}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </motion.div>
             </main>
         </div>
     )
