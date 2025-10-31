@@ -12,7 +12,11 @@ import { useAuth, useAuthContext } from '@/firebase/provider';
 import type { User } from 'firebase/auth';
 
 const navLinks = [
+<<<<<<< HEAD
   { href: '/dashboard', label: 'Home', icon: Home },
+=======
+  { href: '/dashboard', label: 'Dashboard', icon: Home },
+>>>>>>> 376e771 (No... The welcome page is the page before the home page)
   { href: '/compare', label: 'Compare', icon: Scale },
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { href: '/history', label: 'History', icon: History },
