@@ -132,14 +132,14 @@ Please describe your issue below:
             <Card className="glass-card h-full group hover:border-primary/50 transition-colors">
                 <CardHeader className="text-center">
                     <div className="inline-block bg-green-500/10 p-3 rounded-full mx-auto mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-500" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.94A10 10 0 0 0 12 2C6.48 2 2 6.48 2 12c0 5.52 4.48 10 10 10c1.74 0 3.38-.45 4.78-1.25l-1.4-1.4A7.94 7.94 0 0 1 12 20a8 8 0 0 1-8-8c0-4.42 3.58-8 8-8c2.21 0 4.21.9 5.66 2.34l-2.16 2.16h6V4.94zM16.5 11.5c0 .28-.22.5-.5.5h-4c-.28 0-.5-.22-.5-.5v-4c0-.28.22-.5.5-.5s.5.22.5.5V11h3.5c.28 0 .5.22.5.5z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.487 5.235 3.487 8.413.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.847 6.033l-1.072 3.916 3.92-1.066z"/></svg>
                     </div>
                     <CardTitle>Direct Support via WhatsApp</CardTitle>
                     <CardDescription>For the fastest response, reach out on WhatsApp for real-time assistance.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Button onClick={handleWhatsAppClick} className="w-full bg-green-600 hover:bg-green-700 text-white" disabled={isLoading}>
-                        <Send className="mr-2 h-4 w-4" />
+                         <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.487 5.235 3.487 8.413.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.847 6.033l-1.072 3.916 3.92-1.066z"/></svg>
                         Contact on WhatsApp
                     </Button>
                 </CardContent>
