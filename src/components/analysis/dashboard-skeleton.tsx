@@ -118,7 +118,7 @@ function TechStackPlaceholder() {
 }
 
 
-function DashboardSkeleton() {
+export function DashboardSkeleton() {
   return (
     <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
          <div className="mb-12 space-y-4">
@@ -147,5 +147,3 @@ DashboardSkeleton.TrafficPlaceholder = TrafficPlaceholder;
 DashboardSkeleton.AuditPlaceholder = AuditPlaceholder;
 DashboardSkeleton.SummaryPlaceholder = SummaryPlaceholder;
 DashboardSkeleton.TechStackPlaceholder = TechStackPlaceholder;
-
-export { DashboardSkeleton };

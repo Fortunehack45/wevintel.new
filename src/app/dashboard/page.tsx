@@ -11,7 +11,7 @@ import type { User } from 'firebase/auth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Scale, Trophy, Star, Building, Sparkles, Heart } from 'lucide-react';
 import Link from 'next/link';
-import { LoadingOverlay } from '@/components/loading-overlay';
+import { DashboardSkeleton } from '@/components/analysis/dashboard-skeleton';
 
 const sponsors = [
     { name: 'Vercel', logo: '/sponsors/vercel.svg' },
@@ -77,7 +77,7 @@ export default function DashboardPage() {
   }, [auth, router]);
 
   if (isLoading || !user) {
-    return <LoadingOverlay isVisible={true} />;
+    return <DashboardSkeleton />;
   }
   
   const welcomeName = user.displayName || user.email;
