@@ -41,6 +41,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         setMounted(true);
     }, []);
     
+<<<<<<< HEAD
 >>>>>>> f640191 (When it's loading it's showing the old UI which is not right)
     const isAuthPage = pathname === '/login' || pathname === '/signup';
 <<<<<<< HEAD
@@ -50,6 +51,17 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 =======
 =======
 >>>>>>> 114b787 (Let the header show in the sing up and login page of the desktop view)
+=======
+    // Determine which pages should show the layout suggestion
+    const pagesWithSuggestion = [
+        '/',
+        '/dashboard',
+        '/analysis',
+        '/compare',
+    ];
+
+    const showSuggestion = mounted && pagesWithSuggestion.some(p => pathname.startsWith(p));
+>>>>>>> 878e142 (For layout suggestions features let it be able to display on the welcome)
     
 <<<<<<< HEAD
     const appRoutes = ['/dashboard', '/compare', '/leaderboard', '/history', '/settings'];
@@ -192,10 +204,14 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 980974b (Remove that footer been separate features and keep it the way it was bef)
 =======
             <OptimalLayoutSuggestion />
 >>>>>>> 3d6f03c (Create a features in a professional way that inform users that for best)
+=======
+            {showSuggestion && <OptimalLayoutSuggestion />}
+>>>>>>> 878e142 (For layout suggestions features let it be able to display on the welcome)
         </div>
 >>>>>>> 9999f8a (Shift the footer down the page by 30% because it's blocking my view to v)
 =======
