@@ -84,7 +84,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 >>>>>>> 2cc806b (Also introduced the header for the mobile view back)
     if (!mounted) {
         return (
-             <div className="flex flex-col h-full">
+             <div className="flex flex-col min-h-screen">
                 <main className="flex-1">
                     {children}
                 </main>
@@ -107,14 +107,19 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     
     return (
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div className="flex flex-col min-h-screen">
 =======
         <div className="flex flex-col h-full">
 >>>>>>> 9999f8a (Shift the footer down the page by 30% because it's blocking my view to v)
+=======
+        <div className="flex flex-col min-h-screen">
+>>>>>>> 980974b (Remove that footer been separate features and keep it the way it was bef)
             <div className="wave-container">
                 <div className="wave-light"></div>
             </div>
             <Header />
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -165,6 +170,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         </>
 >>>>>>> 2cc806b (Also introduced the header for the mobile view back)
 =======
+=======
+            <main className="flex-1">
+                {children}
+            </main>
+            <Footer />
+            <BottomNav />
+>>>>>>> 980974b (Remove that footer been separate features and keep it the way it was bef)
         </div>
 >>>>>>> 9999f8a (Shift the footer down the page by 30% because it's blocking my view to v)
     )
