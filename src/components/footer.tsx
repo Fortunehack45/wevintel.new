@@ -4,33 +4,14 @@
 import Link from 'next/link';
 import { Compass } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { useAuthContext } from '@/firebase/provider';
-import { useAuth } from '@/firebase/auth';
+import { useAuth, useAuthContext } from '@/firebase/provider';
 import type { User as FirebaseUser } from 'firebase/auth';
-=======
->>>>>>> 4e7a013 (Remove the love emoji. Also don't let the footer show in the mobile mode)
-=======
-import { useState, useEffect } from 'react';
->>>>>>> 768a281 (When the stuff is loading in the mobile view is showing the footer which)
-=======
->>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
-=======
-import { useAuthContext } from '@/firebase/provider';
-import { useAuth } from '@/firebase/auth';
-import type { User as FirebaseUser } from 'firebase/auth';
->>>>>>> bcc5139 (The navigate section in the footer should not be visible for users that)
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const isMobile = useIsMobile();
-<<<<<<< HEAD
-<<<<<<< HEAD
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const auth = useAuthContext();
@@ -49,34 +30,6 @@ export function Footer() {
   const isAuthPage = pathname === '/login' || pathname === '/signup';
 
   if (!mounted || isMobile || isAuthPage) {
-=======
-
-  if (isMobile) {
->>>>>>> 4e7a013 (Remove the love emoji. Also don't let the footer show in the mobile mode)
-=======
-  const [mounted, setMounted] = useState(false);
-  const pathname = usePathname();
-  const auth = useAuthContext();
-  const [user, setUser] = useState<FirebaseUser | null>(null);
-
-  useEffect(() => {
-    setMounted(true);
-    if (auth) {
-      const unsubscribe = useAuth(setUser);
-      return () => unsubscribe();
-    }
-  }, [auth]);
-
-
-<<<<<<< HEAD
-  if (!mounted || isMobile) {
->>>>>>> 768a281 (When the stuff is loading in the mobile view is showing the footer which)
-=======
-  // Do not render footer on auth pages on desktop
-  const isAuthPage = pathname === '/login' || pathname === '/signup';
-
-  if (!mounted || isMobile || isAuthPage) {
->>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
     return null;
   }
   
@@ -97,10 +50,6 @@ export function Footer() {
           </div>
 
           {/* Navigation Column */}
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> bcc5139 (The navigate section in the footer should not be visible for users that)
           {user && (
             <div>
               <h4 className="font-semibold text-foreground mb-4">Navigate</h4>
@@ -111,19 +60,6 @@ export function Footer() {
               </ul>
             </div>
           )}
-<<<<<<< HEAD
-=======
-          <div>
-            <h4 className="font-semibold text-foreground mb-4">Navigate</h4>
-            <ul className="space-y-3 text-sm">
-              <li><Link href="/compare" className="text-muted-foreground hover:text-primary transition-colors">Compare</Link></li>
-              <li><Link href="/leaderboard" className="text-muted-foreground hover:text-primary transition-colors">Leaderboard</Link></li>
-              <li><Link href="/history" className="text-muted-foreground hover:text-primary transition-colors">History</Link></li>
-            </ul>
-          </div>
->>>>>>> 512e4b0 (Please creat a contact page with like a features that allow users to inp)
-=======
->>>>>>> bcc5139 (The navigate section in the footer should not be visible for users that)
 
           {/* Legal Column */}
           <div>
