@@ -8,6 +8,7 @@ import { UrlForm } from '@/components/url-form';
 import { HistoryClient } from '@/components/history-client';
 import { motion } from 'framer-motion';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useAuth, useAuthContext } from '@/firebase/provider';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -147,6 +148,8 @@ const featureCards = [
         description: "Analyze two websites simultaneously to benchmark performance and technology stacks."
     }
 ];
+=======
+>>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
 
 export default function DashboardPage() {
   return (

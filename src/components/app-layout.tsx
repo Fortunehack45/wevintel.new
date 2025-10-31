@@ -5,16 +5,27 @@ import { usePathname } from 'next/navigation';
 import { Header } from './header';
 import { Footer } from './footer';
 import { BottomNav } from './bottom-nav';
+<<<<<<< HEAD
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { OptimalLayoutSuggestion } from './optimal-layout-suggestion';
+=======
+import { Sidebar } from './sidebar';
+import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
+>>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
 
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const isMobile = useIsMobile();
+<<<<<<< HEAD
     const [mounted, setMounted] = useState(false);
+=======
+    const isAuthPage = pathname === '/login' || pathname === '/signup';
+    const isWelcomePage = pathname === '/';
+>>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
 
     useEffect(() => {
         setMounted(true);
@@ -47,6 +58,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
             <Header />
 <<<<<<< HEAD
+<<<<<<< HEAD
             <main className="flex-1 pb-20 md:pb-0">
 =======
             <main className="flex-1 pb-16 md:pb-0">
@@ -54,6 +66,14 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 {children}
             </main>
             <Footer />
+=======
+            <div className={cn(!isWelcomePage && "md:pl-64")}>
+                <main className="flex-1 pb-16 md:pb-0 min-h-[calc(100vh-69px)]">
+                    {children}
+                </main>
+                <Footer />
+            </div>
+>>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
             <BottomNav />
             {showSuggestion && <OptimalLayoutSuggestion />}
         </div>

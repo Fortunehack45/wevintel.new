@@ -85,9 +85,6 @@ export function Header() {
 =======
   const auth = useAuthContext();
   const [user, setUser] = useState<User | null>(null);
-  const { setTheme } = useTheme();
-  const { toast } = useToast();
-  const router = useRouter();
   
   useEffect(() => {
     if (!auth) return;
@@ -98,9 +95,12 @@ export function Header() {
   }, [auth]);
 >>>>>>> 804648f (Okay wait it should be in the header but in a professional way and posit)
 
+<<<<<<< HEAD
   const auth = useAuthContext();
   const [user, setUser] = useState<FirebaseUser | null>(null);
 
+=======
+>>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
   useEffect(() => {
     setMounted(true);
     if (auth) {
@@ -109,6 +109,7 @@ export function Header() {
     }
   }, [auth]);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -203,26 +204,21 @@ export function Header() {
         toast({ title: "Logout Failed", description: error.message, variant: "destructive" });
     }
   }
+=======
+  const isWelcomePage = pathname === '/';
+>>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
 
   if (!mounted) {
     return <header className="p-4 flex justify-between items-center border-b h-[69px]" />;
 >>>>>>> 804648f (Okay wait it should be in the header but in a professional way and posit)
   }
 
-  const NavContent = () => (
-    <nav className="hidden md:flex items-center gap-2">
-        {navLinks.map(link => (
-            <Button
-                key={link.href}
-                variant={pathname.startsWith(link.href) ? "secondary" : "ghost"}
-                asChild
-            >
-                <Link href={link.href}>{link.label}</Link>
-            </Button>
-        ))}
-    </nav>
-  );
+  // Mobile header is handled by bottom nav, so this is mainly for desktop and the welcome page.
+  if (isMobile && !isWelcomePage) {
+    return null;
+  }
   
+<<<<<<< HEAD
   const UserMenu = () => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -279,10 +275,16 @@ export function Header() {
 =======
     <header className="p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-50">
       <Link href="/dashboard" className="flex items-center gap-2 font-bold text-lg">
+=======
+  return (
+    <header className={cn("p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-50", !isWelcomePage && "md:hidden")}>
+      <Link href="/" className="flex items-center gap-2 font-bold text-lg">
+>>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
         <Compass className="h-6 w-6 text-primary" />
         <span className="text-foreground">WebIntel</span>
       </Link>
       
+<<<<<<< HEAD
       {!isMobile && <NavContent />}
 >>>>>>> 804648f (Okay wait it should be in the header but in a professional way and posit)
 
@@ -370,6 +372,20 @@ export function Header() {
             </>
 >>>>>>> 804648f (Okay wait it should be in the header but in a professional way and posit)
         )}
+=======
+      <div className="flex items-center gap-2">
+        <Button variant={isWelcomePage ? "outline" : "default"} asChild>
+            <Link href="/dashboard">Dashboard</Link>
+        </Button>
+        {!user &&
+            <Button asChild>
+                <Link href="/login">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Login
+                </Link>
+            </Button>
+        }
+>>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
       </div>
     </header>
   );
