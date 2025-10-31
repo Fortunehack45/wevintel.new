@@ -5,10 +5,16 @@ import { usePathname } from 'next/navigation';
 import { Header } from './header';
 import { Footer } from './footer';
 import { BottomNav } from './bottom-nav';
+import { Sidebar } from './sidebar';
+import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
+
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
+    const isMobile = useIsMobile();
     const isAuthPage = pathname === '/login' || pathname === '/signup';
+    const isWelcomePage = pathname === '/';
 
     if (isAuthPage) {
         return (
@@ -22,17 +28,19 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </>
         )
     }
-
+    
     return (
         <>
             <div className="wave-container">
                 <div className="wave-light"></div>
             </div>
             <Header />
-            <main className="flex-1 pb-16 md:pb-0">
-                {children}
-            </main>
-            <Footer />
+            <div className={cn(!isWelcomePage && "md:pl-64")}>
+                <main className="flex-1 pb-16 md:pb-0 min-h-[calc(100vh-69px)]">
+                    {children}
+                </main>
+                <Footer />
+            </div>
             <BottomNav />
         </>
     )
