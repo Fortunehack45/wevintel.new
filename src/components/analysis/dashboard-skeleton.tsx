@@ -119,10 +119,14 @@ function TechStackPlaceholder() {
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 export function DashboardSkeleton() {
 =======
 function DashboardSkeleton() {
 >>>>>>> 33068c5 (Add more sections to the dashboard page like sponsores, users reviews et)
+=======
+export function DashboardSkeleton() {
+>>>>>>> 22268db (The sections you said you add is not showing at all in the dashboard pag)
   return (
     <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
          <div className="mb-12 space-y-4">
@@ -171,5 +175,8 @@ DashboardSkeleton.TrafficPlaceholder = TrafficPlaceholder;
 DashboardSkeleton.AuditPlaceholder = AuditPlaceholder;
 DashboardSkeleton.SummaryPlaceholder = SummaryPlaceholder;
 DashboardSkeleton.TechStackPlaceholder = TechStackPlaceholder;
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> 22268db (The sections you said you add is not showing at all in the dashboard pag)
