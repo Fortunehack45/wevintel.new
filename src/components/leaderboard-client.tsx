@@ -10,6 +10,9 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { BarChart, Tv, ShoppingCart, Newspaper, Cpu, Code, Brush, Music, Video, VenetianMask, MessageCircle, Gamepad, BookOpen, Building2, Cloud, DollarSign, Plane, Car, Utensils, Home, Bot, FlaskConical, Search, Globe, Wind, Building as BuildingIcon, Package, Clapperboard, Palette, Headphones, Drama, Play, Library, Landmark, Brain, Heart, ChefHat, Briefcase, Trophy, Sun, Ship, Mail, Handshake, PenTool, Tv2, Webhook, Rss, Book, University, Atom, Stethoscope, Salad, UtensilsCrossed, Hand, Tent, Bus, Forklift, NewspaperIcon, Palette as ArtIcon, Network, GitBranch, SortAsc, SortDesc } from "lucide-react";
+import { useAuth, useAuthContext } from "@/firebase/provider";
+import type { User } from "firebase/auth";
+import { useToast } from "@/hooks/use-toast";
 
 
 const categoryIcons: { [key: string]: React.ElementType } = {
@@ -62,9 +65,29 @@ export function LeaderboardClient() {
   const [sortOrder, setSortOrder] = useState<SortOrder>('rank');
   const [currentPage, setCurrentPage] = useState(1);
   const sitesPerPage = 10;
+  
+  const auth = useAuthContext();
+  const [user, setUser] = useState<User | null>(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (auth) {
+      const unsubscribe = useAuth(setUser);
+      return () => unsubscribe();
+    }
+  }, [auth]);
 
   const handleAnalyse = (e: React.MouseEvent, url: string) => {
     e.stopPropagation();
+    if (!user) {
+        toast({
+            title: "Authentication Required",
+            description: "Please log in or create an account to analyse a website.",
+            variant: "destructive"
+        });
+        router.push('/login');
+        return;
+    }
     const encodedUrl = encodeURIComponent(url);
     router.push(`/analysis/${encodedUrl}`);
   };

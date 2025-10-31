@@ -66,7 +66,7 @@ export function Header() {
   
   const desktopNavLinks = user 
     ? navLinks 
-    : navLinks.filter(link => ['/dashboard', '/about', '/contact'].includes(link.href));
+    : navLinks.filter(link => ['/dashboard', '/leaderboard', '/about', '/contact'].includes(link.href));
   
   // Mobile Header
   if(isMobile) {
