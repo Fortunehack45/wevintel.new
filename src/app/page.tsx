@@ -74,6 +74,9 @@ const featureCards = [
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ae3941f (Add it)
 const personas = [
     {
         icon: Code,
@@ -96,6 +99,7 @@ const personas = [
         description: "Explore the digital architecture of your favorite websites and learn what makes the web tick."
     }
 ];
+<<<<<<< HEAD
 =======
 export default function Home() {
   return (
@@ -329,6 +333,8 @@ export default function WelcomePage() {
       </motion.div>
 
 >>>>>>> 804648f (Okay wait it should be in the header but in a professional way and posit)
+=======
+>>>>>>> ae3941f (Add it)
 
 
 const sponsors = [
@@ -421,6 +427,9 @@ export default function WelcomePage() {
                 </section>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ae3941f (Add it)
                  <section className="container mx-auto px-4 py-16 md:py-24">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -439,7 +448,15 @@ export default function WelcomePage() {
                                     <p className="text-sm text-muted-foreground">{persona.description}</p>
                                 </div>
                             ))}
+<<<<<<< HEAD
 =======
+=======
+                        </div>
+                    </motion.div>
+                </section>
+
+
+>>>>>>> ae3941f (Add it)
                 <section className="py-16 md:py-24">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
