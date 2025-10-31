@@ -1,51 +1,54 @@
 
 'use client';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { User, Mail, MessageSquare, Send, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import { Send, ArrowLeft, User, Mail } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
-const formSchema = z.object({
-  name: z.string().min(2, { message: 'Please enter your name.' }),
-  email: z.string().email({ message: 'Please enter a valid email address.' }),
-  message: z.string().min(10, { message: 'Your message should be at least 10 characters long.' }),
-});
+import { useAuth, useAuthContext } from '@/firebase/provider';
+import type { User as FirebaseUser } from 'firebase/auth';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ContactPage() {
   const router = useRouter();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      message: '',
-    },
-  });
+  const auth = useAuthContext();
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const subject = `Contact Form Message from ${values.name}`;
+  useEffect(() => {
+      if (auth) {
+          const unsubscribe = useAuth((currentUser) => {
+              setUser(currentUser);
+              setIsLoading(false);
+          });
+          return () => unsubscribe();
+      } else {
+          setIsLoading(false);
+      }
+  }, [auth]);
+
+
+  const handleContactClick = () => {
+    const name = user?.displayName || 'N/A';
+    const email = user?.email || 'N/A';
+
+    const subject = "Support Request from WebIntel";
     const body = `
-      You have received a new message from your website contact form.
+Hello Fortune,
 
-      Here are the details:
-      --------------------------
-      Name: ${values.name}
-      Email: ${values.email}
-      --------------------------
-      
-      Message:
-      ${values.message}
-    `;
-    const mailtoLink = `mailto:fortunedomination@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoLink;
+I am contacting you from WebIntel regarding an issue or query.
+
+*User Details:*
+- *Name:* ${name}
+- *Email:* ${email}
+
+*Please describe your issue below:*
+---------------------------------
+
+
+`;
+    const mailtoLink = `https://wa.me/2349167689200?text=${encodeURIComponent(body)}`;
+    window.open(mailtoLink, '_blank');
   };
 
   return (
@@ -59,72 +62,42 @@ export default function ContactPage() {
 
       <div className="text-center space-y-4">
         <Send className="h-16 w-16 text-primary mx-auto" />
-        <h1 className="text-5xl font-bold tracking-tight text-foreground">Get In Touch</h1>
-        <p className="text-lg text-muted-foreground">Have a question or want to work together? Drop me a message.</p>
+        <h1 className="text-5xl font-bold tracking-tight text-foreground">Contact Support</h1>
+        <p className="text-lg text-muted-foreground">Need help or have a question? I'm here for you.</p>
       </div>
 
       <Card className="glass-card">
         <CardHeader>
-          <CardTitle>Contact Form</CardTitle>
-          <CardDescription>Fill out the form below and I'll get back to you as soon as possible.</CardDescription>
+          <CardTitle>Direct Support via WhatsApp</CardTitle>
+          <CardDescription>For a faster response, you can contact me directly on WhatsApp. Your user details will be pre-filled in the message.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name</FormLabel>
-                     <div className="relative">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <FormControl>
-                          <Input placeholder="Your Name" {...field} className="pl-10" />
-                        </FormControl>
-                      </div>
-                    <FormMessage />
-                  </FormItem>
+            <div className="space-y-4 mb-6">
+                <h4 className="font-semibold text-foreground">Your Information:</h4>
+                {isLoading ? (
+                    <div className="space-y-3">
+                        <Skeleton className="h-5 w-48" />
+                        <Skeleton className="h-5 w-64" />
+                    </div>
+                ) : user ? (
+                    <div className="space-y-2 text-sm">
+                        <div className="flex items-center gap-3">
+                            <User className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-foreground">{user.displayName || 'Not Provided'}</span>
+                        </div>
+                         <div className="flex items-center gap-3">
+                            <Mail className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-foreground">{user.email}</span>
+                        </div>
+                    </div>
+                ) : (
+                    <p className="text-sm text-muted-foreground">Log in to pre-fill your contact details.</p>
                 )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email Address</FormLabel>
-                     <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <FormControl>
-                          <Input placeholder="your.email@example.com" {...field} className="pl-10" />
-                        </FormControl>
-                      </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Message</FormLabel>
-                     <div className="relative">
-                        <MessageSquare className="absolute left-3 top-3.5 h-5 w-5 text-muted-foreground" />
-                        <FormControl>
-                          <Textarea placeholder="Tell me about your project or query..." {...field} className="pl-10 min-h-[150px]" />
-                        </FormControl>
-                      </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full">
+            </div>
+            <Button onClick={handleContactClick} className="w-full" disabled={isLoading}>
                 <Send className="mr-2 h-4 w-4" />
-                Send Message
-              </Button>
-            </form>
-          </Form>
+                Contact Me on WhatsApp
+            </Button>
         </CardContent>
       </Card>
     </div>
