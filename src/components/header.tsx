@@ -98,7 +98,7 @@ import { useAuth } from '@/firebase/auth';
 
 
 const navLinks = [
-  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/dashboard', authHref: '/dashboard', publicHref: '/', label: 'Dashboard' },
   { href: '/compare', label: 'Compare' },
   { href: '/leaderboard', label: 'Leaderboard' },
   { href: '/history', label: 'History' },
@@ -571,6 +571,7 @@ export function Header() {
 =======
       <nav className="absolute left-1/2 -translate-x-1/2">
          <ul className="flex items-center gap-2 rounded-full border bg-card/50 p-1">
+<<<<<<< HEAD
             {desktopNavLinks.map(link => (
                 <li key={link.href}>
                     <Link href={link.href} className={cn(
@@ -589,6 +590,29 @@ export function Header() {
                 </li>
             ))}
 >>>>>>> e996306 (This should take users that are logged in to home page and take users th)
+=======
+            {desktopNavLinks.map(link => {
+                const href = user ? (link.authHref || link.href) : (link.publicHref || link.href);
+                const isActive = pathname.startsWith(link.href) || (link.href === '/dashboard' && pathname === '/');
+                return (
+                    <li key={link.href}>
+                        <Link href={href} className={cn(
+                            "relative text-sm font-medium transition-colors text-muted-foreground hover:text-primary px-4 py-2 rounded-full",
+                             isActive && "text-primary"
+                        )}>
+                            {link.label}
+                            {isActive && (
+                                <motion.div
+                                    layoutId="desktop-active-nav"
+                                    className="absolute inset-0 bg-primary/10 rounded-full mix-blend-lighten dark:mix-blend-plus-lighter"
+                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                />
+                            )}
+                        </Link>
+                    </li>
+                )
+            })}
+>>>>>>> bbeec19 (he "Dashboard" in the centered navigation too should lead to the welcome)
          </ul>
       </nav>
       
