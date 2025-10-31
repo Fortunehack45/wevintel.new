@@ -39,7 +39,7 @@ export function AIRedesignCard({ url, isLoading: initialIsLoading }: AIRedesignC
         setRedesign(null);
         try {
             const result = await redesignWebsite({ url });
-            if ('error' in result) {
+            if (result.error) {
                 setError(result.error);
             } else if (result.imageUrl) {
                 setRedesign(result.imageUrl);

@@ -1,5 +1,4 @@
 
-
 'use client';
 import type { AnalysisResult, AuditInfo } from '@/lib/types';
 import { OverviewCard } from './overview-card';
@@ -115,20 +114,13 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
           isLoading={aiSummary === undefined}
         />
       </motion.div>
-      
-      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="col-span-1 md:col-span-2">
-        <AIRedesignCard 
-          url={initialData.overview.url}
-          isLoading={isLoadingFullReport}
-        />
-      </motion.div>
 
       {isLoadingFullReport || !traffic ? (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-1 md:col-span-2 lg:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-1 md:col-span-2">
            <DashboardSkeleton.TrafficPlaceholder />
         </motion.div>
       ) : (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-1 md:col-span-2 lg:col-span-4">
+        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={2} className="col-span-1 md:col-span-2">
           <TrafficCard data={traffic} />
         </motion.div>
       )}
@@ -179,6 +171,13 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
           <OverallScoreCard score={totalAuditScore} />
         </motion.div>
       )}
+      
+       <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="col-span-1 md:col-span-2 lg:col-span-4">
+        <AIRedesignCard 
+          url={initialData.overview.url}
+          isLoading={isLoadingFullReport}
+        />
+      </motion.div>
 
       {metadata &&
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={10} className="col-span-1 md:col-span-2">

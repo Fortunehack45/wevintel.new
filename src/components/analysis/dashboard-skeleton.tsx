@@ -122,32 +122,25 @@ function TechStackPlaceholder() {
 }
 
 
-function DashboardSkeleton({ initialData }: { initialData?: Partial<AnalysisResult> }) {
+function DashboardSkeleton() {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-      {initialData?.overview ? (
-        <div className="col-span-2 lg:col-span-4">
-            <OverviewCard 
-                data={initialData.overview} 
-                isLoading={true} 
-            />
+    <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
+         <div className="mb-12 space-y-4">
+            <div>
+                <Skeleton className="h-10 w-1/2" />
+                <Skeleton className="h-6 w-3/4 mt-2" />
+            </div>
+            <Skeleton className="h-16 w-full max-w-xl mx-auto" />
         </div>
-      ) : (
-        <Skeleton className="h-40 rounded-xl col-span-2 lg:col-span-4" />
-      )}
-      <div className="col-span-2"><SummaryPlaceholder /></div>
-      <div className="col-span-2"><TrafficPlaceholder/></div>
-      <div className="col-span-2 lg:col-span-4"><PerformancePlaceholder /></div>
-      <div className="col-span-2 lg:col-span-4"><TechStackPlaceholder /></div>
-      <Skeleton className="h-48 rounded-xl col-span-1" />
-      <Skeleton className="h-48 rounded-xl col-span-1" />
-      <Skeleton className="h-48 rounded-xl col-span-1" />
-      <Skeleton className="h-48 rounded-xl col-span-1" />
-      <Skeleton className="h-48 rounded-xl col-span-2" />
-      <Skeleton className="h-48 rounded-xl col-span-2" />
-      <div className="col-span-2"><AuditPlaceholder /></div>
-      <div className="col-span-2"><AuditPlaceholder /></div>
-      <Skeleton className="h-64 rounded-xl col-span-2 lg:col-span-4" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            <Skeleton className="h-40 w-full" />
+             <Skeleton className="h-40 w-full" />
+            <Skeleton className="h-40 w-full lg:col-span-1" />
+        </div>
+         <div>
+            <Skeleton className="h-8 w-48 mb-6" />
+            <Skeleton className="h-64 w-full" />
+        </div>
     </div>
   );
 }

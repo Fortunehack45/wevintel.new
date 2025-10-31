@@ -34,6 +34,10 @@ const nextConfig: NextConfig = {
         hostname: 'www.google.com',
         port: '',
         pathname: '/**',
+      },
+       {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
       }
     ],
   },
