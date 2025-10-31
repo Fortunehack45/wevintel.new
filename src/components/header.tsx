@@ -46,6 +46,7 @@ import { cn } from '@/lib/utils';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useAuth, useAuthContext } from '@/firebase/provider';
 =======
 =======
@@ -62,6 +63,9 @@ import { useAuth } from '@/firebase/auth';
 >>>>>>> 546cc0d (The header(desktop view only) is not professional enough the wey it look)
 import { useAuthContext } from '@/firebase/provider';
 >>>>>>> 822423a (For desktop view remove the contact button and about button for the sett)
+=======
+import { useAuth, useAuthContext } from '@/firebase/provider';
+>>>>>>> e996306 (This should take users that are logged in to home page and take users th)
 import { signOut, type User as FirebaseUser } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -78,6 +82,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 <<<<<<< HEAD
 import { motion } from 'framer-motion';
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 import { useAuth } from '@/firebase/auth';
@@ -88,6 +93,8 @@ import { motion } from 'framer-motion';
 =======
 import { useAuth } from '@/firebase/auth';
 >>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
+=======
+>>>>>>> e996306 (This should take users that are logged in to home page and take users th)
 
 
 const navLinks = [
@@ -350,9 +357,8 @@ export function Header() {
     return <header className="p-4 flex justify-between items-center border-b h-16" />;
 >>>>>>> 546cc0d (The header(desktop view only) is not professional enough the wey it look)
   }
-
-  const isWelcomePage = pathname === '/';
   
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -405,6 +411,11 @@ export function Header() {
 =======
   const desktopNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard' || link.href === '/about' || link.href === '/contact');
 >>>>>>> 6508b3f (The about and contact for users that are not logged in should be in the)
+=======
+  const desktopNavLinks = user 
+    ? navLinks 
+    : navLinks.filter(link => ['/dashboard', '/about', '/contact'].includes(link.href));
+>>>>>>> e996306 (This should take users that are logged in to home page and take users th)
   
 >>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
   // Mobile Header
@@ -413,7 +424,7 @@ export function Header() {
         <header className={cn(
             "p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-40 h-16",
         )}>
-          <Link href={isWelcomePage ? "/" : "/dashboard"} className="flex items-center gap-2 font-bold text-lg">
+          <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2 font-bold text-lg">
               <Compass className="h-7 w-7 text-primary" />
               <span className="text-foreground text-xl sr-only">WebIntel</span>
           </Link>
@@ -461,6 +472,7 @@ export function Header() {
       {/* Left Section */}
       <div className="flex items-center gap-6">
         <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2 font-bold text-lg">
+<<<<<<< HEAD
           <Compass className="h-7 w-7 text-primary" />
           <span className="text-foreground text-xl">WebIntel</span>
         </Link>
@@ -490,12 +502,15 @@ export function Header() {
 >>>>>>> 546cc0d (The header(desktop view only) is not professional enough the wey it look)
       <div className="flex items-center gap-6">
         <Link href={isWelcomePage ? "/" : "/dashboard"} className="flex items-center gap-2 font-bold text-lg">
+=======
+>>>>>>> e996306 (This should take users that are logged in to home page and take users th)
           <Compass className="h-7 w-7 text-primary" />
           <span className="text-foreground text-xl">WebIntel</span>
         </Link>
       </div>
 
       {/* Center Section - Main Navigation */}
+<<<<<<< HEAD
       {!isWelcomePage && (
           <nav className="absolute left-1/2 -translate-x-1/2">
              <ul className="flex items-center gap-2 rounded-full border bg-card/50 p-1">
@@ -553,11 +568,33 @@ export function Header() {
                     </li>
                 )
             })}
+=======
+      <nav className="absolute left-1/2 -translate-x-1/2">
+         <ul className="flex items-center gap-2 rounded-full border bg-card/50 p-1">
+            {desktopNavLinks.map(link => (
+                <li key={link.href}>
+                    <Link href={link.href} className={cn(
+                        "relative text-sm font-medium transition-colors text-muted-foreground hover:text-primary px-4 py-2 rounded-full",
+                         pathname.startsWith(link.href) && "text-primary"
+                    )}>
+                        {link.label}
+                        {pathname.startsWith(link.href) && (
+                            <motion.div
+                                layoutId="desktop-active-nav"
+                                className="absolute inset-0 bg-primary/10 rounded-full mix-blend-lighten dark:mix-blend-plus-lighter"
+                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                            />
+                        )}
+                    </Link>
+                </li>
+            ))}
+>>>>>>> e996306 (This should take users that are logged in to home page and take users th)
          </ul>
       </nav>
       
       {/* Right Section */}
       <div className="flex items-center gap-4">
+<<<<<<< HEAD
 =======
       <div className="flex items-center gap-2">
 <<<<<<< HEAD
@@ -568,6 +605,8 @@ export function Header() {
 >>>>>>> 768a281 (When the stuff is loading in the mobile view is showing the footer which)
 =======
 >>>>>>> dd02c12 (The theam toggle should be in the settings page not in the header please)
+=======
+>>>>>>> e996306 (This should take users that are logged in to home page and take users th)
         {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -576,6 +615,7 @@ export function Header() {
                         <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
                         <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
                     </Avatar>
+<<<<<<< HEAD
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
@@ -716,6 +756,28 @@ export function Header() {
                 </Button>
             )
 >>>>>>> 68b907f (Let the about and contact be in that centered navigation of the the desk)
+=======
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>{user.displayName || user.email}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+        ) : (
+            <Button asChild>
+              <Link href="/login">
+                Get Started
+              </Link>
+            </Button>
+>>>>>>> e996306 (This should take users that are logged in to home page and take users th)
         )}
 >>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
       </div>
