@@ -36,7 +36,7 @@ const sponsors = [
     { name: 'Firebase', icon: SiFirebase },
     { name: 'Google', icon: SiGoogle },
     { name: 'Next.js', icon: SiNextdotjs },
-    { name: 'ShadCN', icon: () => <span className="text-4xl font-bold">shadcn</span>, isText: true },
+    { name: 'ShadCN', icon: () => <span className="text-4xl font-bold">ShadCN</span>, isText: true },
     { name: 'Genkit', icon: () => <span className="text-4xl font-bold">Genkit</span>, isText: true },
     { name: 'Tailwind CSS', icon: SiTailwindcss },
 ];
@@ -124,7 +124,7 @@ export default function WelcomePage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.6 }}
-                    className="mb-16 container mx-auto px-4"
+                    className="mb-16"
                 >
                     <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Building className="text-primary"/> Sponsored By</h2>
                     <div className="tech-stack-scroller" data-animated="true">
