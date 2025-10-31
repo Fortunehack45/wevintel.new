@@ -20,15 +20,18 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         setMounted(true);
     }, []);
     
-    // Determine which pages should show the layout suggestion
-    const pagesWithSuggestion = [
-        '/',
-        '/dashboard',
-        '/analysis',
-        '/compare',
+    // Determine which pages should NOT show the layout suggestion
+    const pagesWithoutSuggestion = [
+        '/login',
+        '/signup',
+        '/settings',
+        '/privacy',
+        '/terms',
+        '/about',
+        '/contact'
     ];
 
-    const showSuggestion = mounted && pagesWithSuggestion.some(p => pathname.startsWith(p));
+    const showSuggestion = mounted && !pagesWithoutSuggestion.some(p => pathname.startsWith(p));
     
     if (!mounted) {
         return (
