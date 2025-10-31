@@ -6,16 +6,26 @@ import { Compass } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { useAuthContext } from '@/firebase/provider';
+import { useAuth } from '@/firebase/auth';
+import type { User as FirebaseUser } from 'firebase/auth';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const isMobile = useIsMobile();
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const auth = useAuthContext();
+  const [user, setUser] = useState<FirebaseUser | null>(null);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (auth) {
+      const unsubscribe = useAuth(setUser);
+      return () => unsubscribe();
+    }
+  }, [auth]);
+
 
   // Do not render footer on auth pages on desktop
   const isAuthPage = pathname === '/login' || pathname === '/signup';
@@ -41,14 +51,16 @@ export function Footer() {
           </div>
 
           {/* Navigation Column */}
-          <div>
-            <h4 className="font-semibold text-foreground mb-4">Navigate</h4>
-            <ul className="space-y-3 text-sm">
-              <li><Link href="/compare" className="text-muted-foreground hover:text-primary transition-colors">Compare</Link></li>
-              <li><Link href="/leaderboard" className="text-muted-foreground hover:text-primary transition-colors">Leaderboard</Link></li>
-              <li><Link href="/history" className="text-muted-foreground hover:text-primary transition-colors">History</Link></li>
-            </ul>
-          </div>
+          {user && (
+            <div>
+              <h4 className="font-semibold text-foreground mb-4">Navigate</h4>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/compare" className="text-muted-foreground hover:text-primary transition-colors">Compare</Link></li>
+                <li><Link href="/leaderboard" className="text-muted-foreground hover:text-primary transition-colors">Leaderboard</Link></li>
+                <li><Link href="/history" className="text-muted-foreground hover:text-primary transition-colors">History</Link></li>
+              </ul>
+            </div>
+          )}
 
           {/* Legal Column */}
           <div>
