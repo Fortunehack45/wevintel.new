@@ -25,7 +25,14 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 =======
     const isAuthPage = pathname === '/login' || pathname === '/signup';
     const isWelcomePage = pathname === '/';
+<<<<<<< HEAD
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
+=======
+    
+    const appRoutes = ['/dashboard', '/compare', '/leaderboard', '/history', '/settings'];
+    const isAppPage = appRoutes.some(route => pathname.startsWith(route));
+
+>>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
 
     useEffect(() => {
         setMounted(true);
@@ -51,12 +58,42 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         );
     }
     
+    if (isWelcomePage) {
+        return (
+             <>
+                <div className="wave-container">
+                    <div className="wave-light"></div>
+                </div>
+                <Header />
+                <main className="flex-1 min-h-[calc(100vh-69px)]">
+                    {children}
+                </main>
+                <Footer />
+            </>
+        )
+    }
+
+    if (isAppPage) {
+        return (
+            <div className="flex h-full">
+                <Sidebar />
+                <div className={cn("flex-1", isMobile ? "pl-16" : "md:pl-64")}>
+                    <main className="flex-1 pb-16 md:pb-0 min-h-screen">
+                        {children}
+                    </main>
+                </div>
+            </div>
+        )
+    }
+    
+    // For other pages like /about, /contact, etc.
     return (
         <div className="flex flex-col min-h-screen">
             <div className="wave-container">
                 <div className="wave-light"></div>
             </div>
             <Header />
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             <main className="flex-1 pb-20 md:pb-0">
@@ -74,6 +111,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <Footer />
             </div>
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
+=======
+            <main className="flex-1 pb-16 md:pb-0 min-h-[calc(100vh-69px)]">
+                {children}
+            </main>
+            <Footer />
+>>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
             <BottomNav />
             {showSuggestion && <OptimalLayoutSuggestion />}
         </div>

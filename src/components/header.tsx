@@ -3,14 +3,19 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info, Home } from 'lucide-react';
 =======
 import { Compass, Menu, Bot, Moon, Sun, Scale, Settings, LogIn, User as UserIcon, LogOut, Laptop } from 'lucide-react';
 >>>>>>> 804648f (Okay wait it should be in the header but in a professional way and posit)
+=======
+import { Compass, LogIn } from 'lucide-react';
+>>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+<<<<<<< HEAD
 <<<<<<< HEAD
 import { useAuth, useAuthContext } from '@/firebase/provider';
 import { signOut, type User as FirebaseUser } from 'firebase/auth';
@@ -73,12 +78,15 @@ const navLinks = [
 
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
 
 >>>>>>> 804648f (Okay wait it should be in the header but in a professional way and posit)
 export function Header() {
   const isMobile = useIsMobile();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+<<<<<<< HEAD
 <<<<<<< HEAD
   const { toast } = useToast();
   const router = useRouter();
@@ -102,6 +110,10 @@ export function Header() {
 =======
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
   useEffect(() => {
+=======
+  
+  useEffect(() => {
+>>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
     setMounted(true);
     if (auth) {
       const unsubscribe = useAuth(setUser);
@@ -206,16 +218,22 @@ export function Header() {
   }
 =======
   const isWelcomePage = pathname === '/';
+<<<<<<< HEAD
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
 
   if (!mounted) {
     return <header className="p-4 flex justify-between items-center border-b h-[69px]" />;
 >>>>>>> 804648f (Okay wait it should be in the header but in a professional way and posit)
+=======
+  const isAppPage = ['/dashboard', '/compare', '/leaderboard', '/history', '/settings'].some(route => pathname.startsWith(route));
+
+  if (!mounted) {
+    return <header className="p-4 flex justify-between items-center border-b h-[60px]" />;
+>>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
   }
 
-  // Mobile header is handled by bottom nav, so this is mainly for desktop and the welcome page.
-  if (isMobile && !isWelcomePage) {
-    return null;
+  if (isMobile && isAppPage) {
+    return null; // The sidebar is present on mobile for app pages, no header needed.
   }
   
 <<<<<<< HEAD
@@ -277,7 +295,7 @@ export function Header() {
       <Link href="/dashboard" className="flex items-center gap-2 font-bold text-lg">
 =======
   return (
-    <header className={cn("p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-50", !isWelcomePage && "md:hidden")}>
+    <header className={cn("p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-40 h-[60px]")}>
       <Link href="/" className="flex items-center gap-2 font-bold text-lg">
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
         <Compass className="h-6 w-6 text-primary" />
@@ -374,6 +392,7 @@ export function Header() {
         )}
 =======
       <div className="flex items-center gap-2">
+<<<<<<< HEAD
         <Button variant={isWelcomePage ? "outline" : "default"} asChild>
             <Link href="/dashboard">Dashboard</Link>
         </Button>
@@ -386,6 +405,15 @@ export function Header() {
             </Button>
         }
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
+=======
+        {isWelcomePage && (
+          <Button asChild>
+            <Link href="/dashboard">
+              Get Started
+            </Link>
+          </Button>
+        )}
+>>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
       </div>
     </header>
   );

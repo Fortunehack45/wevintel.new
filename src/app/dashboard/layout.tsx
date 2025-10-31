@@ -1,13 +1,19 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import { ReactNode } from 'react';
 =======
 import { Sidebar } from "@/components/sidebar";
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
+=======
+
+import { ReactNode } from 'react';
+>>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
 
 export default function DashboardLayout({
   children,
 }: {
+<<<<<<< HEAD
 <<<<<<< HEAD
   children: ReactNode;
 }) {
@@ -24,4 +30,9 @@ export default function DashboardLayout({
     </div>
   );
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
+=======
+  children: ReactNode;
+}) {
+  return <>{children}</>;
+>>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
 }

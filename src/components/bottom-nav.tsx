@@ -3,7 +3,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+<<<<<<< HEAD
 import { Home, Scale, Trophy, History, Settings } from 'lucide-react';
+=======
+import { Home, Compass, Info, Send } from 'lucide-react';
+>>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
@@ -13,6 +17,7 @@ import type { User } from 'firebase/auth';
 
 const navLinks = [
 <<<<<<< HEAD
+<<<<<<< HEAD
   { href: '/dashboard', label: 'Home', icon: Home },
 =======
   { href: '/dashboard', label: 'Dashboard', icon: Home },
@@ -21,6 +26,11 @@ const navLinks = [
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { href: '/history', label: 'History', icon: History },
   { href: '/settings', label: 'Settings', icon: Settings },
+=======
+  { href: '/dashboard', label: 'Home', icon: Home },
+  { href: '/about', label: 'About', icon: Info },
+  { href: '/contact', label: 'Contact', icon: Send },
+>>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
 ];
 
 export function BottomNav() {
@@ -67,6 +77,7 @@ export function BottomNav() {
               aria-label={link.label}
             >
               <link.icon className="h-6 w-6" />
+              <span className="text-xs">{link.label}</span>
             </Link>
           );
         })}
