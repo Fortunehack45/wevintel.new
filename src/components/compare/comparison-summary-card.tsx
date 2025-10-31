@@ -93,9 +93,11 @@ export function ComparisonSummaryCard({ summary, data1, data2 }: { summary: Comp
                         {winnerHostname && (
                            <div className='flex items-center justify-center flex-col gap-2 pt-4 border-t'>
                                 <h4 className='font-semibold flex items-center gap-2'><Trophy className="h-5 w-5 text-yellow-400"/> Overall Winner</h4>
-                                {isTie && <Badge size="lg" variant="secondary">It's a Tie!</Badge>}
-                                {isWinner1 && <Badge size="lg" className="bg-primary/80">{data1?.overview.domain}</Badge>}
-                                {isWinner2 && <Badge size="lg" className="bg-primary/80">{data2?.overview.domain}</Badge>}
+                                {isTie ? (
+                                    <Badge size="lg" variant="secondary">It's a Tie!</Badge>
+                                ) : (
+                                    <Badge size="lg" className="bg-primary/80">{winnerHostname}</Badge>
+                                )}
                             </div>
                         )}
                     </>
