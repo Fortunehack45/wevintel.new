@@ -2,7 +2,7 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info } from 'lucide-react';
+import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info, Home } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -67,8 +67,7 @@ export function Header() {
 
   const isWelcomePage = pathname === '/';
   
-  const displayedNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard' || link.href === '/about' || link.href === '/contact');
-  const desktopNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard');
+  const desktopNavLinks = user ? navLinks : navLinks.filter(link => link.href === '/dashboard' || link.href === '/about' || link.href === '/contact');
   
   // Mobile Header
   if(isMobile) {
@@ -182,19 +181,11 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
             ) : (
-              <div className="flex items-center gap-2">
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/about">About</Link>
-                </Button>
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/contact">Contact</Link>
-                </Button>
                 <Button asChild>
                   <Link href="/login">
                     Get Started
                   </Link>
                 </Button>
-              </div>
             )
         )}
       </div>
