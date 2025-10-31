@@ -1,4 +1,3 @@
-
 export const privacyContent = [
     {
         title: "ARTICLE I: INTRODUCTION AND SCOPE",
@@ -24,10 +23,10 @@ export const privacyContent = [
             <h3>1.4 Legal Basis for Data Processing</h3>
             <p>WebIntel processes Personal Data in accordance with and on the basis of the following legal grounds, as applicable under the Nigeria Data Protection Act 2023 and other applicable data protection legislation:</p>
             <ul>
-                <li><strong>Consent:</strong> Where you have given your explicit consent to the Processing of your Personal Data for one or more specific purposes, such consent constitutes the legal basis for such Processing. You have the right to withdraw your consent at any time, without affecting the lawfulness of Processing based on consent before its withdrawal.</li>
-                <li><strong>Contractual Necessity:</strong> Processing is necessary for the performance of a contract to which you are party, or in order to take steps at your request prior to entering into a contract. This legal basis applies to the Processing of authentication data necessary to create and maintain your Account and to provide you with the Service.</li>
-                <li><strong>Compliance with Legal Obligations:</strong> Processing is necessary for compliance with a legal obligation to which WebIntel is subject under Nigerian law or other applicable legislation. This may include obligations to retain certain records, respond to lawful requests from authorities, or comply with court orders.</li>
-                <li><strong>Legitimate Interests:</strong> Processing is necessary for the purposes of the legitimate interests pursued by WebIntel or by a third party, except where such interests are overridden by your interests or fundamental rights and freedoms which require protection of Personal Data. Legitimate interests may include fraud prevention, network and information security, analytics and service improvement, and direct marketing where permitted by law.</li>
+              <li><strong>Consent:</strong> Where you have given your explicit consent to the Processing of your Personal Data for one or more specific purposes, such consent constitutes the legal basis for such Processing. You have the right to withdraw your consent at any time, without affecting the lawfulness of Processing based on consent before its withdrawal.</li>
+              <li><strong>Contractual Necessity:</strong> Processing is necessary for the performance of a contract to which you are party, or in order to take steps at your request prior to entering into a contract. This legal basis applies to the Processing of authentication data necessary to create and maintain your Account and to provide you with the Service.</li>
+              <li><strong>Compliance with Legal Obligations:</strong> Processing is necessary for compliance with a legal obligation to which WebIntel is subject under Nigerian law or other applicable legislation. This may include obligations to retain certain records, respond to lawful requests from authorities, or comply with court orders.</li>
+              <li><strong>Legitimate Interests:</strong> Processing is necessary for the purposes of the legitimate interests pursued by WebIntel or by a third party, except where such interests are overridden by your interests or fundamental rights and freedoms which require protection of Personal Data. Legitimate interests may include fraud prevention, network and information security, analytics and service improvement, and direct marketing where permitted by law.</li>
             </ul>
         `
     },
@@ -56,10 +55,10 @@ export const privacyContent = [
             <h3>2.4 International Human Rights Instruments</h3>
             <p>WebIntel recognizes and commits to upholding the principles set forth in international human rights instruments concerning privacy and data protection, including:</p>
             <ul>
-                <li><strong>The Universal Declaration of Human Rights (UDHR)</strong>, adopted by the United Nations General Assembly in 1948, which provides in Article 12 that no one shall be subjected to arbitrary interference with his privacy, family, home, or correspondence, nor to attacks upon his honour and reputation, and that everyone has the right to the protection of the law against such interference or attacks.</li>
-                <li><strong>The International Covenant on Civil and Political Rights (ICCPR)</strong>, to which Nigeria is a State Party, which provides in Article 17 that no one shall be subjected to arbitrary or unlawful interference with his privacy, family, home, or correspondence, nor to unlawful attacks on his honour and reputation, and that everyone has the right to the protection of the law against such interference or attacks.</li>
-                <li><strong>The African Charter on Human and Peoples’ Rights</strong>, to which Nigeria is a State Party, which provides in Article 5 that every individual shall have the right to the respect of the dignity inherent in a human being and to the recognition of his legal status, and prohibits all forms of exploitation and degradation of man, which we interpret as encompassing protection against exploitation of personal information.</li>
-                <li><strong>The United Nations Guiding Principles on Business and Human Rights</strong>, which establish that business enterprises have a responsibility to respect human rights, meaning they should avoid infringing on the human rights of others and should address adverse human rights impacts with which they are involved. WebIntel conducts human rights due diligence in relation to our data processing activities and seeks to address any adverse impacts on the privacy rights of individuals.</li>
+              <li><strong>The Universal Declaration of Human Rights (UDHR)</strong>, adopted by the United Nations General Assembly in 1948, which provides in Article 12 that no one shall be subjected to arbitrary interference with his privacy, family, home, or correspondence, nor to attacks upon his honour and reputation, and that everyone has the right to the protection of the law against such interference or attacks.</li>
+              <li><strong>The International Covenant on Civil and Political Rights (ICCPR)</strong>, to which Nigeria is a State Party, which provides in Article 17 that no one shall be subjected to arbitrary or unlawful interference with his privacy, family, home, or correspondence, nor to unlawful attacks on his honour and reputation, and that everyone has the right to the protection of the law against such interference or attacks.</li>
+              <li><strong>The African Charter on Human and Peoples’ Rights</strong>, to which Nigeria is a State Party, which provides in Article 5 that every individual shall have the right to the respect of the dignity inherent in a human being and to the recognition of his legal status, and prohibits all forms of exploitation and degradation of man, which we interpret as encompassing protection against exploitation of personal information.</li>
+              <li><strong>The United Nations Guiding Principles on Business and Human Rights</strong>, which establish that business enterprises have a responsibility to respect human rights, meaning they should avoid infringing on the human rights of others and should address adverse human rights impacts with which they are involved. WebIntel conducts human rights due diligence in relation to our data processing activities and seeks to address any adverse impacts on the privacy rights of individuals.</li>
             </ul>
         `
     },
@@ -530,99 +529,3 @@ export const privacyContent = [
         `
     }
 ]
-
-`}</content>
-  </change>
-  <change>
-    <file>src/app/privacy/page.tsx</file>
-    <content><![CDATA[
-'use client';
-
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Home, Shield, ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
-import Link from "next/link";
-import { privacyContent } from "@/lib/privacy-content";
-import { Progress } from "@/components/ui/progress";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-export default function PrivacyPage() {
-  const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = privacyContent.length;
-
-  const handleNext = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
-  };
-
-  const handlePrev = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 0));
-  };
-
-  const currentArticle = privacyContent[currentPage];
-  const progressValue = ((currentPage + 1) / totalPages) * 100;
-
-  return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
-      <div className="flex flex-wrap justify-between items-center gap-4">
-        <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-3">
-          <Shield className="h-8 w-8 text-primary" />
-          Privacy Policy
-        </h1>
-        <Button asChild variant="outline">
-          <Link href="/">
-            <Home className="mr-2 h-4 w-4" />
-            Back to Home
-          </Link>
-        </Button>
-      </div>
-
-      <Card className="glass-card">
-        <CardHeader>
-          <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-            <CardTitle>{currentArticle.title}</CardTitle>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full sm:w-auto">
-                  Go to Article... <ChevronDown className="ml-2 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                {privacyContent.map((article, index) => (
-                  <DropdownMenuItem key={index} onSelect={() => setCurrentPage(index)}>
-                    {article.title}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <p className="text-sm text-muted-foreground pt-2">Last Updated: October 31, 2025</p>
-        </CardHeader>
-        <CardContent className="prose prose-sm sm:prose-base dark:prose-invert max-w-none prose-h3:font-bold prose-h3:text-lg prose-p:leading-relaxed prose-ul:list-disc prose-ul:pl-6 prose-li:my-2 text-foreground/90">
-          <Progress value={progressValue} className="w-full mb-6" />
-          
-          <div
-            dangerouslySetInnerHTML={{ __html: currentArticle.content }}
-          />
-
-          <div className="flex justify-between items-center mt-12 not-prose">
-            <Button onClick={handlePrev} disabled={currentPage === 0} variant="outline">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Previous
-            </Button>
-            <p className="text-sm font-medium">
-              Page {currentPage + 1} of {totalPages}
-            </p>
-            <Button onClick={handleNext} disabled={currentPage === totalPages - 1} variant="outline">
-              Next <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
