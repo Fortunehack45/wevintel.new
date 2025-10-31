@@ -84,11 +84,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 >>>>>>> 2cc806b (Also introduced the header for the mobile view back)
     if (!mounted) {
         return (
-             <div className="flex flex-col min-h-screen">
-                <main className="flex-1">
-                    {children}
-                </main>
-            </div>
+             <main className="flex-1">
+                {children}
+            </main>
         );
     }
     
@@ -108,6 +106,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     return (
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div className="flex flex-col min-h-screen">
 =======
         <div className="flex flex-col h-full">
@@ -115,6 +114,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 =======
         <div className="flex flex-col min-h-screen">
 >>>>>>> 980974b (Remove that footer been separate features and keep it the way it was bef)
+=======
+        <>
+>>>>>>> 0c78a9c (Error: A tree hydrated but some attributes of the server rendered HTML d)
             <div className="wave-container">
                 <div className="wave-light"></div>
             </div>
@@ -176,8 +178,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </main>
             <Footer />
             <BottomNav />
+<<<<<<< HEAD
 >>>>>>> 980974b (Remove that footer been separate features and keep it the way it was bef)
         </div>
 >>>>>>> 9999f8a (Shift the footer down the page by 30% because it's blocking my view to v)
+=======
+        </>
+>>>>>>> 0c78a9c (Error: A tree hydrated but some attributes of the server rendered HTML d)
     )
 }

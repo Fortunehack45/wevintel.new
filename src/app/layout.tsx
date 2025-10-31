@@ -39,6 +39,7 @@ export default function RootLayout({
       <body className={cn(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           `${poppins.variable} font-body antialiased flex flex-col min-h-screen`,
 =======
           `${poppins.variable} font-body antialiased h-full`,
@@ -46,6 +47,9 @@ export default function RootLayout({
 =======
           `${poppins.variable} font-body antialiased`,
 >>>>>>> 980974b (Remove that footer been separate features and keep it the way it was bef)
+=======
+          `${poppins.variable} font-body antialiased flex flex-col min-h-screen`,
+>>>>>>> 0c78a9c (Error: A tree hydrated but some attributes of the server rendered HTML d)
         )}>
         <ThemeProvider
             attribute="class"
