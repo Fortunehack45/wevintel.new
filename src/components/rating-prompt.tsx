@@ -38,7 +38,7 @@ export function RatingPrompt() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: user?.displayName || '',
+      name: '',
       occupation: '',
       rating: 0,
       reason: '',
