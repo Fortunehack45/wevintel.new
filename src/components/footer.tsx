@@ -1,9 +1,18 @@
 
+'use client';
+
 import Link from 'next/link';
 import { Compass } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return null;
+  }
+  
   return (
     <footer className="border-t bg-background/50">
       <div className="container mx-auto px-4 py-12">
@@ -44,7 +53,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
           <p>&copy; {currentYear} WebIntel. All Rights Reserved.</p>
           <p className="mt-1">
-            Developed with ❤️ by <a href="https://wa.me/2349167689200" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
+            Developed by <a href="https://wa.me/2349167689200" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
               Fortune
             </a>.
           </p>
