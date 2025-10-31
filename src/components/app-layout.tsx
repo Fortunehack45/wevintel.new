@@ -25,7 +25,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     if (!mounted) {
         return (
              <div className="flex flex-col h-full">
-                <Header />
                 <main className="flex-1">
                     {children}
                 </main>
@@ -33,7 +32,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         );
     }
     
-    if (isAuthPage) {
+    if (isAuthPage && !isMobile) {
         return (
             <>
                 <div className="wave-container">
@@ -52,7 +51,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <div className="wave-light"></div>
             </div>
             <Header />
-            <main className="flex-1">
+            <main className="flex-1 overflow-y-auto">
                 {children}
             </main>
             <Footer />

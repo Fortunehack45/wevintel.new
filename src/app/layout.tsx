@@ -37,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en-GB" suppressHydrationWarning className="h-full">
       <body className={cn(
-          `${poppins.variable} font-body antialiased flex flex-col h-full`,
+          `${poppins.variable} font-body antialiased h-full`,
         )}>
         <ThemeProvider
             attribute="class"
@@ -46,9 +46,11 @@ export default function RootLayout({
             disableTransitionOnChange
         >
           <FirebaseProvider>
-            <AppLayout>
-              {children}
-            </AppLayout>
+            <div className="flex flex-col h-full">
+                <AppLayout>
+                    {children}
+                </AppLayout>
+            </div>
           </FirebaseProvider>
           <Toaster />
         </ThemeProvider>
