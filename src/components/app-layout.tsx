@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { OptimalLayoutSuggestion } from './optimal-layout-suggestion';
+<<<<<<< HEAD
 =======
 import { Sidebar } from './sidebar';
 import { cn } from '@/lib/utils';
@@ -22,6 +23,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 =======
 import { useState, useEffect } from 'react';
 >>>>>>> f640191 (When it's loading it's showing the old UI which is not right)
+=======
+>>>>>>> 3d6f03c (Create a features in a professional way that inform users that for best)
 
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
@@ -188,7 +191,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <BottomNav />
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 980974b (Remove that footer been separate features and keep it the way it was bef)
+=======
+            <OptimalLayoutSuggestion />
+>>>>>>> 3d6f03c (Create a features in a professional way that inform users that for best)
         </div>
 >>>>>>> 9999f8a (Shift the footer down the page by 30% because it's blocking my view to v)
 =======
