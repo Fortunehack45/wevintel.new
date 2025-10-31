@@ -35,9 +35,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-GB" suppressHydrationWarning className="h-full">
+    <html lang="en-GB" suppressHydrationWarning>
       <body className={cn(
-          `${poppins.variable} font-body antialiased`,
+          `${poppins.variable} font-body antialiased flex flex-col min-h-screen`,
         )}>
         <ThemeProvider
             attribute="class"
