@@ -118,7 +118,11 @@ function TechStackPlaceholder() {
 }
 
 
+<<<<<<< HEAD
 export function DashboardSkeleton() {
+=======
+function DashboardSkeleton() {
+>>>>>>> 33068c5 (Add more sections to the dashboard page like sponsores, users reviews et)
   return (
     <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
          <div className="mb-12 space-y-4">
@@ -126,6 +130,7 @@ export function DashboardSkeleton() {
                 <Skeleton className="h-10 w-1/2" />
                 <Skeleton className="h-6 w-3/4 mt-2" />
             </div>
+<<<<<<< HEAD
             <Skeleton className="h-16 w-full max-w-xl" />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
@@ -139,6 +144,18 @@ export function DashboardSkeleton() {
                 <Skeleton className="h-64 w-full" />
                 <Skeleton className="h-64 w-full" />
             </div>
+=======
+            <Skeleton className="h-16 w-full max-w-xl mx-auto" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            <Skeleton className="h-40 w-full" />
+             <Skeleton className="h-40 w-full" />
+            <Skeleton className="h-40 w-full lg:col-span-1" />
+        </div>
+         <div>
+            <Skeleton className="h-8 w-48 mb-6" />
+            <Skeleton className="h-64 w-full" />
+>>>>>>> 33068c5 (Add more sections to the dashboard page like sponsores, users reviews et)
         </div>
     </div>
   );
