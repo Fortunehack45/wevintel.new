@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { useAuth, useAuthContext } from '@/firebase/provider';
+import type { User } from 'firebase/auth';
 
 const navLinks = [
   { href: '/dashboard', label: 'Home', icon: Home },
@@ -21,12 +23,19 @@ export function BottomNav() {
   const pathname = usePathname();
   const isMobile = useIsMobile();
   const [mounted, setMounted] = useState(false);
+  const auth = useAuthContext();
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (auth) {
+        const unsubscribe = useAuth(setUser);
+        return () => unsubscribe();
+    }
+  }, [auth]);
 
-  const shouldShow = mounted && isMobile && navLinks.some(link => pathname.startsWith(link.href) || pathname.startsWith('/analysis'));
+  const isAuthPage = pathname === '/login' || pathname === '/signup';
+  const shouldShow = mounted && isMobile && user && !isAuthPage;
 
 
   if (!shouldShow) {

@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -9,12 +9,13 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged } from 'firebase/auth';
 import { app } from '@/firebase/config';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -29,6 +30,33 @@ const formSchema = z.object({
     path: ["confirmPassword"],
 });
 
+const AuthSkeleton = () => (
+    <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[80vh]">
+        <Card className="w-full max-w-md">
+            <CardHeader>
+                <Skeleton className="h-8 w-48 mx-auto" />
+                <Skeleton className="h-4 w-64 mx-auto mt-2" />
+            </CardHeader>
+            <CardContent className="space-y-6">
+                <div className="space-y-2">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-10 w-full" />
+                </div>
+                 <div className="space-y-2">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-10 w-full" />
+                </div>
+                <div className="space-y-2">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-10 w-full" />
+                </div>
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-4 w-48 mx-auto" />
+            </CardContent>
+        </Card>
+    </div>
+);
+
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,6 +65,18 @@ export default function SignUpPage() {
   const { toast } = useToast();
   const router = useRouter();
   const auth = getAuth(app);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push('/dashboard');
+      } else {
+        setIsAuthLoading(false);
+      }
+    });
+    return () => unsubscribe();
+  }, [auth, router]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -69,6 +109,10 @@ export default function SignUpPage() {
       setIsLoading(false);
     }
   };
+  
+  if (isAuthLoading) {
+      return <AuthSkeleton />;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[80vh]">
