@@ -118,15 +118,46 @@ function TechStackPlaceholder() {
 }
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-export function DashboardSkeleton() {
-=======
-function DashboardSkeleton() {
->>>>>>> 33068c5 (Add more sections to the dashboard page like sponsores, users reviews et)
-=======
-export function DashboardSkeleton() {
->>>>>>> 22268db (The sections you said you add is not showing at all in the dashboard pag)
+export function DashboardSkeleton({initialData}: {initialData?: any}) {
+    if (initialData) {
+        return (
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="col-span-1 md:col-span-2 lg:col-span-4">
+                    <Card className="glass-card h-full">
+                        <CardHeader className="flex flex-col md:flex-row items-start md:items-center gap-4 space-y-0">
+                            <Skeleton className="h-16 w-16 rounded-lg" />
+                            <div className='flex-1 min-w-0 space-y-2'>
+                                <Skeleton className="h-8 w-3/4" />
+                                <Skeleton className="h-5 w-1/2" />
+                            </div>
+                        </CardHeader>
+                        <CardContent className="space-y-6 pt-4">
+                           <div className="space-y-3">
+                               <Skeleton className="h-5 w-full" />
+                               <Skeleton className="h-5 w-1/2" />
+                           </div>
+                           <div className="space-y-3">
+                               <Skeleton className="h-5 w-1/4" />
+                               <Skeleton className="h-5 w-1/3" />
+                           </div>
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="col-span-1 md:col-span-2"><SummaryPlaceholder /></div>
+                <div className="col-span-1 md:col-span-2"><TrafficPlaceholder /></div>
+                <div className="col-span-1 md:col-span-2 lg:col-span-4"><PerformancePlaceholder /></div>
+                <div className="col-span-1 md:col-span-2 lg:col-span-4"><TechStackPlaceholder /></div>
+                <div className="col-span-1"><Card className="h-full"><CardContent className="pt-6"><Skeleton className="h-32 w-full"/></CardContent></Card></div>
+                <div className="col-span-1"><Card className="h-full"><CardContent className="pt-6"><Skeleton className="h-32 w-full"/></CardContent></Card></div>
+                <div className="col-span-1"><Card className="h-full"><CardContent className="pt-6"><Skeleton className="h-32 w-full"/></CardContent></Card></div>
+                <div className="col-span-1"><ScorePlaceholder /></div>
+                <div className="col-span-1 md:col-span-2"><Card className="h-full"><CardContent className="pt-6"><Skeleton className="h-48 w-full"/></CardContent></Card></div>
+                <div className="col-span-1 md:col-span-2"><AuditPlaceholder /></div>
+                <div className="col-span-1 md:col-span-2 lg:col-span-4"><Card className="h-full"><CardContent className="pt-6"><Skeleton className="h-64 w-full"/></CardContent></Card></div>
+            </div>
+        )
+    }
+
   return (
     <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
          <div className="mb-12 space-y-4">
@@ -134,13 +165,10 @@ export function DashboardSkeleton() {
                 <Skeleton className="h-10 w-1/2" />
                 <Skeleton className="h-6 w-3/4 mt-2" />
             </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
             <Skeleton className="h-16 w-full max-w-xl" />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
             <Skeleton className="h-40 w-full" />
-<<<<<<< HEAD
             <Skeleton className="h-40 w-full" />
         </div>
          <div>
@@ -150,29 +178,6 @@ export function DashboardSkeleton() {
                 <Skeleton className="h-64 w-full" />
                 <Skeleton className="h-64 w-full" />
             </div>
-=======
-            <Skeleton className="h-16 w-full max-w-xl mx-auto" />
-=======
-            <Skeleton className="h-16 w-full max-w-xl" />
->>>>>>> 5a305cc (Add sponsor section and user review section to the dashboard page. For t)
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-=======
->>>>>>> 64d694d (Please let the skeleton loading animation be accurate it's not that it w)
-            <Skeleton className="h-40 w-full" />
-        </div>
-         <div>
-            <Skeleton className="h-8 w-48 mb-6" />
-<<<<<<< HEAD
-            <Skeleton className="h-64 w-full" />
->>>>>>> 33068c5 (Add more sections to the dashboard page like sponsores, users reviews et)
-=======
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <Skeleton className="h-64 w-full" />
-                <Skeleton className="h-64 w-full" />
-                <Skeleton className="h-64 w-full" />
-            </div>
->>>>>>> 64d694d (Please let the skeleton loading animation be accurate it's not that it w)
         </div>
     </div>
   );
@@ -184,13 +189,5 @@ DashboardSkeleton.TrafficPlaceholder = TrafficPlaceholder;
 DashboardSkeleton.AuditPlaceholder = AuditPlaceholder;
 DashboardSkeleton.SummaryPlaceholder = SummaryPlaceholder;
 DashboardSkeleton.TechStackPlaceholder = TechStackPlaceholder;
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     
-=======
->>>>>>> 22268db (The sections you said you add is not showing at all in the dashboard pag)
-=======
-
-    
->>>>>>> 64d694d (Please let the skeleton loading animation be accurate it's not that it w)

@@ -12,7 +12,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowRight, Scale, Trophy } from 'lucide-react';
 import Link from 'next/link';
 import { DashboardSkeleton } from '@/components/analysis/dashboard-skeleton';
-import { LoadingOverlay } from '@/components/loading-overlay';
 
 
 export default function DashboardPage() {
@@ -43,7 +42,7 @@ export default function DashboardPage() {
   }, [auth, router]);
 
   if (isLoading || !user) {
-    return <LoadingOverlay isVisible={true} />;
+    return <DashboardSkeleton />;
   }
   
   const welcomeName = user.displayName || user.email;
