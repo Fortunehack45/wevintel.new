@@ -140,6 +140,7 @@ export function DashboardSkeleton() {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
             <Skeleton className="h-40 w-full" />
+<<<<<<< HEAD
             <Skeleton className="h-40 w-full" />
         </div>
          <div>
@@ -156,14 +157,22 @@ export function DashboardSkeleton() {
 >>>>>>> 5a305cc (Add sponsor section and user review section to the dashboard page. For t)
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+=======
+>>>>>>> 64d694d (Please let the skeleton loading animation be accurate it's not that it w)
             <Skeleton className="h-40 w-full" />
-             <Skeleton className="h-40 w-full" />
-            <Skeleton className="h-40 w-full lg:col-span-1" />
         </div>
          <div>
             <Skeleton className="h-8 w-48 mb-6" />
+<<<<<<< HEAD
             <Skeleton className="h-64 w-full" />
 >>>>>>> 33068c5 (Add more sections to the dashboard page like sponsores, users reviews et)
+=======
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <Skeleton className="h-64 w-full" />
+                <Skeleton className="h-64 w-full" />
+                <Skeleton className="h-64 w-full" />
+            </div>
+>>>>>>> 64d694d (Please let the skeleton loading animation be accurate it's not that it w)
         </div>
     </div>
   );
@@ -176,7 +185,12 @@ DashboardSkeleton.AuditPlaceholder = AuditPlaceholder;
 DashboardSkeleton.SummaryPlaceholder = SummaryPlaceholder;
 DashboardSkeleton.TechStackPlaceholder = TechStackPlaceholder;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     
 =======
 >>>>>>> 22268db (The sections you said you add is not showing at all in the dashboard pag)
+=======
+
+    
+>>>>>>> 64d694d (Please let the skeleton loading animation be accurate it's not that it w)
