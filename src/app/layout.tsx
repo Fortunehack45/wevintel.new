@@ -6,6 +6,7 @@ import { Poppins } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 import { AppLayout } from '@/components/app-layout';
+import { FirebaseProvider } from '@/firebase/client-provider';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -44,9 +45,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-          <AppLayout>
-            {children}
-          </AppLayout>
+          <FirebaseProvider>
+            <AppLayout>
+              {children}
+            </AppLayout>
+          </FirebaseProvider>
           <Toaster />
         </ThemeProvider>
       </body>
