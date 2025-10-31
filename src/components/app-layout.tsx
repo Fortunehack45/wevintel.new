@@ -8,11 +8,18 @@ import { BottomNav } from './bottom-nav';
 import { Sidebar } from './sidebar';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useState, useEffect } from 'react';
 
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const isMobile = useIsMobile();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+    
     const isAuthPage = pathname === '/login' || pathname === '/signup';
     const isWelcomePage = pathname === '/';
     
@@ -20,8 +27,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     const isAppPage = appRoutes.some(route => pathname.startsWith(route));
 
     const analysisRoutes = ['/analysis', '/compare/'];
-    const isAnalysisPage = analysisRoutes.some(route => pathname.startsWith(route));
+    const isAnalysisPage = analysisRoutes.some(route => pathname.startsWith(route) && route !== '/compare');
 
+
+    if (!mounted) {
+        return null;
+    }
 
     if (isAuthPage) {
         return (
@@ -51,7 +62,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         )
     }
 
-    if (isAppPage) {
+    if (isAppPage || isAnalysisPage) {
         // Desktop view always gets the sidebar for app pages
         if (!isMobile) {
             return (
