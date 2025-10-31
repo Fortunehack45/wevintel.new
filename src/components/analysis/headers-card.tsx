@@ -9,7 +9,7 @@ export function HeadersCard({ data }: { data?: HeaderInfo }) {
 
   if (!data) {
     return (
-      <Card className="h-full">
+      <Card className="h-full glass-card">
         <CardHeader>
           <Skeleton className="h-5 w-32" />
           <Skeleton className="h-4 w-56" />
@@ -24,7 +24,7 @@ export function HeadersCard({ data }: { data?: HeaderInfo }) {
   const headers = Object.entries(data);
 
   return (
-    <Card className="h-full">
+    <Card className="h-full glass-card">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ListTree className="h-5 w-5 text-primary" />

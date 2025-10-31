@@ -416,9 +416,9 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                     </p>
                 </div>
                 <div className='flex flex-wrap items-center justify-start sm:justify-end gap-2 w-full sm:w-auto'>
-                    <Button variant="outline" onClick={() => router.back()} disabled={isDownloading}>
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back
+                    <Button variant="outline" onClick={() => router.push('/')} disabled={isDownloading}>
+                        <Home className="mr-2 h-4 w-4" />
+                        Back to Home
                     </Button>
                     <Button variant="outline" onClick={handleReanalyze} disabled={isLoading || isDownloading}>
                         <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
