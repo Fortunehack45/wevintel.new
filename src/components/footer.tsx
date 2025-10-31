@@ -26,7 +26,7 @@ export function Footer() {
           
           {/* Brand Column */}
           <div className="md:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+            <Link href="/dashboard" className="flex items-center gap-2 font-bold text-xl">
                 <Compass className="h-7 w-7 text-primary" />
                 <span className="text-foreground">WebIntel</span>
             </Link>

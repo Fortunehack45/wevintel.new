@@ -416,7 +416,7 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                     </p>
                 </div>
                 <div className='flex flex-wrap items-center justify-start sm:justify-end gap-2 w-full sm:w-auto'>
-                    <Button variant="outline" onClick={() => router.push('/')} disabled={isDownloading}>
+                    <Button variant="outline" onClick={() => router.push('/dashboard')} disabled={isDownloading}>
                         <Home className="mr-2 h-4 w-4" />
                         Back to Home
                     </Button>

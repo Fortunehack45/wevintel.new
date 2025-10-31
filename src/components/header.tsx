@@ -26,7 +26,7 @@ import { useRouter } from 'next/navigation';
 
 
 const navLinks = [
-    { href: '/', label: 'Home' },
+    { href: '/dashboard', label: 'Dashboard' },
     { href: '/compare', label: 'Compare' },
     { href: '/leaderboard', label: 'Leaderboard' },
     { href: '/history', label: 'History' },
@@ -78,7 +78,7 @@ export function Header() {
         {navLinks.map(link => (
             <Button
                 key={link.href}
-                variant={pathname.startsWith(link.href) && (link.href !== '/' || pathname === '/') ? "secondary" : "ghost"}
+                variant={pathname.startsWith(link.href) ? "secondary" : "ghost"}
                 asChild
             >
                 <Link href={link.href}>{link.label}</Link>
@@ -129,7 +129,7 @@ export function Header() {
 
   return (
     <header className="p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-50">
-      <Link href="/" className="flex items-center gap-2 font-bold text-lg">
+      <Link href="/dashboard" className="flex items-center gap-2 font-bold text-lg">
         <Compass className="h-6 w-6 text-primary" />
         <span className="text-foreground">WebIntel</span>
       </Link>
