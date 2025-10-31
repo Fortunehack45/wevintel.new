@@ -7,6 +7,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+<<<<<<< HEAD
 import { useAuth, useAuthContext } from '@/firebase/provider';
 import { signOut, type User as FirebaseUser } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
@@ -21,6 +22,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { motion } from 'framer-motion';
 
+=======
+import { useTheme } from 'next-themes';
+import { getAuth, onAuthStateChanged, type User } from 'firebase/auth';
+import { useAuthContext } from '@/firebase/provider';
+>>>>>>> 768a281 (When the stuff is loading in the mobile view is showing the footer which)
 
 const navLinks = [
 <<<<<<< HEAD
@@ -173,6 +179,7 @@ export function Header() {
         </Link>
       </div>
 
+<<<<<<< HEAD
       {/* Center Section - Main Navigation */}
       <nav className="absolute left-1/2 -translate-x-1/2">
          <ul className="flex items-center gap-2 rounded-full border bg-card/50 p-1">
@@ -202,6 +209,11 @@ export function Header() {
       
       {/* Right Section */}
       <div className="flex items-center gap-4">
+=======
+      <div className="flex items-center gap-2">
+        <NavContent />
+        <ThemeToggle />
+>>>>>>> 768a281 (When the stuff is loading in the mobile view is showing the footer which)
         {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
