@@ -65,8 +65,8 @@ export default function AboutPage() {
                 <p className="text-primary font-semibold">Software Engineer | Database Developer | UI/UX Designer | Innovator</p>
                 
                 <div className="mt-4 text-left text-muted-foreground space-y-4">
-                    <p>
-                        Fortune is an 18-year-old Nigerian software developer and technology innovator dedicated to building solutions at the intersection of AI, Web3, and modern web infrastructure. Guided by a deep passion for creativity and engineering precision, he has become known for transforming complex ideas into intuitive, scalable, and visually compelling digital products.
+                     <p>
+                       Fortune is an 18-year-old Nigerian software developer and technology innovator dedicated to building solutions at the intersection of AI, Web3, and modern web infrastructure. Guided by a deep passion for creativity and engineering precision, he has become known for transforming complex ideas into intuitive, scalable, and visually compelling digital products.
                     </p>
                     <p>
                         With an unwavering belief in technological empowerment, Fortune’s work on WebIntel reflects his mission to democratize access to analytical intelligence and redefine what responsible innovation means in the modern web ecosystem. His development philosophy emphasizes privacy by design, clarity in function, and beauty in user experience — values that have shaped the DNA of WebIntel from its earliest conceptual stages.
