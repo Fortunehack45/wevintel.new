@@ -1,6 +1,7 @@
+
 'use client';
 import type { FirebaseApp } from 'firebase/app';
-import type { Auth } from 'firebase/auth';
+import type { Auth, User } from 'firebase/auth';
 import type { Firestore } from 'firebase/firestore';
 import {
   createContext,
@@ -9,7 +10,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { useAuth } from './auth';
+import { useAuth as useFirebaseAuth } from './auth';
 
 /**
  * A React provider that shares the Firebase app, Firestore, and Auth instances
@@ -43,7 +44,7 @@ export function FirebaseProvider({
   const [user, setUser] = useState(auth.currentUser);
 
   useEffect(() => {
-    const unsubscribe = useAuth(setUser);
+    const unsubscribe = useFirebaseAuth(setUser);
     return () => unsubscribe();
   }, []);
 
@@ -58,3 +59,4 @@ export const useFirebase = () => useContext(FirebaseContext);
 export const useFirebaseApp = () => useContext(FirebaseContext).firebaseApp;
 export const useFirestore = () => useContext(FirebaseContext).firestore;
 export const useAuthContext = () => useContext(FirebaseContext).auth;
+export const useAuth = useFirebaseAuth;

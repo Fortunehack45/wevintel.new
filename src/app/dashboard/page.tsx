@@ -4,8 +4,45 @@
 import { UrlForm } from '@/components/url-form';
 import { HistoryClient } from '@/components/history-client';
 import { motion } from 'framer-motion';
+import { useAuth, useAuthContext } from '@/firebase/provider';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import type { User } from 'firebase/auth';
+import { LoadingOverlay } from '@/components/loading-overlay';
 
 export default function DashboardPage() {
+  const auth = useAuthContext();
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (auth) {
+      const unsubscribe = useAuth((user) => {
+        if (user) {
+          setUser(user);
+          setIsLoading(false);
+        } else {
+          router.push('/login');
+        }
+      });
+      return () => unsubscribe();
+    } else {
+        // If auth isn't ready, maybe it's still loading, but if it's null, we should redirect.
+        // A brief delay to see if auth context loads.
+        const timer = setTimeout(() => {
+            if (!auth) {
+                router.push('/login');
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }
+  }, [auth, router]);
+
+  if (isLoading || !user) {
+    return <LoadingOverlay isVisible={true} />;
+  }
+  
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center text-center pb-24 md:pb-8">
       <div className="max-w-3xl w-full">

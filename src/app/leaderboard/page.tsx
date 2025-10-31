@@ -1,12 +1,46 @@
 
 
+'use client';
 import { LeaderboardClient } from "@/components/leaderboard-client";
-import { Button } from "@/components/ui/button";
-import { Home, Trophy } from "lucide-react";
-import Link from "next/link";
+import { Trophy } from "lucide-react";
+import { useAuth, useAuthContext } from "@/firebase/provider";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import type { User } from "firebase/auth";
+import { LoadingOverlay } from "@/components/loading-overlay";
 
 
 export default function LeaderboardPage() {
+    const auth = useAuthContext();
+    const router = useRouter();
+    const [user, setUser] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (auth) {
+            const unsubscribe = useAuth((user) => {
+                if (user) {
+                    setUser(user);
+                    setIsLoading(false);
+                } else {
+                    router.push('/login');
+                }
+            });
+            return () => unsubscribe();
+        } else {
+            const timer = setTimeout(() => {
+                if (!auth) {
+                    router.push('/login');
+                }
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [auth, router]);
+
+    if (isLoading || !user) {
+        return <LoadingOverlay isVisible={true} />;
+    }
+
     return (
         <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
             <div className="flex flex-wrap justify-between items-center mb-8 gap-4">
@@ -19,4 +53,3 @@ export default function LeaderboardPage() {
         </div>
     )
 }
-

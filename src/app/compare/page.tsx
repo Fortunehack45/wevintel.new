@@ -4,8 +4,43 @@ import { CompareForm } from '@/components/compare/compare-form';
 import { motion } from 'framer-motion';
 import { Scale } from 'lucide-react';
 import { ComparisonHistoryList } from '@/components/compare/comparison-history-list';
+import { useAuth, useAuthContext } from '@/firebase/provider';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import type { User } from 'firebase/auth';
+import { LoadingOverlay } from '@/components/loading-overlay';
 
 export default function ComparePage() {
+  const auth = useAuthContext();
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (auth) {
+      const unsubscribe = useAuth((user) => {
+        if (user) {
+          setUser(user);
+          setIsLoading(false);
+        } else {
+          router.push('/login');
+        }
+      });
+      return () => unsubscribe();
+    } else {
+        const timer = setTimeout(() => {
+            if (!auth) {
+                router.push('/login');
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }
+  }, [auth, router]);
+
+  if (isLoading || !user) {
+    return <LoadingOverlay isVisible={true} />;
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center text-center pb-24 md:pb-8">
       <div className="max-w-3xl w-full">
