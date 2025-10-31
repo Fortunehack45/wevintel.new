@@ -420,6 +420,7 @@ export default function WelcomePage() {
                       </motion.div>
                 </section>
 
+<<<<<<< HEAD
                  <section className="container mx-auto px-4 py-16 md:py-24">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -438,11 +439,7 @@ export default function WelcomePage() {
                                     <p className="text-sm text-muted-foreground">{persona.description}</p>
                                 </div>
                             ))}
-                        </div>
-                    </motion.div>
-                </section>
-
-
+=======
                 <section className="py-16 md:py-24">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -463,9 +460,63 @@ export default function WelcomePage() {
                                     </div>
                                 ))}
                             </div>
+>>>>>>> 6814331 (Let the space between all the sections in the welcome page be uniform an)
                         </div>
                     </motion.div>
                 </section>
+
+<<<<<<< HEAD
+
+                <section className="py-16 md:py-24">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.6 }}
+                    >
+                        <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Building className="text-primary"/> Sponsored By</h2>
+                        <div className="tech-stack-scroller" data-animated="true">
+                            <div className="tech-stack-scroller-inner flex items-center gap-16">
+                                {[...sponsors, ...sponsors].map((sponsor, index) => (
+                                    <div key={`${sponsor.name}-${index}`} className="flex items-center gap-4 text-4xl grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all">
+                                        {sponsor.isText ? <sponsor.icon /> : (
+                                            <>
+                                                <sponsor.icon />
+                                                <p className="font-bold text-2xl">{sponsor.name}</p>
+                                            </>
+                                        )}
+                                    </div>
+=======
+                 <section className="container mx-auto px-4 py-16 md:py-24">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                    >
+                        <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Heart className="text-primary"/> From Our Users</h2>
+                        <div className="w-full overflow-hidden tech-stack-scroller" data-animated="true">
+                            <div className="tech-stack-scroller-inner flex gap-6">
+                                {[...reviews, ...reviews].map((review, index) => (
+                                    <Card key={index} className="glass-card w-80 flex-shrink-0">
+                                        <CardContent className="p-6">
+                                            <div className="flex mb-2">
+                                                {[...Array(review.rating)].map((_, i) => (
+                                                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                                                ))}
+                                            </div>
+                                            <p className="text-muted-foreground italic">"{review.quote}"</p>
+                                            <div className="mt-4 text-right">
+                                                <p className="font-bold text-sm">{review.name}</p>
+                                                <p className="text-xs text-muted-foreground">{review.role}</p>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+>>>>>>> 6814331 (Let the space between all the sections in the welcome page be uniform an)
+                                ))}
+                            </div>
+                        </div>
+                    </motion.div>
+                </section>
+<<<<<<< HEAD
 
                  <section className="container mx-auto px-4 py-16 md:py-24">
                     <motion.div
@@ -496,6 +547,8 @@ export default function WelcomePage() {
                         </div>
                     </motion.div>
                 </section>
+=======
+>>>>>>> 6814331 (Let the space between all the sections in the welcome page be uniform an)
 
             </main>
         </div>
