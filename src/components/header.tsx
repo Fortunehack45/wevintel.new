@@ -146,7 +146,6 @@ export function Header() {
                 <Compass className="h-6 w-6 text-primary" />
                 <span className="text-foreground">WebIntel</span>
             </Link>
-            <ThemeToggle />
         </header>
       )
   }
@@ -212,8 +211,11 @@ export function Header() {
 =======
       <div className="flex items-center gap-2">
         <NavContent />
+<<<<<<< HEAD
         <ThemeToggle />
 >>>>>>> 768a281 (When the stuff is loading in the mobile view is showing the footer which)
+=======
+>>>>>>> dd02c12 (The theam toggle should be in the settings page not in the header please)
         {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
