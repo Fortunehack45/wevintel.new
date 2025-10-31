@@ -12,52 +12,50 @@ import { AnimatePresence, motion } from 'framer-motion';
 const SEEN_PATHS_KEY = 'webintel_layout_suggestion_seen_paths';
 
 export function OptimalLayoutSuggestion() {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const { width, height } = useWindowSize();
     const isMobile = useIsMobile();
     const pathname = usePathname();
 
     useEffect(() => {
-        // Ensure this only runs on the client
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined' || !isMobile || width === 0) {
+            return;
+        }
 
         const isPortrait = height > width;
-        
-        // Read the list of seen paths from sessionStorage
         const seenPathsRaw = sessionStorage.getItem(SEEN_PATHS_KEY);
         const seenPaths: string[] = seenPathsRaw ? JSON.parse(seenPathsRaw) : [];
 
-        // Check if the current page has already shown the suggestion in this session
-        if (isMobile && isPortrait && !seenPaths.includes(pathname)) {
-            // If not seen, show it after a delay
+        if (isPortrait && !seenPaths.includes(pathname)) {
             const timer = setTimeout(() => {
-                setIsOpen(true);
-                // After showing, add it to the seen list for this session
+                setIsVisible(true);
                 const updatedSeenPaths = [...seenPaths, pathname];
                 sessionStorage.setItem(SEEN_PATHS_KEY, JSON.stringify(updatedSeenPaths));
-            }, 1500); 
+            }, 1500);
 
             return () => clearTimeout(timer);
+        } else {
+            setIsVisible(false);
         }
+    }, [pathname, isMobile, width, height]);
 
-        // If conditions aren't met or it has been seen, ensure it's closed
-        if (isOpen) {
-            setIsOpen(false);
+    useEffect(() => {
+        if (isVisible) {
+            const dismissTimer = setTimeout(() => {
+                setIsVisible(false);
+            }, 8000); // Auto-dismiss after 8 seconds
+
+            return () => clearTimeout(dismissTimer);
         }
-
-    }, [width, height, isMobile, pathname, isOpen]);
+    }, [isVisible]);
 
     const handleDismiss = () => {
-        setIsOpen(false);
+        setIsVisible(false);
     };
-
-    if (!isOpen) {
-        return null;
-    }
 
     return (
         <AnimatePresence>
-            {isOpen && (
+            {isVisible && (
                 <motion.div
                     initial={{ y: "120%", opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
