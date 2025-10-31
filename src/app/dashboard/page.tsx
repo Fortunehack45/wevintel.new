@@ -166,16 +166,18 @@ import Link from 'next/link';
 >>>>>>> 1ee8e8e (Make the dashboard page more detailed and informative and fully sophisti)
 =======
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Scale, Trophy, Star, Building, Sparkles, Heart } from 'lucide-react';
+import { ArrowRight, Scale, Trophy, Sparkles, Star, Building, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { DashboardSkeleton } from '@/components/analysis/dashboard-skeleton';
 
 const sponsors = [
-    { name: 'Vercel', logo: '/sponsors/vercel.svg' },
-    { name: 'Firebase', logo: '/sponsors/firebase.svg' },
-    { name: 'Google', logo: '/sponsors/google.svg' },
-    { name: 'Next.js', logo: '/sponsors/nextjs.svg' },
-    { name: 'ShadCN', logo: '/sponsors/shadcn.svg' },
+    { name: 'Vercel' },
+    { name: 'Firebase' },
+    { name: 'Google' },
+    { name: 'Next.js' },
+    { name: 'ShadCN' },
+    { name: 'Genkit' },
+    { name: 'Tailwind CSS' },
 ];
 
 const reviews = [

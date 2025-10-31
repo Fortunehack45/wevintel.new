@@ -1,4 +1,3 @@
-
 'use client';
 import { Button } from "@/components/ui/button";
 <<<<<<< HEAD
@@ -20,7 +19,7 @@ import { BarChart, Search, Sparkles, Scale, Trophy, ArrowRight, Activity, Shield
 import Link from 'next/link';
 =======
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import { ArrowRight, BarChart, Scale, ShieldCheck, Sparkles, Zap, Activity } from "lucide-react";
+import { ArrowRight, Scale, ShieldCheck, Sparkles, Activity } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 >>>>>>> 376e771 (No... The welcome page is the page before the home page)
