@@ -1,8 +1,7 @@
-
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import { ArrowRight, BarChart, Scale, ShieldCheck, Sparkles, Zap, Activity } from "lucide-react";
+import { ArrowRight, Scale, ShieldCheck, Sparkles, Activity } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
