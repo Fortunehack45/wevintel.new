@@ -426,7 +426,7 @@ export function Header() {
         )}>
           <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2 font-bold text-lg">
               <Compass className="h-7 w-7 text-primary" />
-              <span className="text-foreground text-xl sr-only">WebIntel</span>
+              <span className="text-foreground text-xl">WebIntel</span>
           </Link>
           
           {user ? (
