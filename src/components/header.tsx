@@ -414,8 +414,12 @@ export function Header() {
 =======
   const desktopNavLinks = user 
     ? navLinks 
+<<<<<<< HEAD
     : navLinks.filter(link => ['/dashboard', '/about', '/contact'].includes(link.href));
 >>>>>>> e996306 (This should take users that are logged in to home page and take users th)
+=======
+    : navLinks.filter(link => ['/dashboard', '/leaderboard', '/about', '/contact'].includes(link.href));
+>>>>>>> 5fb7d37 (Can you make the leaderboard available for users that are not logged in)
   
 >>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
   // Mobile Header
