@@ -20,7 +20,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         setMounted(true);
     }, []);
     
-    const isAuthPage = pathname === '/login' || pathname === '/signup';
+    // Determine which pages should show the layout suggestion
+    const pagesWithSuggestion = [
+        '/',
+        '/dashboard',
+        '/analysis',
+        '/compare',
+    ];
+
+    const showSuggestion = mounted && pagesWithSuggestion.some(p => pathname.startsWith(p));
     
     if (!mounted) {
         return (
@@ -41,7 +49,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </main>
             <Footer />
             <BottomNav />
-            <OptimalLayoutSuggestion />
+            {showSuggestion && <OptimalLayoutSuggestion />}
         </div>
     )
 }
