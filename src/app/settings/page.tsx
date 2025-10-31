@@ -318,7 +318,7 @@ export default function SettingsPage() {
   
   const MobileSettings = () => {
       return (
-        <div className="p-4 space-y-8">
+        <div className="p-4 space-y-8 pb-24">
             <h1 className="text-4xl font-bold">Settings</h1>
             {isAuthLoading ? (
                  <Skeleton className="h-40 w-full" />
@@ -403,7 +403,6 @@ export default function SettingsPage() {
                     </AlertDialog>
                 </div>
             </div>
-             <div className="pb-16"></div>
         </div>
       )
   }
