@@ -9,6 +9,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useAuthContext } from '@/firebase/provider';
 import { useAuth } from '@/firebase/auth';
 import type { User as FirebaseUser } from 'firebase/auth';
@@ -19,6 +20,11 @@ import { useState, useEffect } from 'react';
 >>>>>>> 768a281 (When the stuff is loading in the mobile view is showing the footer which)
 =======
 >>>>>>> 0d734c4 (For desktop view user's that are not logged in should only see "Dashboar)
+=======
+import { useAuthContext } from '@/firebase/provider';
+import { useAuth } from '@/firebase/auth';
+import type { User as FirebaseUser } from 'firebase/auth';
+>>>>>>> bcc5139 (The navigate section in the footer should not be visible for users that)
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -50,10 +56,17 @@ export function Footer() {
 =======
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const auth = useAuthContext();
+  const [user, setUser] = useState<FirebaseUser | null>(null);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (auth) {
+      const unsubscribe = useAuth(setUser);
+      return () => unsubscribe();
+    }
+  }, [auth]);
+
 
 <<<<<<< HEAD
   if (!mounted || isMobile) {
@@ -85,6 +98,9 @@ export function Footer() {
 
           {/* Navigation Column */}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> bcc5139 (The navigate section in the footer should not be visible for users that)
           {user && (
             <div>
               <h4 className="font-semibold text-foreground mb-4">Navigate</h4>
@@ -95,6 +111,7 @@ export function Footer() {
               </ul>
             </div>
           )}
+<<<<<<< HEAD
 =======
           <div>
             <h4 className="font-semibold text-foreground mb-4">Navigate</h4>
@@ -105,6 +122,8 @@ export function Footer() {
             </ul>
           </div>
 >>>>>>> 512e4b0 (Please creat a contact page with like a features that allow users to inp)
+=======
+>>>>>>> bcc5139 (The navigate section in the footer should not be visible for users that)
 
           {/* Legal Column */}
           <div>
