@@ -25,7 +25,7 @@ export function Footer() {
             <h4 className="font-semibold text-foreground mb-4">Navigate</h4>
             <ul className="space-y-3 text-sm">
               <li><Link href="/compare" className="text-muted-foreground hover:text-primary transition-colors">Compare</Link></li>
-              <li><Link href="/leaderboard" className="text-muted-foreground hover:text-primary transition-colors">Leaderboard</Link></li>
+              <li><Link href="/leaderboard" className="text-muted-foreground hovertext-primary transition-colors">Leaderboard</Link></li>
               <li><Link href="/history" className="text-muted-foreground hover:text-primary transition-colors">History</Link></li>
             </ul>
           </div>
@@ -45,7 +45,7 @@ export function Footer() {
           <p>&copy; {currentYear} WebIntel. All Rights Reserved.</p>
           <p className="mt-1">
             Developed with ❤️ by <a href="https://wa.me/2349167689200" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
-              Esho Fortune Adebayo Emmanuel
+              Fortune
             </a>.
           </p>
         </div>
