@@ -34,6 +34,7 @@ import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { cn } from '@/lib/utils';
 =======
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -43,6 +44,9 @@ import { Sidebar } from '@/components/sidebar';
 >>>>>>> 309dde7 (Under the settings page I want the contact features to be there, legal e)
 =======
 >>>>>>> 5813a0a (Use button navigation bar for mobile view please)
+=======
+import { cn } from '@/lib/utils';
+>>>>>>> 822423a (For desktop view remove the contact button and about button for the sett)
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, { message: 'Current password is required.' }),
@@ -50,10 +54,14 @@ const passwordSchema = z.object({
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 const SettingsItem = ({ icon: Icon, label, href, onClick, className }: { icon: React.ElementType, label: string, href?: string, onClick?: () => void, className?: string }) => {
 =======
 const SettingsItem = ({ icon: Icon, label, href, onClick }: { icon: React.ElementType, label: string, href?: string, onClick?: () => void }) => {
 >>>>>>> 309dde7 (Under the settings page I want the contact features to be there, legal e)
+=======
+const SettingsItem = ({ icon: Icon, label, href, onClick, className }: { icon: React.ElementType, label: string, href?: string, onClick?: () => void, className?: string }) => {
+>>>>>>> 822423a (For desktop view remove the contact button and about button for the sett)
     const content = (
         <div className="flex items-center justify-between p-4 rounded-lg bg-background hover:bg-muted transition-colors cursor-pointer w-full">
             <div className="flex items-center gap-4">
@@ -66,6 +74,7 @@ const SettingsItem = ({ icon: Icon, label, href, onClick }: { icon: React.Elemen
 
     if (href) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         return <Link href={href} className={className}>{content}</Link>;
     }
     
@@ -76,6 +85,12 @@ const SettingsItem = ({ icon: Icon, label, href, onClick }: { icon: React.Elemen
     
     return <button onClick={onClick} className="w-full text-left">{content}</button>;
 >>>>>>> 309dde7 (Under the settings page I want the contact features to be there, legal e)
+=======
+        return <Link href={href} className={className}>{content}</Link>;
+    }
+    
+    return <button onClick={onClick} className={cn("w-full text-left", className)}>{content}</button>;
+>>>>>>> 822423a (For desktop view remove the contact button and about button for the sett)
 };
 
 export default function SettingsPage() {
@@ -314,6 +329,7 @@ export default function SettingsPage() {
                  <div className="space-y-1">
                     <SettingsItem icon={Info} label="About WebIntel" href="/about" className="md:hidden"/>
                     <SettingsItem icon={Send} label="Contact Us" href="/contact" className="md:hidden"/>
+<<<<<<< HEAD
                     <SettingsItem icon={Shield} label="Privacy Policy" href="/privacy" />
                     <SettingsItem icon={FileText} label="Terms & Conditions" href="/terms" />
                  </div>
@@ -483,6 +499,8 @@ export default function SettingsPage() {
                  <div className="space-y-1">
                     <SettingsItem icon={Info} label="About WebIntel" href="/about" />
                     <SettingsItem icon={Send} label="Contact Us" href="/contact" />
+=======
+>>>>>>> 822423a (For desktop view remove the contact button and about button for the sett)
                     <SettingsItem icon={Shield} label="Privacy Policy" href="/privacy" />
                     <SettingsItem icon={FileText} label="Terms & Conditions" href="/terms" />
                  </div>
