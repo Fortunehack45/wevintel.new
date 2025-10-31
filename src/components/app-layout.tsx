@@ -14,15 +14,28 @@ import { OptimalLayoutSuggestion } from './optimal-layout-suggestion';
 import { Sidebar } from './sidebar';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
+<<<<<<< HEAD
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
+=======
+import { useState, useEffect } from 'react';
+>>>>>>> f640191 (When it's loading it's showing the old UI which is not right)
 
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const isMobile = useIsMobile();
 <<<<<<< HEAD
+<<<<<<< HEAD
     const [mounted, setMounted] = useState(false);
 =======
+=======
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+    
+>>>>>>> f640191 (When it's loading it's showing the old UI which is not right)
     const isAuthPage = pathname === '/login' || pathname === '/signup';
     const isWelcomePage = pathname === '/';
 <<<<<<< HEAD
@@ -36,10 +49,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 >>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
 =======
     const analysisRoutes = ['/analysis', '/compare/'];
-    const isAnalysisPage = analysisRoutes.some(route => pathname.startsWith(route));
+    const isAnalysisPage = analysisRoutes.some(route => pathname.startsWith(route) && route !== '/compare');
 
 >>>>>>> 2a49068 (The sidebar is only for the dashboard page oo for the mobile view. It sh)
 
+<<<<<<< HEAD
     useEffect(() => {
         setMounted(true);
     }, []);
@@ -57,6 +71,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     const showSuggestion = mounted && !pagesWithoutSuggestion.some(p => pathname.startsWith(p));
     
     if (!mounted) {
+=======
+    if (!mounted) {
+        return null;
+    }
+
+    if (isAuthPage) {
+>>>>>>> f640191 (When it's loading it's showing the old UI which is not right)
         return (
              <main className="flex-1">
                 {children}
@@ -79,7 +100,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         )
     }
 
-    if (isAppPage) {
+    if (isAppPage || isAnalysisPage) {
         // Desktop view always gets the sidebar for app pages
         if (!isMobile) {
             return (
