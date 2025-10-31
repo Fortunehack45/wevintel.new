@@ -20,7 +20,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         setMounted(true);
     }, []);
     
-    // Determine which pages should NOT show the layout suggestion
     const pagesWithoutSuggestion = [
         '/login',
         '/signup',
@@ -47,7 +46,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <div className="wave-light"></div>
             </div>
             <Header />
-            <main className="flex-1">
+            <main className="flex-1 pb-20 md:pb-0">
                 {children}
             </main>
             <Footer />

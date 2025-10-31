@@ -55,7 +55,7 @@ export function OptimalLayoutSuggestion() {
                         <div className="flex-1">
                             <h3 className="font-semibold text-foreground">Optimal Viewing Experience</h3>
                             <p className="text-sm text-muted-foreground mt-1">
-                                For the best results, we recommend rotating your device to landscape mode.
+                                WebIntel is optimized for larger screens. For the best experience, view on a desktop or switch your mobile browser to landscape and 'Desktop Site' mode.
                             </p>
                         </div>
                         <Button
