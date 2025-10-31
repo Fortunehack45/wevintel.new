@@ -57,8 +57,20 @@ export function Header() {
     setMounted(true);
   }, []);
 
-  if (!mounted || isMobile) {
+  if (!mounted) {
     return <header className="p-4 flex justify-between items-center border-b h-[69px]" />;
+  }
+
+  if (isMobile) {
+      return (
+        <header className="p-4 flex justify-between items-center border-b sticky top-0 bg-background/80 backdrop-blur-lg z-50">
+            <Link href="/" className="flex items-center gap-2 font-bold text-lg">
+                <Compass className="h-6 w-6 text-primary" />
+                <span className="text-foreground">WebIntel</span>
+            </Link>
+            <ThemeToggle />
+        </header>
+      )
   }
 
   const NavContent = () => (

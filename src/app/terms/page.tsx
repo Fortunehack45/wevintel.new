@@ -13,10 +13,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 export default function TermsPage() {
   const [currentPage, setCurrentPage] = useState(0);
   const totalPages = termsContent.length;
+  const router = useRouter();
 
   const handleNext = () => {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
@@ -30,17 +32,15 @@ export default function TermsPage() {
   const progressValue = ((currentPage + 1) / totalPages) * 100;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
+    <div className="container mx-auto px-4 py-8 max-w-4xl space-y-8 pb-24 md:pb-8">
       <div className="flex flex-wrap justify-between items-center gap-4">
         <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-3">
           <FileText className="h-8 w-8 text-primary" />
           Terms and Conditions
         </h1>
-        <Button asChild variant="outline">
-          <Link href="/">
-            <Home className="mr-2 h-4 w-4" />
-            Back to Home
-          </Link>
+        <Button onClick={() => router.back()} variant="outline">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
         </Button>
       </div>
 

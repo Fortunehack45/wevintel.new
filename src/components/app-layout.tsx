@@ -29,7 +29,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <div className="wave-light"></div>
             </div>
             <Header />
-            <main className="flex-1">
+            <main className="flex-1 pb-16 md:pb-0">
                 {children}
             </main>
             <Footer />

@@ -13,10 +13,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 export default function PrivacyPage() {
   const [currentPage, setCurrentPage] = useState(0);
   const totalPages = privacyContent.length;
+  const router = useRouter();
 
   const handleNext = () => {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
@@ -30,17 +32,15 @@ export default function PrivacyPage() {
   const progressValue = ((currentPage + 1) / totalPages) * 100;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
+    <div className="container mx-auto px-4 py-8 max-w-4xl space-y-8 pb-24 md:pb-8">
       <div className="flex flex-wrap justify-between items-center gap-4">
         <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-3">
           <Shield className="h-8 w-8 text-primary" />
           Privacy Policy
         </h1>
-        <Button asChild variant="outline">
-          <Link href="/">
-            <Home className="mr-2 h-4 w-4" />
-            Back to Home
-          </Link>
+        <Button onClick={() => router.back()} variant="outline">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
         </Button>
       </div>
 
