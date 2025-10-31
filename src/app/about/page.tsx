@@ -1,7 +1,6 @@
 
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Info, Database, Shield, Home, Settings, Layers, Code, User, Send, Compass, ArrowRight, TrendingUp, BarChart, FileSearch } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Info, Code, User, Send, Compass, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,7 +11,7 @@ export default function AboutPage() {
       <div className="mb-8">
         <Button asChild variant="outline">
           <Link href="/">
-            <Home className="mr-2 h-4 w-4" />
+            <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home
           </Link>
         </Button>
@@ -21,165 +20,33 @@ export default function AboutPage() {
       <div className="text-center space-y-4">
         <Compass className="h-16 w-16 text-primary mx-auto" />
         <h1 className="text-5xl font-bold tracking-tight text-foreground">About WebIntel</h1>
-        <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-          Uncovering the technology and performance behind any website with a powerful, open-source intelligence platform designed for developers, marketers, and the endlessly curious.
-        </p>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2">
-        <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              <Info className="text-primary" />
-              Our Mission
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-muted-foreground">
-            <p>
-              In an increasingly complex digital landscape, understanding the mechanics behind a website is more important than ever. WebIntel was born from a simple idea: to democratize web intelligence. We aim to provide a comprehensive and accessible tool that empowers users to see what makes any website tick.
-            </p>
-            <p>
-              We aggregate public data, run extensive analyses, and leverage cutting-edge AI to transform raw, technical information into clear, actionable insights. Whether you're a developer benchmarking against a competitor, a marketer researching a new space, or simply exploring the web, WebIntel is your trusted guide.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              <Shield className="text-primary" />
-              Our Commitment to Privacy
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-muted-foreground">
-            <p>
-              Your curiosity should be your own. WebIntel is architected with a "privacy-first" philosophy. All analysis history and comparisons are stored exclusively in your browser's local storage.
-            </p>
-            <ul className="list-disc pl-5 space-y-2">
-              <li><span className="font-semibold text-foreground">No Server-Side Tracking:</span> We do not have a traditional backend server that logs your activity or the URLs you analyze.</li>
-              <li><span className="font-semibold text-foreground">Client-Side History:</span> Your entire analysis history is yours alone. You can view, manage, and clear it at any time directly from the History page.</li>
-            </ul>
-          </CardContent>
-        </Card>
-      </div>
-      
-      <Card className="w-full">
+      <Card className="glass-card">
         <CardHeader>
-          <CardTitle className="flex items-center gap-3">
-            <Settings className="text-primary" />
-            Core Features
-          </CardTitle>
+            <CardTitle className="flex items-center gap-3">
+                <Info className="text-primary" />
+                About The Platform
+            </CardTitle>
         </CardHeader>
-        <CardContent className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 text-sm text-muted-foreground">
-            <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg"><TrendingUp className="h-5 w-5 text-primary shrink-0"/></div>
-                <div>
-                    <h4 className="font-semibold text-foreground">Comprehensive Performance Analysis</h4>
-                    <p>Get detailed Core Web Vitals reports for both mobile and desktop, powered by Google PageSpeed Insights.</p>
-                </div>
-            </div>
-            <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg"><Shield className="h-5 w-5 text-primary shrink-0"/></div>
-                <div>
-                    <h4 className="font-semibold text-foreground">In-Depth Security Scanning</h4>
-                    <p>Checks for SSL/TLS, essential security headers like CSP and HSTS, and other potential vulnerabilities.</p>
-                </div>
-            </div>
-             <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg"><Send className="h-5 w-5 text-primary shrink-0"/></div>
-                <div>
-                    <h4 className="font-semibold text-foreground">AI-Powered Insights</h4>
-                    <p>Receive AI-generated summaries, actionable recommendations, and traffic estimations to quickly understand a site's profile.</p>
-                </div>
-            </div>
-             <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg"><Layers className="h-5 w-5 text-primary shrink-0"/></div>
-                <div>
-                    <h4 className="font-semibold text-foreground">Technology Stack Detection</h4>
-                    <p>Uncover the frameworks, libraries, CMS, and other services a website is built with, using advanced AI analysis.</p>
-                </div>
-            </div>
-            <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg"><Database className="h-5 w-5 text-primary shrink-0"/></div>
-                <div>
-                    <h4 className="font-semibold text-foreground">Hosting & Domain Information</h4>
-                    <p>Discover the IP address, ISP, and geographic location of the hosting server for any website.</p>
-                </div>
-            </div>
-            <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg"><FileSearch className="h-5 w-5 text-primary shrink-0"/></div>
-                <div>
-                    <h4 className="font-semibold text-foreground">Metadata & SEO Health</h4>
-                    <p>Inspects Open Graph tags, `robots.txt`, and `sitemap.xml` to evaluate SEO readiness and social sharing configuration.</p>
-                </div>
-            </div>
-            <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg"><BarChart className="h-5 w-5 text-primary shrink-0"/></div>
-                <div>
-                    <h4 className="font-semibold text-foreground">Detailed Lighthouse Audits</h4>
-                    <p>Access granular reports on performance, accessibility, best practices, and SEO from Google Lighthouse.</p>
-                </div>
-            </div>
-             <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg"><ArrowRight className="h-5 w-5 text-primary shrink-0 -rotate-45"/></div>
-                <div>
-                    <h4 className="font-semibold text-foreground">Side-by-Side Comparison</h4>
-                    <p>Analyze two websites simultaneously to benchmark against competitors and see who comes out on top.</p>
-                </div>
-            </div>
-             <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg"><Home className="h-5 w-5 text-primary shrink-0"/></div>
-                <div>
-                    <h4 className="font-semibold text-foreground">Responsive & Modern UI</h4>
-                    <p>A clean, beautiful, and fully responsive interface built for an optimal experience on any device.</p>
-                </div>
-            </div>
+        <CardContent className="space-y-4 text-muted-foreground">
+            <p>
+                WebIntel is a next-generation website analysis and intelligence platform meticulously crafted to empower developers, digital strategists, cybersecurity experts, and businesses with actionable insights derived from real-time data. Designed to merge precision, privacy, and performance, WebIntel enables users to conduct comprehensive evaluations of websites and web applications through an advanced, AI-driven interface.
+            </p>
+            <p>
+                Built on modern web architecture, WebIntel provides a unified analytical ecosystem capable of identifying a site’s performance metrics, underlying technologies, security posture, SEO readiness, and hosting infrastructure — all without compromising user privacy or data control. Unlike conventional analytics platforms, WebIntel operates on a client-first model, meaning all historical data and analytical interactions are stored locally within the user’s browser. No centralized database is used for tracking, profiling, or retaining user behavior, ensuring absolute privacy and transparency in line with global data protection principles.
+            </p>
+            <p>
+                At its core, WebIntel integrates multiple layers of intelligence — leveraging public APIs such as Google PageSpeed Insights, IP-API, and Google Gemini — to assemble a holistic, verifiable overview of any target domain. Whether analyzing a personal portfolio site, a high-traffic eCommerce platform, or an enterprise-grade infrastructure, WebIntel delivers structured intelligence through an elegant, user-centric interface that reflects modern UI/UX standards.
+            </p>
+            <p>
+                The platform’s engineering approach follows a modular and privacy-preserving philosophy, blending innovation with accountability. Users retain full control over their analytical data and activity records through browser-based local storage. The application uses Firebase Authentication exclusively for login and session validation — without persistent user tracking or data harvesting. All analysis data fetched through external APIs is processed in real time and is never stored or reused outside the user's active session.
+            </p>
+            <p>
+                WebIntel stands as a symbol of next-generation digital responsibility — combining transparency, AI-assisted intelligence, and ethical design to redefine how website analytics should function in a privacy-conscious digital era.
+            </p>
         </CardContent>
       </Card>
-
-      <div className="grid gap-8 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              <Layers className="text-primary" />
-              Technology Stack
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-muted-foreground">
-            <p>
-              WebIntel is built with a modern, powerful, and scalable technology stack to ensure a fast, reliable, and intelligent experience.
-            </p>
-            <ul className="list-disc pl-5 space-y-2 text-sm">
-                <li><span className="font-semibold text-foreground">Next.js & React:</span> For a fast, server-rendered application with robust features, optimized performance, and a component-based architecture.</li>
-                <li><span className="font-semibold text-foreground">Tailwind CSS & ShadCN/UI:</span> For a beautiful, responsive, and highly customizable user interface built with utility-first principles.</li>
-                <li><span className="font-semibold text-foreground">Google Gemini & Genkit:</span> For integrating powerful generative AI features like analysis summaries, traffic estimations, and technology stack detection.</li>
-                <li><span className="font-semibold text-foreground">Vercel:</span> For serverless deployment, continuous integration, and global hosting performance that ensures the app is fast for everyone.</li>
-            </ul>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              <Database className="text-primary" />
-              Data Sources
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-muted-foreground">
-            <p>
-              To provide a comprehensive analysis, WebIntel gathers data from a variety of trusted, public APIs. We are grateful for these services that make this tool possible:
-            </p>
-            <ul className="list-disc pl-5 space-y-2 font-mono text-xs">
-              <li>Google PageSpeed Insights</li>
-              <li>ip-api.com</li>
-              <li>Google Gemini (for all AI features)</li>
-            </ul>
-            <p className="text-xs">
-              Please note that all data is fetched on-demand and represents a public snapshot of the target website at the time of analysis. For sensitive or private data, always refer to the website's official sources.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
 
        <Card className="glass-card">
         <CardHeader className="text-center">
@@ -188,21 +55,37 @@ export default function AboutPage() {
                 About the Developer
             </CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col items-center text-center space-y-4">
+        <CardContent className="flex flex-col items-center text-center space-y-6">
             <Avatar className="h-24 w-24 border-2 border-primary">
                 <AvatarImage src="https://github.com/fortunesad.png" alt="Fortune"/>
                 <AvatarFallback>F</AvatarFallback>
             </Avatar>
-            <div className="max-w-xl">
-                <h3 className="text-2xl font-bold">Fortune</h3>
-                <p className="text-muted-foreground mt-2">
-                    Fortune is a passionate software and web developer with a love for building creative and impactful solutions. With a keen eye for detail and a drive for excellence, he specialises in turning complex problems into elegant, user-friendly applications.
-                </p>
-                <p className="text-muted-foreground mt-4">
-                    This project is a demonstration of modern web development techniques, including AI integration, responsive design, and performance optimization. If you are interested in collaborating on a project or exploring partnership opportunities, feel free to get in touch.
-                </p>
+            <div className="max-w-3xl">
+                <h3 className="text-2xl font-bold">Esho Fortune Adebayo Emmanuel</h3>
+                <p className="text-primary font-semibold">Software Engineer | Database Developer | UI/UX Designer | Innovator</p>
+                
+                <div className="mt-4 text-left text-muted-foreground space-y-4">
+                    <p>
+                        Fortune is an 18-year-old Nigerian software developer and technology innovator dedicated to building solutions at the intersection of AI, Web3, and modern web infrastructure. Guided by a deep passion for creativity and engineering precision, he has become known for transforming complex ideas into intuitive, scalable, and visually compelling digital products.
+                    </p>
+                    <p>
+                        With an unwavering belief in technological empowerment, Fortune’s work on WebIntel reflects his mission to democratize access to analytical intelligence and redefine what responsible innovation means in the modern web ecosystem. His development philosophy emphasizes privacy by design, clarity in function, and beauty in user experience — values that have shaped the DNA of WebIntel from its earliest conceptual stages.
+                    </p>
+                    <p>
+                        Throughout his projects, Fortune has displayed a remarkable ability to bridge technical rigor with imaginative foresight. From crafting blockchain-powered financial systems to designing immersive digital experiences, his development process blends research, experimentation, and an acute sensitivity to user needs. The same philosophy underpins WebIntel — a tool engineered not merely as a product, but as a technological statement on digital ethics and autonomy.
+                    </p>
+                     <p>
+                        Beyond software development, Fortune is a creative strategist who draws inspiration from the narrative complexity of cinema, the competitiveness of gaming, and the logic of systems engineering. These influences inform his vision of building platforms that are both functional and philosophically resonant — tools that engage, educate, and empower their users.
+                    </p>
+                    <p>
+                        Every line of code within WebIntel represents a commitment to purpose, precision, and progress. Fortune’s approach extends beyond technological innovation; it embodies a belief that data should serve humanity, not exploit it. This belief defines not only the essence of WebIntel but also the broader trajectory of his work as a next-generation technologist.
+                    </p>
+                    <p>
+                        As the sole developer and creative architect behind WebIntel, Fortune continues to refine and expand the platform’s capabilities, ensuring that it remains accessible, transparent, and compliant with international digital standards. His forward-thinking approach aims to make WebIntel not just a tool for analysis, but a global benchmark for ethical AI and web intelligence systems.
+                    </p>
+                </div>
             </div>
-             <Button asChild>
+             <Button asChild className="mt-6">
                 <a href="https://wa.me/2349167689200" target="_blank" rel="noopener noreferrer">
                     <Send className="mr-2 h-4 w-4" />
                     Contact Fortune

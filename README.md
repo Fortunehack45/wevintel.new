@@ -77,10 +77,4 @@ Your privacy is paramount. WebIntel operates entirely on your client-side (your 
 
 ---
 
-<<<<<<< HEAD
-
-=======
-Developed with ❤️ by [Fortune](https://wa.me/2349167689200).
->>>>>>> 22de3c8 (Can you make the about section fully detailed and also for the README.md)
-
-
+Developed with ❤️ by [Esho Fortune Adebayo Emmanuel](https://wa.me/2349167689200).
