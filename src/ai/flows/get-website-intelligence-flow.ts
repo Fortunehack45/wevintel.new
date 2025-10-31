@@ -16,7 +16,7 @@ import type { AISummary, TechStackData, TrafficData } from '@/lib/types';
 
 
 // Input Schema
-export const WebsiteIntelligenceInputSchema = z.object({
+const WebsiteIntelligenceInputSchema = z.object({
   url: z.string().describe('The URL of the website.'),
   htmlContent: z.string().optional().describe('The first 5000 characters of the website\'s HTML content.'),
   headers: z.record(z.string()).optional().describe('A subset of the HTTP response headers.'),
