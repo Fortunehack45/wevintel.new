@@ -153,7 +153,7 @@ const featureCards = [
 
 export default function DashboardPage() {
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center text-center">
+    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center text-center pb-24 md:pb-8">
       <div className="max-w-3xl w-full">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
