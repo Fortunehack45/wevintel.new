@@ -156,7 +156,13 @@ const featureCards = [
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
 =======
 import { LoadingOverlay } from '@/components/loading-overlay';
+<<<<<<< HEAD
 >>>>>>> 8e6b5af (Users that are not logged in should not have access at all to the home p)
+=======
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowRight, Scale, Trophy } from 'lucide-react';
+import Link from 'next/link';
+>>>>>>> 1ee8e8e (Make the dashboard page more detailed and informative and fully sophisti)
 
 export default function DashboardPage() {
   const auth = useAuthContext();
@@ -176,8 +182,6 @@ export default function DashboardPage() {
       });
       return () => unsubscribe();
     } else {
-        // If auth isn't ready, maybe it's still loading, but if it's null, we should redirect.
-        // A brief delay to see if auth context loads.
         const timer = setTimeout(() => {
             if (!auth) {
                 router.push('/login');
@@ -191,33 +195,91 @@ export default function DashboardPage() {
     return <LoadingOverlay isVisible={true} />;
   }
   
+  const welcomeName = user.displayName || user.email;
+
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center text-center pb-24 md:pb-8">
-      <div className="max-w-3xl w-full">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="mb-12"
-        >
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-foreground">
-            WebIntel
+    <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="mb-12 space-y-4"
+      >
+        <div>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
+            Welcome back, {welcomeName}
           </h1>
-          <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Know everything about any website. Instantly uncover the secrets of any URL.
+          <p className="mt-2 text-lg text-muted-foreground">
+            Ready to uncover some website intelligence? Let's get started.
           </p>
-        </motion.div>
+        </div>
         <UrlForm />
-        <p className="mt-4 text-sm text-muted-foreground">
-          Get insights on performance, security, SEO, and more.
-        </p>
+      </motion.div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+        >
+            <Card className="glass-card h-full hover:border-primary/50 transition-all group">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                        <Scale className="h-6 w-6 text-primary"/>
+                        Compare Websites
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <CardDescription>
+                        Analyze two websites side-by-side to benchmark performance, security, and technology stacks.
+                    </CardDescription>
+                     <Link href="/compare" className="text-sm font-semibold text-primary mt-4 flex items-center gap-2">
+                        Start Comparing <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                </CardContent>
+            </Card>
+        </motion.div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="lg:col-span-2"
+        >
+             <Card className="glass-card h-full hover:border-primary/50 transition-all group">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                        <Trophy className="h-6 w-6 text-primary"/>
+                        Leaderboard
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <CardDescription>
+                        Explore and analyze a curated list of top websites from various categories to see how they perform and what technologies they use.
+                    </CardDescription>
+                     <Link href="/leaderboard" className="text-sm font-semibold text-primary mt-4 flex items-center gap-2">
+                        View Leaderboard <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                </CardContent>
+            </Card>
+        </motion.div>
       </div>
 
+<<<<<<< HEAD
       <div className="w-full max-w-5xl mt-24">
         <h2 className="text-3xl font-bold mb-6 text-left">Recent Analyses</h2>
         <HistoryClient limit={6} />
       </div>
 >>>>>>> 376e771 (No... The welcome page is the page before the home page)
+=======
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        <h2 className="text-3xl font-bold mb-6 text-left">Your History</h2>
+        <HistoryClient />
+      </motion.div>
+>>>>>>> 1ee8e8e (Make the dashboard page more detailed and informative and fully sophisti)
     </div>
   );
 }
