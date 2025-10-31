@@ -21,63 +21,62 @@ export function OptimalLayoutSuggestion() {
         if (typeof window !== 'undefined' && isMobile) {
             const isPortrait = height > width;
             
-            // Get the list of seen paths from sessionStorage
             const seenPathsRaw = sessionStorage.getItem(SEEN_PATHS_KEY);
             const seenPaths: string[] = seenPathsRaw ? JSON.parse(seenPathsRaw) : [];
 
-            // Check if it should be shown
             if (isPortrait && !seenPaths.includes(pathname)) {
                 const timer = setTimeout(() => {
                     setIsOpen(true);
-                    // Add the current path to the seen list
                     const updatedSeenPaths = [...seenPaths, pathname];
                     sessionStorage.setItem(SEEN_PATHS_KEY, JSON.stringify(updatedSeenPaths));
-                }, 1500); // Delay before showing
+                }, 1500); 
                 return () => clearTimeout(timer);
-            } else {
-                setIsOpen(false);
             }
-        } else {
-            setIsOpen(false);
         }
+        
+        // Always ensure it's closed if conditions aren't met or if it has been seen
+        return () => setIsOpen(false);
+
     }, [width, height, isMobile, pathname]);
 
     const handleDismiss = () => {
         setIsOpen(false);
     };
 
+    if (!isOpen) {
+        return null;
+    }
+
     return (
         <AnimatePresence>
-            {isOpen && (
-                 <motion.div
-                    initial={{ y: "120%", opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: "120%", opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="fixed bottom-20 left-4 right-4 max-w-md mx-auto p-4 rounded-xl shadow-2xl glass-card z-40"
-                >
-                    <div className="flex items-start gap-4">
-                        <div className="mt-1 bg-primary/10 p-2 rounded-full">
-                            <Smartphone className="h-6 w-6 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                            <h3 className="font-semibold text-foreground">Optimal Viewing Experience</h3>
-                            <p className="text-sm text-muted-foreground mt-1">
-                                For the best experience, view on a desktop or switch your browser to landscape and 'Desktop Site' mode.
-                            </p>
-                        </div>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-7 w-7 flex-shrink-0"
-                            onClick={handleDismiss}
-                            aria-label="Dismiss suggestion"
-                        >
-                            <X className="h-4 w-4" />
-                        </Button>
+            <motion.div
+                initial={{ y: "120%", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: "120%", opacity: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="fixed bottom-20 left-4 right-4 max-w-md mx-auto p-4 rounded-xl shadow-2xl glass-card z-40"
+            >
+                <div className="flex items-start gap-4">
+                    <div className="mt-1 bg-primary/10 p-2 rounded-full">
+                        <Smartphone className="h-6 w-6 text-primary" />
                     </div>
-                </motion.div>
-            )}
+                    <div className="flex-1">
+                        <h3 className="font-semibold text-foreground">Optimal Viewing Experience</h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                            For the best experience, rotate your device to landscape or use 'Desktop Site' mode in your browser.
+                        </p>
+                    </div>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 flex-shrink-0"
+                        onClick={handleDismiss}
+                        aria-label="Dismiss suggestion"
+                    >
+                        <X className="h-4 w-4" />
+                    </Button>
+                </div>
+            </motion.div>
         </AnimatePresence>
     );
 }
