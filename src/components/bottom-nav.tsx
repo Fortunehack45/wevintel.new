@@ -4,10 +4,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Home, Scale, Trophy, History, Settings } from 'lucide-react';
 =======
 import { Home, Compass, Info, Send } from 'lucide-react';
 >>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
+=======
+import { Home, Scale, Trophy, History } from 'lucide-react';
+>>>>>>> 5813a0a (Use button navigation bar for mobile view please)
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
@@ -28,15 +32,22 @@ const navLinks = [
   { href: '/settings', label: 'Settings', icon: Settings },
 =======
   { href: '/dashboard', label: 'Home', icon: Home },
+<<<<<<< HEAD
   { href: '/about', label: 'About', icon: Info },
   { href: '/contact', label: 'Contact', icon: Send },
 >>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
+=======
+  { href: '/compare', label: 'Compare', icon: Scale },
+  { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
+  { href: '/history', label: 'History', icon: History },
+>>>>>>> 5813a0a (Use button navigation bar for mobile view please)
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
   const isMobile = useIsMobile();
   const [mounted, setMounted] = useState(false);
+<<<<<<< HEAD
   const auth = useAuthContext();
   const [user, setUser] = useState<User | null>(null);
 
@@ -50,6 +61,14 @@ export function BottomNav() {
 
   const isAuthPage = pathname === '/login' || pathname === '/signup';
   const shouldShow = mounted && isMobile && user && !isAuthPage;
+=======
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const shouldShow = mounted && isMobile && navLinks.some(link => pathname.startsWith(link.href) || pathname.startsWith('/analysis'));
+>>>>>>> 5813a0a (Use button navigation bar for mobile view please)
 
 
   if (!shouldShow) {
@@ -77,7 +96,6 @@ export function BottomNav() {
               aria-label={link.label}
             >
               <link.icon className="h-6 w-6" />
-              <span className="text-xs">{link.label}</span>
             </Link>
           );
         })}

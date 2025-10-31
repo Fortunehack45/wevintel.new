@@ -33,6 +33,7 @@ import { type AnalysisResult, type ComparisonHistoryItem } from '@/lib/types';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { cn } from '@/lib/utils';
 =======
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -40,6 +41,8 @@ import { cn } from '@/lib/utils';
 import { Sidebar } from '@/components/sidebar';
 
 >>>>>>> 309dde7 (Under the settings page I want the contact features to be there, legal e)
+=======
+>>>>>>> 5813a0a (Use button navigation bar for mobile view please)
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, { message: 'Current password is required.' }),
@@ -449,6 +452,9 @@ export default function SettingsPage() {
                                 <Button type="submit" disabled={isLoading}>
                                   {isLoading ? 'Updating...' : 'Update Password'}
                                 </Button>
+                                 <Button variant="ghost" onClick={handleLogout} className="text-destructive hover:text-destructive hover:bg-destructive/10">
+                                    <LogOut className="mr-2" /> Logout
+                                </Button>
                             </div>
                           </form>
                         </Form>
@@ -468,7 +474,20 @@ export default function SettingsPage() {
                     </CardContent>
                 </Card>
             )}
+<<<<<<< HEAD
 >>>>>>> 309dde7 (Under the settings page I want the contact features to be there, legal e)
+=======
+
+            <div className="space-y-4">
+                 <h3 className="text-lg font-semibold text-muted-foreground px-4">Support & Legal</h3>
+                 <div className="space-y-1">
+                    <SettingsItem icon={Info} label="About WebIntel" href="/about" />
+                    <SettingsItem icon={Send} label="Contact Us" href="/contact" />
+                    <SettingsItem icon={Shield} label="Privacy Policy" href="/privacy" />
+                    <SettingsItem icon={FileText} label="Terms & Conditions" href="/terms" />
+                 </div>
+            </div>
+>>>>>>> 5813a0a (Use button navigation bar for mobile view please)
             
             <Card className="glass-card border-destructive/50">
                 <CardHeader>
