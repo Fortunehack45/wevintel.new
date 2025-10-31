@@ -11,7 +11,9 @@ import { useEffect, useState } from "react";
 import { useAuth, useAuthContext } from "@/firebase/provider";
 import type { User } from 'firebase/auth';
 import { LoadingOverlay } from "@/components/loading-overlay";
-import DashboardPage from "./dashboard/page";
+import { DashboardContent } from "./dashboard/page";
+import { DashboardSkeleton } from "@/components/analysis/dashboard-skeleton";
+
 
 const featureCards = [
     {
@@ -244,17 +246,17 @@ export default function RootPage() {
             return () => unsubscribe();
         } else {
             // If auth is not ready, wait a bit then assume logged out
-            const timer = setTimeout(() => setIsLoading(false), 300);
+            const timer = setTimeout(() => setIsLoading(false), 500);
             return () => clearTimeout(timer);
         }
     }, [auth]);
 
     if (isLoading) {
-        return <LoadingOverlay isVisible={true} />;
+        return <DashboardSkeleton />;
     }
 
     if (user) {
-        return <DashboardPage />;
+        return <DashboardContent user={user} />;
     }
 
     return <WelcomePage />;
