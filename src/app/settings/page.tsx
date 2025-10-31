@@ -299,6 +299,8 @@ export default function SettingsPage() {
             <div className="space-y-4">
                  <h3 className="text-lg font-semibold text-muted-foreground px-4">Support & Legal</h3>
                  <div className="space-y-1">
+                    <SettingsItem icon={Info} label="About" href="/about" />
+                    <SettingsItem icon={Send} label="Contact" href="/contact" />
                     <SettingsItem icon={Shield} label="Privacy Policy" href="/privacy" />
                     <SettingsItem icon={FileText} label="Terms & Conditions" href="/terms" />
                  </div>
