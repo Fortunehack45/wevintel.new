@@ -8,7 +8,34 @@ import { useAuth, useAuthContext } from '@/firebase/provider';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { User } from 'firebase/auth';
-import { LoadingOverlay } from '@/components/loading-overlay';
+import { Skeleton } from '@/components/ui/skeleton';
+
+
+const ComparePageSkeleton = () => (
+    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center text-center pb-24 md:pb-8">
+        <div className="max-w-3xl w-full">
+            <div className="mb-12 space-y-4">
+                <Skeleton className="h-16 w-3/4 mx-auto" />
+                <Skeleton className="h-6 w-1/2 mx-auto" />
+            </div>
+            <div className="space-y-4 max-w-xl mx-auto">
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-4 w-8 mx-auto" />
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+            </div>
+        </div>
+        <div className="w-full max-w-5xl mt-24">
+            <Skeleton className="h-8 w-64 mb-6" />
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <Skeleton className="h-48 w-full" />
+                <Skeleton className="h-48 w-full" />
+                <Skeleton className="h-48 w-full" />
+            </div>
+        </div>
+    </div>
+);
+
 
 export default function ComparePage() {
   const auth = useAuthContext();
@@ -38,7 +65,7 @@ export default function ComparePage() {
   }, [auth, router]);
 
   if (isLoading || !user) {
-    return <LoadingOverlay isVisible={true} />;
+    return <ComparePageSkeleton />;
   }
 
   return (
