@@ -37,7 +37,11 @@ export default function RootLayout({
   return (
     <html lang="en-GB" suppressHydrationWarning>
       <body className={cn(
+<<<<<<< HEAD
           `${poppins.variable} font-body antialiased flex flex-col min-h-screen`,
+=======
+          `${poppins.variable} font-body antialiased h-full`,
+>>>>>>> ad66bd8 (The footer should be separated from the body in the desktop view. Like t)
         )}>
         <ThemeProvider
             attribute="class"
@@ -46,9 +50,17 @@ export default function RootLayout({
             disableTransitionOnChange
         >
           <FirebaseProvider>
+<<<<<<< HEAD
             <AppLayout>
                 {children}
             </AppLayout>
+=======
+            <div className="flex flex-col h-full">
+                <AppLayout>
+                    {children}
+                </AppLayout>
+            </div>
+>>>>>>> ad66bd8 (The footer should be separated from the body in the desktop view. Like t)
           </FirebaseProvider>
           <Toaster />
         </ThemeProvider>

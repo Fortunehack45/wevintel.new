@@ -85,7 +85,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     if (!mounted) {
         return (
              <div className="flex flex-col h-full">
-                <Header />
                 <main className="flex-1">
                     {children}
                 </main>
@@ -93,8 +92,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         );
     }
     
+<<<<<<< HEAD
     if (isAuthPage) {
 >>>>>>> f640191 (When it's loading it's showing the old UI which is not right)
+=======
+    if (isAuthPage && !isMobile) {
+>>>>>>> ad66bd8 (The footer should be separated from the body in the desktop view. Like t)
         return (
              <main className="flex-1">
                 {children}
@@ -108,6 +111,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <div className="wave-light"></div>
             </div>
             <Header />
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -146,6 +150,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
 =======
             <main className="flex-1">
+=======
+            <main className="flex-1 overflow-y-auto">
+>>>>>>> ad66bd8 (The footer should be separated from the body in the desktop view. Like t)
                 {children}
             </main>
             <Footer />
