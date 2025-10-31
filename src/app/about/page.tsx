@@ -12,7 +12,7 @@ export default function AboutPage() {
   const router = useRouter();
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-5xl space-y-12">
+    <div className="container mx-auto px-4 py-8 max-w-5xl space-y-12 pb-24 md:pb-8">
       <div className="mb-8">
         <Button onClick={() => router.back()} variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />

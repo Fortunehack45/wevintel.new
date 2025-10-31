@@ -136,7 +136,7 @@ export default function SettingsPage() {
 
   if (!mounted) {
       return (
-          <div className="container mx-auto px-4 py-8 max-w-3xl space-y-10">
+          <div className="container mx-auto px-4 py-8 max-w-3xl space-y-10 pb-24 md:pb-8">
             <Skeleton className="h-24 w-full" />
             <Skeleton className="h-64 w-full" />
             <Skeleton className="h-80 w-full" />

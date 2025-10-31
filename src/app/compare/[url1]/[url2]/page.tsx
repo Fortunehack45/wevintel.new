@@ -50,7 +50,7 @@ export default async function CompareResultPage({ params }: { params: { url1: st
         new URL(decodedUrl2);
     } catch(e) {
         return (
-            <div className="px-4 py-8">
+            <div className="px-4 py-8 pb-24 md:pb-8">
                 <NotFoundCard url={decodedUrl1 || decodedUrl2} message="One or both of the provided URLs are not valid. Please go back and try again." />
             </div>
         )

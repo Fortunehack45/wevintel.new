@@ -74,7 +74,7 @@ export default async function AnalysisPage({ params, searchParams }: Props) {
     }
   } catch (e) {
     return (
-      <div className="px-4 py-8">
+      <div className="px-4 py-8 pb-24 md:pb-8">
         <NotFoundCard url={decodedUrl} message="The provided URL is not valid. Please go back and try again with a valid URL (e.g., https://example.com)." />
       </div>
     )
@@ -91,13 +91,13 @@ export default async function AnalysisPage({ params, searchParams }: Props) {
   if ('error' in fastResult) {
       if (fastResult.error === 'Domain not found. The website is not reachable.' || fastResult.error === 'Could not fetch the main page of the website. It might be down or blocking requests.') {
           return (
-            <div className="px-4 py-8">
+            <div className="px-4 py-8 pb-24 md:pb-8">
                 <NotFoundCard url={decodedUrl} message={fastResult.error} />
             </div>
           );
       }
       return (
-        <div className="px-4 py-8">
+        <div className="px-4 py-8 pb-24 md:pb-8">
             <ErrorAlert title="Analysis Failed" description={fastResult.error} />
         </div>
       );
