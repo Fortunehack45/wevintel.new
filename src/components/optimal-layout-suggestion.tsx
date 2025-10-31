@@ -46,7 +46,7 @@ export function OptimalLayoutSuggestion() {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: "120%", opacity: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="fixed bottom-20 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md p-4 rounded-xl shadow-2xl glass-card z-40"
+                    className="fixed bottom-20 left-4 right-4 max-w-md mx-auto p-4 rounded-xl shadow-2xl glass-card z-40"
                 >
                     <div className="flex items-start gap-4">
                         <div className="mt-1 bg-primary/10 p-2 rounded-full">
@@ -55,7 +55,7 @@ export function OptimalLayoutSuggestion() {
                         <div className="flex-1">
                             <h3 className="font-semibold text-foreground">Optimal Viewing Experience</h3>
                             <p className="text-sm text-muted-foreground mt-1">
-                                For best results, we recommend using a desktop or rotating your device to landscape mode.
+                                For the best results, we recommend rotating your device to landscape mode.
                             </p>
                         </div>
                         <Button
