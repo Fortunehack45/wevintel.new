@@ -54,7 +54,7 @@ export function Header() {
     try {
         await signOut(auth);
         toast({ title: "Logged Out", description: "You have been successfully logged out." });
-        router.push('/login');
+        router.push('/');
     } catch (error: any) {
         toast({ title: "Logout Failed", description: error.message, variant: "destructive" });
     }
