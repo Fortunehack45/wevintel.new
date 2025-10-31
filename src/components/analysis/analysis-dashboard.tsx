@@ -71,25 +71,33 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
 
 
   const totalAuditScore = useMemo(() => {
-    if (!initialData.performance) return null; // Don't calculate score for partial data
-    
-    const allAudits: (AuditInfo | undefined)[] = [initialData.performanceAudits, initialData.securityAudits, initialData.diagnosticsAudits];
     let totalScore = 0;
     let scoreCount = 0;
 
-    allAudits.forEach(auditInfo => {
-      if (auditInfo) {
-        Object.values(auditInfo).forEach(audit => {
-          if (audit.score !== null) {
-            totalScore += audit.score;
-            scoreCount++;
-          }
-        });
-      }
-    });
+    // Start with security score if available
+    if (initialData.security?.securityScore) {
+        totalScore += initialData.security.securityScore;
+        scoreCount++;
+    }
+    
+    // If we have full performance data, use it for a more accurate score
+    if (initialData.performance) {
+      const allAudits: (AuditInfo | undefined)[] = [initialData.performanceAudits, initialData.securityAudits, initialData.diagnosticsAudits];
+
+      allAudits.forEach(auditInfo => {
+        if (auditInfo) {
+          Object.values(auditInfo).forEach(audit => {
+            if (audit.score !== null) {
+              totalScore += audit.score * 100;
+              scoreCount++;
+            }
+          });
+        }
+      });
+    }
 
     if (scoreCount === 0) return null;
-    return Math.round((totalScore / scoreCount) * 100);
+    return Math.round(totalScore / scoreCount);
   }, [initialData]);
 
   const { overview, security, hosting, metadata, headers, performance, performanceAudits, securityAudits, diagnosticsAudits, traffic, aiSummary, techStack, status } = initialData;
@@ -165,16 +173,11 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
           <HostingCard data={hosting} />
         </motion.div>
       }
-
-      {isLoadingFullReport ? (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={9} className="col-span-1">
-           <DashboardSkeleton.ScorePlaceholder />
-        </motion.div>
-      ) : (
-        <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={9} className="col-span-1">
-          <OverallScoreCard score={totalAuditScore} />
-        </motion.div>
-      )}
+      
+      <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={9} className="col-span-1">
+        <OverallScoreCard score={totalAuditScore} isLoading={totalAuditScore === null} />
+      </motion.div>
+      
 
       {metadata &&
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={10} className="col-span-1 md:col-span-2">

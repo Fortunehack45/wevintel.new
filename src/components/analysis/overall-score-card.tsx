@@ -17,9 +17,9 @@ const getScoreRingColor = (score: number) => {
     return 'hsl(var(--destructive))'; // Red
 }
 
-export function OverallScoreCard({ score }: { score: number | null }) {
+export function OverallScoreCard({ score, isLoading }: { score: number | null, isLoading?: boolean }) {
 
-  if (score === null) {
+  if (isLoading || score === null) {
       return (
           <Card className="h-full glass-card">
               <CardHeader className="pb-2">
@@ -28,8 +28,8 @@ export function OverallScoreCard({ score }: { score: number | null }) {
                     Overall Score
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <Skeleton className="w-full h-24" />
+              <CardContent className="flex items-center justify-center pt-2">
+                <Skeleton className="w-24 h-24 rounded-full" />
               </CardContent>
           </Card>
       )

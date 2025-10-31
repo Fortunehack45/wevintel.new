@@ -9,12 +9,17 @@ import { getWebsiteIntelligence, WebsiteIntelligenceInput } from '@/ai/flows/get
 const getSecurityScore = (data: Partial<AnalysisResult>) => {
     if (!data.security) return 0;
     let total = 0, count = 0;
+    
+    // Quick, initial score based on what we have from getFastAnalysis
     if(data.security.isSecure) { total++; count++; }
     Object.values(data.security.securityHeaders || {}).forEach(v => { if(v) total++; count++; });
+
+    // Refined score if we have the full audit data
     if(data.securityAudits) {
         Object.values(data.securityAudits).forEach(a => { if (a.score !== null) { total += a.score; count++; } });
     }
-    return count > 0 ? Math.round((total / count) * 100) : 0;
+
+    return count > 0 ? Math.round((total / (count > 4 ? 4 : count)) * 100) : 0;
 }
 
 export const getFullAnalysis = async (url: string): Promise<AnalysisResult | { error: string, overview: Partial<AnalysisResult['overview']> }> => {
@@ -27,6 +32,9 @@ export const getFullAnalysis = async (url: string): Promise<AnalysisResult | { e
     } catch (e: any) {
         return { error: e.message || "Failed to fetch initial data", overview: { url }};
     }
+
+    // Assign an initial security score based on fast data
+    fastResult.security!.securityScore = getSecurityScore(fastResult);
 
     const aiInput: WebsiteIntelligenceInput = {
         url: fastResult.overview!.url,
@@ -56,7 +64,6 @@ export const getFullAnalysis = async (url: string): Promise<AnalysisResult | { e
         trafficPart = aiValue.traffic;
         techStackPart = aiValue.techStack;
     }
-
 
     const finalResult: AnalysisResult = {
         ...(fastResult as AnalysisResult),
