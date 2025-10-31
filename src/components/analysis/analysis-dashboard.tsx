@@ -19,6 +19,7 @@ import { SummaryCard } from './summary-card';
 import { TrafficCard } from './traffic-card';
 import { TechStackCarousel } from './tech-stack-carousel';
 import { StatusCard } from './status-card';
+import { AIRedesignCard } from './ai-redesign-card';
 
 
 const cardVariants = {
@@ -134,6 +135,10 @@ export function AnalysisDashboard({ initialData }: { initialData: AnalysisResult
           <PerformanceCard data={performance} />
         </motion.div>
       )}
+
+       <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={3} className="col-span-1 md:col-span-2 lg:col-span-4">
+          <AIRedesignCard url={overview.url} isLoading={isLoadingFullReport}/>
+      </motion.div>
 
       {isLoadingFullReport || !techStack ? (
         <motion.div variants={cardVariants} initial="hidden" animate="visible" custom={5} className="col-span-1 md:col-span-2 lg:col-span-4">

@@ -30,11 +30,11 @@ export function OptimalLayoutSuggestion() {
         }
 
         const navigationEntries = performance.getEntriesByType("navigation");
-        const navigationType = navigationEntries.length > 0 ? navigationEntries[0].type : '';
+        const navEntry = navigationEntries[0] as PerformanceNavigationTiming | undefined;
+        const navigationType = navEntry?.type;
         
         const isReload = navigationType === 'reload';
         
-        // Check if this is the very first page load of the session
         const sessionStartTime = sessionStorage.getItem(SESSION_START_KEY);
         const isFirstLoadOfSession = !sessionStartTime;
 
@@ -44,15 +44,13 @@ export function OptimalLayoutSuggestion() {
 
         const seenPathsRaw = sessionStorage.getItem(SEEN_PATHS_KEY);
         const seenPaths: string[] = seenPathsRaw ? JSON.parse(seenPathsRaw) : [];
+        
+        const hasSeenOnThisPath = seenPaths.includes(pathname);
 
-        // Show suggestion if:
-        // 1. It's the first load of the entire session, OR it's a reload.
-        // AND
-        // 2. We haven't already shown it for this specific page path in this session.
-        if ((isFirstLoadOfSession || isReload) && !seenPaths.includes(pathname)) {
-            const timer = setTimeout(() => {
+        if (!hasSeenOnThisPath && (isFirstLoadOfSession || isReload)) {
+             const timer = setTimeout(() => {
                 setIsVisible(true);
-                // Immediately mark as seen
+                // Immediately mark as seen for this session
                 const updatedSeenPaths = [...seenPaths, pathname];
                 sessionStorage.setItem(SEEN_PATHS_KEY, JSON.stringify(updatedSeenPaths));
             }, 1500); // Delay before showing
@@ -61,15 +59,13 @@ export function OptimalLayoutSuggestion() {
         } else {
             setIsVisible(false);
         }
-
     }, [pathname, isMobile, width, height]);
 
     useEffect(() => {
-        // Auto-dismiss logic
         if (isVisible) {
             const dismissTimer = setTimeout(() => {
                 setIsVisible(false);
-            }, 8000); // 8 seconds
+            }, 8000); // Auto-dismiss after 8 seconds
 
             return () => clearTimeout(dismissTimer);
         }
