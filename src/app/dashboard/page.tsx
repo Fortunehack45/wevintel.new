@@ -8,10 +8,31 @@ import { useAuth, useAuthContext } from '@/firebase/provider';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { User } from 'firebase/auth';
-import { LoadingOverlay } from '@/components/loading-overlay';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Scale, Trophy } from 'lucide-react';
 import Link from 'next/link';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const DashboardSkeleton = () => (
+    <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
+         <div className="mb-12 space-y-4">
+            <div>
+                <Skeleton className="h-10 w-1/2" />
+                <Skeleton className="h-6 w-3/4 mt-2" />
+            </div>
+            <Skeleton className="h-16 w-full max-w-xl mx-auto" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            <Skeleton className="h-40 w-full" />
+            <Skeleton className="h-40 w-full lg:col-span-2" />
+        </div>
+         <div>
+            <Skeleton className="h-8 w-48 mb-6" />
+            <Skeleton className="h-64 w-full" />
+        </div>
+    </div>
+);
+
 
 export default function DashboardPage() {
   const auth = useAuthContext();
@@ -41,7 +62,7 @@ export default function DashboardPage() {
   }, [auth, router]);
 
   if (isLoading || !user) {
-    return <LoadingOverlay isVisible={true} />;
+    return <DashboardSkeleton />;
   }
   
   const welcomeName = user.displayName || user.email;
