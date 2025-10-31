@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowRight, Scale, ShieldCheck, Sparkles, Activity, Building, Heart, Star } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { SiVercel, SiFirebase, SiGoogle, SiNextdotjs, SiTailwindcss } from 'react-icons/si';
+import { cn } from "@/lib/utils";
 
 const featureCards = [
     {
@@ -29,13 +31,13 @@ const featureCards = [
 ];
 
 const sponsors = [
-    { name: 'Vercel' },
-    { name: 'Firebase' },
-    { name: 'Google' },
-    { name: 'Next.js' },
-    { name: 'ShadCN' },
-    { name: 'Genkit' },
-    { name: 'Tailwind CSS' },
+    { name: 'Vercel', icon: SiVercel },
+    { name: 'Firebase', icon: SiFirebase },
+    { name: 'Google', icon: SiGoogle },
+    { name: 'Next.js', icon: SiNextdotjs },
+    { name: 'ShadCN', icon: () => <span className="text-xl font-bold">shadcn</span> },
+    { name: 'Genkit', icon: () => <span className="text-xl font-bold">Genkit</span> },
+    { name: 'Tailwind CSS', icon: SiTailwindcss },
 ];
 
 const reviews = [
@@ -159,7 +161,8 @@ export default function WelcomePage() {
                             <div className="tech-stack-scroller" data-animated="true">
                                 <div className="tech-stack-scroller-inner flex items-center gap-16">
                                     {[...sponsors, ...sponsors].map((sponsor, index) => (
-                                        <div key={`${sponsor.name}-${index}`} className="flex items-center gap-3 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all">
+                                        <div key={`${sponsor.name}-${index}`} className="flex items-center gap-3 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all text-2xl">
+                                            <sponsor.icon />
                                             <p className="font-bold text-lg">{sponsor.name}</p>
                                         </div>
                                     ))}
