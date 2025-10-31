@@ -227,7 +227,7 @@ export function ComparisonPageContent({ urls, initialData1, initialData2 }: Comp
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(28);
             pdf.setTextColor(whiteColor);
-            pdf.text('WebIntel Comparison', pdfWidth / 2, pdfHeight / 2 - 80, { align: 'center' });
+            pdf.text('WebIntel Comparison Report', pdfWidth / 2, pdfHeight / 2 - 80, { align: 'center' });
             
             pdf.setFontSize(18);
             pdf.text(d1.overview.domain, pdfWidth / 2, pdfHeight / 2 - 20, { align: 'center' });
@@ -369,9 +369,9 @@ export function ComparisonPageContent({ urls, initialData1, initialData2 }: Comp
                     </div>
                 </div>
                 <div className='flex items-center gap-2 flex-wrap justify-start md:justify-end'>
-                     <Button variant="outline" onClick={() => router.push('/compare')} disabled={isDownloading}>
+                     <Button variant="outline" onClick={() => router.back()} disabled={isDownloading}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        New
+                        Back
                     </Button>
                     <Dialog open={editOpen} onOpenChange={setEditOpen}>
                         <DialogTrigger asChild>

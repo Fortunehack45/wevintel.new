@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
-import { RefreshCw, Download, Home } from 'lucide-react';
+import { RefreshCw, Download, Home, ArrowLeft } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { type AnalysisResult, type AuditInfo, type Metadata, type SecurityData } from '@/lib/types';
@@ -415,10 +415,10 @@ export function AnalysisPageContent({ decodedUrl, initialData }: { decodedUrl: s
                         Results for: <a href={decodedUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{decodedUrl}</a>
                     </p>
                 </div>
-                <div className='flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto'>
-                    <Button variant="outline" onClick={() => router.push('/')} disabled={isDownloading}>
-                        <Home className="mr-2 h-4 w-4" />
-                        Back to Home
+                <div className='flex flex-wrap items-center justify-start sm:justify-end gap-2 w-full sm:w-auto'>
+                    <Button variant="outline" onClick={() => router.back()} disabled={isDownloading}>
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back
                     </Button>
                     <Button variant="outline" onClick={handleReanalyze} disabled={isLoading || isDownloading}>
                         <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />

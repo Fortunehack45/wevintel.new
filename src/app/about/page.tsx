@@ -1,19 +1,22 @@
 
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Info, Code, User, Send, Compass, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
 
 export default function AboutPage() {
+  const router = useRouter();
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl space-y-12">
       <div className="mb-8">
-        <Button asChild variant="outline">
-          <Link href="/">
+        <Button onClick={() => router.back()} variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
-          </Link>
+            Back
         </Button>
       </div>
 
@@ -61,7 +64,7 @@ export default function AboutPage() {
                 <AvatarFallback>F</AvatarFallback>
             </Avatar>
             <div className="max-w-3xl">
-                <h3 className="text-2xl font-bold">Esho Fortune Adebayo Emmanuel</h3>
+                <h3 className="text-2xl font-bold">Esho Fortune Adebayo Emmanuel — known professionally as Fortune.</h3>
                 <p className="text-primary font-semibold">Software Engineer | Database Developer | UI/UX Designer | Innovator</p>
                 
                 <div className="mt-4 text-left text-muted-foreground space-y-4">
