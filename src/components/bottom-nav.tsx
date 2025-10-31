@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, History, Info, Trophy, Scale } from 'lucide-react';
+import { Home, History, Trophy, Scale, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
@@ -13,7 +13,7 @@ const navLinks = [
   { href: '/compare', label: 'Compare', icon: Scale },
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { href: '/history', label: 'History', icon: History },
-  { href: '/about', label: 'About', icon: Info },
+  { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
 export function BottomNav() {
