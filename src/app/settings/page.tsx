@@ -34,6 +34,7 @@ import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
+import { Sidebar } from '@/components/sidebar';
 
 
 const passwordSchema = z.object({
@@ -69,13 +70,14 @@ export default function SettingsPage() {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const auth = getAuth(app);
-  const isMobile = useIsMobile();
   
   const [, setAnalysisHistory] = useLocalStorage<AnalysisResult[]>('webintel_history', []);
   const [, setComparisonHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', []);
 
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+      setMounted(true);
+  }, []);
 
   const clearAllHistory = () => {
     setAnalysisHistory([]);
@@ -135,101 +137,20 @@ export default function SettingsPage() {
         toast({ title: "Logout Failed", description: error.message, variant: "destructive" });
     }
   }
-  
-  const MobileSettings = () => {
+
+  if (!mounted) {
       return (
-        <div className="p-4 space-y-8 pb-20">
-            <h1 className="text-4xl font-bold">Settings</h1>
-            {isAuthLoading ? (
-                 <Skeleton className="h-40 w-full" />
-            ): user && (
-                 <div>
-                    <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Account</h2>
-                    <div className="rounded-lg bg-card border overflow-hidden">
-                        <div className="p-4 border-b">
-                            <p className="font-semibold">{user.displayName || 'User'}</p>
-                            <p className="text-sm text-muted-foreground">{user.email}</p>
-                        </div>
-                        <SettingsItem icon={Lock} label="Change Password" onClick={() => toast({ title: "Please use desktop view to change password." })} />
-                        <SettingsItem icon={LogOut} label="Sign Out" onClick={handleLogout} />
-                    </div>
-                 </div>
-            )}
-            
-            <div>
-                <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Legal & Support</h2>
-                <div className="rounded-lg bg-card border overflow-hidden">
-                    <SettingsItem icon={Info} label="About WebIntel" href="/about" />
-                    <SettingsItem icon={Send} label="Contact Us" href="/contact" />
-                    <SettingsItem icon={Shield} label="Privacy Policy" href="/privacy" />
-                    <SettingsItem icon={FileText} label="Terms & Conditions" href="/terms" />
-                </div>
-            </div>
-
-            <div>
-                 <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Appearance</h2>
-                <div className="rounded-lg bg-card border p-4">
-                     <RadioGroup
-                        value={theme}
-                        onValueChange={setTheme}
-                        className="grid grid-cols-3 gap-2"
-                    >
-                        <Label className="p-3 border rounded-lg flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
-                            <RadioGroupItem value="light" id="light_mobile" className="sr-only" />
-                            <Sun className="h-6 w-6" />
-                            <span className="text-xs font-semibold">Light</span>
-                        </Label>
-                        <Label className="p-3 border rounded-lg flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
-                            <RadioGroupItem value="dark" id="dark_mobile" className="sr-only" />
-                            <Moon className="h-6 w-6" />
-                            <span className="text-xs font-semibold">Dark</span>
-                        </Label>
-                        <Label className="p-3 border rounded-lg flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-all">
-                            <RadioGroupItem value="system" id="system_mobile" className="sr-only" />
-                            <Laptop className="h-6 w-6" />
-                            <span className="text-xs font-semibold">System</span>
-                        </Label>
-                    </RadioGroup>
-                </div>
-            </div>
-
-             <div>
-                 <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Danger Zone</h2>
-                <div className="rounded-lg bg-card border overflow-hidden">
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                         <button className="w-full text-left">
-                            <div className="flex items-center justify-between p-4 rounded-lg bg-background hover:bg-muted transition-colors cursor-pointer w-full">
-                                <div className="flex items-center gap-4">
-                                    <Trash2 className="h-5 w-5 text-destructive" />
-                                    <span className="font-medium text-destructive">Clear All Local History</span>
-                                </div>
-                                <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                            </div>
-                        </button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This will permanently delete your entire analysis and comparison history from this browser. This action cannot be undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={clearAllHistory} className={buttonVariants({ variant: "destructive" })}>Clear History</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                </div>
-            </div>
-        </div>
+          <div className="container mx-auto px-4 py-8 max-w-3xl space-y-10">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-64 w-full" />
+            <Skeleton className="h-80 w-full" />
+            <Skeleton className="h-40 w-full" />
+          </div>
       )
   }
-
-  const DesktopSettings = () => {
-    return (
-        <div className="container mx-auto px-4 py-8 max-w-3xl">
+  
+  return (
+        <div className="container mx-auto px-4 py-8 max-w-3xl pb-24 md:pb-8">
           <div className="mb-10 text-center">
             <h1 className="text-5xl font-bold tracking-tight">Settings</h1>
             <p className="text-muted-foreground mt-2">Manage your account and application preferences.</p>
@@ -345,10 +266,6 @@ export default function SettingsPage() {
                                 <Button type="submit" disabled={isLoading}>
                                   {isLoading ? 'Updating...' : 'Update Password'}
                                 </Button>
-                                <Button variant="outline" onClick={handleLogout}>
-                                    <LogOut className="mr-2 h-4 w-4" />
-                                    Sign Out
-                                </Button>
                             </div>
                           </form>
                         </Form>
@@ -401,18 +318,4 @@ export default function SettingsPage() {
           </div>
         </div>
       );
-  }
-
-  if (!mounted) {
-      return (
-          <div className="container mx-auto px-4 py-8 max-w-3xl space-y-10">
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-64 w-full" />
-            <Skeleton className="h-80 w-full" />
-            <Skeleton className="h-40 w-full" />
-          </div>
-      )
-  }
-  
-  return isMobile ? <MobileSettings /> : <DesktopSettings />;
 }

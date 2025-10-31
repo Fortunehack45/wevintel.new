@@ -3,17 +3,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, History, Trophy, Scale, Settings } from 'lucide-react';
+import { Home, Compass, Info, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
 
 const navLinks = [
-  { href: '/dashboard', label: 'Dashboard', icon: Home },
-  { href: '/compare', label: 'Compare', icon: Scale },
-  { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
-  { href: '/history', label: 'History', icon: History },
-  { href: '/settings', label: 'Settings', icon: Settings },
+  { href: '/dashboard', label: 'Home', icon: Home },
+  { href: '/about', label: 'About', icon: Info },
+  { href: '/contact', label: 'Contact', icon: Send },
 ];
 
 export function BottomNav() {
@@ -39,12 +37,13 @@ export function BottomNav() {
               key={link.href}
               href={link.href}
               className={cn(
-                'flex items-center justify-center w-full h-full transition-colors',
+                'flex flex-col items-center justify-center w-full h-full transition-colors',
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               )}
               aria-label={link.label}
             >
               <link.icon className="h-6 w-6" />
+              <span className="text-xs">{link.label}</span>
             </Link>
           );
         })}
