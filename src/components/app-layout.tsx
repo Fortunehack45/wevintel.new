@@ -40,10 +40,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     
 >>>>>>> f640191 (When it's loading it's showing the old UI which is not right)
     const isAuthPage = pathname === '/login' || pathname === '/signup';
+<<<<<<< HEAD
     const isWelcomePage = pathname === '/';
 <<<<<<< HEAD
 >>>>>>> 05fe2ff (For the welcome page on the desktop view it should only one page Dashboa)
 =======
+=======
+>>>>>>> 114b787 (Let the header show in the sing up and login page of the desktop view)
     
 <<<<<<< HEAD
     const appRoutes = ['/dashboard', '/compare', '/leaderboard', '/history', '/settings'];
@@ -91,6 +94,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     }
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (isAuthPage) {
 >>>>>>> f640191 (When it's loading it's showing the old UI which is not right)
 =======
@@ -117,6 +121,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 =======
         <>
 >>>>>>> 0c78a9c (Error: A tree hydrated but some attributes of the server rendered HTML d)
+=======
+    return (
+        <div className="flex flex-col min-h-screen">
+>>>>>>> 114b787 (Let the header show in the sing up and login page of the desktop view)
             <div className="wave-container">
                 <div className="wave-light"></div>
             </div>
@@ -179,11 +187,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <Footer />
             <BottomNav />
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 980974b (Remove that footer been separate features and keep it the way it was bef)
         </div>
 >>>>>>> 9999f8a (Shift the footer down the page by 30% because it's blocking my view to v)
 =======
         </>
 >>>>>>> 0c78a9c (Error: A tree hydrated but some attributes of the server rendered HTML d)
+=======
+        </div>
+>>>>>>> 114b787 (Let the header show in the sing up and login page of the desktop view)
     )
 }
