@@ -33,12 +33,14 @@ import { type AnalysisResult, type ComparisonHistoryItem } from '@/lib/types';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { checkPasswordStrength } from '@/lib/utils';
+import { PasswordStrengthIndicator } from '@/components/ui/password-strength-indicator';
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, { message: 'Current password is required.' }),
   newPassword: z
     .string()
-    .min(6, { message: 'New password must be at least 6 characters.' })
+    .min(8, { message: 'New password must be at least 8 characters.' })
     .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter." })
     .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter." })
     .regex(/[0-9]/, { message: "Password must contain at least one number." })
@@ -78,6 +80,8 @@ export default function SettingsPage() {
   const [, setComparisonHistory] = useLocalStorage<ComparisonHistoryItem[]>('webintel_comparison_history', []);
 
   const [mounted, setMounted] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState({ score: -1, feedback: [] });
+
   useEffect(() => {
       setMounted(true);
   }, []);
@@ -106,6 +110,13 @@ export default function SettingsPage() {
       newPassword: '',
     },
   });
+
+  const watchedNewPassword = form.watch('newPassword');
+
+  useEffect(() => {
+      const strength = checkPasswordStrength(watchedNewPassword || '');
+      setPasswordStrength(strength as any);
+  }, [watchedNewPassword]);
 
   const onSubmit = async (values: z.infer<typeof passwordSchema>) => {
     if (!user || !user.email) return;
@@ -266,6 +277,7 @@ export default function SettingsPage() {
                                     </Button>
                                   </div>
                                   <FormMessage />
+                                  {field.value && <PasswordStrengthIndicator score={passwordStrength.score} />}
                                 </FormItem>
                               )}
                             />

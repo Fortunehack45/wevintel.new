@@ -16,13 +16,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Skeleton } from '@/components/ui/skeleton';
+import { checkPasswordStrength } from '@/lib/utils';
+import { PasswordStrengthIndicator } from '@/components/ui/password-strength-indicator';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email address.' }),
   password: z
     .string()
-    .min(6, { message: 'Password must be at least 6 characters.' })
+    .min(8, { message: 'Password must be at least 8 characters.' })
     .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter." })
     .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter." })
     .regex(/[0-9]/, { message: "Password must contain at least one number." })
@@ -83,6 +85,7 @@ export default function SignUpPage() {
   const router = useRouter();
   const auth = getAuth(app);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [passwordStrength, setPasswordStrength] = useState({ score: -1, feedback: [] });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -105,6 +108,13 @@ export default function SignUpPage() {
       terms: false,
     },
   });
+
+  const watchedPassword = form.watch('password');
+
+  useEffect(() => {
+      const strength = checkPasswordStrength(watchedPassword || '');
+      setPasswordStrength(strength as any);
+  }, [watchedPassword]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
@@ -199,7 +209,8 @@ export default function SignUpPage() {
                         {showPassword ? <EyeOff /> : <Eye />}
                       </Button>
                     </div>
-                    <FormMessage />
+                     <FormMessage />
+                    {field.value && <PasswordStrengthIndicator score={passwordStrength.score} />}
                   </FormItem>
                 )}
               />
