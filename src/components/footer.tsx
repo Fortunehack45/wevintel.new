@@ -4,15 +4,19 @@
 import Link from 'next/link';
 import { Compass } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+<<<<<<< HEAD
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuthContext } from '@/firebase/provider';
 import { useAuth } from '@/firebase/auth';
 import type { User as FirebaseUser } from 'firebase/auth';
+=======
+>>>>>>> 4e7a013 (Remove the love emoji. Also don't let the footer show in the mobile mode)
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const isMobile = useIsMobile();
+<<<<<<< HEAD
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const auth = useAuthContext();
@@ -31,6 +35,10 @@ export function Footer() {
   const isAuthPage = pathname === '/login' || pathname === '/signup';
 
   if (!mounted || isMobile || isAuthPage) {
+=======
+
+  if (isMobile) {
+>>>>>>> 4e7a013 (Remove the love emoji. Also don't let the footer show in the mobile mode)
     return null;
   }
   
