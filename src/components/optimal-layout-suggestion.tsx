@@ -31,6 +31,7 @@ export function OptimalLayoutSuggestion() {
         if (typeof window !== 'undefined' && isMobile) {
             const isPortrait = height > width;
 <<<<<<< HEAD
+<<<<<<< HEAD
             const lastDismissedPath = sessionStorage.getItem('layout_suggestion_dismissed_path');
 
             if (isPortrait && lastDismissedPath !== pathname) {
@@ -39,10 +40,15 @@ export function OptimalLayoutSuggestion() {
             
             if (isPortrait && !hasBeenDismissed) {
 >>>>>>> 3d6f03c (Create a features in a professional way that inform users that for best)
+=======
+            
+            if (isPortrait) {
+>>>>>>> fd5f0f3 (Once the page is reloaded the layout suggestions should show up if in th)
                 const timer = setTimeout(() => {
                     setIsOpen(true);
                 }, 1500); // Delay before showing
                 return () => clearTimeout(timer);
+<<<<<<< HEAD
 <<<<<<< HEAD
             } else {
                 setIsOpen(false);
@@ -56,14 +62,20 @@ export function OptimalLayoutSuggestion() {
         sessionStorage.setItem('layout_suggestion_dismissed_path', pathname);
 =======
             } else if (!isPortrait) {
+=======
+            } else {
+>>>>>>> fd5f0f3 (Once the page is reloaded the layout suggestions should show up if in th)
                 setIsOpen(false);
             }
         }
     }, [width, height, isMobile]);
 
     const handleDismiss = () => {
+<<<<<<< HEAD
         sessionStorage.setItem('dismissedOptimalLayoutSuggestion', 'true');
 >>>>>>> 3d6f03c (Create a features in a professional way that inform users that for best)
+=======
+>>>>>>> fd5f0f3 (Once the page is reloaded the layout suggestions should show up if in th)
         setIsOpen(false);
     };
 
