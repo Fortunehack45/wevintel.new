@@ -3,6 +3,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useLocalStorage } from './use-local-storage';
+import { useAuth, useAuthContext } from '@/firebase/provider';
+import type { User as FirebaseUser } from 'firebase/auth';
 
 const RATING_SNOOZE_KEY = 'webintel_rating_snooze_until';
 const RATING_SUBMITTED_KEY = 'webintel_rating_submitted';
@@ -29,9 +31,18 @@ export function useRatingPrompt() {
     dailyTotal: 0,
     weeklyTotal: 0,
   });
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+  const auth = useAuthContext();
+
+  useEffect(() => {
+    if (auth) {
+      const unsubscribe = useAuth(setUser);
+      return () => unsubscribe();
+    }
+  }, [auth]);
 
   const checkVisibility = useCallback(() => {
-    if (submitted || isVisible) return;
+    if (!user || submitted || isVisible) return;
 
     const now = new Date();
     
@@ -70,10 +81,12 @@ export function useRatingPrompt() {
     if (daily >= DAILY_USAGE_TRIGGER || weekly >= WEEKLY_USAGE_TRIGGER) {
         setIsVisible(true);
     }
-  }, [submitted, snoozeUntil, usageStats, isVisible]);
+  }, [user, submitted, snoozeUntil, usageStats, isVisible]);
   
   // Track usage time
   useEffect(() => {
+    if (!user) return; // Only track usage for logged-in users
+
     const interval = setInterval(() => {
       const now = new Date();
       const today = now.toISOString().split('T')[0];
@@ -103,7 +116,7 @@ export function useRatingPrompt() {
     }, 1000); // Update usage every second
 
     return () => clearInterval(interval);
-  }, [checkVisibility, setUsageStats, usageStats]);
+  }, [user, checkVisibility, setUsageStats, usageStats]);
 
 
   const dismiss = () => {
