@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Compass, LogIn, User, Settings, LogOut, ChevronDown, History, Scale, Trophy, Contact, Info, Home } from 'lucide-react';
 =======
 import { Compass, Menu, Bot, Moon, Sun, Scale, Settings, LogIn, User as UserIcon, LogOut, Laptop } from 'lucide-react';
@@ -23,6 +24,9 @@ import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Home, Scale, Troph
 =======
 import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Info, Send } from 'lucide-react';
 >>>>>>> 546cc0d (The header(desktop view only) is not professional enough the wey it look)
+=======
+import { Compass, LogIn, User, Settings, LogOut, ChevronDown, Home, Scale, Trophy, History } from 'lucide-react';
+>>>>>>> 68b907f (Let the about and contact be in that centered navigation of the the desk)
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -32,8 +36,12 @@ import { cn } from '@/lib/utils';
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useAuth, useAuthContext } from '@/firebase/provider';
 =======
+=======
+import { useAuth } from '@/firebase/auth';
+>>>>>>> 68b907f (Let the about and contact be in that centered navigation of the the desk)
 import { useAuthContext } from '@/firebase/provider';
 import { useAuth } from '@/firebase/auth';
 >>>>>>> 2cc806b (Also introduced the header for the mobile view back)
@@ -56,10 +64,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { motion } from 'framer-motion';
 =======
 =======
 import { useAuth } from '@/firebase/auth';
+=======
+>>>>>>> 68b907f (Let the about and contact be in that centered navigation of the the desk)
 import { motion } from 'framer-motion';
 >>>>>>> 546cc0d (The header(desktop view only) is not professional enough the wey it look)
 
@@ -69,8 +80,11 @@ const navLinks = [
   { href: '/compare', label: 'Compare' },
   { href: '/leaderboard', label: 'Leaderboard' },
   { href: '/history', label: 'History' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
 ];
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 2cc806b (Also introduced the header for the mobile view back)
 =======
@@ -80,6 +94,15 @@ const secondaryNavLinks = [
 ]
 
 >>>>>>> 822423a (For desktop view remove the contact button and about button for the sett)
+=======
+const mobileNavLinks = [
+  { href: '/dashboard', label: 'Home', icon: Home },
+  { href: '/compare', label: 'Compare', icon: Scale },
+  { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
+  { href: '/history', label: 'History', icon: History },
+  { href: '/settings', label: 'Settings', icon: Settings },
+];
+>>>>>>> 68b907f (Let the about and contact be in that centered navigation of the the desk)
 
 =======
 import { useTheme } from 'next-themes';
@@ -447,7 +470,7 @@ export function Header() {
       {/* Center Section - Main Navigation */}
       {!isWelcomePage && (
           <nav className="absolute left-1/2 -translate-x-1/2">
-             <ul className="flex items-center gap-2 rounded-full border bg-card p-1">
+             <ul className="flex items-center gap-2 rounded-full border bg-card/50 p-1">
                 {navLinks.map(link => (
                     <li key={link.href}>
                         <Link href={link.href} className={cn(
@@ -541,6 +564,7 @@ export function Header() {
                 <Link href="/dashboard">Enter Dashboard</Link>
             </Button>
         ) : (
+<<<<<<< HEAD
              <div className='flex items-center gap-4'>
                 {secondaryNavLinks.map(link => (
                      <Link key={link.href} href={link.href} className={cn(
@@ -633,6 +657,37 @@ export function Header() {
               Login
             </Link>
           </Button>
+=======
+            user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="flex items-center gap-2 p-1 h-auto rounded-full">
+                        <Avatar className="h-9 w-9">
+                            <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
+                            <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>{user.displayName || user.email}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+            ) : (
+              <Button asChild variant="secondary">
+                <Link href="/login">
+                  Login
+                </Link>
+              </Button>
+            )
+>>>>>>> 68b907f (Let the about and contact be in that centered navigation of the the desk)
         )}
 >>>>>>> b4e6b96 (The dashboard page should not show a button navigation bar on the mobile)
       </div>
