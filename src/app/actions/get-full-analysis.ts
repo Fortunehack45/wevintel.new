@@ -3,10 +3,8 @@
 
 import { getFastAnalysis, getPerformanceAnalysis } from '@/app/actions/analyze';
 import { getAdditionalAnalysis } from '@/app/actions/get-additional-analysis';
-import { summarizeWebsite, WebsiteAnalysisInput } from '@/ai/flows/summarize-flow';
-import { estimateTraffic } from '@/ai/flows/traffic-estimate-flow';
-import { detectTechStack } from '@/ai/flows/tech-stack-flow';
 import { AnalysisResult } from '@/lib/types';
+import { getWebsiteIntelligence, WebsiteIntelligenceInput } from '@/ai/flows/get-website-intelligence-flow';
 
 const getSecurityScore = (data: Partial<AnalysisResult>) => {
     if (!data.security) return 0;
@@ -30,28 +28,36 @@ export const getFullAnalysis = async (url: string): Promise<AnalysisResult | { e
         return { error: e.message || "Failed to fetch initial data", overview: { url }};
     }
 
-
-    const aiSummaryInput: WebsiteAnalysisInput = {
-        overview: fastResult.overview!,
-        security: fastResult.security!,
-        hosting: fastResult.hosting!,
+    const aiInput: WebsiteIntelligenceInput = {
+        url: fastResult.overview!.url,
+        htmlContent: fastResult.overview?.htmlContent || '',
+        description: fastResult.overview?.description || '',
         headers: fastResult.headers,
     };
 
-    const [perfResult, additionalResult, summaryResult, trafficResult, techStackResult] = await Promise.allSettled([
+    const [perfResult, additionalResult, aiResult] = await Promise.allSettled([
         getPerformanceAnalysis(url),
         getAdditionalAnalysis(url),
-        summarizeWebsite(aiSummaryInput),
-        estimateTraffic({ url, description: fastResult.overview?.description || '' }),
-        detectTechStack({ url, htmlContent: fastResult.overview?.htmlContent || '', headers: fastResult.headers || {} }),
+        getWebsiteIntelligence(aiInput),
     ]);
 
     const fullPerfData = perfResult.status === 'fulfilled' ? perfResult.value : {};
     const additionalValue = additionalResult.status === 'fulfilled' ? additionalResult.value : { status: undefined };
-    const summaryValue = summaryResult.status === 'fulfilled' ? summaryResult.value : { error: summaryResult.reason?.message || 'Failed to generate summary.' };
-    const trafficValue = trafficResult.status === 'fulfilled' ? trafficResult.value : undefined;
-    const techStackValue = techStackResult.status === 'fulfilled' ? techStackResult.value : undefined;
+    const aiValue = aiResult.status === 'fulfilled' ? aiResult.value : { error: aiResult.reason?.message || 'Failed to generate AI analysis.' };
     
+    let summaryPart, trafficPart, techStackPart;
+    
+    if (aiValue && 'error' in aiValue) {
+        summaryPart = { error: aiValue.error };
+        trafficPart = null;
+        techStackPart = null;
+    } else if (aiValue) {
+        summaryPart = aiValue.summary ? { summary: aiValue.summary } : { error: 'AI did not return a summary.'};
+        trafficPart = aiValue.traffic;
+        techStackPart = aiValue.techStack;
+    }
+
+
     const finalResult: AnalysisResult = {
         ...(fastResult as AnalysisResult),
         ...fullPerfData,
@@ -70,10 +76,11 @@ export const getFullAnalysis = async (url: string): Promise<AnalysisResult | { e
             ...fastResult.security!,
             securityScore: getSecurityScore({ ...fastResult, ...fullPerfData }),
         },
-        aiSummary: summaryValue,
-        traffic: trafficValue,
-        techStack: techStackValue,
+        aiSummary: summaryPart,
+        traffic: trafficPart,
+        techStack: techStackPart,
         status: additionalValue.status,
     };
     return finalResult;
 };
+
