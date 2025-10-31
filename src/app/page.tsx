@@ -1,7 +1,7 @@
 'use client';
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import { ArrowRight, Scale, ShieldCheck, Sparkles, Activity } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowRight, Scale, ShieldCheck, Sparkles, Activity, Building, Heart, Star } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -27,6 +27,44 @@ const featureCards = [
         description: "Analyze two websites simultaneously to benchmark performance and technology stacks."
     }
 ];
+
+const sponsors = [
+    { name: 'Vercel' },
+    { name: 'Firebase' },
+    { name: 'Google' },
+    { name: 'Next.js' },
+    { name: 'ShadCN' },
+    { name: 'Genkit' },
+    { name: 'Tailwind CSS' },
+];
+
+const reviews = [
+    {
+        quote: "WebIntel is an absolute game-changer. The depth of analysis and the AI-powered insights have revolutionized my workflow.",
+        name: "Sarah L.",
+        role: "Lead Developer, TechCorp",
+        rating: 5,
+    },
+    {
+        quote: "The side-by-side comparison feature is invaluable for competitive analysis. I've uncovered so many opportunities.",
+        name: "Michael B.",
+        role: "Digital Strategist",
+        rating: 5,
+    },
+    {
+        quote: "As a security consultant, WebIntel is my first step in any website audit. It's fast, comprehensive, and incredibly accurate.",
+        name: "Dr. Evelyn Reed",
+        role: "Cybersecurity Expert",
+        rating: 5,
+    },
+     {
+        quote: "The AI redesign feature gave me a fresh perspective on my portfolio. It's like having a world-class designer on call.",
+        name: "Alex Johnson",
+        role: "Freelance Designer",
+        rating: 5,
+    },
+];
+
 
 export default function WelcomePage() {
     return (
@@ -78,6 +116,58 @@ export default function WelcomePage() {
                         </div>
                       </motion.div>
                 </section>
+
+                 <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                    className="mb-16 container mx-auto px-4"
+                >
+                    <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Heart className="text-primary"/> From Our Users</h2>
+                    <div className="w-full overflow-hidden tech-stack-scroller" data-animated="true">
+                        <div className="tech-stack-scroller-inner flex gap-6">
+                            {[...reviews, ...reviews].map((review, index) => (
+                                <Card key={index} className="glass-card w-80 flex-shrink-0">
+                                    <CardContent className="p-6">
+                                        <div className="flex mb-2">
+                                            {[...Array(review.rating)].map((_, i) => (
+                                                <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                                            ))}
+                                        </div>
+                                        <p className="text-muted-foreground italic">"{review.quote}"</p>
+                                        <div className="mt-4 text-right">
+                                            <p className="font-bold text-sm">{review.name}</p>
+                                            <p className="text-xs text-muted-foreground">{review.role}</p>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+                    </div>
+                </motion.div>
+
+
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.6 }}
+                    className="mb-16 container mx-auto px-4"
+                >
+                    <h2 className="text-3xl font-bold mb-6 text-center flex items-center justify-center gap-3"><Building className="text-primary"/> Sponsored By</h2>
+                    <Card className="glass-card">
+                        <CardContent className="p-6">
+                            <div className="tech-stack-scroller" data-animated="true">
+                                <div className="tech-stack-scroller-inner flex items-center gap-16">
+                                    {[...sponsors, ...sponsors].map((sponsor, index) => (
+                                        <div key={`${sponsor.name}-${index}`} className="flex items-center gap-3 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all">
+                                            <p className="font-bold text-lg">{sponsor.name}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </motion.div>
             </main>
         </div>
     )
