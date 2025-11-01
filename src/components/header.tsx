@@ -23,10 +23,12 @@ import { motion } from 'framer-motion';
 
 
 const navLinks = [
-  { href: '/', label: 'Dashboard' },
-  { href: '/compare', label: 'Compare' },
-  { href: '/leaderboard', label: 'Leaderboard' },
-  { href: '/history', label: 'History' },
+  { href: '/', label: 'Dashboard', loggedIn: true },
+  { href: '/compare', label: 'Compare', loggedIn: true },
+  { href: '/leaderboard', label: 'Leaderboard', loggedIn: null },
+  { href: '/history', label: 'History', loggedIn: true },
+  { href: '/about', label: 'About', loggedIn: null },
+  { href: '/contact', label: 'Contact', loggedIn: null },
 ];
 
 
@@ -64,8 +66,8 @@ export function Header() {
   }
   
   const desktopNavLinks = user 
-    ? navLinks 
-    : navLinks.filter(link => ['/', '/leaderboard'].includes(link.href));
+    ? navLinks.filter(link => link.loggedIn !== false) // Show all except explicitly logged-out-only links
+    : navLinks.filter(link => link.loggedIn !== true); // Show all except explicitly logged-in-only links
   
   const isAuthPage = pathname === '/login' || pathname === '/signup';
   
@@ -105,7 +107,7 @@ export function Header() {
             ) : !isAuthPage && (
               <Button asChild size="sm">
                 <Link href="/signup">
-                  <UserPlus className='mr-2' /> Get Started
+                  Get Started
                 </Link>
               </Button>
             )}
@@ -137,7 +139,7 @@ export function Header() {
                             "relative text-sm font-medium transition-colors text-muted-foreground hover:text-primary px-4 py-2 rounded-full",
                              isActive && "text-primary"
                         )}>
-                            {link.label}
+                            {link.label === 'Dashboard' && user ? 'Dashboard' : link.label === 'Dashboard' ? 'Home' : link.label}
                             {isActive && (
                                 <motion.div
                                     layoutId="desktop-active-nav"
