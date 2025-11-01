@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 210 29% 97%; /* Lighter gray for a very soft feel */
+    --background: 0 0% 100%; /* White */
     --foreground: 220 20% 15%; /* Dark, slightly desaturated blue-gray */
     --card: 0 0% 100%; /* White */
     --card-foreground: 220 20% 15%;
@@ -13,16 +13,16 @@
     --popover-foreground: 220 20% 15%;
     --primary: 196 66% 45%; /* #29ABE2 - Deep, futuristic blue */
     --primary-foreground: 0 0% 100%;
-    --secondary: 215 30% 90%; /* Softer, muted blue-gray */
+    --secondary: 215 30% 95%; /* Even lighter gray */
     --secondary-foreground: 220 20% 15%;
-    --muted: 215 30% 90%;
+    --muted: 215 30% 95%;
     --muted-foreground: 215 20% 45%;
     --accent: 265 53% 60%; /* #8E44AD - Electric purple */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
-    --border: 215 25% 85%;
-    --input: 215 25% 85%;
+    --border: 215 25% 90%;
+    --input: 215 25% 90%;
     --ring: 196 66% 45%;
     --radius: 0.75rem; /* rounded-xl */
     --chart-1: 196 66% 45%;
@@ -33,24 +33,24 @@
   }
 
   .dark {
-    --background: 216 33% 16%; /* #1A2A3A - Dark Navy */
+    --background: 0 0% 0%; /* Black */
     --foreground: 210 20% 90%;
-    --card: 216 33% 20%; /* Slightly lighter than background */
+    --card: 216 33% 5%; /* Very dark navy, almost black */
     --card-foreground: 210 20% 90%;
-    --popover: 216 33% 16%;
+    --popover: 216 33% 5%;
     --popover-foreground: 210 20% 90%;
     --primary: 196 76% 52%; /* #29ABE2 - A bit brighter for dark mode */
     --primary-foreground: 210 20% 98%;
-    --secondary: 215 28% 25%;
+    --secondary: 215 28% 12%;
     --secondary-foreground: 210 20% 98%;
-    --muted: 215 28% 25%;
+    --muted: 215 28% 12%;
     --muted-foreground: 218 15% 65%;
     --accent: 265 63% 68%; /* #8E44AD - A bit brighter for dark mode */
     --accent-foreground: 210 20% 98%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 20% 98%;
-    --border: 215 28% 25%;
-    --input: 215 28% 25%;
+    --border: 215 28% 12%;
+    --input: 215 28% 12%;
     --ring: 196 76% 52%;
   }
 }
