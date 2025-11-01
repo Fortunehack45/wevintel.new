@@ -23,7 +23,7 @@ import { motion } from 'framer-motion';
 
 
 const navLinks = [
-  { href: '/', label: 'Dashboard', loggedIn: true },
+  { href: '/', label: 'Dashboard', loggedIn: null },
   { href: '/compare', label: 'Compare', loggedIn: true },
   { href: '/leaderboard', label: 'Leaderboard', loggedIn: null },
   { href: '/history', label: 'History', loggedIn: true },
@@ -139,7 +139,7 @@ export function Header() {
                             "relative text-sm font-medium transition-colors text-muted-foreground hover:text-primary px-4 py-2 rounded-full",
                              isActive && "text-primary"
                         )}>
-                            {link.label === 'Dashboard' && user ? 'Dashboard' : link.label === 'Dashboard' ? 'Home' : link.label}
+                            {link.label === 'Dashboard' && !user ? 'Home' : link.label}
                             {isActive && (
                                 <motion.div
                                     layoutId="desktop-active-nav"
