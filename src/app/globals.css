@@ -11,7 +11,7 @@
     --card-foreground: 220 20% 15%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 20% 15%;
-    --primary: 221 83% 43%; /* Deeper Navy Blue */
+    --primary: 245 56% 20%; /* Deeper Navy Blue */
     --primary-foreground: 0 0% 100%;
     --secondary: 215 30% 95%; /* Even lighter gray */
     --secondary-foreground: 220 20% 15%;
@@ -23,8 +23,9 @@
     --destructive-foreground: 0 0% 100%;
     --border: 215 25% 90%;
     --input: 215 25% 90%;
-    --ring: 221 83% 43%;
-    --chart-1: 221 83% 43%;
+    --ring: 245 56% 20%;
+    --radius: 0.8rem;
+    --chart-1: 245 56% 20%;
     --chart-2: 265 53% 60%;
     --chart-3: 160 60% 45%;
     --chart-4: 40 90% 55%;
@@ -34,11 +35,11 @@
   .dark {
     --background: 0 0% 0%; /* Black */
     --foreground: 210 20% 90%;
-    --card: 216 33% 5%; /* Very dark navy, almost black */
+    --card: 245 50% 8%; /* Very dark navy, almost black */
     --card-foreground: 210 20% 90%;
-    --popover: 216 33% 5%;
+    --popover: 245 50% 8%;
     --popover-foreground: 210 20% 90%;
-    --primary: 221 83% 53%; /* Brighter Navy Blue for dark mode */
+    --primary: 240 50% 65%; /* Brighter Navy Blue for dark mode */
     --primary-foreground: 210 20% 98%;
     --secondary: 215 28% 12%;
     --secondary-foreground: 210 20% 98%;
@@ -50,7 +51,7 @@
     --destructive-foreground: 210 20% 98%;
     --border: 215 28% 12%;
     --input: 215 28% 12%;
-    --ring: 221 83% 53%;
+    --ring: 240 50% 65%;
   }
 }
 
