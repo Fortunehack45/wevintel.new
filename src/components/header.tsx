@@ -2,7 +2,7 @@
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Compass, LogIn, User, Settings, LogOut, History, Scale, Trophy, Contact, Info } from 'lucide-react';
+import { Compass, LogIn, User, Settings, LogOut, History, Scale, Trophy, Contact, Info, UserPlus } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -27,8 +27,6 @@ const navLinks = [
   { href: '/compare', label: 'Compare' },
   { href: '/leaderboard', label: 'Leaderboard' },
   { href: '/history', label: 'History' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
 ];
 
 
@@ -67,7 +65,7 @@ export function Header() {
   
   const desktopNavLinks = user 
     ? navLinks 
-    : navLinks.filter(link => ['/', '/leaderboard', '/about', '/contact'].includes(link.href));
+    : navLinks.filter(link => ['/', '/leaderboard'].includes(link.href));
   
   const isAuthPage = pathname === '/login' || pathname === '/signup';
   
@@ -106,8 +104,8 @@ export function Header() {
                 </DropdownMenu>
             ) : !isAuthPage && (
               <Button asChild>
-                <Link href="/login">
-                  <LogIn className='mr-2' /> Login
+                <Link href="/signup">
+                  <UserPlus className='mr-2' /> Get Started
                 </Link>
               </Button>
             )}
