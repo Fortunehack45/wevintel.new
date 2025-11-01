@@ -5,8 +5,8 @@
     "description": "Analyse any website URL for a full public intelligence report.",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#1947D1",
-    "theme_color": "#1947D1",
+    "background_color": "#000000",
+    "theme_color": "#221C46",
     "icons": [
         {
             "src": "/icons/android-chrome-192x192.png",
