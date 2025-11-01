@@ -11,7 +11,7 @@
     --card-foreground: 220 20% 15%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 20% 15%;
-    --primary: 196 66% 45%; /* #29ABE2 - Deep, futuristic blue */
+    --primary: 221 83% 53%; /* Navy Blue */
     --primary-foreground: 0 0% 100%;
     --secondary: 215 30% 95%; /* Even lighter gray */
     --secondary-foreground: 220 20% 15%;
@@ -23,9 +23,9 @@
     --destructive-foreground: 0 0% 100%;
     --border: 215 25% 90%;
     --input: 215 25% 90%;
-    --ring: 196 66% 45%;
+    --ring: 221 83% 53%;
     --radius: 0.75rem; /* rounded-xl */
-    --chart-1: 196 66% 45%;
+    --chart-1: 221 83% 53%;
     --chart-2: 265 53% 60%;
     --chart-3: 160 60% 45%;
     --chart-4: 40 90% 55%;
@@ -39,7 +39,7 @@
     --card-foreground: 210 20% 90%;
     --popover: 216 33% 5%;
     --popover-foreground: 210 20% 90%;
-    --primary: 196 76% 52%; /* #29ABE2 - A bit brighter for dark mode */
+    --primary: 221 83% 63%; /* Brighter Navy Blue for dark mode */
     --primary-foreground: 210 20% 98%;
     --secondary: 215 28% 12%;
     --secondary-foreground: 210 20% 98%;
@@ -51,7 +51,7 @@
     --destructive-foreground: 210 20% 98%;
     --border: 215 28% 12%;
     --input: 215 28% 12%;
-    --ring: 196 76% 52%;
+    --ring: 221 83% 63%;
   }
 }
 
