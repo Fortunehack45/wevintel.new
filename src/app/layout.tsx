@@ -1,5 +1,5 @@
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter } from 'next/font/google';
@@ -13,7 +13,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const themeColor = '#221C46';
+const themeColor = '#0C0A1E';
 
 export const metadata: Metadata = {
   title: 'WebIntel',
@@ -35,7 +35,6 @@ export const metadata: Metadata = {
         },
     ],
   },
-  themeColor: themeColor,
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -43,6 +42,13 @@ export const metadata: Metadata = {
   other: {
     'msapplication-TileColor': themeColor,
   }
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#FFFFFF' },
+    { media: '(prefers-color-scheme: dark)', color: themeColor },
+  ],
 };
 
 export default function RootLayout({

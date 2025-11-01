@@ -5,13 +5,13 @@
 import { getFastAnalysis } from '@/app/actions/analyze';
 import { ComparisonPageContent } from '@/components/compare/comparison-page-content';
 import { NotFoundCard } from '@/components/analysis/not-found-card';
-import type { Metadata as NextMetadata } from 'next';
+import type { Metadata } from 'next';
 
 type Props = {
   params: { url1: string, url2: string }
 }
 
-export async function generateMetadata({ params }: Props): Promise<NextMetadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   let decodedUrl1 = 'Site 1';
   let decodedUrl2 = 'Site 2';
   let domain1 = 'site1.com';
