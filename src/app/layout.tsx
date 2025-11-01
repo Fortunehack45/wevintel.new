@@ -2,19 +2,19 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { Poppins } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 import { AppLayout } from '@/components/app-layout';
 import { FirebaseProvider } from '@/firebase/client-provider';
 
-const poppins = Poppins({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
-  variable: '--font-poppins',
+  variable: '--font-inter',
 });
 
-const themeColor = '#1A2A3A';
+const lightThemeColor = '#1A2A3A';
+const darkThemeColor = '#1A2A3A';
 
 export const metadata: Metadata = {
   title: 'WebIntel',
@@ -27,12 +27,25 @@ export const metadata: Metadata = {
     ],
     apple: [
       { url: '/apple-touch-icon.png', sizes: '180x180' },
-    ]
+    ],
+    other: [
+        {
+          rel: 'mask-icon',
+          url: '/icons/safari-pinned-tab.svg',
+          color: lightThemeColor,
+        },
+    ],
   },
-  themeColor: themeColor,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: lightThemeColor },
+    { media: '(prefers-color-scheme: dark)', color: darkThemeColor },
+  ],
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
+  },
+  other: {
+    'msapplication-TileColor': lightThemeColor,
   }
 };
 
@@ -44,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en-GB" suppressHydrationWarning>
       <body className={cn(
-          `${poppins.variable} font-body antialiased flex flex-col min-h-screen`,
+          `${inter.variable} font-body antialiased flex flex-col min-h-screen`,
         )}>
         <ThemeProvider
             attribute="class"
