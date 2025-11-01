@@ -103,7 +103,7 @@ function WelcomePage() {
     return (
         <div className="flex flex-col min-h-screen">
             <main className="flex-1">
-                <section className="relative container mx-auto px-4 pt-20 pb-16 md:pt-32 md:pb-24 text-center h-[80vh] flex flex-col justify-center">
+                <section className="relative container mx-auto px-4 pt-20 pb-16 md:pt-32 md:pb-24 text-center min-h-[60vh] flex flex-col justify-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

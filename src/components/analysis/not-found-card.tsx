@@ -20,8 +20,8 @@ export function NotFoundCard({ url, message }: { url: string; message?: string }
             </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center">
-            <div className="w-48 h-48 flex items-center justify-center text-muted-foreground/20">
-                <FileSearch className="h-32 w-32" />
+            <div className="w-32 h-32 flex items-center justify-center text-muted-foreground/20">
+                <FileSearch className="h-24 w-24" />
             </div>
             <p className="mt-4 text-muted-foreground">
                 {message || "This could be because the domain is incorrect, the site is temporarily down, or it doesn't exist. Please check the URL and try again."}
