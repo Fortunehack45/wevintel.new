@@ -103,11 +103,15 @@ function WelcomePage() {
     return (
         <div className="flex flex-col min-h-screen">
             <main className="flex-1">
-                <section className="container mx-auto px-4 pt-20 pb-16 md:pt-32 md:pb-24 text-center">
+                <section className="relative container mx-auto px-4 pt-20 pb-16 md:pt-32 md:pb-24 text-center h-[80vh] flex flex-col justify-center">
+                     <div className="absolute inset-0 -z-10 opacity-70 dark:opacity-100">
+                        <iframe src='https://my.spline.design/glasseffectcopy-72b1865a7455d81a97753a15c89c1a52/' frameBorder='0' width='100%' height='100%'></iframe>
+                    </div>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
+                         className="relative z-10"
                     >
                         <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-foreground">
                             The Ultimate Website Intelligence Tool
