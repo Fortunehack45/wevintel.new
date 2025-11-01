@@ -105,7 +105,7 @@ function WelcomePage() {
             <main className="flex-1">
                 <section className="relative container mx-auto px-4 pt-20 pb-16 md:pt-32 md:pb-24 text-center h-[80vh] flex flex-col justify-center">
                      <div className="absolute inset-0 -z-10 opacity-70 dark:opacity-100">
-                        <iframe src='https://my.spline.design/glasseffectcopy-wpnrxnzxaya3nwfabun5wisd/' frameborder='0' width='100%' height='100%'></iframe>
+                        <iframe src='https://my.spline.design/glasseffectcopy-wpnrxnzxaya3nwfabun5wisd/' frameBorder='0' width='100%' height='100%'></iframe>
                     </div>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
