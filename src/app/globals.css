@@ -17,7 +17,7 @@
     --secondary-foreground: 220 20% 15%;
     --muted: 215 30% 95%;
     --muted-foreground: 215 20% 45%;
-    --accent: 265 53% 60%; /* #8E44AD - Electric purple */
+    --accent: 240 60% 15%; /* Dark Navy Blue */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
@@ -45,7 +45,7 @@
     --secondary-foreground: 210 20% 98%;
     --muted: 215 28% 12%;
     --muted-foreground: 218 15% 65%;
-    --accent: 265 63% 68%; /* #8E44AD - A bit brighter for dark mode */
+    --accent: 240 50% 65%; /* Brighter Navy Blue for dark mode */
     --accent-foreground: 210 20% 98%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 20% 98%;
