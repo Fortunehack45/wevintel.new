@@ -117,7 +117,7 @@ function WelcomePage() {
                         </p>
                         <div className="mt-8 flex justify-center">
                             <Button asChild size="lg" className="h-12 text-lg">
-                                <Link href="/login">
+                                <Link href="/signup">
                                     Get Started <ArrowRight className="ml-2" />
                                 </Link>
                             </Button>
