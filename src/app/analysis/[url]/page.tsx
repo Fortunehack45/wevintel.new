@@ -5,7 +5,6 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AnalysisPageContent } from '@/components/analysis/analysis-page-content';
 import { type Metadata } from 'next';
 import { getFastAnalysis } from '@/app/actions/analyze';
-import { DashboardSkeleton } from '@/components/analysis/dashboard-skeleton';
 import { NotFoundCard } from '@/components/analysis/not-found-card';
 import { clearCacheForUrl } from '@/lib/cache';
 
