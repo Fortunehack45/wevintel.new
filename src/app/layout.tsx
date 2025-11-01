@@ -39,9 +39,6 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
   },
-  other: {
-    'msapplication-TileColor': themeColor,
-  }
 };
 
 export const viewport: Viewport = {
