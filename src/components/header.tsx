@@ -103,7 +103,7 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
             ) : !isAuthPage && (
-              <Button asChild>
+              <Button asChild size="sm">
                 <Link href="/signup">
                   <UserPlus className='mr-2' /> Get Started
                 </Link>
