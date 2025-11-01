@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 
 
 const getScoreColor = (score: number) => {
-    if (score >= 90) return 'hsl(var(--chart-1))'; // Green
+    if (score >= 90) return 'hsl(var(--chart-3))'; // Green
     if (score >= 50) return 'hsl(var(--chart-4))'; // Yellow
     return 'hsl(var(--destructive))'; // Red
 };
@@ -31,19 +31,19 @@ const ScoreCircle = ({ label, score }: { label: string, score: number }) => {
         <div className="relative h-20 w-20">
           <svg className="h-full w-full" viewBox="0 0 80 80">
             <circle
-              className="stroke-current text-muted/50"
+              className="stroke-current text-muted/30"
               cx="40"
               cy="40"
               r={radius}
               fill="transparent"
-              strokeWidth="8"
+              strokeWidth="6"
             />
             <motion.circle
               cx="40"
               cy="40"
               r={radius}
               fill="transparent"
-              strokeWidth="8"
+              strokeWidth="6"
               stroke={getScoreColor(score)}
               strokeLinecap="round"
               strokeDasharray={circumference}
@@ -70,7 +70,7 @@ const MetricItem = ({ icon: Icon, label, value }: { icon: React.ElementType, lab
         <Icon className="h-4 w-4 text-muted-foreground" />
         <span className="text-muted-foreground">{label}</span>
       </div>
-      <span className="font-semibold text-foreground">{value || 'N/A'}</span>
+      <span className="font-semibold text-foreground font-mono">{value || 'N/A'}</span>
     </div>
 );
 
@@ -113,9 +113,9 @@ const PerformanceReport = ({ data }: { data?: PerformanceData }) => {
                 {chartData.map((item) => <ScoreCircle key={item.label} {...item} />)}
             </div>
             <Separator className="my-4" />
-            <div className="grid gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
                 {detailedMetrics.map(metric => (
-                    <MetricItem key={metric.label} {...metric} />
+                    metric.value ? <MetricItem key={metric.label} {...metric} /> : null
                 ))}
             </div>
           </>
