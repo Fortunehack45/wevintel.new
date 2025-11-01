@@ -68,7 +68,7 @@ export default function RootLayout({
           <FirebaseProvider>
             <AppLayout>
                 {children}
-            </App-Layout>
+            </AppLayout>
           </FirebaseProvider>
           <Toaster />
         </ThemeProvider>
