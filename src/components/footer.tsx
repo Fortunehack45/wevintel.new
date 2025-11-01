@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuth, useAuthContext } from '@/firebase/provider';
 import type { User as FirebaseUser } from 'firebase/auth';
+import { ThemeToggle } from './theme-toggle';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -73,13 +74,16 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>&copy; {currentYear} WebIntel. All Rights Reserved.</p>
-          <p className="mt-1">
-            Developed by <a href="https://wa.me/2349167689200" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
-              Fortune
-            </a>.
-          </p>
+        <div className="mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-6 text-sm text-muted-foreground">
+            <div className="text-center sm:text-left">
+                <p>&copy; {currentYear} WebIntel. All Rights Reserved.</p>
+                <p className="mt-1">
+                    Developed by <a href="https://wa.me/2349167689200" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
+                    Fortune
+                    </a>.
+                </p>
+            </div>
+            <ThemeToggle />
         </div>
       </div>
     </footer>
