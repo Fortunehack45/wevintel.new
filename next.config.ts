@@ -1,19 +1,21 @@
 
-import type {NextConfig} from 'next';
-
+/** @type {import('next').NextConfig} */
 const withPWA = require('next-pwa')({
-  dest: 'public'
-})
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development'
+});
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const nextConfig = {
+  reactStrictMode: true,
   typescript: {
     ignoreBuildErrors: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
-  images: {
+   images: {
     remotePatterns: [
       {
         protocol: 'https',
@@ -34,7 +36,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https',
+        protocol: 'https://',
         hostname: 'www.google.com',
         port: '',
         pathname: '/**',
@@ -45,9 +47,9 @@ const nextConfig: NextConfig = {
       }
     ],
   },
-  env: {
+   env: {
     PAGESPEED_API_KEY: process.env.PAGESPEED_API_KEY,
   }
 };
 
-export default withPWA(nextConfig);
+module.exports = withPWA(nextConfig);

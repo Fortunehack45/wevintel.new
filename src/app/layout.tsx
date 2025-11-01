@@ -13,8 +13,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const lightThemeColor = '#221C46';
-const darkThemeColor = '#221C46';
+const themeColor = '#221C46';
 
 export const metadata: Metadata = {
   title: 'WebIntel',
@@ -31,21 +30,18 @@ export const metadata: Metadata = {
     other: [
         {
           rel: 'mask-icon',
-          url: '/icons/safari-pinned-tab.svg',
-          color: lightThemeColor,
+          url: '/safari-pinned-tab.svg',
+          color: themeColor,
         },
     ],
   },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: lightThemeColor },
-    { media: '(prefers-color-scheme: dark)', color: darkThemeColor },
-  ],
+  themeColor: themeColor,
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
   },
   other: {
-    'msapplication-TileColor': lightThemeColor,
+    'msapplication-TileColor': themeColor,
   }
 };
 
