@@ -36,15 +36,18 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
+    title: "WebIntel",
   },
 };
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#FFFFFF' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
-  ],
-};
+export function generateViewport(): Viewport {
+  return {
+    themeColor: [
+      { media: '(prefers-color-scheme: light)', color: '#FFFFFF' },
+      { media: '(prefers-color-scheme: dark)', color: '#000000' },
+    ],
+  }
+}
 
 export default function RootLayout({
   children,
@@ -65,7 +68,7 @@ export default function RootLayout({
           <FirebaseProvider>
             <AppLayout>
                 {children}
-            </AppLayout>
+            </App-Layout>
           </FirebaseProvider>
           <Toaster />
         </ThemeProvider>
