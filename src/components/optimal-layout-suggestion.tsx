@@ -61,16 +61,6 @@ export function OptimalLayoutSuggestion() {
         }
     }, [pathname, isMobile, width, height]);
 
-    useEffect(() => {
-        if (isVisible) {
-            const dismissTimer = setTimeout(() => {
-                setIsVisible(false);
-            }, 8000); // Auto-dismiss after 8 seconds
-
-            return () => clearTimeout(dismissTimer);
-        }
-    }, [isVisible]);
-
     const handleDismiss = () => {
         setIsVisible(false);
     };
@@ -85,24 +75,25 @@ export function OptimalLayoutSuggestion() {
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     className="fixed bottom-20 left-4 right-4 max-w-md mx-auto p-4 rounded-xl shadow-2xl glass-card z-40"
                 >
-                    <div className="flex items-start gap-4">
-                        <div className="mt-1 bg-primary/10 p-2 rounded-full">
-                            <Smartphone className="h-6 w-6 text-primary" />
+                    <div className="flex flex-col gap-4">
+                        <div className="flex items-start gap-4">
+                            <div className="mt-1 bg-primary/10 p-2 rounded-full">
+                                <Smartphone className="h-6 w-6 text-primary" />
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="font-semibold text-foreground">Optimal Viewing Experience</h3>
+                                <p className="text-sm text-muted-foreground mt-1">
+                                    For the best experience, rotate your device to landscape or use 'Desktop Site' mode in your browser.
+                                </p>
+                            </div>
                         </div>
-                        <div className="flex-1">
-                            <h3 className="font-semibold text-foreground">Optimal Viewing Experience</h3>
-                            <p className="text-sm text-muted-foreground mt-1">
-                                For the best experience, rotate your device to landscape or use 'Desktop Site' mode in your browser.
-                            </p>
-                        </div>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-7 w-7 flex-shrink-0"
+                         <Button
+                            variant="secondary"
+                            className="w-full"
                             onClick={handleDismiss}
-                            aria-label="Dismiss suggestion"
+                            aria-label="Continue with mobile"
                         >
-                            <X className="h-4 w-4" />
+                            Continue with mobile view
                         </Button>
                     </div>
                 </motion.div>
