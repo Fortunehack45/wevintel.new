@@ -13,8 +13,8 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const lightThemeColor = '#FFFFFF';
-const darkThemeColor = '#000000';
+const lightThemeColor = '#1947D1';
+const darkThemeColor = '#1947D1';
 
 export const metadata: Metadata = {
   title: 'WebIntel',
