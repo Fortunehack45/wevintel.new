@@ -13,7 +13,6 @@ import type { User } from 'firebase/auth';
 import { LoadingOverlay } from "@/components/loading-overlay";
 import { DashboardContent } from "./dashboard/page";
 import { DashboardSkeleton } from "@/components/analysis/dashboard-skeleton";
-import { Skeleton } from "@/components/ui/skeleton";
 
 
 const featureCards = [
@@ -107,7 +106,7 @@ function WelcomePage() {
                 <section className="relative container mx-auto px-4 pt-20 pb-16 md:pt-32 md:pb-24 text-center h-[80vh] flex flex-col justify-center">
                      <div className="absolute inset-0 -z-10 opacity-70 dark:opacity-100">
                         <iframe 
-                            src='https://my.spline.design/glasseffectcopy-wPNrXnzXaya3nwfAbUn5wIsd/embed' 
+                            src='https://my.spline.design/glasseffectcopy-wpnrxnzxaya3nwfabun5wisd/embed' 
                             frameBorder='0' 
                             width='100%' 
                             height='100%'
@@ -271,3 +270,5 @@ export default function RootPage() {
 
     return <WelcomePage />;
 }
+
+    
