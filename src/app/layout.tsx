@@ -13,8 +13,6 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const themeColor = '#0C0A1E';
-
 export const metadata: Metadata = {
   title: 'WebIntel',
   description: 'Analyse any website URL for a full public intelligence report.',
@@ -31,7 +29,7 @@ export const metadata: Metadata = {
         {
           rel: 'mask-icon',
           url: '/safari-pinned-tab.svg',
-          color: themeColor,
+          color: '#0C0A1E'
         },
     ],
   },
@@ -44,7 +42,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#FFFFFF' },
-    { media: '(prefers-color-scheme: dark)', color: themeColor },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
   ],
 };
 
