@@ -7,13 +7,19 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { SiVercel, SiFirebase, SiGoogle, SiNextdotjs, SiTailwindcss } from 'react-icons/si';
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState }from 'react';
 import { useAuth, useAuthContext } from "@/firebase/provider";
 import type { User } from 'firebase/auth';
 import { LoadingOverlay } from "@/components/loading-overlay";
 import { DashboardContent } from "./dashboard/page";
 import { DashboardSkeleton } from "@/components/analysis/dashboard-skeleton";
-import Spline from '@splinetool/react-spline/next';
+import dynamic from 'next/dynamic';
+import { Skeleton } from "@/components/ui/skeleton";
+
+const Spline = dynamic(() => import('@splinetool/react-spline'), {
+  ssr: false,
+  loading: () => <Skeleton className="w-full h-full" />,
+});
 
 
 const featureCards = [
