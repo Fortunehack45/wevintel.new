@@ -69,6 +69,8 @@ export function Header() {
     ? navLinks 
     : navLinks.filter(link => ['/', '/leaderboard', '/about', '/contact'].includes(link.href));
   
+  const isAuthPage = pathname === '/login' || pathname === '/signup';
+  
   // Mobile Header
   if(isMobile) {
       return (
@@ -102,7 +104,7 @@ export function Header() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-            ) : (
+            ) : !isAuthPage && (
               <Button asChild>
                 <Link href="/login">
                   <LogIn className='mr-2' /> Login
@@ -176,9 +178,9 @@ export function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-        ) : (
+        ) : !isAuthPage && (
             <Button asChild>
-              <Link href="/login">
+              <Link href="/signup">
                 Get Started
               </Link>
             </Button>
