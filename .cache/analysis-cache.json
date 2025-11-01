@@ -2039,5 +2039,135 @@
         "hasSitemapXml": true
       }
     }
+  },
+  "performance:https://youtube.com": {
+    "timestamp": 1761950120892,
+    "data": {
+      "performance": {
+        "mobile": {},
+        "desktop": {}
+      },
+      "performanceAudits": {},
+      "securityAudits": {},
+      "diagnosticsAudits": {},
+      "overview": {
+        "url": "https://youtube.com",
+        "domain": "youtube.com"
+      },
+      "metadata": {
+        "openGraphTags": {},
+        "hasRobotsTxt": false,
+        "hasSitemapXml": false
+      }
+    }
+  },
+  "intelligence:https://youtube.com": {
+    "timestamp": 1761950138378,
+    "data": {
+      "summary": {
+        "summary": "YouTube presents an exceptionally robust and secure technical profile, leveraging Google's advanced infrastructure. The site employs a highly dynamic, JavaScript-driven frontend, likely built with Web Components and Polymer for optimal performance and modularity. Security is paramount, with comprehensive Content Security Policies, Strict Transport Security, and robust anti-framing measures ensuring user safety and data integrity. The use of modern web standards and performance optimizations like Brotli compression underscores its status as a cutting-edge global platform.",
+        "recommendations": [
+          "Continuously monitor and refine the Content Security Policy (CSP) based on real-world reports to adapt to evolving threat landscapes and ensure optimal browser security.",
+          "Given the scale and complexity, regularly audit third-party script integrations, especially those mentioned in CSP, to mitigate supply chain risks and maintain performance.",
+          "Explore further optimizations for low-bandwidth scenarios and older devices, ensuring equitable access and performance for all users globally."
+        ]
+      },
+      "techStack": [
+        {
+          "name": "HTML5",
+          "category": "Markup Language",
+          "confidence": 100,
+          "description": "The latest standard for structuring and presenting content on the World Wide Web."
+        },
+        {
+          "name": "JavaScript",
+          "category": "Programming Language",
+          "confidence": 100,
+          "description": "A high-level, interpreted programming language essential for interactive web pages."
+        },
+        {
+          "name": "CSS3",
+          "category": "Stylesheet Language",
+          "confidence": 100,
+          "description": "The latest evolution of Cascading Style Sheets, used for styling web content."
+        },
+        {
+          "name": "Polymer",
+          "category": "JavaScript Library",
+          "confidence": 95,
+          "description": "A JavaScript library created by Google for building web components using modular elements."
+        },
+        {
+          "name": "Web Components",
+          "category": "Web Standard",
+          "confidence": 90,
+          "description": "A set of W3C specifications that allow for the creation of reusable custom elements."
+        },
+        {
+          "name": "Brotli",
+          "category": "Compression Algorithm",
+          "confidence": 99,
+          "description": "A generic-purpose lossless compression algorithm developed by Google, offering high data compression ratios."
+        },
+        {
+          "name": "Google",
+          "category": "Cloud Provider",
+          "confidence": 100,
+          "description": "The technology giant providing the underlying infrastructure and services for YouTube."
+        },
+        {
+          "name": "ESF",
+          "category": "Web Server",
+          "confidence": 90,
+          "description": "Google's proprietary Edge Security Frontend server."
+        },
+        {
+          "name": "Strict-Transport-Security (HSTS)",
+          "category": "Security Standard",
+          "confidence": 100,
+          "description": "A security policy mechanism that helps protect websites against downgrade attacks and cookie hijacking."
+        },
+        {
+          "name": "Content Security Policy (CSP)",
+          "category": "Security Standard",
+          "confidence": 100,
+          "description": "A computer security standard introduced to prevent cross-site scripting (XSS), clickjacking, and other code injection attacks."
+        },
+        {
+          "name": "Google Fonts",
+          "category": "Font Service",
+          "confidence": 85,
+          "description": "A library of open-source fonts hosted by Google, used to serve the Roboto typeface."
+        }
+      ],
+      "traffic": {
+        "estimatedMonthlyVisits": 2500000000,
+        "estimationConfidence": "high",
+        "trafficSources": {
+          "direct": 40,
+          "search": 35,
+          "social": 15,
+          "referral": 10
+        },
+        "topCountries": [
+          {
+            "country": "US",
+            "percentage": 20
+          },
+          {
+            "country": "IN",
+            "percentage": 15
+          },
+          {
+            "country": "BR",
+            "percentage": 8
+          }
+        ],
+        "engagement": {
+          "avgSessionDuration": "18m 30s",
+          "bounceRate": 25
+        }
+      }
+    }
   }
 }

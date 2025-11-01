@@ -1,3 +1,4 @@
+
 export const privacyContent = [
     {
         title: "ARTICLE I: INTRODUCTION AND SCOPE",
@@ -526,6 +527,20 @@ export const privacyContent = [
             <hr/>
             <h4>IN WITNESS WHEREOF, by accessing or using the Platform, you acknowledge that you have read, understood, and agree to be bound by this Privacy Policy in its entirety, and you consent to the collection, use, processing, storage, disclosure, and transfer of your Personal Data as described herein.</h4>
             <p><strong>END OF PRIVACY POLICY</strong></p>
+            <hr/>
+            <h4>Document Information:</h4>
+            <p><strong>Title:</strong> Privacy Policy - WebIntel Website Analysis and Intelligence Tool</p>
+            <p><strong>Total Word Count:</strong> Approximately 16,500 words</p>
+            <p><strong>Last Updated:</strong> October 31, 2025</p>
+            <p><strong>Governing Law:</strong> Laws of the Federal Republic of Nigeria</p>
+            <p><strong>Applicable Legislation:</strong> Nigeria Data Protection Act 2023, General Data Protection Regulation (EU) 2016/679 where applicable</p>
+            <p><strong>Version:</strong> 1.0</p>
+            <p><strong>Contact Information for Privacy Matters:</strong><br/>For questions, concerns, or requests concerning this Privacy Policy or our data processing practices, please contact us through the designated privacy contact channels published on the Platform's website.</p>
+            <p><strong>Supervisory Authority (Nigeria):</strong><br/>Nigeria Data Protection Commission</p>
+            <br/>
+            <p><em>Your privacy matters to us. We are committed to protecting your Personal Data and respecting your privacy rights under Nigerian and international data protection law.</em></p>
         `
     }
 ]
+
+    
