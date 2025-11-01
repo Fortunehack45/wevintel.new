@@ -14,6 +14,8 @@ const poppins = Poppins({
   variable: '--font-poppins',
 });
 
+const themeColor = '#1A2A3A';
+
 export const metadata: Metadata = {
   title: 'WebIntel',
   description: 'Analyse any website URL for a full public intelligence report.',
@@ -27,7 +29,11 @@ export const metadata: Metadata = {
       { url: '/apple-touch-icon.png', sizes: '180x180' },
     ]
   },
-  themeColor: "#000000",
+  themeColor: themeColor,
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  }
 };
 
 export default function RootLayout({
