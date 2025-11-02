@@ -1,5 +1,4 @@
 
-
 # WebIntel: Website Analysis & Intelligence Tool
 
 WebIntel is a powerful, privacy-focused tool designed to give developers, marketers, and curious minds a comprehensive analysis of any website. It aggregates public data and uses AI to provide deep insights into a site's performance, security, technology stack, and more.
